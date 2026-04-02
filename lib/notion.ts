@@ -45,14 +45,9 @@ function getDate(page: PageObjectResponse, field: string): string | null {
   return prop?.date?.start ?? null;
 }
 
-// Map Notion Tier select values → numeric tier
-// "Tier 1 - Fully Reviewed" → 1, "Tier 2 - Listed" → 2, anything else → 3
-function parseTier(page: PageObjectResponse): 1 | 2 | 3 {
-  const raw = getSelect(page, "Tier") ?? "";
-  if (raw.startsWith("Tier 1")) return 1;
-  if (raw.startsWith("Tier 2")) return 2;
-  return 3;
-}
+// Tier: "1 - Featured" → 1, anything else → 2
+// Schools without a tier set are treated as Tier 2 (listed), never hidden
+
 
 function parseStateCodes(raw: string): string[] {
   if (!raw || raw.trim() === "") return [];
@@ -73,7 +68,8 @@ function parseLines(raw: string): string[] {
 // ─── UNIFIED RECORD MAPPER ─────────────────────────────────
 
 function mapSchool(page: PageObjectResponse): School {
-  const tier = parseTier(page);
+  const tierRaw = getSelect(page, "Tier") ?? "";
+  const tier: 1 | 2 = tierRaw.startsWith("Tier 1") || tierRaw === "1 - Featured" ? 1 : 2;
   const stateSel = getSelect(page, "State") ?? "";
   // State can be a select (e.g. "California") or a text field with codes
   const stateCodes = parseStateCodes(getText(page, "State Codes"));
@@ -87,7 +83,7 @@ function mapSchool(page: PageObjectResponse): School {
         .replace(/\s+/g, "-")
         .replace(/[^a-z0-9-]/g, ""),
     name: getText(page, "School Name"),
-    tier: tier === 3 ? 2 : tier, // For School type, force to 1|2
+    tier,
     badge: getSelect(page, "Badge") as School["badge"],
     tagline: getText(page, "One Liner") || getText(page, "Notes"),
     website: getText(page, "Website"),
@@ -129,7 +125,6 @@ function mapDirectorySchool(page: PageObjectResponse): DirectorySchool {
     address: getText(page, "Address"),
     website: getText(page, "Website") || null,
     onlineAvailable: getCheckbox(page, "Online Available"),
-    tier: 3,
     source: getSelect(page, "Source") || getText(page, "Source") || "State DMV",
     lastScraped: getDate(page, "Date Scraped"),
   };
@@ -200,29 +195,26 @@ export async function getSchoolBySlug(slug: string): Promise<School | null> {
   return all.find((s) => s.slug === slug) ?? null;
 }
 
-/** Get Tier 3 (directory) schools for a state. */
+/** Get directory schools for a state (everything NOT Tier 1/2). */
 export async function getDirectoryForState(
   stateName: string
 ): Promise<DirectorySchool[]> {
   if (!isConfigured()) return [];
   try {
-    // Get all schools for the state that are NOT tier 1/2
+    // All schools for this state — we exclude Tier 1/2 in code
+    // because Notion "does_not_equal" can't combine with "is_empty"
     const pages = await queryAll(
       DB_ID!,
-      {
-        and: [
-          { property: "State", select: { equals: stateName } },
-          {
-            or: [
-              { property: "Tier", select: { equals: "Tier 3 - Directory Only" } },
-              { property: "Tier", select: { is_empty: true } },
-            ],
-          },
-        ],
-      },
+      { property: "State", select: { equals: stateName } },
       [{ property: "School Name", direction: "ascending" }]
     );
-    return pages.map(mapDirectorySchool);
+    // Filter out Tier 1/2 — those show in the comparison section
+    return pages
+      .filter((p) => {
+        const tier = getSelect(p, "Tier") ?? "";
+        return !tier.startsWith("Tier 1") && tier !== "1 - Featured";
+      })
+      .map(mapDirectorySchool);
   } catch {
     return [];
   }
@@ -283,7 +275,7 @@ export async function getAdminStats() {
 
   if (!isConfigured()) {
     return {
-      totalSchools: 0, tier1Count: 0, tier2Count: 0, tier3Count: 0,
+      totalSchools: 0, tier1Count: 0, tier2Count: 0, directoryCount: 0,
       noAffiliateCount: 0, noAffiliateSchools: [] as string[],
       caDirectoryCount: 0, txDirectoryCount: 0, flDirectoryCount: 0,
       latestVerified: null as string | null,
@@ -312,7 +304,7 @@ export async function getAdminStats() {
     totalSchools: tier1Schools.length,
     tier1Count: tier1.length,
     tier2Count: tier2.length,
-    tier3Count: caCount + txCount + flCount,
+    directoryCount: caCount + txCount + flCount,
     noAffiliateCount: noAffiliate.length,
     noAffiliateSchools: noAffiliate.map((s) => s.name),
     caDirectoryCount: caCount,

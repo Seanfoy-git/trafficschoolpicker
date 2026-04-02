@@ -42,7 +42,6 @@ export type DirectorySchool = {
   address: string;
   website: string | null;
   onlineAvailable: boolean;
-  tier: 3;
   source: string;                // "CA DMV"
   lastScraped: string | null;
 };

@@ -1,7 +1,7 @@
 /**
  * DATA FLOW: Google Places API → Notion → Site
  *
- * JOB 3: Enriches Tier 3 directory schools with website URLs and Google
+ * JOB 4: Enriches directory schools with website URLs and Google
  * ratings via the Places Text Search API. Only processes schools where
  * the Website field is empty (not yet enriched).
  *
