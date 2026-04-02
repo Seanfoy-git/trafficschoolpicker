@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "scrape:ca": "tsx scripts/scrape-ca-dmv.ts",
+    "scrape:tx": "tsx scripts/scrape-tx-tdlr.ts",
+    "scrape:prices": "tsx scripts/scrape-prices.ts",
+    "scrape:diff": "tsx scripts/compare-and-diff.ts",
+    "scrape:all": "npm run scrape:ca && npm run scrape:tx && npm run scrape:prices && npm run scrape:diff"
   },
   "dependencies": {
     "@radix-ui/react-select": "^2.2.6",
@@ -21,9 +26,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cheerio": "^1.2.0",
+    "csv-parse": "^6.2.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.2",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

@@ -1,0 +1,60 @@
+name: Monthly Data Update
+
+on:
+  schedule:
+    # 1st of every month at 9am UTC
+    - cron: "0 9 1 * *"
+  workflow_dispatch: # allow manual trigger
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Scrape CA DMV schools
+        run: npx tsx scripts/scrape-ca-dmv.ts
+
+      - name: Scrape TX TDLR providers
+        run: npx tsx scripts/scrape-tx-tdlr.ts
+
+      - name: Scrape Tier 1 school prices
+        run: npx tsx scripts/scrape-prices.ts
+
+      - name: Generate diff report
+        run: npx tsx scripts/compare-and-diff.ts
+
+      - name: Read diff report
+        id: report
+        run: |
+          if [ -f data/diff-report.md ]; then
+            {
+              echo "body<<DIFF_EOF"
+              cat data/diff-report.md
+              echo "DIFF_EOF"
+            } >> "$GITHUB_OUTPUT"
+          else
+            echo "body=No diff report generated." >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: monthly data update — ${{ github.run_id }}"
+          branch: data-update/${{ github.run_id }}
+          title: "Monthly Data Update — $(date +%B\\ %Y)"
+          body: ${{ steps.report.outputs.body }}
+          labels: data-update
+          delete-branch: true
