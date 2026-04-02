@@ -36,19 +36,27 @@ async function scrapeCADMV(): Promise<ScrapedSchool[]> {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
-  await page.goto("https://drive.dmvonline.ca.gov/s/oll-traffic-schools");
-  await page.waitForLoadState("networkidle");
-
-  // Select Internet type
-  console.log("Selecting Internet type and searching...");
-  await page.click('[aria-label="Type of Instruction"]');
-  await page.click("text=Internet");
-  await page.click("text=Search");
-
-  // Wait for results
-  await page.waitForSelector("text=Total Number of Records Found", {
+  await page.goto("https://drive.dmvonline.ca.gov/s/oll-traffic-schools", {
     timeout: 30000,
   });
+  await page.waitForLoadState("networkidle");
+  await page.waitForTimeout(2000);
+
+  // Open the "Type of Instruction" Lightning combobox and pick "Internet"
+  console.log("Selecting Internet type and searching...");
+  await page.click('button[aria-label="Type of Instruction"]');
+  await page.waitForTimeout(500);
+  await page.click('[data-value="Internet"]');
+  await page.waitForTimeout(500);
+
+  // Click the Search button
+  await page.click('button:has-text("Search")');
+
+  // Wait for results to appear (the table renders with "Total Number of Records Found")
+  await page.waitForFunction(
+    () => document.body.innerText.includes("Total Number of Records Found"),
+    { timeout: 30000 }
+  );
   await page.waitForTimeout(2000);
 
   // Extract from DOM text
@@ -61,10 +69,22 @@ async function scrapeCADMV(): Promise<ScrapedSchool[]> {
   const licensePattern = /^E\d{4}$/;
   const schools: ScrapedSchool[] = [];
 
+  // Results are formatted as:
+  //   Show Details
+  //   SCHOOL NAME
+  //   E####            ← license number
+  //   ADDRESS
+  //   PHONE
+  //   Active/Inactive
   for (let i = 0; i < lines.length; i++) {
     if (licensePattern.test(lines[i])) {
+      // Name is the line before the license (skip "Show Details" if present)
+      let name = lines[i - 1] ?? "";
+      if (name === "Show Details" && i >= 2) {
+        name = lines[i - 2] ?? "";
+      }
       schools.push({
-        name: lines[i - 1] ?? "",
+        name,
         license: lines[i],
         address: lines[i + 1] ?? "",
         phone: lines[i + 2] ?? "",
