@@ -1,27 +1,18 @@
 "use client";
 
 import { ExternalLink } from "lucide-react";
-import { School } from "@/lib/schools";
-import { buildAffiliateUrl, trackClick } from "@/lib/affiliate";
+import type { School } from "@/lib/types";
 
 export function AffiliateButton({
   school,
-  state,
-  source,
   variant = "primary",
-  children,
 }: {
   school: School;
-  state: string;
-  source: string;
   variant?: "primary" | "secondary";
-  children?: React.ReactNode;
 }) {
-  const url = buildAffiliateUrl(school, state, source);
-
-  const handleClick = () => {
-    trackClick(school.id, state, source);
-  };
+  const hasAffiliate = school.affiliateUrl.length > 0;
+  const url = hasAffiliate ? school.affiliateUrl : school.website;
+  const label = hasAffiliate ? "Enroll Now" : "Visit Website";
 
   const baseClasses =
     "inline-flex items-center justify-center gap-2 font-semibold rounded-lg transition-colors";
@@ -34,15 +25,14 @@ export function AffiliateButton({
     <a
       href={url}
       target="_blank"
-      rel="noopener noreferrer nofollow sponsored"
-      onClick={handleClick}
+      rel={
+        hasAffiliate
+          ? "noopener noreferrer nofollow sponsored"
+          : "noopener noreferrer"
+      }
       className={`${baseClasses} ${variantClasses}`}
     >
-      {children ?? (
-        <>
-          Enroll Now <ExternalLink className="w-4 h-4" />
-        </>
-      )}
+      {label} <ExternalLink className="w-4 h-4" />
     </a>
   );
 }

@@ -1,14 +1,25 @@
-import { Award, Zap, Star, Trophy } from "lucide-react";
+import { Award, Zap, Star, Trophy, DollarSign } from "lucide-react";
 
-const badgeConfig = {
-  "best-value": { label: "Best Value", icon: Award, bg: "bg-green-100", text: "text-green-800", border: "border-green-200" },
-  fastest: { label: "Fastest", icon: Zap, bg: "bg-blue-100", text: "text-blue-800", border: "border-blue-200" },
-  "top-rated": { label: "Top Rated", icon: Star, bg: "bg-amber-100", text: "text-amber-800", border: "border-amber-200" },
-  "editors-choice": { label: "Editor's Choice", icon: Trophy, bg: "bg-purple-100", text: "text-purple-800", border: "border-purple-200" },
-} as const;
+const badgeConfig: Record<
+  string,
+  {
+    label: string;
+    icon: typeof Award;
+    bg: string;
+    text: string;
+    border: string;
+  }
+> = {
+  "Best Value": { label: "Best Value", icon: Award, bg: "bg-green-100", text: "text-green-800", border: "border-green-200" },
+  Fastest: { label: "Fastest", icon: Zap, bg: "bg-blue-100", text: "text-blue-800", border: "border-blue-200" },
+  "Top Rated": { label: "Top Rated", icon: Star, bg: "bg-amber-100", text: "text-amber-800", border: "border-amber-200" },
+  "Editors Choice": { label: "Editor's Choice", icon: Trophy, bg: "bg-purple-100", text: "text-purple-800", border: "border-purple-200" },
+  "Budget Pick": { label: "Budget Pick", icon: DollarSign, bg: "bg-emerald-100", text: "text-emerald-800", border: "border-emerald-200" },
+};
 
-export function Badge({ type }: { type: keyof typeof badgeConfig }) {
+export function Badge({ type }: { type: string }) {
   const config = badgeConfig[type];
+  if (!config) return null;
   const Icon = config.icon;
 
   return (

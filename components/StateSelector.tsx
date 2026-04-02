@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { states } from "@/lib/states";
+import { STATE_LIST } from "@/lib/state-utils";
 import { MapPin } from "lucide-react";
 
 export function StateSelector({ size = "lg" }: { size?: "sm" | "lg" }) {
@@ -9,15 +9,11 @@ export function StateSelector({ size = "lg" }: { size?: "sm" | "lg" }) {
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const slug = e.target.value;
-    if (slug) {
-      router.push(`/${slug}`);
-    }
+    if (slug) router.push(`/${slug}`);
   };
 
   const sizeClasses =
-    size === "lg"
-      ? "px-6 py-4 text-lg pr-12"
-      : "px-4 py-2 text-sm pr-10";
+    size === "lg" ? "px-6 py-4 text-lg pr-12" : "px-4 py-2 text-sm pr-10";
 
   return (
     <div className="relative inline-block">
@@ -34,7 +30,7 @@ export function StateSelector({ size = "lg" }: { size?: "sm" | "lg" }) {
         <option value="" disabled>
           Select your state...
         </option>
-        {states.map((state) => (
+        {STATE_LIST.map((state) => (
           <option key={state.slug} value={state.slug}>
             {state.name}
           </option>

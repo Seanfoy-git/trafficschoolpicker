@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { schools, getSchoolBySlug, getReviewsForSchool } from "@/lib/schools";
+import { getAllSchools, getSchoolBySlug } from "@/lib/notion";
 import { RatingStars } from "@/components/RatingStars";
 import { Badge } from "@/components/Badge";
 import { AffiliateButton } from "@/components/AffiliateButton";
@@ -13,26 +13,28 @@ import {
   Calendar,
   ThumbsUp,
   ThumbsDown,
-  Star,
+  ExternalLink,
 } from "lucide-react";
-import Link from "next/link";
+
+export const revalidate = 86400;
 
 type Props = {
   params: Promise<{ "school-slug": string }>;
 };
 
 export async function generateStaticParams() {
+  const schools = await getAllSchools();
   return schools.map((s) => ({ "school-slug": s.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { "school-slug": slug } = await params;
-  const school = getSchoolBySlug(slug);
+  const school = await getSchoolBySlug(slug);
   if (!school) return {};
 
   return {
-    title: `${school.name} Review (2025) — Is It Worth It?`,
-    description: `Detailed review of ${school.name} online traffic school. Price: $${school.price}. Rating: ${school.rating}/5 from ${school.reviewCount.toLocaleString()} reviews. See pros, cons, and our verdict.`,
+    title: `${school.name} Review (2026) — Is It Worth It?`,
+    description: `Detailed review of ${school.name} online traffic school. Price: $${school.price}. ${school.rating ? `Rating: ${school.rating}/5` : ""}. See pros, cons, and our verdict.`,
     alternates: {
       canonical: `https://trafficschoolpicker.com/reviews/${school.slug}`,
     },
@@ -45,11 +47,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ReviewPage({ params }: Props) {
   const { "school-slug": slug } = await params;
-  const school = getSchoolBySlug(slug);
+  const school = await getSchoolBySlug(slug);
   if (!school) notFound();
 
-  const reviews = getReviewsForSchool(slug);
-  const competitors = schools.filter((s) => s.id !== school.id).slice(0, 3);
+  const allSchools = await getAllSchools();
+  const competitors = allSchools.filter((s) => s.id !== school.id).slice(0, 3);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -58,11 +60,13 @@ export default async function ReviewPage({ params }: Props) {
       "@type": "EducationalOrganization",
       name: school.name,
     },
-    reviewRating: {
-      "@type": "Rating",
-      ratingValue: school.rating,
-      bestRating: 5,
-    },
+    ...(school.rating && {
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: school.rating,
+        bestRating: 5,
+      },
+    }),
     author: {
       "@type": "Organization",
       name: "TrafficSchoolPicker",
@@ -85,43 +89,48 @@ export default async function ReviewPage({ params }: Props) {
             </h1>
             {school.badge && <Badge type={school.badge} />}
           </div>
-          <div className="mb-4">
-            <RatingStars
-              rating={school.rating}
-              count={school.reviewCount}
-              size="lg"
-            />
-          </div>
+          {school.rating !== null && (
+            <div className="flex items-center gap-2 mb-4">
+              <RatingStars rating={school.rating} count={school.reviewCount ?? undefined} size="lg" />
+              {school.reviewSource && (
+                <span className="text-sm text-slate-300">
+                  {school.reviewUrl ? (
+                    <a href={school.reviewUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                      {school.reviewSource} reviews
+                    </a>
+                  ) : (
+                    <>{school.reviewSource} reviews</>
+                  )}
+                </span>
+              )}
+            </div>
+          )}
           <div className="flex flex-wrap gap-6 text-sm text-slate-300">
-            <span className="flex items-center gap-1.5">
-              <Clock className="w-4 h-4" />
-              {school.completionTimeHours} hours
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle className="w-4 h-4" />
-              {school.courtAcceptance === "all"
-                ? "All courts"
-                : school.courtAcceptance === "most"
-                ? "Most courts"
-                : "Some courts"}
-            </span>
+            {school.completionHours && (
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-4 h-4" /> {school.completionHours} hours
+              </span>
+            )}
+            {school.courtAcceptance && (
+              <span className="flex items-center gap-1.5">
+                <CheckCircle className="w-4 h-4" /> {school.courtAcceptance}
+              </span>
+            )}
             {school.mobileApp && (
               <span className="flex items-center gap-1.5">
                 <Smartphone className="w-4 h-4" /> Mobile app
               </span>
             )}
-            <span className="flex items-center gap-1.5">
-              <Send className="w-4 h-4" />
-              {school.certificateDelivery === "electronic"
-                ? "Electronic delivery"
-                : school.certificateDelivery === "mail"
-                ? "Mail delivery"
-                : "Electronic + mail"}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Calendar className="w-4 h-4" />
-              Founded {school.founded}
-            </span>
+            {school.certificateDelivery && (
+              <span className="flex items-center gap-1.5">
+                <Send className="w-4 h-4" /> {school.certificateDelivery} delivery
+              </span>
+            )}
+            {school.founded && (
+              <span className="flex items-center gap-1.5">
+                <Calendar className="w-4 h-4" /> Founded {school.founded}
+              </span>
+            )}
           </div>
         </div>
       </section>
@@ -131,47 +140,44 @@ export default async function ReviewPage({ params }: Props) {
         <div className="lg:col-span-2 space-y-10">
           {/* Quick Summary */}
           <section>
-            <h2 className="text-2xl font-bold text-slate-900 mb-4">
-              Quick Summary
-            </h2>
-            <p className="text-slate-600 leading-relaxed mb-6">
-              {school.longDescription}
-            </p>
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">Quick Summary</h2>
+            {school.bestFor && (
+              <p className="text-slate-700 font-medium mb-3">
+                Best for: {school.bestFor}
+              </p>
+            )}
+            <p className="text-slate-600 leading-relaxed mb-6">{school.tagline}</p>
             <div className="grid sm:grid-cols-2 gap-6">
-              <div>
-                <h3 className="flex items-center gap-2 font-semibold text-green-700 mb-2">
-                  <ThumbsUp className="w-4 h-4" /> Pros
-                </h3>
-                <ul className="space-y-1.5">
-                  {school.pros.map((pro) => (
-                    <li
-                      key={pro}
-                      className="flex items-start gap-2 text-sm text-slate-600"
-                    >
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
-                      {pro}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3 className="flex items-center gap-2 font-semibold text-red-700 mb-2">
-                  <ThumbsDown className="w-4 h-4" /> Cons
-                </h3>
-                <ul className="space-y-1.5">
-                  {school.cons.map((con) => (
-                    <li
-                      key={con}
-                      className="flex items-start gap-2 text-sm text-slate-600"
-                    >
-                      <span className="w-4 h-4 text-red-400 mt-0.5 shrink-0 text-center">
-                        &minus;
-                      </span>
-                      {con}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {school.pros.length > 0 && (
+                <div>
+                  <h3 className="flex items-center gap-2 font-semibold text-green-700 mb-2">
+                    <ThumbsUp className="w-4 h-4" /> Pros
+                  </h3>
+                  <ul className="space-y-1.5">
+                    {school.pros.map((pro) => (
+                      <li key={pro} className="flex items-start gap-2 text-sm text-slate-600">
+                        <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
+                        {pro}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {school.cons.length > 0 && (
+                <div>
+                  <h3 className="flex items-center gap-2 font-semibold text-red-700 mb-2">
+                    <ThumbsDown className="w-4 h-4" /> Cons
+                  </h3>
+                  <ul className="space-y-1.5">
+                    {school.cons.map((con) => (
+                      <li key={con} className="flex items-start gap-2 text-sm text-slate-600">
+                        <span className="w-4 h-4 text-red-400 mt-0.5 shrink-0 text-center">&minus;</span>
+                        {con}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </section>
 
@@ -180,210 +186,79 @@ export default async function ReviewPage({ params }: Props) {
             <h2 className="text-2xl font-bold text-slate-900 mb-4">Pricing</h2>
             <div className="bg-slate-50 rounded-lg p-6">
               <div className="flex items-baseline gap-3 mb-2">
-                <span className="text-3xl font-bold text-slate-900">
-                  ${school.price.toFixed(2)}
-                </span>
+                <span className="text-3xl font-bold text-slate-900">${school.price.toFixed(2)}</span>
                 {school.originalPrice && (
-                  <span className="text-lg text-slate-400 line-through">
-                    ${school.originalPrice.toFixed(2)}
-                  </span>
-                )}
-                {school.originalPrice && (
-                  <span className="text-sm font-semibold text-accent">
-                    Save $
-                    {(school.originalPrice - school.price).toFixed(2)}
-                  </span>
+                  <>
+                    <span className="text-lg text-slate-400 line-through">${school.originalPrice.toFixed(2)}</span>
+                    <span className="text-sm font-semibold text-accent">
+                      Save ${(school.originalPrice - school.price).toFixed(2)}
+                    </span>
+                  </>
                 )}
               </div>
               <ul className="text-sm text-slate-600 space-y-1">
                 {school.moneyBackGuarantee && (
                   <li className="flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-accent" />
-                    Money-back guarantee included
+                    <Shield className="w-4 h-4 text-accent" /> Money-back guarantee included
                   </li>
                 )}
                 <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-accent" />
-                  Certificate included in price
+                  <CheckCircle className="w-4 h-4 text-accent" /> Certificate included in price
                 </li>
               </ul>
             </div>
           </section>
 
           {/* Feature Comparison */}
-          <section>
-            <h2 className="text-2xl font-bold text-slate-900 mb-4">
-              How {school.name} Compares
-            </h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b-2 border-slate-200">
-                    <th className="text-left py-3 pr-4 font-semibold text-slate-700">
-                      Feature
-                    </th>
-                    <th className="py-3 px-4 font-semibold text-accent">
-                      {school.name}
-                    </th>
-                    {competitors.map((c) => (
-                      <th
-                        key={c.id}
-                        className="py-3 px-4 font-semibold text-slate-700"
-                      >
-                        {c.name}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    {
-                      label: "Price",
-                      getValue: (s: typeof school) =>
-                        `$${s.price.toFixed(2)}`,
-                    },
-                    {
-                      label: "Rating",
-                      getValue: (s: typeof school) =>
-                        `${s.rating}/5`,
-                    },
-                    {
-                      label: "Completion Time",
-                      getValue: (s: typeof school) =>
-                        `${s.completionTimeHours}h`,
-                    },
-                    {
-                      label: "Mobile App",
-                      getValue: (s: typeof school) =>
-                        s.mobileApp ? "Yes" : "No",
-                    },
-                    {
-                      label: "Money-Back Guarantee",
-                      getValue: (s: typeof school) =>
-                        s.moneyBackGuarantee ? "Yes" : "No",
-                    },
-                    {
-                      label: "Court Acceptance",
-                      getValue: (s: typeof school) =>
-                        s.courtAcceptance === "all"
-                          ? "All courts"
-                          : s.courtAcceptance === "most"
-                          ? "Most courts"
-                          : "Some courts",
-                    },
-                  ].map((row) => (
-                    <tr key={row.label} className="border-b border-slate-100">
-                      <td className="py-3 pr-4 font-medium text-slate-700">
-                        {row.label}
-                      </td>
-                      <td className="py-3 px-4 text-center font-semibold text-accent">
-                        {row.getValue(school)}
-                      </td>
+          {competitors.length > 0 && (
+            <section>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">
+                How {school.name} Compares
+              </h2>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b-2 border-slate-200">
+                      <th className="text-left py-3 pr-4 font-semibold text-slate-700">Feature</th>
+                      <th className="py-3 px-4 font-semibold text-accent">{school.name}</th>
                       {competitors.map((c) => (
-                        <td
-                          key={c.id}
-                          className="py-3 px-4 text-center text-slate-600"
-                        >
-                          {row.getValue(c)}
-                        </td>
+                        <th key={c.id} className="py-3 px-4 font-semibold text-slate-700">{c.name}</th>
                       ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          {/* Features */}
-          <section>
-            <h2 className="text-2xl font-bold text-slate-900 mb-4">
-              Course Features
-            </h2>
-            <div className="grid sm:grid-cols-2 gap-3">
-              {school.features.map((feature) => (
-                <div
-                  key={feature}
-                  className="flex items-center gap-2 text-sm text-slate-600 bg-slate-50 rounded-lg px-4 py-3"
-                >
-                  <CheckCircle className="w-4 h-4 text-accent shrink-0" />
-                  {feature}
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Student Reviews */}
-          <section>
-            <h2 className="text-2xl font-bold text-slate-900 mb-4">
-              Student Reviews
-            </h2>
-            <div className="space-y-4">
-              {reviews.map((review, i) => (
-                <div
-                  key={i}
-                  className="border border-slate-200 rounded-lg p-5"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <div>
-                      <span className="font-semibold text-slate-900">
-                        {review.name}
-                      </span>
-                      <span className="text-sm text-slate-500 ml-2">
-                        {review.state}
-                      </span>
-                    </div>
-                    <span className="text-xs text-slate-400">
-                      {review.date}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1 mb-2">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <Star
-                        key={s}
-                        className={`w-4 h-4 ${
-                          s <= review.rating
-                            ? "text-highlight fill-highlight"
-                            : "text-slate-200"
-                        }`}
-                      />
+                  </thead>
+                  <tbody>
+                    {[
+                      { label: "Price", getValue: (s: typeof school) => `$${s.price.toFixed(2)}` },
+                      { label: "Rating", getValue: (s: typeof school) => s.rating ? `${s.rating}/5` : "—" },
+                      { label: "Completion Time", getValue: (s: typeof school) => s.completionHours ? `${s.completionHours}h` : "—" },
+                      { label: "Mobile App", getValue: (s: typeof school) => s.mobileApp ? "Yes" : "No" },
+                      { label: "Money-Back Guarantee", getValue: (s: typeof school) => s.moneyBackGuarantee ? "Yes" : "No" },
+                      { label: "Court Acceptance", getValue: (s: typeof school) => s.courtAcceptance ?? "—" },
+                    ].map((row) => (
+                      <tr key={row.label} className="border-b border-slate-100">
+                        <td className="py-3 pr-4 font-medium text-slate-700">{row.label}</td>
+                        <td className="py-3 px-4 text-center font-semibold text-accent">{row.getValue(school)}</td>
+                        {competitors.map((c) => (
+                          <td key={c.id} className="py-3 px-4 text-center text-slate-600">{row.getValue(c)}</td>
+                        ))}
+                      </tr>
                     ))}
-                  </div>
-                  <p className="text-sm text-slate-600">{review.text}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          )}
 
           {/* Verdict */}
           <section className="bg-slate-50 rounded-xl p-6">
-            <h2 className="text-2xl font-bold text-slate-900 mb-3">
-              Our Verdict
-            </h2>
+            <h2 className="text-2xl font-bold text-slate-900 mb-3">Our Verdict</h2>
             <p className="text-slate-600 leading-relaxed mb-4">
               {school.name} is a{" "}
-              {school.rating >= 4.5
-                ? "top-tier"
-                : school.rating >= 4.0
-                ? "solid"
-                : "decent"}{" "}
+              {school.rating && school.rating >= 4.5 ? "top-tier" : school.rating && school.rating >= 4.0 ? "solid" : "decent"}{" "}
               choice for online traffic school.{" "}
-              {school.badge === "best-value"
-                ? "It offers the best value for money among the schools we reviewed."
-                : school.badge === "top-rated"
-                ? "It earns our highest rating for overall quality and user experience."
-                : school.badge === "editors-choice"
-                ? "It's our editor's choice for the most comprehensive learning experience."
-                : school.badge === "fastest"
-                ? "It's the fastest option for drivers who want to complete their course quickly."
-                : `With a ${school.rating}/5 rating from ${school.reviewCount.toLocaleString()} reviews, it has a strong track record.`}
+              {school.bestFor && <>It&apos;s best for {school.bestFor.toLowerCase()}.</>}
             </p>
-            <AffiliateButton
-              school={school}
-              state="general"
-              source="review-verdict"
-            >
-              Enroll at {school.name} &rarr;
-            </AffiliateButton>
+            <AffiliateButton school={school} />
           </section>
         </div>
 
@@ -391,38 +266,45 @@ export default async function ReviewPage({ params }: Props) {
         <aside className="space-y-6">
           <div className="bg-accent/5 border border-accent/20 rounded-xl p-6 sticky top-6">
             <div className="text-center mb-4">
-              <div className="text-3xl font-bold text-slate-900 mb-1">
-                ${school.price.toFixed(2)}
-              </div>
+              <div className="text-3xl font-bold text-slate-900 mb-1">${school.price.toFixed(2)}</div>
               {school.originalPrice && (
-                <div className="text-sm text-slate-400 line-through">
-                  ${school.originalPrice.toFixed(2)}
-                </div>
+                <div className="text-sm text-slate-400 line-through">${school.originalPrice.toFixed(2)}</div>
               )}
             </div>
-            <AffiliateButton
-              school={school}
-              state="general"
-              source="review-sidebar"
-            />
-            <div className="mt-4 text-center">
-              <RatingStars rating={school.rating} count={school.reviewCount} />
-            </div>
+            <AffiliateButton school={school} />
+            {school.rating !== null && (
+              <div className="mt-4 text-center">
+                <RatingStars rating={school.rating} count={school.reviewCount ?? undefined} />
+                {school.reviewSource && (
+                  <div className="text-xs text-slate-500 mt-1">{school.reviewSource}</div>
+                )}
+              </div>
+            )}
             <ul className="mt-4 space-y-2 text-sm text-slate-600">
-              <li className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-slate-400" />
-                {school.completionTimeHours} hours to complete
-              </li>
+              {school.completionHours && (
+                <li className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-slate-400" /> {school.completionHours} hours to complete
+                </li>
+              )}
               <li className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-slate-400" />
-                {school.states.length === 50
-                  ? "All 50 states"
-                  : `${school.states.length} states`}
+                {school.stateCodes.includes("all") ? "All 50 states" : `${school.stateCodes.length} states`}
               </li>
               {school.moneyBackGuarantee && (
                 <li className="flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-slate-400" />
-                  Money-back guarantee
+                  <Shield className="w-4 h-4 text-slate-400" /> Money-back guarantee
+                </li>
+              )}
+              {school.website && (
+                <li>
+                  <a
+                    href={school.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-accent hover:underline"
+                  >
+                    <ExternalLink className="w-4 h-4" /> Official website
+                  </a>
                 </li>
               )}
             </ul>

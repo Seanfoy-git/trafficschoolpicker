@@ -1,30 +1,24 @@
-import { Metadata } from "next";
 import { StateSelector } from "@/components/StateSelector";
 import { TrustBar } from "@/components/TrustBar";
 import { SchoolCard } from "@/components/SchoolCard";
 import { SchoolFAQ, FAQJsonLd } from "@/components/SchoolFAQ";
-import { getTopSchools } from "@/lib/schools";
-import { states } from "@/lib/states";
+import { getAllSchools } from "@/lib/notion";
+import { STATE_LIST } from "@/lib/state-utils";
 import Link from "next/link";
 import { ArrowRight, Search, BarChart3, MousePointerClick } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "TrafficSchoolPicker — Compare Online Traffic Schools & Save",
-  description:
-    "Got a traffic ticket? Compare court-approved online traffic schools by price, speed, and quality. Find the best school in your state and save money.",
-  alternates: { canonical: "https://trafficschoolpicker.com" },
-};
+export const revalidate = 86400;
 
 const homeFaqs = [
   {
     question: "Does online traffic school remove a ticket?",
     answer:
-      "In most states, completing an approved online traffic school course can dismiss your ticket or prevent points from appearing on your driving record. The specific outcome depends on your state's laws and the court handling your case. Generally, the violation is masked or dismissed once you submit your completion certificate.",
+      "In most states, completing an approved online traffic school course can dismiss your ticket or prevent points from appearing on your driving record. The specific outcome depends on your state's laws and the court handling your case.",
   },
   {
     question: "How long does traffic school take?",
     answer:
-      "Most online traffic school courses take between 4 to 8 hours to complete, depending on your state's requirements. Many states mandate a minimum seat time. The good news is that most online courses let you log in and out, so you can spread the time over several days.",
+      "Most online traffic school courses take between 4 to 8 hours to complete, depending on your state's requirements. Many states mandate a minimum seat time. Most courses let you log in and out and spread the time over several days.",
   },
   {
     question: "Is online traffic school accepted by courts?",
@@ -34,22 +28,23 @@ const homeFaqs = [
   {
     question: "How much does traffic school cost?",
     answer:
-      "Online traffic school typically costs between $19.95 and $29.99, depending on the provider and your state. This is significantly cheaper than paying the full ticket fine, which can be $150-$500+ plus insurance premium increases. Traffic school usually pays for itself many times over.",
+      "Online traffic school typically costs between $19.95 and $49.99, depending on the provider and your state. This is significantly cheaper than paying the full ticket fine plus insurance premium increases.",
   },
   {
     question: "What happens if I don't take traffic school?",
     answer:
-      "If you're eligible for traffic school but choose not to attend, the violation will remain on your driving record. This can lead to points on your license, increased insurance premiums (often 20-40% higher for 3-5 years), and potentially license suspension if you accumulate too many points.",
+      "If you're eligible for traffic school but choose not to attend, the violation will remain on your driving record. This can lead to points on your license, increased insurance premiums (often 20-40% higher for 3-5 years), and potentially license suspension.",
   },
   {
     question: "Can I take traffic school on my phone?",
     answer:
-      "Yes! Most modern online traffic schools are mobile-friendly, and some like Aceable even offer dedicated mobile apps. You can complete your course on a smartphone or tablet from anywhere with an internet connection.",
+      "Yes! Most modern online traffic schools are mobile-friendly, and some offer dedicated mobile apps. You can complete your course on a smartphone or tablet from anywhere with an internet connection.",
   },
 ];
 
-export default function HomePage() {
-  const topSchools = getTopSchools(3);
+export default async function HomePage() {
+  const allSchools = await getAllSchools();
+  const topSchools = allSchools.filter((s) => s.tier === 1).slice(0, 3);
 
   return (
     <>
@@ -113,22 +108,24 @@ export default function HomePage() {
       </section>
 
       {/* Top Picks */}
-      <section className="py-16 bg-slate-50">
-        <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
-            Our Top Picks
-          </h2>
-          <p className="text-slate-600 mb-8">
-            Hand-picked by our editorial team based on price, quality, and user
-            satisfaction.
-          </p>
-          <div className="space-y-4">
-            {topSchools.map((school, i) => (
-              <SchoolCard key={school.id} school={school} rank={i + 1} />
-            ))}
+      {topSchools.length > 0 && (
+        <section className="py-16 bg-slate-50">
+          <div className="max-w-5xl mx-auto px-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
+              Our Top Picks
+            </h2>
+            <p className="text-slate-600 mb-8">
+              Hand-picked by our editorial team based on price, quality, and user
+              satisfaction.
+            </p>
+            <div className="space-y-4">
+              {topSchools.map((school, i) => (
+                <SchoolCard key={school.id} school={school} rank={i + 1} showProsAndCons />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Why Trust Us */}
       <section className="py-16 bg-white">
@@ -159,7 +156,7 @@ export default function HomePage() {
             Find Traffic Schools by State
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {states.map((state) => (
+            {STATE_LIST.map((state) => (
               <Link
                 key={state.slug}
                 href={`/${state.slug}`}

@@ -1,28 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import { School } from "@/lib/schools";
+import type { School } from "@/lib/types";
 import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
 import { AffiliateButton } from "./AffiliateButton";
 import { ArrowUpDown, Clock, CheckCircle, Smartphone, Shield } from "lucide-react";
 import Link from "next/link";
 
-type SortKey = "price" | "rating" | "completionTimeHours";
+type SortKey = "price" | "rating" | "completionHours";
 
 export function ComparisonTable({
   schools,
-  state,
 }: {
   schools: School[];
-  state: string;
 }) {
   const [sortBy, setSortBy] = useState<SortKey>("rating");
   const [sortAsc, setSortAsc] = useState(false);
 
   const sorted = [...schools].sort((a, b) => {
-    const diff = sortAsc ? a[sortBy] - b[sortBy] : b[sortBy] - a[sortBy];
-    return diff;
+    const aVal = a[sortBy] ?? 0;
+    const bVal = b[sortBy] ?? 0;
+    return sortAsc ? aVal - bVal : bVal - aVal;
   });
 
   const handleSort = (key: SortKey) => {
@@ -30,7 +29,7 @@ export function ComparisonTable({
       setSortAsc(!sortAsc);
     } else {
       setSortBy(key);
-      setSortAsc(key === "price" || key === "completionTimeHours");
+      setSortAsc(key === "price" || key === "completionHours");
     }
   };
 
@@ -57,7 +56,7 @@ export function ComparisonTable({
               <SortHeader label="Rating" sortKey="rating" />
             </th>
             <th className="pb-3 px-4">
-              <SortHeader label="Time" sortKey="completionTimeHours" />
+              <SortHeader label="Time" sortKey="completionHours" />
             </th>
             <th className="pb-3 px-4 font-semibold text-slate-700">Features</th>
             <th className="pb-3 pl-4"></th>
@@ -100,20 +99,26 @@ export function ComparisonTable({
                 )}
               </td>
               <td className="py-4 px-4">
-                <RatingStars rating={school.rating} size="sm" />
-                <div className="text-xs text-slate-500 mt-0.5">
-                  {school.reviewCount.toLocaleString()} reviews
-                </div>
+                {school.rating !== null && (
+                  <>
+                    <RatingStars rating={school.rating} size="sm" />
+                    <div className="text-xs text-slate-500 mt-0.5">
+                      {school.reviewCount?.toLocaleString()} {school.reviewSource ?? ""} reviews
+                    </div>
+                  </>
+                )}
               </td>
               <td className="py-4 px-4">
-                <span className="flex items-center gap-1 text-slate-700">
-                  <Clock className="w-4 h-4 text-slate-400" />
-                  {school.completionTimeHours}h
-                </span>
+                {school.completionHours && (
+                  <span className="flex items-center gap-1 text-slate-700">
+                    <Clock className="w-4 h-4 text-slate-400" />
+                    {school.completionHours}h
+                  </span>
+                )}
               </td>
               <td className="py-4 px-4">
                 <div className="flex gap-2">
-                  {school.courtAcceptance === "all" && (
+                  {school.courtAcceptance === "All Courts" && (
                     <span title="Accepted by all courts" className="text-green-600">
                       <CheckCircle className="w-4 h-4" />
                     </span>
@@ -133,8 +138,6 @@ export function ComparisonTable({
               <td className="py-4 pl-4">
                 <AffiliateButton
                   school={school}
-                  state={state}
-                  source="comparison-table"
                   variant={i === 0 ? "primary" : "secondary"}
                 />
               </td>
