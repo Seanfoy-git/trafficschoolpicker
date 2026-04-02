@@ -62,9 +62,9 @@ async function getSchoolsFromNotion(): Promise<NotionSchool[]> {
   const response = await notion.databases.query({
     database_id: SCHOOLS_DB,
     filter: {
-      or: [
-        { property: "Tier", select: { equals: "Tier 1 - Fully Reviewed" } },
-        { property: "Tier", select: { equals: "Tier 2 - Listed" } },
+      and: [
+        { property: "Status", select: { equals: "Active" } },
+        { property: "Show On Site", checkbox: { equals: true } },
       ],
     },
   });
@@ -287,11 +287,11 @@ async function main() {
     }
 
     if (Object.keys(properties).length > 0) {
-      properties["Notes"] = {
+      properties["Price Note"] = {
         rich_text: [
           {
             text: {
-              content: `Price scrape ${TODAY}: ${update.notes.join(" · ")}`,
+              content: `${TODAY}: ${update.notes.join(" · ")}`,
             },
           },
         ],

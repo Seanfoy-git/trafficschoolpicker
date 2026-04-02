@@ -4,12 +4,8 @@ import type { School, DirectorySchool, StateInfo } from "./types";
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
-// Single database for everything — Schools DB and Directory DB are the same
-const DB_ID = process.env.NOTION_SCHOOLS_DB || process.env.NOTION_DIRECTORY_DB;
-
-function isConfigured(): boolean {
-  return !!(process.env.NOTION_TOKEN && DB_ID);
-}
+const SCHOOLS_DB = process.env.NOTION_SCHOOLS_DB; // Traffic Schools (Tier 1/2 curated)
+const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB; // School Directory (DMV-scraped)
 
 // ─── HELPERS ────────────────────────────────────────────────
 
@@ -45,10 +41,6 @@ function getDate(page: PageObjectResponse, field: string): string | null {
   return prop?.date?.start ?? null;
 }
 
-// Tier: "1 - Featured" → 1, anything else → 2
-// Schools without a tier set are treated as Tier 2 (listed), never hidden
-
-
 function parseStateCodes(raw: string): string[] {
   if (!raw || raw.trim() === "") return [];
   if (raw.trim().toLowerCase() === "all") return ["all"];
@@ -65,14 +57,11 @@ function parseLines(raw: string): string[] {
     .filter(Boolean);
 }
 
-// ─── UNIFIED RECORD MAPPER ─────────────────────────────────
+// ─── SCHOOLS (Traffic Schools DB) ───────────────────────────
 
 function mapSchool(page: PageObjectResponse): School {
-  const tierRaw = getSelect(page, "Tier") ?? "";
-  const tier: 1 | 2 = tierRaw.startsWith("Tier 1") || tierRaw === "1 - Featured" ? 1 : 2;
-  const stateSel = getSelect(page, "State") ?? "";
-  // State can be a select (e.g. "California") or a text field with codes
-  const stateCodes = parseStateCodes(getText(page, "State Codes"));
+  // Tier: "1 - Featured" → 1, anything else (including null) → 2
+  const tier: 1 | 2 = getSelect(page, "Tier") === "1 - Featured" ? 1 : 2;
 
   return {
     id: page.id,
@@ -85,7 +74,7 @@ function mapSchool(page: PageObjectResponse): School {
     name: getText(page, "School Name"),
     tier,
     badge: getSelect(page, "Badge") as School["badge"],
-    tagline: getText(page, "One Liner") || getText(page, "Notes"),
+    tagline: getText(page, "One Liner"),
     website: getText(page, "Website"),
     affiliateUrl: getText(page, "Affiliate URL"),
     affiliateNetwork: getSelect(page, "Affiliate Network") as School["affiliateNetwork"],
@@ -100,7 +89,7 @@ function mapSchool(page: PageObjectResponse): School {
     reviewCount: getNumber(page, "Review Count"),
     reviewSource: getSelect(page, "Review Source") as School["reviewSource"],
     reviewUrl: getText(page, "Review URL") || null,
-    stateCodes: stateCodes.length > 0 ? stateCodes : stateSel ? [stateSel] : [],
+    stateCodes: parseStateCodes(getText(page, "State Codes")),
     pros: parseLines(getText(page, "Pros")),
     cons: parseLines(getText(page, "Cons")),
     bestFor: getText(page, "Best For"),
@@ -110,10 +99,49 @@ function mapSchool(page: PageObjectResponse): School {
     certificateDelivery: getSelect(page, "Certificate Delivery") as School["certificateDelivery"],
     courtAcceptance: getSelect(page, "Court Acceptance") as School["courtAcceptance"],
     founded: getNumber(page, "Founded"),
-    showOnSite: true,
-    lastVerified: getDate(page, "Last Verified") || getDate(page, "Date Scraped"),
+    showOnSite: getCheckbox(page, "Show On Site"),
+    lastVerified: getDate(page, "Last Verified"),
   };
 }
+
+export async function getAllSchools(): Promise<School[]> {
+  if (!process.env.NOTION_TOKEN || !SCHOOLS_DB) return [];
+  try {
+    const response = await notion.databases.query({
+      database_id: SCHOOLS_DB,
+      filter: {
+        and: [
+          { property: "Status", select: { equals: "Active" } },
+          { property: "Show On Site", checkbox: { equals: true } },
+        ],
+      },
+      sorts: [{ property: "Rating", direction: "descending" }],
+    });
+    return (response.results as PageObjectResponse[]).map(mapSchool);
+  } catch {
+    return [];
+  }
+}
+
+export async function getSchoolsForState(stateCode: string): Promise<School[]> {
+  const all = await getAllSchools();
+  return all
+    .filter((school) => {
+      if (school.stateCodes.includes("all")) return true;
+      return school.stateCodes.includes(stateCode.toUpperCase());
+    })
+    .sort((a, b) => {
+      if (a.tier !== b.tier) return a.tier - b.tier;
+      return (b.reviewCount ?? 0) - (a.reviewCount ?? 0);
+    });
+}
+
+export async function getSchoolBySlug(slug: string): Promise<School | null> {
+  const all = await getAllSchools();
+  return all.find((s) => s.slug === slug) ?? null;
+}
+
+// ─── DIRECTORY (School Directory DB) ────────────────────────
 
 function mapDirectorySchool(page: PageObjectResponse): DirectorySchool {
   return {
@@ -130,17 +158,13 @@ function mapDirectorySchool(page: PageObjectResponse): DirectorySchool {
   };
 }
 
-// ─── QUERIES ────────────────────────────────────────────────
-
-// Paginate through all results for a query
-async function queryAll(
+async function queryAllPages(
   databaseId: string,
   filter: any,
   sorts?: any[]
 ): Promise<PageObjectResponse[]> {
   const results: PageObjectResponse[] = [];
   let cursor: string | undefined;
-
   do {
     const response: any = await notion.databases.query({
       database_id: databaseId,
@@ -152,82 +176,31 @@ async function queryAll(
     results.push(...(response.results as PageObjectResponse[]));
     cursor = response.has_more ? response.next_cursor ?? undefined : undefined;
   } while (cursor);
-
   return results;
 }
 
-/** Get Tier 1 and Tier 2 schools (curated, reviewed). */
-export async function getAllSchools(): Promise<School[]> {
-  if (!isConfigured()) return [];
-  try {
-    const pages = await queryAll(DB_ID!, {
-      or: [
-        { property: "Tier", select: { equals: "Tier 1 - Fully Reviewed" } },
-        { property: "Tier", select: { equals: "Tier 2 - Listed" } },
-      ],
-    });
-    return pages.map(mapSchool).sort((a, b) => {
-      if (a.tier !== b.tier) return a.tier - b.tier;
-      return (b.rating ?? 0) - (a.rating ?? 0);
-    });
-  } catch {
-    return [];
-  }
-}
-
-/** Get Tier 1/2 schools that serve a given state. */
-export async function getSchoolsForState(stateCode: string): Promise<School[]> {
-  const all = await getAllSchools();
-  return all.filter((school) => {
-    if (school.stateCodes.includes("all")) return true;
-    // Match by state code (e.g. "CA") or full state name (e.g. "California")
-    return school.stateCodes.some(
-      (sc) =>
-        sc.toUpperCase() === stateCode.toUpperCase() ||
-        sc.toLowerCase() === stateCode.toLowerCase()
-    );
-  });
-}
-
-/** Get a single school by slug (Tier 1/2 only). */
-export async function getSchoolBySlug(slug: string): Promise<School | null> {
-  const all = await getAllSchools();
-  return all.find((s) => s.slug === slug) ?? null;
-}
-
-/** Get directory schools for a state (everything NOT Tier 1/2). */
 export async function getDirectoryForState(
   stateName: string
 ): Promise<DirectorySchool[]> {
-  if (!isConfigured()) return [];
+  if (!process.env.NOTION_TOKEN || !DIRECTORY_DB) return [];
   try {
-    // All schools for this state — we exclude Tier 1/2 in code
-    // because Notion "does_not_equal" can't combine with "is_empty"
-    const pages = await queryAll(
-      DB_ID!,
+    const pages = await queryAllPages(
+      DIRECTORY_DB,
       { property: "State", select: { equals: stateName } },
       [{ property: "School Name", direction: "ascending" }]
     );
-    // Filter out Tier 1/2 — those show in the comparison section
-    return pages
-      .filter((p) => {
-        const tier = getSelect(p, "Tier") ?? "";
-        return !tier.startsWith("Tier 1") && tier !== "1 - Featured";
-      })
-      .map(mapDirectorySchool);
+    return pages.map(mapDirectorySchool);
   } catch {
     return [];
   }
 }
 
-// ─── STATES (no separate DB — use static fallback) ─────────
+// ─── STATES (no separate DB yet — use static fallback) ──────
 
 export async function getStateInfo(
   _stateCode: string
 ): Promise<StateInfo | null> {
-  // States DB not yet created — return null to use static fallback
   if (!process.env.NOTION_STATES_DB) return null;
-  if (!isConfigured()) return null;
   try {
     const response = await notion.databases.query({
       database_id: process.env.NOTION_STATES_DB,
@@ -245,13 +218,13 @@ export async function getStateInfo(
       id: page.id,
       code: getText(page, "State Code") || getText(page, "Abbreviation") || "",
       name: getText(page, "State Name") || getText(page, "Name") || "",
-      onlineAllowed: getCheckbox(page, "Online Allowed") || getCheckbox(page, "Online Available"),
-      minHours: getNumber(page, "Min Hours") || getNumber(page, "Minimum Hours"),
-      programName: getText(page, "Program Name") || getText(page, "TVS Name") || "Traffic School",
-      eligibilityNotes: getText(page, "Eligibility") || getText(page, "Eligibility Notes") || "",
-      courtProcess: getText(page, "Court Process") || getText(page, "How It Works") || "",
-      dmvUrl: getText(page, "DMV URL") || getText(page, "Official URL") || "",
-      lastUpdated: getDate(page, "Last Updated") || getDate(page, "Last Verified"),
+      onlineAllowed: getCheckbox(page, "Online Allowed"),
+      minHours: getNumber(page, "Min Hours"),
+      programName: getText(page, "Program Name") || "Traffic School",
+      eligibilityNotes: getText(page, "Eligibility") || "",
+      courtProcess: getText(page, "Court Process") || "",
+      dmvUrl: getText(page, "DMV URL") || "",
+      lastUpdated: getDate(page, "Last Updated"),
     };
   } catch {
     return null;
@@ -259,60 +232,7 @@ export async function getStateInfo(
 }
 
 export async function getAllStates(): Promise<StateInfo[]> {
-  return []; // Use static STATE_LIST from state-utils.ts for routing
-}
-
-// ─── ADMIN STATS ────────────────────────────────────────────
-
-export async function getAdminStats() {
-  const envChecks = {
-    notionToken: !!process.env.NOTION_TOKEN,
-    schoolsDb: !!DB_ID,
-    directoryDb: !!DB_ID,
-    statesDb: !!process.env.NOTION_STATES_DB,
-    deployHook: !!process.env.VERCEL_DEPLOY_HOOK,
-  };
-
-  if (!isConfigured()) {
-    return {
-      totalSchools: 0, tier1Count: 0, tier2Count: 0, directoryCount: 0,
-      noAffiliateCount: 0, noAffiliateSchools: [] as string[],
-      caDirectoryCount: 0, txDirectoryCount: 0, flDirectoryCount: 0,
-      latestVerified: null as string | null,
-      envChecks,
-    };
-  }
-
-  const tier1Schools = await getAllSchools();
-  const tier1 = tier1Schools.filter((s) => s.tier === 1);
-  const tier2 = tier1Schools.filter((s) => s.tier === 2);
-  const noAffiliate = tier1Schools.filter((s) => !s.affiliateUrl);
-
-  let caCount = 0, txCount = 0, flCount = 0;
-  try {
-    const [ca, tx, fl] = await Promise.all([
-      getDirectoryForState("California"),
-      getDirectoryForState("Texas"),
-      getDirectoryForState("Florida"),
-    ]);
-    caCount = ca.length;
-    txCount = tx.length;
-    flCount = fl.length;
-  } catch { /* */ }
-
-  return {
-    totalSchools: tier1Schools.length,
-    tier1Count: tier1.length,
-    tier2Count: tier2.length,
-    directoryCount: caCount + txCount + flCount,
-    noAffiliateCount: noAffiliate.length,
-    noAffiliateSchools: noAffiliate.map((s) => s.name),
-    caDirectoryCount: caCount,
-    txDirectoryCount: txCount,
-    flDirectoryCount: flCount,
-    latestVerified: null as string | null,
-    envChecks,
-  };
+  return []; // Use static STATE_LIST from state-utils.ts
 }
 
 // ─── PRICE HELPER ───────────────────────────────────────────
@@ -333,6 +253,63 @@ export function getPriceForState(
   return {
     amount,
     display: amount !== null ? `$${amount.toFixed(2)}` : "Check website",
+  };
+}
+
+// ─── ADMIN STATS ────────────────────────────────────────────
+
+export async function getAdminStats() {
+  const envChecks = {
+    notionToken: !!process.env.NOTION_TOKEN,
+    schoolsDb: !!SCHOOLS_DB,
+    directoryDb: !!DIRECTORY_DB,
+    statesDb: !!process.env.NOTION_STATES_DB,
+    deployHook: !!process.env.VERCEL_DEPLOY_HOOK,
+  };
+
+  if (!process.env.NOTION_TOKEN) {
+    return {
+      totalSchools: 0, tier1Count: 0, tier2Count: 0,
+      noAffiliateCount: 0, noAffiliateSchools: [] as string[],
+      caDirectoryCount: 0, txDirectoryCount: 0, flDirectoryCount: 0,
+      latestVerified: null as string | null,
+      envChecks,
+    };
+  }
+
+  const schools = await getAllSchools();
+  const tier1 = schools.filter((s) => s.tier === 1);
+  const tier2 = schools.filter((s) => s.tier === 2);
+  const noAffiliate = schools.filter((s) => !s.affiliateUrl);
+  const latestVerified = schools
+    .map((s) => s.lastVerified)
+    .filter(Boolean)
+    .sort()
+    .pop();
+
+  let caCount = 0, txCount = 0, flCount = 0;
+  try {
+    const [ca, tx, fl] = await Promise.all([
+      getDirectoryForState("California"),
+      getDirectoryForState("Texas"),
+      getDirectoryForState("Florida"),
+    ]);
+    caCount = ca.length;
+    txCount = tx.length;
+    flCount = fl.length;
+  } catch { /* */ }
+
+  return {
+    totalSchools: schools.length,
+    tier1Count: tier1.length,
+    tier2Count: tier2.length,
+    noAffiliateCount: noAffiliate.length,
+    noAffiliateSchools: noAffiliate.map((s) => s.name),
+    caDirectoryCount: caCount,
+    txDirectoryCount: txCount,
+    flDirectoryCount: flCount,
+    latestVerified: latestVerified ?? null,
+    envChecks,
   };
 }
 
