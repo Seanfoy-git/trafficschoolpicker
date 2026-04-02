@@ -137,20 +137,21 @@ async function syncTXToNotion(schools: Record<string, string>[]) {
     updated = 0;
 
   for (const row of schools) {
-    const name = pickField(row, "Name", "Business Name", "BusinessName", "DBA Name");
+    const name = pickField(row, "Licensee", "Name", "Business Name", "BusinessName", "DBA Name");
     const license = pickField(
       row,
-      "LicenseNumber",
       "License Number",
+      "LicenseNumber",
       "License",
       "Provider Number"
     );
     const phone = pickField(row, "Phone", "PhoneNumber", "Phone Number");
     const city = pickField(row, "City");
     const address = [
-      pickField(row, "Address", "Street"),
+      pickField(row, "Address 1", "Address", "Street"),
+      pickField(row, "Address 2"),
       city,
-      "TX",
+      pickField(row, "State") || "TX",
       pickField(row, "Zip", "ZipCode", "Zip Code"),
     ]
       .filter(Boolean)
@@ -162,7 +163,7 @@ async function syncTXToNotion(schools: Record<string, string>[]) {
       "School Name": { title: [{ text: { content: name } }] },
       "License Number": { rich_text: [{ text: { content: license } }] },
       Phone: { rich_text: [{ text: { content: phone || "" } }] },
-      "Counties Approved": { rich_text: [{ text: { content: address } }] },
+      Address: { rich_text: [{ text: { content: address } }] },
       State: { select: { name: "Texas" } },
       "Online Available": { checkbox: true },
       Source: { select: { name: "TX TDLR" } },

@@ -148,7 +148,7 @@ async function syncToNotion(scraped: ScrapedSchool[]) {
         rich_text: [{ text: { content: school.license } }],
       },
       Phone: { rich_text: [{ text: { content: school.phone || "" } }] },
-      "Counties Approved": {
+      "Address": {
         rich_text: [{ text: { content: school.address } }],
       },
       State: { select: { name: "California" } },

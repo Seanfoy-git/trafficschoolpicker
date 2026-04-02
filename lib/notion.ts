@@ -155,7 +155,7 @@ function mapDirectorySchool(page: PageObjectResponse): DirectorySchool {
     licenseNumber: getText(page, "License Number"),
     phone: getText(page, "Phone"),
     address:
-      getText(page, "Counties Approved") || getText(page, "Address") || "",
+      getText(page, "Address") || getText(page, "Counties Approved") || "",
     website: getText(page, "Website") || null,
     onlineAvailable: getCheckbox(page, "Online Available"),
     tier: 3,
