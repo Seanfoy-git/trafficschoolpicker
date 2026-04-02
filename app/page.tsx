@@ -1,65 +1,183 @@
-import Image from "next/image";
+import { Metadata } from "next";
+import { StateSelector } from "@/components/StateSelector";
+import { TrustBar } from "@/components/TrustBar";
+import { SchoolCard } from "@/components/SchoolCard";
+import { SchoolFAQ, FAQJsonLd } from "@/components/SchoolFAQ";
+import { getTopSchools } from "@/lib/schools";
+import { states } from "@/lib/states";
+import Link from "next/link";
+import { ArrowRight, Search, BarChart3, MousePointerClick } from "lucide-react";
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: "TrafficSchoolPicker — Compare Online Traffic Schools & Save",
+  description:
+    "Got a traffic ticket? Compare court-approved online traffic schools by price, speed, and quality. Find the best school in your state and save money.",
+  alternates: { canonical: "https://trafficschoolpicker.com" },
+};
+
+const homeFaqs = [
+  {
+    question: "Does online traffic school remove a ticket?",
+    answer:
+      "In most states, completing an approved online traffic school course can dismiss your ticket or prevent points from appearing on your driving record. The specific outcome depends on your state's laws and the court handling your case. Generally, the violation is masked or dismissed once you submit your completion certificate.",
+  },
+  {
+    question: "How long does traffic school take?",
+    answer:
+      "Most online traffic school courses take between 4 to 8 hours to complete, depending on your state's requirements. Many states mandate a minimum seat time. The good news is that most online courses let you log in and out, so you can spread the time over several days.",
+  },
+  {
+    question: "Is online traffic school accepted by courts?",
+    answer:
+      "Yes — all schools listed on TrafficSchoolPicker are court-approved and accepted by the relevant state DMV or court system. We only list schools that have been officially licensed or approved by state regulatory agencies.",
+  },
+  {
+    question: "How much does traffic school cost?",
+    answer:
+      "Online traffic school typically costs between $19.95 and $29.99, depending on the provider and your state. This is significantly cheaper than paying the full ticket fine, which can be $150-$500+ plus insurance premium increases. Traffic school usually pays for itself many times over.",
+  },
+  {
+    question: "What happens if I don't take traffic school?",
+    answer:
+      "If you're eligible for traffic school but choose not to attend, the violation will remain on your driving record. This can lead to points on your license, increased insurance premiums (often 20-40% higher for 3-5 years), and potentially license suspension if you accumulate too many points.",
+  },
+  {
+    question: "Can I take traffic school on my phone?",
+    answer:
+      "Yes! Most modern online traffic schools are mobile-friendly, and some like Aceable even offer dedicated mobile apps. You can complete your course on a smartphone or tablet from anywhere with an internet connection.",
+  },
+];
+
+export default function HomePage() {
+  const topSchools = getTopSchools(3);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <>
+      <FAQJsonLd faqs={homeFaqs} />
+
+      {/* Hero */}
+      <section className="bg-primary text-white py-16 md:py-24">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+            Got a ticket? Find the best traffic school in your state.
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-lg md:text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
+            Compare court-approved online traffic schools by price, speed, and
+            quality. Save money and keep your driving record clean.
           </p>
+          <StateSelector size="lg" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <TrustBar />
+
+      {/* How It Works */}
+      <section className="py-16 bg-white">
+        <div className="max-w-5xl mx-auto px-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-slate-900 mb-12">
+            How It Works
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Search,
+                title: "Select your state",
+                desc: "Choose your state to see court-approved schools and state-specific pricing.",
+              },
+              {
+                icon: BarChart3,
+                title: "Compare prices & features",
+                desc: "Sort by price, rating, and completion time to find the perfect fit.",
+              },
+              {
+                icon: MousePointerClick,
+                title: "Enroll in minutes",
+                desc: "Click through to your chosen school and start your course right away.",
+              },
+            ].map((step, i) => (
+              <div key={i} className="text-center">
+                <div className="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
+                  <step.icon className="w-7 h-7 text-accent" />
+                </div>
+                <div className="text-xs font-semibold text-accent uppercase tracking-wider mb-1">
+                  Step {i + 1}
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-2">
+                  {step.title}
+                </h3>
+                <p className="text-sm text-slate-600">{step.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* Top Picks */}
+      <section className="py-16 bg-slate-50">
+        <div className="max-w-5xl mx-auto px-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
+            Our Top Picks
+          </h2>
+          <p className="text-slate-600 mb-8">
+            Hand-picked by our editorial team based on price, quality, and user
+            satisfaction.
+          </p>
+          <div className="space-y-4">
+            {topSchools.map((school, i) => (
+              <SchoolCard key={school.id} school={school} rank={i + 1} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Trust Us */}
+      <section className="py-16 bg-white">
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
+            Why Trust TrafficSchoolPicker?
+          </h2>
+          <p className="text-slate-600 leading-relaxed mb-6">
+            We independently research and review every traffic school we list.
+            Our rankings are based on price, course quality, user reviews,
+            completion time, and court acceptance rates. We may earn affiliate
+            commissions, but this never influences our rankings or
+            recommendations.
+          </p>
+          <Link
+            href="/about"
+            className="inline-flex items-center gap-1 text-accent font-semibold hover:underline"
+          >
+            Read our full methodology <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
+
+      {/* State Grid */}
+      <section className="py-16 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-8 text-center">
+            Find Traffic Schools by State
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {states.map((state) => (
+              <Link
+                key={state.slug}
+                href={`/${state.slug}`}
+                className="block px-4 py-3 bg-white rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:border-accent hover:text-accent transition-colors text-center"
+              >
+                {state.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-16 bg-white">
+        <div className="max-w-3xl mx-auto px-4">
+          <SchoolFAQ faqs={homeFaqs} />
+        </div>
+      </section>
+    </>
   );
 }
