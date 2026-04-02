@@ -1,12 +1,12 @@
-name: Monthly DMV Scrape → Notion
+name: Monthly Data Refresh
 
 on:
   schedule:
-    - cron: "0 9 1 * *" # 9am UTC on 1st of every month
-  workflow_dispatch: # Allow manual trigger from GitHub Actions UI
+    - cron: "0 9 1 * *" # 1st of each month, 9am UTC
+  workflow_dispatch: # Allow manual trigger
 
 jobs:
-  scrape:
+  refresh:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,30 +15,41 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
 
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
-      - name: Scrape CA DMV → Notion
+      # JOB 1 — DMV directory scrape (CA, TX, FL)
+      - name: Scrape state DMV sources → Notion Directory
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DIRECTORY_DB: ${{ secrets.NOTION_DIRECTORY_DB }}
+        run: npm run scrape:dmv
+
+      # JOB 2 — Review scrape (Trustpilot for Tier 1/2 schools)
+      - name: Scrape Trustpilot ratings → Notion Schools
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_SCHOOLS_DB: ${{ secrets.NOTION_SCHOOLS_DB }}
+        run: npm run scrape:reviews
+
+      # JOB 3 — Google Places enrichment (websites for new directory schools)
+      - name: Enrich new schools via Google Places API
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DIRECTORY_DB: ${{ secrets.NOTION_DIRECTORY_DB }}
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+        run: npm run enrich:places
+
+      # Trigger site redeploy after all data is updated
+      - name: Trigger Vercel redeploy
+        env:
           VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
-        run: npm run scrape:ca -- --deploy
-
-      - name: Scrape TX TDLR → Notion
-        env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_DIRECTORY_DB: ${{ secrets.NOTION_DIRECTORY_DB }}
-        run: npm run scrape:tx
-
-      - name: Scrape FL DHSMV → Notion
-        env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_DIRECTORY_DB: ${{ secrets.NOTION_DIRECTORY_DB }}
-        run: npm run scrape:fl
-
-      - name: Summary
-        run: echo "Scrape complete. Notion updated. Site will reflect changes via ISR within 24hrs or after deploy."
+        run: |
+          if [ -n "$VERCEL_DEPLOY_HOOK" ]; then
+            curl -X POST "$VERCEL_DEPLOY_HOOK"
+            echo "Vercel redeploy triggered"
+          else
+            echo "No deploy hook configured — skipping"
+          fi

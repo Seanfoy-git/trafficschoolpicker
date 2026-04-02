@@ -10,7 +10,10 @@
     "scrape:ca": "npx tsx scripts/scrape-ca-dmv.ts",
     "scrape:tx": "npx tsx scripts/scrape-tx-tdlr.ts",
     "scrape:fl": "npx tsx scripts/scrape-fl-dhsmv.ts",
-    "scrape:all": "npm run scrape:ca && npm run scrape:tx && npm run scrape:fl"
+    "scrape:dmv": "npm run scrape:ca && npm run scrape:tx && npm run scrape:fl",
+    "scrape:reviews": "npx tsx scripts/scrape-reviews.ts",
+    "enrich:places": "npx tsx scripts/enrich-places.ts",
+    "scrape:all": "npm run scrape:dmv && npm run scrape:reviews && npm run enrich:places"
   },
   "dependencies": {
     "@notionhq/client": "^2.3.0",
