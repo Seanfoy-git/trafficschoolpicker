@@ -1,4 +1,5 @@
 import type { School } from "@/lib/types";
+import { getPriceForState } from "@/lib/notion";
 import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
 import { AffiliateButton } from "./AffiliateButton";
@@ -9,11 +10,14 @@ export function SchoolCard({
   school,
   rank,
   showProsAndCons = false,
+  stateCode,
 }: {
   school: School;
   rank?: number;
   showProsAndCons?: boolean;
+  stateCode?: string;
 }) {
+  const { amount, display } = getPriceForState(school, stateCode ?? "CA");
   return (
     <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex flex-col sm:flex-row sm:items-start gap-4">
@@ -108,14 +112,27 @@ export function SchoolCard({
 
         <div className="flex flex-col items-end gap-3 sm:min-w-[160px]">
           <div className="text-right">
-            {school.originalPrice && (
-              <span className="text-sm text-slate-400 line-through">
-                ${school.originalPrice.toFixed(2)}
-              </span>
+            {amount !== null ? (
+              <>
+                {school.originalPrice && (
+                  <span className="text-sm text-slate-400 line-through">
+                    ${school.originalPrice.toFixed(2)}
+                  </span>
+                )}
+                <div className="text-2xl font-bold text-slate-900">
+                  {display}
+                </div>
+              </>
+            ) : (
+              <a
+                href={school.website}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="text-sm text-slate-500 hover:underline"
+              >
+                Check website &rarr;
+              </a>
             )}
-            <div className="text-2xl font-bold text-slate-900">
-              ${school.price.toFixed(2)}
-            </div>
           </div>
 
           <AffiliateButton school={school} />

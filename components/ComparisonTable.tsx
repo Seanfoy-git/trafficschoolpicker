@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { School } from "@/lib/types";
+import { getPriceForState } from "@/lib/notion";
 import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
 import { AffiliateButton } from "./AffiliateButton";
@@ -12,13 +13,23 @@ type SortKey = "price" | "rating" | "completionHours";
 
 export function ComparisonTable({
   schools,
+  stateCode = "CA",
 }: {
   schools: School[];
+  stateCode?: string;
 }) {
   const [sortBy, setSortBy] = useState<SortKey>("rating");
   const [sortAsc, setSortAsc] = useState(false);
 
   const sorted = [...schools].sort((a, b) => {
+    if (sortBy === "price") {
+      const priceA = getPriceForState(a, stateCode).amount;
+      const priceB = getPriceForState(b, stateCode).amount;
+      if (priceA === null && priceB === null) return 0;
+      if (priceA === null) return 1;
+      if (priceB === null) return -1;
+      return sortAsc ? priceA - priceB : priceB - priceA;
+    }
     const aVal = a[sortBy] ?? 0;
     const bVal = b[sortBy] ?? 0;
     return sortAsc ? aVal - bVal : bVal - aVal;
@@ -89,14 +100,23 @@ export function ComparisonTable({
                 </div>
               </td>
               <td className="py-4 px-4">
-                <div className="font-bold text-slate-900">
-                  ${school.price.toFixed(2)}
-                </div>
-                {school.originalPrice && (
-                  <div className="text-xs text-slate-400 line-through">
-                    ${school.originalPrice.toFixed(2)}
-                  </div>
-                )}
+                {(() => {
+                  const { amount } = getPriceForState(school, stateCode);
+                  return amount !== null ? (
+                    <>
+                      <div className="font-bold text-slate-900">
+                        ${amount.toFixed(2)}
+                      </div>
+                      {school.originalPrice && (
+                        <div className="text-xs text-slate-400 line-through">
+                          ${school.originalPrice.toFixed(2)}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="text-xs text-slate-500">Check site</div>
+                  );
+                })()}
               </td>
               <td className="py-4 px-4">
                 {school.rating !== null && (

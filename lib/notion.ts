@@ -94,7 +94,11 @@ function mapSchool(page: PageObjectResponse): School {
     affiliateUrl: getText(page, "Affiliate URL"),
     affiliateNetwork: getSelect(page, "Affiliate Network") as School["affiliateNetwork"],
     commissionRate: getText(page, "Commission Rate"),
-    price: getNumber(page, "Price") ?? 0,
+    price: getNumber(page, "Price CA") ?? getNumber(page, "Price") ?? 0,
+    priceCA: getNumber(page, "Price CA"),
+    priceTX: getNumber(page, "Price TX"),
+    priceFL: getNumber(page, "Price FL"),
+    priceNY: getNumber(page, "Price NY"),
     originalPrice: getNumber(page, "Original Price"),
     rating: getNumber(page, "Rating"),
     reviewCount: getNumber(page, "Review Count"),
@@ -316,6 +320,27 @@ export async function getAdminStats() {
     flDirectoryCount: flCount,
     latestVerified: null as string | null,
     envChecks,
+  };
+}
+
+// ─── PRICE HELPER ───────────────────────────────────────────
+
+export function getPriceForState(
+  school: School,
+  stateCode: string
+): { amount: number | null; display: string } {
+  const stateMap: Record<string, number | null> = {
+    CA: school.priceCA,
+    TX: school.priceTX,
+    FL: school.priceFL,
+    NY: school.priceNY,
+  };
+
+  const amount = stateMap[stateCode.toUpperCase()] ?? (school.price || null);
+
+  return {
+    amount,
+    display: amount !== null ? `$${amount.toFixed(2)}` : "Check website",
   };
 }
 

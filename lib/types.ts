@@ -10,6 +10,10 @@ export type School = {
   affiliateNetwork: 'CJ' | 'Impact' | 'ShareASale' | 'Direct' | 'Unknown' | null;
   commissionRate: string;
   price: number;
+  priceCA: number | null;
+  priceTX: number | null;
+  priceFL: number | null;
+  priceNY: number | null;
   originalPrice: number | null;
   rating: number | null;
   reviewCount: number | null;

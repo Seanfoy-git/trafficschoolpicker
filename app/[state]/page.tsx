@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getSchoolsForState, getStateInfo, getDirectoryForState } from "@/lib/notion";
+import { getSchoolsForState, getStateInfo, getDirectoryForState, getPriceForState } from "@/lib/notion";
 import { getStateFAQs } from "@/lib/state-faqs";
 import { getStateBySlug, getAllStateSlugs } from "@/lib/state-utils";
 import { SchoolCard } from "@/components/SchoolCard";
@@ -98,6 +98,7 @@ export default async function StatePage({ params }: Props) {
                   school={school}
                   rank={i + 1}
                   showProsAndCons
+                  stateCode={stateMeta.code}
                 />
               ))}
             </div>
@@ -139,9 +140,14 @@ export default async function StatePage({ params }: Props) {
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="text-right">
-                      <div className="font-bold text-slate-900">
-                        ${school.price.toFixed(2)}
-                      </div>
+                      {(() => {
+                        const { amount, display } = getPriceForState(school, stateMeta.code);
+                        return amount !== null ? (
+                          <div className="font-bold text-slate-900">{display}</div>
+                        ) : (
+                          <div className="text-xs text-slate-500">Check site</div>
+                        );
+                      })()}
                       {school.rating !== null && (
                         <div className="text-xs text-slate-500">
                           {school.rating}/5

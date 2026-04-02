@@ -34,7 +34,14 @@ jobs:
           NOTION_SCHOOLS_DB: ${{ secrets.NOTION_SCHOOLS_DB }}
         run: npm run scrape:reviews
 
-      # JOB 3 — Google Places enrichment (websites for new directory schools)
+      # JOB 3 — Price scrape (state-specific prices for Tier 1/2 schools)
+      - name: Scrape school prices → Notion
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_SCHOOLS_DB: ${{ secrets.NOTION_SCHOOLS_DB }}
+        run: npm run scrape:prices
+
+      # JOB 4 — Google Places enrichment (websites for new directory schools)
       - name: Enrich new schools via Google Places API
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}

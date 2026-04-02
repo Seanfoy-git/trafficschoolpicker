@@ -12,8 +12,9 @@
     "scrape:fl": "npx tsx scripts/scrape-fl-dhsmv.ts",
     "scrape:dmv": "npm run scrape:ca && npm run scrape:tx && npm run scrape:fl",
     "scrape:reviews": "npx tsx scripts/scrape-reviews.ts",
+    "scrape:prices": "npx tsx scripts/scrape-prices.ts",
     "enrich:places": "npx tsx scripts/enrich-places.ts",
-    "scrape:all": "npm run scrape:dmv && npm run scrape:reviews && npm run enrich:places"
+    "scrape:all": "npm run scrape:dmv && npm run scrape:reviews && npm run scrape:prices && npm run enrich:places"
   },
   "dependencies": {
     "@notionhq/client": "^2.3.0",
