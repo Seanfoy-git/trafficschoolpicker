@@ -17,6 +17,8 @@
  * - CA DMV: no documented limit → Playwright adds natural delays
  */
 
+import { config } from "dotenv";
+config({ path: ".env.local" });
 import { chromium } from "playwright";
 import { Client } from "@notionhq/client";
 
@@ -145,8 +147,10 @@ async function syncToNotion(scraped: ScrapedSchool[]) {
       "License Number": {
         rich_text: [{ text: { content: school.license } }],
       },
-      Phone: { phone_number: school.phone || null },
-      Address: { rich_text: [{ text: { content: school.address } }] },
+      Phone: { rich_text: [{ text: { content: school.phone || "" } }] },
+      "Counties Approved": {
+        rich_text: [{ text: { content: school.address } }],
+      },
       State: { select: { name: "California" } },
       "Online Available": { checkbox: true },
       Source: { select: { name: "CA DMV" } },

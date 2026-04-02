@@ -17,6 +17,8 @@
  * - TX TDLR: CSV download → single request, no rate limit
  */
 
+import { config } from "dotenv";
+config({ path: ".env.local" });
 import { Client } from "@notionhq/client";
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
@@ -159,8 +161,8 @@ async function syncTXToNotion(schools: Record<string, string>[]) {
     const properties: any = {
       "School Name": { title: [{ text: { content: name } }] },
       "License Number": { rich_text: [{ text: { content: license } }] },
-      Phone: { phone_number: phone || null },
-      Address: { rich_text: [{ text: { content: address } }] },
+      Phone: { rich_text: [{ text: { content: phone || "" } }] },
+      "Counties Approved": { rich_text: [{ text: { content: address } }] },
       State: { select: { name: "Texas" } },
       "Online Available": { checkbox: true },
       Source: { select: { name: "TX TDLR" } },

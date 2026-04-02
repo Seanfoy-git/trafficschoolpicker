@@ -17,6 +17,8 @@
  * - FL DHSMV: no documented limit → Playwright adds natural delays
  */
 
+import { config } from "dotenv";
+config({ path: ".env.local" });
 import { chromium } from "playwright";
 import { Client } from "@notionhq/client";
 
@@ -168,7 +170,7 @@ async function syncFLToNotion(scraped: ScrapedSchool[]) {
       "License Number": {
         rich_text: [{ text: { content: school.license || "N/A" } }],
       },
-      Phone: { phone_number: school.phone || null },
+      Phone: { rich_text: [{ text: { content: school.phone || "" } }] },
       State: { select: { name: "Florida" } },
       "Online Available": { checkbox: true },
       Source: { select: { name: "FL DHSMV" } },
@@ -181,7 +183,11 @@ async function syncFLToNotion(scraped: ScrapedSchool[]) {
     };
 
     if (school.website) {
-      properties["Website"] = { url: school.website.startsWith("http") ? school.website : `https://${school.website}` };
+      properties["Website"] = {
+        url: school.website.startsWith("http")
+          ? school.website
+          : `https://${school.website}`,
+      };
     }
 
     const existingId = existing.get(school.name);
