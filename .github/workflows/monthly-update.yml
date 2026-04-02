@@ -9,6 +9,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 jobs:
   update-data:
@@ -23,18 +24,44 @@ jobs:
 
       - run: npm ci
 
-      - name: Scrape CA DMV schools
-        run: npx tsx scripts/scrape-ca-dmv.ts
+      # Run all scrapers with validation
+      - name: Run scrapers
+        id: scrape
+        continue-on-error: true
+        run: npx tsx scripts/run-all.ts
 
-      - name: Scrape TX TDLR providers
-        run: npx tsx scripts/scrape-tx-tdlr.ts
-
-      - name: Scrape Tier 1 school prices
-        run: npx tsx scripts/scrape-prices.ts
-
+      # Generate diff report
       - name: Generate diff report
         run: npx tsx scripts/compare-and-diff.ts
 
+      # Read health status
+      - name: Check health
+        id: health
+        run: |
+          if [ -f data/scrape-health.json ]; then
+            STATUS=$(node -e "console.log(JSON.parse(require('fs').readFileSync('data/scrape-health.json','utf-8')).overall)")
+            echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+
+            ISSUES=$(node -e "
+              const h = JSON.parse(require('fs').readFileSync('data/scrape-health.json','utf-8'));
+              const lines = [];
+              for (const r of h.results) {
+                for (const e of r.errors) lines.push('- **ERROR** ' + e);
+                for (const w of r.warnings) lines.push('- **WARN** ' + w);
+              }
+              console.log(lines.join('\n'));
+            ")
+            {
+              echo "issues<<HEALTH_EOF"
+              echo "$ISSUES"
+              echo "HEALTH_EOF"
+            } >> "$GITHUB_OUTPUT"
+          else
+            echo "status=unknown" >> "$GITHUB_OUTPUT"
+            echo "issues=Health report not generated" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Read diff report for PR body
       - name: Read diff report
         id: report
         run: |
@@ -42,12 +69,17 @@ jobs:
             {
               echo "body<<DIFF_EOF"
               cat data/diff-report.md
+              echo ""
+              echo "## Scrape Health: ${{ steps.health.outputs.status }}"
+              echo ""
+              echo "${{ steps.health.outputs.issues }}"
               echo "DIFF_EOF"
             } >> "$GITHUB_OUTPUT"
           else
             echo "body=No diff report generated." >> "$GITHUB_OUTPUT"
           fi
 
+      # Always create a PR with whatever data we got
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
@@ -58,3 +90,41 @@ jobs:
           body: ${{ steps.report.outputs.body }}
           labels: data-update
           delete-branch: true
+
+      # Open a GitHub Issue if any scraper is failing or degraded
+      - name: Alert on scrape failures
+        if: steps.health.outputs.status == 'failing' || steps.health.outputs.status == 'degraded'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = '${{ steps.health.outputs.status }}';
+            const emoji = status === 'failing' ? '🔴' : '🟡';
+            const label = status === 'failing' ? 'bug' : 'maintenance';
+
+            // Check if there's already an open issue to avoid duplicates
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'scrape-alert',
+              per_page: 1,
+            });
+
+            if (existing.data.length > 0) {
+              // Update existing issue with new info
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.data[0].number,
+                body: `${emoji} **Monthly update ${new Date().toISOString().split('T')[0]}** — status: **${status}**\n\n${{ steps.health.outputs.issues }}\n\nSee [workflow run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`,
+              });
+            } else {
+              // Create new issue
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `${emoji} Scrape ${status}: data source may have changed`,
+                body: `The monthly data update detected issues with one or more scrapers.\n\n## Status: ${status.toUpperCase()}\n\n${{ steps.health.outputs.issues }}\n\n## What to check\n- Has the source website changed its URL or page structure?\n- Is the API endpoint still returning the expected format?\n- Are there new fields or missing columns in the data?\n\nSee [workflow run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}) for full logs.`,
+                labels: ['scrape-alert', label],
+              });
+            }

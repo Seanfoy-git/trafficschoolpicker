@@ -11,7 +11,7 @@
     "scrape:tx": "tsx scripts/scrape-tx-tdlr.ts",
     "scrape:prices": "tsx scripts/scrape-prices.ts",
     "scrape:diff": "tsx scripts/compare-and-diff.ts",
-    "scrape:all": "npm run scrape:ca && npm run scrape:tx && npm run scrape:prices && npm run scrape:diff"
+    "scrape:all": "tsx scripts/run-all.ts && tsx scripts/compare-and-diff.ts"
   },
   "dependencies": {
     "@radix-ui/react-select": "^2.2.6",
