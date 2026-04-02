@@ -1,158 +1,222 @@
 /**
- * Fetches the TX TDLR driving safety (traffic school) provider CSV from
- * tdlr.texas.gov, filters to active Internet-based providers, validates
- * results, and writes data/tx-schools.json.
+ * DATA FLOW: DMV → Notion → Site
+ *
+ * 1. This script fetches the TX TDLR driving safety provider CSV
+ * 2. It writes/updates records in the Notion School Directory database
+ *    (ID: process.env.NOTION_DIRECTORY_DB)
+ * 3. The Next.js site reads from Notion via getDirectoryForState()
+ *    in lib/notion.ts on every request (cached for 24hrs via ISR)
+ * 4. No JSON files are involved. Notion is the single source of truth.
+ * 5. To see changes on the site immediately after scraping:
+ *    - Run this script with --deploy flag: npm run scrape:tx -- --deploy
+ *    - OR go to trafficschoolpicker.com/admin and click Trigger Redeploy
+ *    - OR wait up to 24hrs for ISR to pick up Notion changes automatically
+ *
+ * Rate limits:
+ * - Notion API: 3 requests/second → 350ms delay between writes
+ * - TX TDLR: CSV download → single request, no rate limit
  */
 
-import { writeFileSync, mkdirSync } from "fs";
-import * as path from "path";
-import { parse } from "csv-parse/sync";
-import { validateRecords, runScraper, ScrapeResult } from "./lib/validate";
+import { Client } from "@notionhq/client";
+
+const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB!;
 
 const CSV_URL =
   "https://www.tdlr.texas.gov/dbproduction2/vsDriverEduProvider.csv";
 
-const REQUIRED_FIELDS = ["name", "licenseNumber"];
-const MIN_EXPECTED_PROVIDERS = 10; // TX typically has dozens of providers
+function parseCSV(text: string): Record<string, string>[] {
+  const lines = text.split("\n");
+  const headers = lines[0]
+    .split(",")
+    .map((h) => h.trim().replace(/"/g, ""));
 
-type TxSchool = {
-  name: string;
-  licenseNumber: string;
-  phone: string;
-  website: string;
-  county: string;
-  status: string;
-  address: string;
-  city: string;
-  state: string;
-  zip: string;
-  type: string;
-  expirationDate: string;
-};
+  return lines
+    .slice(1)
+    .filter((line) => line.trim())
+    .map((line) => {
+      const values = line.split(",").map((v) => v.trim().replace(/"/g, ""));
+      const row: Record<string, string> = {};
+      headers.forEach((h, i) => (row[h] = values[i] ?? ""));
+      return row;
+    });
+}
 
-function pickField(row: Record<string, string>, ...candidates: string[]): string {
+function pickField(
+  row: Record<string, string>,
+  ...candidates: string[]
+): string {
   for (const key of candidates) {
     if (row[key]) return row[key];
   }
   return "";
 }
 
-export async function scrape(): Promise<ScrapeResult> {
-  return runScraper("tx-tdlr", async () => {
-    console.log("Fetching TX TDLR CSV...");
-    const res = await fetch(CSV_URL, {
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; TrafficSchoolPicker/1.0)" },
-      signal: AbortSignal.timeout(30000),
-    });
+async function scrapeTXTDLR(): Promise<Record<string, string>[]> {
+  console.log("Fetching TX TDLR CSV...");
+  const response = await fetch(CSV_URL, {
+    headers: {
+      "User-Agent": "Mozilla/5.0 (compatible; TrafficSchoolPicker/1.0)",
+    },
+    signal: AbortSignal.timeout(30000),
+  });
 
-    if (res.status === 404) {
-      throw new Error("CSV endpoint returned 404 — TDLR may have moved the file");
-    }
-    if (!res.ok) throw new Error(`HTTP ${res.status} fetching CSV`);
+  if (!response.ok) throw new Error(`HTTP ${response.status} fetching CSV`);
 
-    const text = await res.text();
-    console.log(`Downloaded ${(text.length / 1024).toFixed(0)} KB`);
+  const csv = await response.text();
+  console.log(`Downloaded ${(csv.length / 1024).toFixed(0)} KB`);
 
-    if (text.length < 100) {
-      throw new Error(`CSV response suspiciously small (${text.length} bytes) — may be an error page`);
-    }
+  if (csv.trimStart().startsWith("<!") || csv.trimStart().startsWith("<html")) {
+    throw new Error("Received HTML instead of CSV — endpoint may have changed");
+  }
 
-    // Check if we got HTML instead of CSV (common when endpoint changes)
-    if (text.trimStart().startsWith("<!") || text.trimStart().startsWith("<html")) {
-      throw new Error("Received HTML instead of CSV — endpoint may have changed");
-    }
+  const all = parseCSV(csv);
+  console.log(`Parsed ${all.length} total records`);
 
-    let records: Record<string, string>[];
-    try {
-      records = parse(text, {
-        columns: true,
-        skip_empty_lines: true,
-        trim: true,
-        relax_column_count: true,
-      });
-    } catch (err) {
-      throw new Error(`CSV parse failed — format may have changed: ${(err as Error).message}`);
-    }
+  if (all.length > 0) {
+    console.log("Columns:", Object.keys(all[0]).join(", "));
+  }
 
-    console.log(`Parsed ${records.length} total records`);
-
-    if (records.length > 0) {
-      const cols = Object.keys(records[0]);
-      console.log(`Columns (${cols.length}): ${cols.join(", ")}`);
-    }
-
-    const schools: TxSchool[] = [];
-    const seen = new Set<string>();
-
-    for (const row of records) {
-      const licenseNumber = pickField(row, "License Number", "LicenseNumber", "LICENSE_NUMBER", "License_Number", "ProviderNumber", "Provider Number");
-      const name = pickField(row, "Business Name", "BusinessName", "BUSINESS_NAME", "Business_Name", "Name", "DBA Name", "DBA");
-
-      if (!licenseNumber || seen.has(licenseNumber)) continue;
-      seen.add(licenseNumber);
-
-      schools.push({
-        name: name.trim(),
-        licenseNumber: licenseNumber.trim(),
-        phone: pickField(row, "Phone", "PHONE", "Phone Number", "PhoneNumber").trim(),
-        website: pickField(row, "Website", "URL", "Web", "WebAddress").trim(),
-        county: pickField(row, "County", "COUNTY").trim(),
-        status: pickField(row, "Status", "LICENSE_STATUS", "License Status").trim(),
-        address: pickField(row, "Address", "Street", "ADDRESS", "Mailing Address").trim(),
-        city: pickField(row, "City", "CITY").trim(),
-        state: pickField(row, "State", "STATE").trim() || "TX",
-        zip: pickField(row, "Zip", "ZIP", "Zip Code", "ZipCode", "Postal Code").trim(),
-        type: pickField(row, "Type", "School Type", "SchoolType", "Course Type", "CourseType", "Category").trim(),
-        expirationDate: pickField(row, "Expiration Date", "ExpirationDate", "EXPIRATION_DATE", "Expiration").trim(),
-      });
-    }
-
-    schools.sort((a, b) => a.name.localeCompare(b.name));
-
-    // Validate
-    const validation = validateRecords({
-      source: "tx-tdlr",
-      records: schools as unknown as Record<string, unknown>[],
-      requiredFields: REQUIRED_FIELDS,
-      minRecords: MIN_EXPECTED_PROVIDERS,
-    });
-
-    // Extra: warn if no records have a name (column mapping probably broke)
-    const namedCount = schools.filter((s) => s.name.length > 0).length;
-    if (schools.length > 0 && namedCount === 0) {
-      validation.errors.push(
-        "tx-tdlr: no records have a name — CSV column names likely changed"
-      );
-    }
-
-    // Write data
-    const outDir = path.join(process.cwd(), "data");
-    mkdirSync(outDir, { recursive: true });
-    writeFileSync(
-      path.join(outDir, "tx-schools.json"),
-      JSON.stringify(schools, null, 2)
+  // Filter for driving safety / defensive driving providers
+  const schools = all.filter((row) => {
+    const type = pickField(
+      row,
+      "License Type",
+      "Type",
+      "Category",
+      "School Type"
+    ).toLowerCase();
+    return (
+      type.includes("safety") ||
+      type.includes("defensive") ||
+      type.includes("driving safety") ||
+      type === "" // include if no type column (assume all are relevant)
     );
+  });
 
-    console.log(`\n${schools.length} unique providers written`);
+  console.log(`Filtered to ${schools.length} driving safety providers`);
+  return schools;
+}
 
-    return {
-      records: schools as unknown as Record<string, unknown>[],
-      errors: validation.errors,
-      warnings: validation.warnings,
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+async function getExistingTXSchools(): Promise<Map<string, string>> {
+  const existing = new Map<string, string>();
+  let cursor: string | undefined;
+
+  do {
+    const response: any = await notion.databases.query({
+      database_id: DIRECTORY_DB,
+      filter: { property: "State", select: { equals: "Texas" } },
+      start_cursor: cursor,
+      page_size: 100,
+    });
+
+    for (const page of response.results) {
+      const props = (page as any).properties;
+      const license =
+        props["License Number"]?.rich_text?.[0]?.plain_text;
+      if (license) existing.set(license, page.id);
+    }
+
+    cursor = response.has_more
+      ? response.next_cursor ?? undefined
+      : undefined;
+  } while (cursor);
+
+  console.log(`Found ${existing.size} existing TX schools in Notion`);
+  return existing;
+}
+
+async function syncTXToNotion(schools: Record<string, string>[]) {
+  const existing = await getExistingTXSchools();
+  const TODAY = new Date().toISOString().split("T")[0];
+  let created = 0,
+    updated = 0;
+
+  for (const row of schools) {
+    const name = pickField(row, "Name", "Business Name", "BusinessName", "DBA Name");
+    const license = pickField(
+      row,
+      "LicenseNumber",
+      "License Number",
+      "License",
+      "Provider Number"
+    );
+    const phone = pickField(row, "Phone", "PhoneNumber", "Phone Number");
+    const city = pickField(row, "City");
+    const address = [
+      pickField(row, "Address", "Street"),
+      city,
+      "TX",
+      pickField(row, "Zip", "ZipCode", "Zip Code"),
+    ]
+      .filter(Boolean)
+      .join(", ");
+
+    if (!name || !license) continue;
+
+    const properties: any = {
+      "School Name": { title: [{ text: { content: name } }] },
+      "License Number": { rich_text: [{ text: { content: license } }] },
+      Phone: { phone_number: phone || null },
+      Address: { rich_text: [{ text: { content: address } }] },
+      State: { select: { name: "Texas" } },
+      "Online Available": { checkbox: true },
+      Source: { select: { name: "TX TDLR" } },
+      "Date Scraped": { date: { start: TODAY } },
     };
-  });
+
+    const existingId = existing.get(license);
+
+    if (existingId) {
+      await notion.pages.update({ page_id: existingId, properties });
+      updated++;
+    } else {
+      await notion.pages.create({
+        parent: { database_id: DIRECTORY_DB },
+        properties,
+      });
+      created++;
+    }
+
+    await new Promise((r) => setTimeout(r, 350));
+  }
+
+  console.log(`
+  ━━━━━━━━━━━━━━━━━━━━━━━━
+  TX TDLR Sync Complete
+  ━━━━━━━━━━━━━━━━━━━━━━━━
+  Parsed:  ${schools.length} providers from CSV
+  Created: ${created} new Notion records
+  Updated: ${updated} existing records
+  ━━━━━━━━━━━━━━━━━━━━━━━━
+  `);
 }
 
-if (require.main === module) {
-  scrape().then((result) => {
-    if (result.errors.length > 0) {
-      console.error("\nERRORS:");
-      result.errors.forEach((e) => console.error(`  ✗ ${e}`));
-    }
-    if (result.warnings.length > 0) {
-      console.warn("\nWARNINGS:");
-      result.warnings.forEach((w) => console.warn(`  ⚠ ${w}`));
-    }
-    if (result.status === "error") process.exit(1);
-  });
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
+async function triggerDeploy() {
+  const hookUrl = process.env.VERCEL_DEPLOY_HOOK;
+  if (!hookUrl) {
+    console.log("No deploy hook configured — skipping redeploy");
+    return;
+  }
+  await fetch(hookUrl, { method: "POST" });
+  console.log("Vercel redeploy triggered");
 }
+
+async function main() {
+  console.log("Starting TX TDLR scrape...");
+  const schools = await scrapeTXTDLR();
+  await syncTXToNotion(schools);
+
+  if (process.argv.includes("--deploy")) {
+    await triggerDeploy();
+  }
+}
+
+main().catch((err) => {
+  console.error("Fatal:", err);
+  process.exit(1);
+});

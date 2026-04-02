@@ -1,242 +1,218 @@
 /**
- * Scrapes CA DMV traffic school data from the Salesforce Aura API at
- * drive.dmvonline.ca.gov. Queries each of California's 58 counties with
- * typeofInstruction=Internet, deduplicates by license number, validates
- * results, and writes data/ca-schools.json.
+ * DATA FLOW: DMV → Notion → Site
+ *
+ * 1. This script scrapes the official CA DMV source via Playwright
+ * 2. It writes/updates records in the Notion School Directory database
+ *    (ID: process.env.NOTION_DIRECTORY_DB)
+ * 3. The Next.js site reads from Notion via getDirectoryForState()
+ *    in lib/notion.ts on every request (cached for 24hrs via ISR)
+ * 4. No JSON files are involved. Notion is the single source of truth.
+ * 5. To see changes on the site immediately after scraping:
+ *    - Run this script with --deploy flag: npm run scrape:ca -- --deploy
+ *    - OR go to trafficschoolpicker.com/admin and click Trigger Redeploy
+ *    - OR wait up to 24hrs for ISR to pick up Notion changes automatically
+ *
+ * Rate limits:
+ * - Notion API: 3 requests/second → 350ms delay between writes
+ * - CA DMV: no documented limit → Playwright adds natural delays
  */
 
-import { writeFileSync, mkdirSync } from "fs";
-import * as path from "path";
-import { validateRecords, runScraper, ScrapeResult } from "./lib/validate";
+import { chromium } from "playwright";
+import { Client } from "@notionhq/client";
 
-const AURA_URL = "https://drive.dmvonline.ca.gov/s/sfsites/aura";
-const PAGE_URL = "https://drive.dmvonline.ca.gov/s/oll-traffic-schools?language=en_US";
+const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB!;
 
-const CA_COUNTIES = [
-  "Alameda", "Alpine", "Amador", "Butte", "Calaveras", "Colusa",
-  "Contra Costa", "Del Norte", "El Dorado", "Fresno", "Glenn", "Humboldt",
-  "Imperial", "Inyo", "Kern", "Kings", "Lake", "Lassen", "Los Angeles",
-  "Madera", "Marin", "Mariposa", "Mendocino", "Merced", "Modoc", "Mono",
-  "Monterey", "Napa", "Nevada", "Orange", "Placer", "Plumas", "Riverside",
-  "Sacramento", "San Benito", "San Bernardino", "San Diego", "San Francisco",
-  "San Joaquin", "San Luis Obispo", "San Mateo", "Santa Barbara", "Santa Clara",
-  "Santa Cruz", "Shasta", "Sierra", "Siskiyou", "Solano", "Sonoma",
-  "Stanislaus", "Sutter", "Tehama", "Trinity", "Tulare", "Tuolumne",
-  "Ventura", "Yolo", "Yuba",
-];
-
-const REQUIRED_FIELDS = ["name", "licenseNumber", "county", "status"];
-const MIN_EXPECTED_SCHOOLS = 50; // CA typically has 150-250 internet schools
-
-type AuraContext = { fwuid: string; loaded: Record<string, string> };
-
-type SchoolRecord = {
+interface ScrapedSchool {
   name: string;
-  licenseNumber: string;
-  phone: string;
-  website: string;
-  county: string;
-  status: string;
+  license: string;
   address: string;
-  city: string;
-  state: string;
-  zip: string;
-  email: string;
-  languages: string[];
-  modalities: string[];
-  licenseStart: string;
-  licenseEnd: string;
-};
-
-async function getAuraContext(): Promise<AuraContext> {
-  console.log("Fetching Aura context from page...");
-  const res = await fetch(PAGE_URL, {
-    headers: { "User-Agent": "Mozilla/5.0 (compatible; TrafficSchoolPicker/1.0)" },
-  });
-  if (!res.ok) throw new Error(`Failed to fetch page: ${res.status}`);
-  const html = await res.text();
-
-  const fwuidMatch = html.match(/"fwuid"\s*:\s*"([^"]+)"/);
-  if (!fwuidMatch) throw new Error("Could not find fwuid in page HTML — Salesforce may have changed their page structure");
-
-  const loadedMatch = html.match(
-    /"APPLICATION@markup:\/\/siteforce:communityApp"\s*:\s*"([^"]+)"/
-  );
-  if (!loadedMatch) throw new Error("Could not find app hash in page HTML — Salesforce deployment may have changed");
-
-  return {
-    fwuid: fwuidMatch[1],
-    loaded: { "APPLICATION@markup://siteforce:communityApp": loadedMatch[1] },
-  };
+  phone: string;
+  status: string;
 }
 
-async function queryCounty(county: string, ctx: AuraContext): Promise<unknown[]> {
-  const message = JSON.stringify({
-    actions: [{
-      id: "1;a",
-      descriptor: "aura://ApexActionController/ACTION$execute",
-      callingDescriptor: "UNKNOWN",
-      params: {
-        namespace: "",
-        classname: "CADMV_OLSISDataRetieverController",
-        method: "getTSLRecords",
-        params: {
-          businessCategory: "", address: "", businessName: "",
-          postalCode: "", licenseNumber: "", city: "",
-          typeofInstruction: "Internet", language: "", county,
-        },
-        cacheable: false,
-        isContinuation: false,
-      },
-    }],
+async function scrapeCADMV(): Promise<ScrapedSchool[]> {
+  console.log("Launching browser...");
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage();
+
+  await page.goto("https://drive.dmvonline.ca.gov/s/oll-traffic-schools");
+  await page.waitForLoadState("networkidle");
+
+  // Select Internet type
+  console.log("Selecting Internet type and searching...");
+  await page.click('[aria-label="Type of Instruction"]');
+  await page.click("text=Internet");
+  await page.click("text=Search");
+
+  // Wait for results
+  await page.waitForSelector("text=Total Number of Records Found", {
+    timeout: 30000,
   });
+  await page.waitForTimeout(2000);
 
-  const auraContext = JSON.stringify({
-    mode: "PROD", fwuid: ctx.fwuid, app: "siteforce:communityApp",
-    loaded: ctx.loaded, dn: [], globals: {}, uad: true,
-  });
+  // Extract from DOM text
+  const rawText = await page.evaluate(() => document.body.innerText);
 
-  const body = new URLSearchParams({
-    message,
-    "aura.context": auraContext,
-    "aura.pageURI": "/s/oll-traffic-schools?language=en_US",
-    "aura.token": "null",
-  });
+  const lines = rawText
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
+  const licensePattern = /^E\d{4}$/;
+  const schools: ScrapedSchool[] = [];
 
-  const res = await fetch(AURA_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-      "User-Agent": "Mozilla/5.0 (compatible; TrafficSchoolPicker/1.0)",
-    },
-    body: body.toString(),
-  });
-
-  if (!res.ok) throw new Error(`Aura HTTP ${res.status} for ${county}`);
-
-  const json = await res.json();
-  const action = json?.actions?.[0];
-
-  if (!action) throw new Error(`No action in Aura response for ${county} — API structure may have changed`);
-  if (action.state !== "SUCCESS") {
-    const errMsg = JSON.stringify(action.error ?? action.state);
-    throw new Error(`Aura action failed for ${county}: ${errMsg}`);
-  }
-
-  const records = action.returnValue?.returnValue;
-  if (!Array.isArray(records)) {
-    throw new Error(`Unexpected response shape for ${county} — returnValue is not an array`);
-  }
-
-  return records;
-}
-
-function parseRecord(raw: Record<string, unknown>, county: string): SchoolRecord {
-  const str = (key: string) => (raw[key] as string) ?? "";
-  const languages = str("CADMV_LessonPlan_Language__c").split(";").map((l) => l.trim()).filter(Boolean);
-  const modalities = str("CADMV_LessonPlan_Modality__c").split(";").map((m) => m.trim()).filter(Boolean);
-
-  return {
-    name: str("CADMV_BL_LicenseDisplayName__c"),
-    licenseNumber: str("CADMV_BL_LicenseNumber__c"),
-    phone: str("CADMV_BL_Acct_Phone__c"),
-    website: str("CADMV_BL_Contact_Email__c"),
-    county: str("CADMV_BL_Acct_SiteCountyCode__c") || county,
-    status: str("CADMV_BL_Status__c"),
-    address: str("CADMV_BL_Acct_ShippingStreet__c"),
-    city: str("CADMV_BL_Acct_shippingcity__c"),
-    state: str("CADMV_BL_Acct_shippingstate__c"),
-    zip: str("CADMV_BL_Acct_ShippingPostalCode__c"),
-    email: str("CADMV_BL_Contact_Email__c"),
-    languages,
-    modalities,
-    licenseStart: str("CADMV_BL_PeriodStart__c"),
-    licenseEnd: str("CADMV_BL_PeriodEnd__c"),
-  };
-}
-
-export async function scrape(): Promise<ScrapeResult> {
-  return runScraper("ca-dmv", async () => {
-    const ctx = await getAuraContext();
-    console.log(`Got Aura context (fwuid: ${ctx.fwuid.slice(0, 20)}...)`);
-
-    const seen = new Map<string, SchoolRecord>();
-    const countyErrors: string[] = [];
-    let totalRaw = 0;
-
-    for (const county of CA_COUNTIES) {
-      try {
-        const records = await queryCounty(county, ctx);
-        totalRaw += records.length;
-        console.log(`  ${county}: ${records.length} records`);
-
-        for (const raw of records) {
-          const school = parseRecord(raw as Record<string, unknown>, county);
-          if (school.licenseNumber && !seen.has(school.licenseNumber)) {
-            seen.set(school.licenseNumber, school);
-          }
-        }
-      } catch (err) {
-        const msg = (err as Error).message;
-        console.error(`  ${county}: ERROR — ${msg}`);
-        countyErrors.push(`${county}: ${msg}`);
-      }
-
-      await new Promise((r) => setTimeout(r, 500));
+  for (let i = 0; i < lines.length; i++) {
+    if (licensePattern.test(lines[i])) {
+      schools.push({
+        name: lines[i - 1] ?? "",
+        license: lines[i],
+        address: lines[i + 1] ?? "",
+        phone: lines[i + 2] ?? "",
+        status: lines[i + 3] ?? "Active",
+      });
     }
+  }
 
-    const schools = Array.from(seen.values()).sort((a, b) => a.name.localeCompare(b.name));
+  await browser.close();
+  console.log(`Scraped ${schools.length} CA schools from DMV`);
+  return schools;
+}
 
-    // Validate
-    const validation = validateRecords({
-      source: "ca-dmv",
-      records: schools as unknown as Record<string, unknown>[],
-      requiredFields: REQUIRED_FIELDS,
-      minRecords: MIN_EXPECTED_SCHOOLS,
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+async function getExistingNotionSchools(): Promise<Map<string, string>> {
+  const existing = new Map<string, string>();
+  let cursor: string | undefined;
+
+  do {
+    const response: any = await notion.databases.query({
+      database_id: DIRECTORY_DB,
+      filter: { property: "State", select: { equals: "California" } },
+      start_cursor: cursor,
+      page_size: 100,
     });
 
-    // Add county-level errors as warnings (individual county failures shouldn't fail the whole scrape)
-    if (countyErrors.length > 0) {
-      validation.warnings.push(
-        `${countyErrors.length}/${CA_COUNTIES.length} counties had errors: ${countyErrors.slice(0, 3).join("; ")}${countyErrors.length > 3 ? "..." : ""}`
-      );
-    }
-    // But if more than half failed, that's a real error
-    if (countyErrors.length > CA_COUNTIES.length / 2) {
-      validation.errors.push(
-        `${countyErrors.length}/${CA_COUNTIES.length} counties failed — source may be down`
-      );
+    for (const page of response.results) {
+      const props = (page as any).properties;
+      const license =
+        props["License Number"]?.rich_text?.[0]?.plain_text;
+      if (license) existing.set(license, page.id);
     }
 
-    // Write data
-    const outDir = path.join(process.cwd(), "data");
-    mkdirSync(outDir, { recursive: true });
-    writeFileSync(
-      path.join(outDir, "ca-schools.json"),
-      JSON.stringify(schools, null, 2)
-    );
+    cursor = response.has_more
+      ? response.next_cursor ?? undefined
+      : undefined;
+  } while (cursor);
 
-    console.log(`\n${totalRaw} raw → ${schools.length} unique schools`);
+  console.log(`Found ${existing.size} existing CA schools in Notion`);
+  return existing;
+}
 
-    return {
-      records: schools as unknown as Record<string, unknown>[],
-      errors: validation.errors,
-      warnings: validation.warnings,
+async function syncToNotion(scraped: ScrapedSchool[]) {
+  const existing = await getExistingNotionSchools();
+  const scrapedLicenses = new Set(scraped.map((s) => s.license));
+
+  let created = 0,
+    updated = 0,
+    deactivated = 0;
+  const TODAY = new Date().toISOString().split("T")[0];
+
+  for (const school of scraped) {
+    const existingId = existing.get(school.license);
+
+    const properties: any = {
+      "School Name": { title: [{ text: { content: school.name } }] },
+      "License Number": {
+        rich_text: [{ text: { content: school.license } }],
+      },
+      Phone: { phone_number: school.phone || null },
+      Address: { rich_text: [{ text: { content: school.address } }] },
+      State: { select: { name: "California" } },
+      "Online Available": { checkbox: true },
+      Source: { select: { name: "CA DMV" } },
+      "Date Scraped": { date: { start: TODAY } },
+      Notes: {
+        rich_text: [{ text: { content: `Status: ${school.status}` } }],
+      },
     };
-  });
+
+    if (existingId) {
+      await notion.pages.update({
+        page_id: existingId,
+        properties,
+      });
+      updated++;
+    } else {
+      await notion.pages.create({
+        parent: { database_id: DIRECTORY_DB },
+        properties,
+      });
+      created++;
+    }
+
+    // Respect Notion rate limits (3 req/sec)
+    await new Promise((r) => setTimeout(r, 350));
+  }
+
+  // Deactivate schools no longer in DMV list
+  const existingEntries = Array.from(existing.entries());
+  for (let idx = 0; idx < existingEntries.length; idx++) {
+    const [license, pageId] = existingEntries[idx];
+    if (!scrapedLicenses.has(license)) {
+      await notion.pages.update({
+        page_id: pageId,
+        properties: {
+          Notes: {
+            rich_text: [
+              {
+                text: {
+                  content: `Status: Inactive - not in DMV list as of ${TODAY}`,
+                },
+              },
+            ],
+          },
+        } as any,
+      });
+      deactivated++;
+      await new Promise((r) => setTimeout(r, 350));
+    }
+  }
+
+  console.log(`
+  ━━━━━━━━━━━━━━━━━━━━━━━━
+  CA DMV Sync Complete
+  ━━━━━━━━━━━━━━━━━━━━━━━━
+  Scraped:     ${scraped.length} schools from DMV
+  Created:     ${created} new Notion records
+  Updated:     ${updated} existing records
+  Deactivated: ${deactivated} schools (no longer in DMV list)
+  ━━━━━━━━━━━━━━━━━━━━━━━━
+  `);
 }
 
-// Allow running standalone
-if (require.main === module) {
-  scrape().then((result) => {
-    if (result.errors.length > 0) {
-      console.error("\nERRORS:");
-      result.errors.forEach((e) => console.error(`  ✗ ${e}`));
-    }
-    if (result.warnings.length > 0) {
-      console.warn("\nWARNINGS:");
-      result.warnings.forEach((w) => console.warn(`  ⚠ ${w}`));
-    }
-    if (result.status === "error") process.exit(1);
-  });
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
+async function triggerDeploy() {
+  const hookUrl = process.env.VERCEL_DEPLOY_HOOK;
+  if (!hookUrl) {
+    console.log("No deploy hook configured — skipping redeploy");
+    return;
+  }
+  await fetch(hookUrl, { method: "POST" });
+  console.log("Vercel redeploy triggered");
 }
+
+async function main() {
+  console.log("Starting CA DMV scrape...");
+  const scraped = await scrapeCADMV();
+  await syncToNotion(scraped);
+
+  if (process.argv.includes("--deploy")) {
+    await triggerDeploy();
+  }
+}
+
+main().catch((err) => {
+  console.error("Fatal:", err);
+  process.exit(1);
+});

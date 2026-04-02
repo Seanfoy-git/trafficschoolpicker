@@ -7,17 +7,17 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "scrape:ca": "tsx scripts/scrape-ca-dmv.ts",
-    "scrape:tx": "tsx scripts/scrape-tx-tdlr.ts",
-    "scrape:prices": "tsx scripts/scrape-prices.ts",
-    "scrape:diff": "tsx scripts/compare-and-diff.ts",
-    "scrape:all": "tsx scripts/run-all.ts && tsx scripts/compare-and-diff.ts"
+    "scrape:ca": "npx tsx scripts/scrape-ca-dmv.ts",
+    "scrape:tx": "npx tsx scripts/scrape-tx-tdlr.ts",
+    "scrape:fl": "npx tsx scripts/scrape-fl-dhsmv.ts",
+    "scrape:all": "npm run scrape:ca && npm run scrape:tx && npm run scrape:fl"
   },
   "dependencies": {
     "@notionhq/client": "^2.3.0",
     "@radix-ui/react-select": "^2.2.6",
     "lucide-react": "^1.7.0",
     "next": "16.2.2",
+    "playwright": "^1.59.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "sharp": "^0.34.5"
@@ -27,8 +27,6 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "cheerio": "^1.2.0",
-    "csv-parse": "^6.2.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.2",
     "tailwindcss": "^4",
