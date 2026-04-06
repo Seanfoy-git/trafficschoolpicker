@@ -1,45 +1,37 @@
 import { MetadataRoute } from "next";
+import { STATE_SEO, BLOG_SEO } from "@/lib/seo-config";
 import { getAllStateSlugs } from "@/lib/state-utils";
-import { getAllSchools } from "@/lib/notion";
-import { blogPosts } from "@/lib/blog";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://trafficschoolpicker.com";
+const BASE_URL = "https://www.trafficschoolpicker.com";
 
-  let schools: { slug: string }[] = [];
-  try {
-    schools = await getAllSchools();
-  } catch {
-    // Notion may not be configured yet
-  }
+export default function sitemap(): MetadataRoute.Sitemap {
+  const now = new Date().toISOString();
 
-  const staticPages = [
-    { url: baseUrl, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 1 },
-    { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.6 },
-    { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.7 },
-    { url: `${baseUrl}/admin`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.3 },
+  // Static pages
+  const staticPages: MetadataRoute.Sitemap = [
+    { url: BASE_URL, lastModified: now, changeFrequency: "weekly", priority: 1.0 },
+    { url: `${BASE_URL}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
   ];
 
-  const statePages = getAllStateSlugs().map((slug) => ({
-    url: `${baseUrl}/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: 0.9,
-  }));
+  // State pages — include all 50 states from routing, use SEO config for those that have it
+  const statePages: MetadataRoute.Sitemap = getAllStateSlugs().map((slug) => {
+    const seo = STATE_SEO[slug];
+    return {
+      url: `${BASE_URL}${seo?.canonicalPath ?? `/${slug}`}`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    };
+  });
 
-  const reviewPages = schools.map((school) => ({
-    url: `${baseUrl}/reviews/${school.slug}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }));
-
-  const blogPages = blogPosts.map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
+  // Blog posts
+  const blogPages: MetadataRoute.Sitemap = Object.values(BLOG_SEO).map((seo) => ({
+    url: `${BASE_URL}${seo.canonicalPath}`,
+    lastModified: now,
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
 
-  return [...staticPages, ...statePages, ...reviewPages, ...blogPages];
+  return [...staticPages, ...statePages, ...blogPages];
 }

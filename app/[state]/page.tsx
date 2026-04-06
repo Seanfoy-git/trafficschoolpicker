@@ -5,6 +5,7 @@ import {
   getStateInfo,
   getDirectoryForState,
 } from "@/lib/notion";
+import { STATE_SEO } from "@/lib/seo-config";
 import { getStateFAQs } from "@/lib/state-faqs";
 import { getNotionStateFaqs } from "@/lib/notion-faqs";
 import { getStateBySlug, getAllStateSlugs } from "@/lib/state-utils";
@@ -40,13 +41,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const stateMeta = getStateBySlug(stateSlug);
   if (!stateMeta) return {};
 
+  const seo = STATE_SEO[stateSlug];
+  if (!seo) {
+    return {
+      title: `Online Traffic School in ${stateMeta.name} (2026)`,
+      description: `Compare court-approved online traffic schools in ${stateMeta.name}. Find the lowest price and enroll today.`,
+      alternates: { canonical: `https://www.trafficschoolpicker.com/${stateMeta.slug}` },
+    };
+  }
+
   return {
-    title: `Best Online Traffic Schools in ${stateMeta.name} (2026) — Compare & Save`,
-    description: `Compare court-approved online traffic schools in ${stateMeta.name}. Find the lowest prices, read reviews, and enroll today.`,
-    alternates: { canonical: `https://trafficschoolpicker.com/${stateMeta.slug}` },
+    title: seo.title,
+    description: seo.description,
+    alternates: { canonical: `https://www.trafficschoolpicker.com${seo.canonicalPath}` },
     openGraph: {
-      title: `${stateMeta.name} Online Traffic School — Compare & Save`,
-      description: `Find the best court-approved online traffic school in ${stateMeta.name}. Compare prices, ratings, and features.`,
+      title: seo.title,
+      description: seo.description,
+      url: `https://www.trafficschoolpicker.com${seo.canonicalPath}`,
+      siteName: "TrafficSchoolPicker",
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title: seo.title,
+      description: seo.description,
     },
   };
 }
@@ -68,10 +86,12 @@ export default async function StatePage({ params }: Props) {
     ? notionFaqs
     : getStateFAQs(stateMeta.code).map((f) => ({ question: f.question, answer: f.answer }));
 
+  const seo = STATE_SEO[stateSlug];
   const onlineStatus = stateInfo?.onlineStatus ?? "Unknown";
   const tier1 = schools.filter((s) => s.tier === 1);
   const tier2 = schools.filter((s) => s.tier === 2);
   const year = new Date().getFullYear();
+  const h1 = seo?.h1 ?? `Online Traffic Schools in ${stateMeta.name} (${year})`;
 
   return (
     <>
@@ -83,7 +103,7 @@ export default async function StatePage({ params }: Props) {
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
             {onlineStatus === "In-person only"
               ? `Traffic School in ${stateMeta.name}`
-              : `The ${tier1.length > 0 ? tier1.length : schools.length} Best Online Traffic Schools in ${stateMeta.name} (${year})`}
+              : h1}
           </h1>
           {onlineStatus === "Online — ticket dismissal" && schools.length > 0 && (
             <p className="text-lg text-slate-300 max-w-3xl">

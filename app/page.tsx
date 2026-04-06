@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { HOME_SEO } from "@/lib/seo-config";
 import { StateSelector } from "@/components/StateSelector";
 import { TrustBar } from "@/components/TrustBar";
 import { SchoolCard } from "@/components/SchoolCard";
@@ -8,6 +10,21 @@ import Link from "next/link";
 import { ArrowRight, Search, BarChart3, MousePointerClick } from "lucide-react";
 
 export const revalidate = 86400;
+
+export const metadata: Metadata = {
+  title: HOME_SEO.title,
+  description: HOME_SEO.description,
+  alternates: {
+    canonical: "https://www.trafficschoolpicker.com",
+  },
+  openGraph: {
+    title: HOME_SEO.title,
+    description: HOME_SEO.description,
+    url: "https://www.trafficschoolpicker.com",
+    siteName: "TrafficSchoolPicker",
+    type: "website",
+  },
+};
 
 const homeFaqs = [
   {
@@ -54,7 +71,7 @@ export default async function HomePage() {
       <section className="bg-primary text-white py-16 md:py-24">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-            Got a ticket? Find the best traffic school in your state.
+            {HOME_SEO.h1}
           </h1>
           <p className="text-lg md:text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
             Compare court-approved online traffic schools by price, speed, and

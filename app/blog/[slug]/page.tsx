@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { blogPosts, getBlogPostBySlug } from "@/lib/blog";
+import { BLOG_SEO } from "@/lib/seo-config";
 import Link from "next/link";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
 
@@ -14,20 +15,30 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const seo = BLOG_SEO[slug];
   const post = getBlogPostBySlug(slug);
   if (!post) return {};
 
+  const title = seo?.title ?? post.title;
+  const description = seo?.description ?? post.excerpt;
+  const canonical = `https://www.trafficschoolpicker.com${seo?.canonicalPath ?? `/blog/${slug}`}`;
+
   return {
-    title: post.title,
-    description: post.excerpt,
-    alternates: {
-      canonical: `https://trafficschoolpicker.com/blog/${post.slug}`,
-    },
+    title,
+    description,
+    alternates: { canonical },
     openGraph: {
-      title: post.title,
-      description: post.excerpt,
+      title,
+      description,
+      url: canonical,
+      siteName: "TrafficSchoolPicker",
       type: "article",
       publishedTime: post.date,
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
     },
   };
 }
@@ -96,7 +107,7 @@ export default async function BlogPostPage({ params }: Props) {
           </Link>
 
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-            {post.title}
+            {BLOG_SEO[slug]?.h1 ?? post.title}
           </h1>
 
           <div className="flex items-center gap-4 text-sm text-slate-500 mb-8 pb-8 border-b border-slate-200">

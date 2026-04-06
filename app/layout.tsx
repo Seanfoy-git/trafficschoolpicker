@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { validateSeoConfig } from "@/lib/seo-config";
 import "./globals.css";
+
+validateSeoConfig();
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,19 +18,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.trafficschoolpicker.com"),
   title: {
-    default: "TrafficSchoolPicker — Compare Online Traffic Schools & Save",
+    default: "TrafficSchoolPicker — Compare Online Traffic Schools",
     template: "%s | TrafficSchoolPicker",
   },
   description:
-    "Compare court-approved online traffic schools by price, speed, and ratings. Find the best traffic school in your state and dismiss your ticket today.",
-  metadataBase: new URL("https://trafficschoolpicker.com"),
+    "Compare court-approved online traffic schools across all 50 states. Find the lowest price and enroll today.",
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
-    type: "website",
     siteName: "TrafficSchoolPicker",
-    title: "TrafficSchoolPicker — Compare Online Traffic Schools & Save",
-    description:
-      "Compare court-approved online traffic schools by price, speed, and ratings across all 50 US states.",
+    type: "website",
   },
 };
 
