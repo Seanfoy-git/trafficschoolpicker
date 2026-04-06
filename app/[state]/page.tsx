@@ -228,7 +228,7 @@ export default async function StatePage({ params }: Props) {
         <section className="py-12 bg-white">
           <div className="max-w-4xl mx-auto px-4">
             <h2 className="text-2xl font-bold text-slate-900 mb-6">
-              {stateMeta.name} Traffic School Info
+              {stateMeta.name} Traffic School Rules &amp; Requirements
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-slate-50 rounded-lg p-6">
@@ -237,14 +237,37 @@ export default async function StatePage({ params }: Props) {
                   <h3 className="font-semibold text-slate-900">Online Status</h3>
                 </div>
                 <p className="text-sm text-slate-600">{stateInfo.onlineStatus}</p>
+                {stateInfo.minHours && (
+                  <p className="text-sm text-slate-500 mt-1">
+                    Minimum {stateInfo.minHours} hours required
+                  </p>
+                )}
               </div>
-              {stateInfo.notes && (
+              {stateInfo.eligibility && (
+                <div className="bg-slate-50 rounded-lg p-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <AlertCircle className="w-5 h-5 text-highlight" />
+                    <h3 className="font-semibold text-slate-900">Eligibility</h3>
+                  </div>
+                  <p className="text-sm text-slate-600">{stateInfo.eligibility}</p>
+                </div>
+              )}
+              {stateInfo.courtNotes && (
                 <div className="bg-slate-50 rounded-lg p-6">
                   <div className="flex items-center gap-2 mb-3">
                     <FileText className="w-5 h-5 text-primary" />
-                    <h3 className="font-semibold text-slate-900">Notes</h3>
+                    <h3 className="font-semibold text-slate-900">Court Acceptance</h3>
                   </div>
-                  <p className="text-sm text-slate-600">{stateInfo.notes}</p>
+                  <p className="text-sm text-slate-600">{stateInfo.courtNotes}</p>
+                </div>
+              )}
+              {stateInfo.certificateSubmission && (
+                <div className="bg-slate-50 rounded-lg p-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <FileText className="w-5 h-5 text-blue-500" />
+                    <h3 className="font-semibold text-slate-900">Certificate Submission</h3>
+                  </div>
+                  <p className="text-sm text-slate-600">{stateInfo.certificateSubmission}</p>
                 </div>
               )}
               {stateInfo.dmvUrl && (
@@ -261,6 +284,15 @@ export default async function StatePage({ params }: Props) {
                   >
                     {stateMeta.name} DMV <ExternalLink className="w-3 h-3" />
                   </a>
+                </div>
+              )}
+              {stateInfo.notes && (
+                <div className="bg-slate-50 rounded-lg p-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Info className="w-5 h-5 text-slate-500" />
+                    <h3 className="font-semibold text-slate-900">Notes</h3>
+                  </div>
+                  <p className="text-sm text-slate-600">{stateInfo.notes}</p>
                 </div>
               )}
             </div>

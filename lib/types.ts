@@ -26,9 +26,17 @@ export type StateInfo = {
   id: string;
   code: string;                  // "CA"
   name: string;                  // "California"
-  onlineStatus: OnlineStatus;
+  onlineAllowed: boolean;
+  onlineDismissesTicket: boolean;
+  insuranceDiscountAvailable: boolean;
+  onlineStatus: OnlineStatus;    // derived from the checkboxes
   dmvUrl: string;
   notes: string;
+  eligibility: string;
+  courtNotes: string;
+  certificateSubmission: string | null;
+  minHours: number | null;
+  status: string;                // "Research Complete" / "In Progress" / "Not Started"
 };
 
 // ─── Traffic Schools DB (editorial + reviews) ───────────────

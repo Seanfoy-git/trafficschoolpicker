@@ -92,26 +92,50 @@ async function queryAllPages(
 
 // ─── STATES DB ──────────────────────────────────────────────
 
+function deriveOnlineStatus(
+  onlineAllowed: boolean,
+  dismissesTicket: boolean,
+  insuranceDiscount: boolean
+): OnlineStatus {
+  if (onlineAllowed && dismissesTicket) return "Online — ticket dismissal";
+  if (onlineAllowed && insuranceDiscount) return "Online — insurance discount only";
+  if (!onlineAllowed) return "In-person only";
+  return "Unknown";
+}
+
 export async function getStateInfo(stateCode: string): Promise<StateInfo | null> {
   if (!process.env.NOTION_TOKEN || !STATES_DB) return null;
   try {
     const response = await notion.databases.query({
       database_id: STATES_DB,
       filter: {
-        property: "State Code",
+        property: "Abbreviation",
         rich_text: { equals: stateCode.toUpperCase() },
       },
       page_size: 1,
     });
     if (!response.results.length) return null;
     const page = response.results[0] as PageObjectResponse;
+
+    const onlineAllowed = getCheckbox(page, "Online Allowed");
+    const dismissesTicket = getCheckbox(page, "Online Dismisses Ticket");
+    const insuranceDiscount = getCheckbox(page, "Insurance Discount Available");
+
     return {
       id: page.id,
-      code: getText(page, "State Code"),
+      code: getText(page, "Abbreviation"),
       name: getText(page, "State Name"),
-      onlineStatus: (getSelect(page, "Online Status") ?? "Unknown") as OnlineStatus,
+      onlineAllowed,
+      onlineDismissesTicket: dismissesTicket,
+      insuranceDiscountAvailable: insuranceDiscount,
+      onlineStatus: deriveOnlineStatus(onlineAllowed, dismissesTicket, insuranceDiscount),
       dmvUrl: getText(page, "DMV URL"),
-      notes: getText(page, "Notes"),
+      notes: getText(page, "Research Notes"),
+      eligibility: getText(page, "Eligibility Requirements"),
+      courtNotes: getText(page, "Court Acceptance Notes"),
+      certificateSubmission: getSelect(page, "Certificate Submission"),
+      minHours: getNumber(page, "Minimum Hours"),
+      status: getSelect(page, "Status") ?? "Not Started",
     };
   } catch {
     return null;
