@@ -6,9 +6,11 @@ import {
   getDirectoryForState,
 } from "@/lib/notion";
 import { getStateFAQs } from "@/lib/state-faqs";
+import { getNotionStateFaqs } from "@/lib/notion-faqs";
 import { getStateBySlug, getAllStateSlugs } from "@/lib/state-utils";
 import { SchoolCard } from "@/components/SchoolCard";
-import { SchoolFAQ, FAQJsonLd } from "@/components/SchoolFAQ";
+import { FaqSection } from "@/components/FaqSection";
+import { FAQJsonLd } from "@/components/SchoolFAQ";
 import { DirectoryTable } from "@/components/DirectoryTable";
 import { TrustBar } from "@/components/TrustBar";
 import { AffiliateButton } from "@/components/AffiliateButton";
@@ -54,16 +56,21 @@ export default async function StatePage({ params }: Props) {
   const stateMeta = getStateBySlug(stateSlug);
   if (!stateMeta) notFound();
 
-  const [schools, stateInfo, directory] = await Promise.all([
+  const [schools, stateInfo, directory, notionFaqs] = await Promise.all([
     getSchoolPricingForState(stateMeta.code),
     getStateInfo(stateMeta.code),
     getDirectoryForState(stateMeta.name),
+    getNotionStateFaqs(stateSlug),
   ]);
+
+  // Use Notion FAQs if available, fall back to static
+  const faqs = notionFaqs.length > 0
+    ? notionFaqs
+    : getStateFAQs(stateMeta.code).map((f) => ({ question: f.question, answer: f.answer }));
 
   const onlineStatus = stateInfo?.onlineStatus ?? "Unknown";
   const tier1 = schools.filter((s) => s.tier === 1);
   const tier2 = schools.filter((s) => s.tier === 2);
-  const faqs = getStateFAQs(stateMeta.code);
   const year = new Date().getFullYear();
 
   return (
@@ -303,7 +310,7 @@ export default async function StatePage({ params }: Props) {
       {/* FAQ */}
       <section className="py-12 bg-slate-50">
         <div className="max-w-3xl mx-auto px-4">
-          <SchoolFAQ faqs={faqs} heading={`${stateMeta.name} Traffic School FAQ`} />
+          <FaqSection faqs={faqs} stateDisplayName={stateMeta.name} />
         </div>
       </section>
 
