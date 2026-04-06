@@ -382,9 +382,9 @@ async function getSchoolsFromNotion(): Promise<SchoolConfig[]> {
           .replace(/\s+/g, "-")
           .replace(/[^a-z0-9-]/g, ""),
       website: props["Website"]?.url ?? "",
-      trustpilotUrl: props["Trustpilot URL"]?.url ?? props["Review URL"]?.url ?? "",
+      trustpilotUrl: props["Review URL"]?.url ?? "",
       yelpUrl: props["Yelp URL"]?.url ?? "",
-      prevTrustpilot: props["Trustpilot Rating"]?.number ?? props["Rating"]?.number ?? null,
+      prevTrustpilot: props["Rating"]?.number ?? null,
       prevGoogle: props["Google Rating"]?.number ?? null,
       prevYelp: props["Yelp Rating"]?.number ?? null,
     };
@@ -413,36 +413,39 @@ async function updateNotionSchool(
   const TODAY = new Date().toISOString().split("T")[0];
   const properties: any = {};
 
-  for (const r of results) {
-    if (r.rating === null) continue;
-
-    const prefix = r.platform;
-    properties[`${prefix} Rating`] = { number: r.rating };
-    properties[`${prefix} Count`] = { number: r.reviewCount };
-
-    if (r.url) {
-      properties[`${prefix} URL`] = { url: r.url };
-    }
-  }
-
-  // Store previous ratings before overwriting
   const tp = results.find((r) => r.platform === "Trustpilot");
   const gg = results.find((r) => r.platform === "Google");
   const yp = results.find((r) => r.platform === "Yelp");
 
-  if (tp?.rating !== null) {
-    properties["Rating"] = { number: tp?.rating ?? null };
-    properties["Review Count"] = { number: tp?.reviewCount ?? null };
+  // Trustpilot → existing Rating/Review Count/Review URL fields
+  if (tp && tp.rating !== null) {
+    properties["Rating"] = { number: tp.rating };
+    properties["Review Count"] = { number: tp.reviewCount };
+    if (tp.url) properties["Review URL"] = { url: tp.url };
   }
 
-  // Synthesized pros/cons
+  // Google → Google Rating/Google Review Count/Google URL
+  if (gg && gg.rating !== null) {
+    properties["Google Rating"] = { number: gg.rating };
+    properties["Google Review Count"] = { number: gg.reviewCount };
+    if (gg.url) properties["Google URL"] = { url: gg.url };
+  }
+
+  // Yelp → Yelp Rating/Yelp Review Count/Yelp URL
+  if (yp && yp.rating !== null) {
+    properties["Yelp Rating"] = { number: yp.rating };
+    properties["Yelp Review Count"] = { number: yp.reviewCount };
+    if (yp.url) properties["Yelp URL"] = { url: yp.url };
+  }
+
+  // Synthesized highlights
   if (synthesized.pros.length > 0) {
-    properties["Synthesized Pros"] = {
+    properties["Review Highlights Good"] = {
       rich_text: [{ text: { content: synthesized.pros.join("\n") } }],
     };
   }
   if (synthesized.cons.length > 0) {
-    properties["Synthesized Cons"] = {
+    properties["Review Highlights Bad"] = {
       rich_text: [{ text: { content: synthesized.cons.join("\n") } }],
     };
   }

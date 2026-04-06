@@ -67,66 +67,59 @@ function determineTrend(current: number, previous: number | null): "up" | "down"
   return "stable";
 }
 
+function parseTrendSelect(raw: string | null): "up" | "down" | "stable" {
+  if (!raw) return "stable";
+  if (raw.startsWith("↑")) return "up";
+  if (raw.startsWith("↓")) return "down";
+  return "stable";
+}
+
 function buildPlatformRatings(page: PageObjectResponse): import("./types").PlatformRating[] {
   const ratings: import("./types").PlatformRating[] = [];
 
-  // Trustpilot
-  const tpRating = getNumber(page, "Trustpilot Rating");
-  const tpCount = getNumber(page, "Trustpilot Count");
+  // Trustpilot — uses existing Rating/Review Count/Previous Rating/Review URL fields
+  const tpRating = getNumber(page, "Rating");
+  const tpCount = getNumber(page, "Review Count");
   if (tpRating !== null) {
     ratings.push({
       platform: "Trustpilot",
       rating: tpRating,
       reviewCount: tpCount ?? 0,
-      previousRating: getNumber(page, "Trustpilot Prev Rating"),
-      trend: determineTrend(tpRating, getNumber(page, "Trustpilot Prev Rating")),
-      url: getText(page, "Trustpilot URL") || null,
+      previousRating: getNumber(page, "Previous Rating"),
+      trend: parseTrendSelect(getSelect(page, "Trustpilot Trend")) ??
+        determineTrend(tpRating, getNumber(page, "Previous Rating")),
+      url: getText(page, "Review URL") || null,
     });
   }
 
   // Google
   const gRating = getNumber(page, "Google Rating");
-  const gCount = getNumber(page, "Google Count");
+  const gCount = getNumber(page, "Google Review Count");
   if (gRating !== null) {
     ratings.push({
       platform: "Google",
       rating: gRating,
       reviewCount: gCount ?? 0,
-      previousRating: getNumber(page, "Google Prev Rating"),
-      trend: determineTrend(gRating, getNumber(page, "Google Prev Rating")),
+      previousRating: getNumber(page, "Google Previous Rating"),
+      trend: parseTrendSelect(getSelect(page, "Google Trend")) ??
+        determineTrend(gRating, getNumber(page, "Google Previous Rating")),
       url: getText(page, "Google URL") || null,
     });
   }
 
   // Yelp
   const yRating = getNumber(page, "Yelp Rating");
-  const yCount = getNumber(page, "Yelp Count");
+  const yCount = getNumber(page, "Yelp Review Count");
   if (yRating !== null) {
     ratings.push({
       platform: "Yelp",
       rating: yRating,
       reviewCount: yCount ?? 0,
-      previousRating: getNumber(page, "Yelp Prev Rating"),
-      trend: determineTrend(yRating, getNumber(page, "Yelp Prev Rating")),
+      previousRating: getNumber(page, "Yelp Previous Rating"),
+      trend: parseTrendSelect(getSelect(page, "Yelp Trend")) ??
+        determineTrend(yRating, getNumber(page, "Yelp Previous Rating")),
       url: getText(page, "Yelp URL") || null,
     });
-  }
-
-  // Fallback: if no per-platform ratings, use legacy single rating
-  if (ratings.length === 0) {
-    const legacyRating = getNumber(page, "Rating");
-    const legacyCount = getNumber(page, "Review Count");
-    const legacySource = getSelect(page, "Review Source") as "Trustpilot" | "Google" | "Yelp" | null;
-    if (legacyRating !== null && legacySource) {
-      ratings.push({
-        platform: legacySource,
-        rating: legacyRating,
-        reviewCount: legacyCount ?? 0,
-        previousRating: getNumber(page, "Previous Rating"),
-        trend: determineTrend(legacyRating, getNumber(page, "Previous Rating")),
-        url: getText(page, "Review URL") || null,
-      });
-    }
   }
 
   return ratings;
@@ -163,8 +156,8 @@ function mapSchool(page: PageObjectResponse): School {
     reviewSource: getSelect(page, "Review Source") as School["reviewSource"],
     reviewUrl: getText(page, "Review URL") || null,
     ratings: buildPlatformRatings(page),
-    synthesizedPros: parseLines(getText(page, "Synthesized Pros")),
-    synthesizedCons: parseLines(getText(page, "Synthesized Cons")),
+    synthesizedPros: parseLines(getText(page, "Review Highlights Good")),
+    synthesizedCons: parseLines(getText(page, "Review Highlights Bad")),
     stateCodes: parseStateCodes(getText(page, "State Codes")),
     pros: parseLines(getText(page, "Pros")),
     cons: parseLines(getText(page, "Cons")),
