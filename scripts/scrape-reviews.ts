@@ -1,359 +1,257 @@
 /**
- * DATA FLOW: Trustpilot + Google + Yelp → Notion → Site
+ * Multi-source review scraper: Trustpilot, BBB, App Store, Google Play
+ * → Notion Traffic Schools DB → Site
  *
- * Scrapes ratings and review snippets from all three platforms for each
- * Tier 1/2 school. Writes per-platform ratings to Notion and synthesizes
- * common pros/cons from review text.
+ * Google and Yelp excluded (Google Places unreliable for online schools,
+ * Yelp API costs $229/month).
  *
- * Rate limits:
- * - Notion API: 3 req/sec → 350ms delay
- * - Trustpilot/Yelp: Playwright with 2s delay between pages
- * - Google Places: API with key, 150ms delay
+ * Flow:
+ * 1. Read 6 curated schools from Notion
+ * 2. For each school, fetch ratings from all available sources
+ * 3. Synthesise pros/cons from Trustpilot review text via Claude
+ * 4. Write all ratings + synthesis back to Notion
+ * 5. Calculate trends (up/down/stable) vs previous run
  */
 
 import { config } from "dotenv";
 config({ path: ".env.local" });
-import { chromium } from "playwright";
 import { Client } from "@notionhq/client";
+import Anthropic from "@anthropic-ai/sdk";
+import gplay from "google-play-scraper";
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const SCHOOLS_DB = process.env.NOTION_SCHOOLS_DB!;
-const PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
+const anthropic = new Anthropic();
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // ─── TYPES ──────────────────────────────────────────────────
 
-interface PlatformResult {
-  platform: "Trustpilot" | "Google" | "Yelp";
-  rating: number | null;
-  reviewCount: number | null;
-  url: string;
-  snippets: string[]; // Recent review excerpts for synthesis
-}
-
-interface NotionSchool {
-  pageId: string;
-  name: string;
-  slug: string;
-  website: string;
-  trustpilotUrl: string;
-  googleUrl: string;
-  yelpUrl: string;
-  prevTrustpilot: number | null;
-  prevGoogle: number | null;
-  prevYelp: number | null;
-}
-
-// ─── TRUSTPILOT SCRAPER ─────────────────────────────────────
-
-async function scrapeTrustpilot(
-  domain: string,
-  page: import("playwright").Page
-): Promise<PlatformResult> {
-  const url = `https://www.trustpilot.com/review/${domain}`;
-  const result: PlatformResult = {
-    platform: "Trustpilot",
-    rating: null,
-    reviewCount: null,
-    url,
-    snippets: [],
-  };
-
-  try {
-    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 15000 });
-    await page.waitForTimeout(2000);
-
-    const text = await page.evaluate(() => document.body.innerText);
-    const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
-
-    // Find rating and count
-    // Pattern: "Reviews 26,951" on one line, then "•" or blank, then "4.8"
-    for (let i = 0; i < lines.length; i++) {
-      const reviewMatch = lines[i].match(/Reviews\s+([\d,]+)/);
-      if (reviewMatch) {
-        result.reviewCount = parseInt(reviewMatch[1].replace(/,/g, ""));
-        // Rating might be on same line, next line, or line after "•"
-        const ratingMatch =
-          lines[i].match(/(\d\.\d)/) ||
-          lines[i + 1]?.match(/^(\d\.\d)$/) ||
-          lines[i + 2]?.match(/^(\d\.\d)$/);
-        if (ratingMatch) result.rating = parseFloat(ratingMatch[1]);
-        break;
-      }
-    }
-
-    // Extract review snippets — look for actual review text
-    // Reviews on Trustpilot appear after date lines like "Mar 27, 2026"
-    const datePattern = /^[A-Z][a-z]{2} \d{1,2}, \d{4}$/;
-    let inReviewZone = false;
-    for (let i = 0; i < lines.length && result.snippets.length < 10; i++) {
-      if (datePattern.test(lines[i])) {
-        inReviewZone = true;
-        continue;
-      }
-      if (inReviewZone && lines[i].length > 40 && lines[i].length < 600) {
-        // Skip UI elements
-        if (
-          !lines[i].match(/^(Useful|Share|Verified|See more|Reply|Report|Was this|Date of experience)/) &&
-          !lines[i].match(/^\d+ review/) &&
-          !lines[i].includes("Trustpilot") &&
-          !lines[i].includes("Cookie")
-        ) {
-          result.snippets.push(lines[i]);
-          inReviewZone = false; // One snippet per review
-        }
-      }
-    }
-  } catch (err) {
-    console.error(`  Trustpilot error for ${domain}:`, (err as Error).message);
-  }
-
-  return result;
-}
-
-// ─── GOOGLE PLACES SCRAPER ──────────────────────────────────
-
-async function scrapeGoogle(
-  schoolName: string
-): Promise<PlatformResult> {
-  const result: PlatformResult = {
-    platform: "Google",
-    rating: null,
-    reviewCount: null,
-    url: `https://www.google.com/search?q=${encodeURIComponent(schoolName + " reviews")}`,
-    snippets: [],
-  };
-
-  if (!PLACES_API_KEY) return result;
-
-  try {
-    const response = await fetch(
-      "https://places.googleapis.com/v1/places:searchText",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Goog-Api-Key": PLACES_API_KEY,
-          "X-Goog-FieldMask":
-            "places.id,places.rating,places.userRatingCount,places.reviews,places.googleMapsUri",
-        },
-        body: JSON.stringify({ textQuery: `${schoolName} traffic school` }),
-      }
-    );
-
-    if (response.ok) {
-      const data = (await response.json()) as any;
-      const place = data.places?.[0];
-      if (place) {
-        result.rating = place.rating ?? null;
-        result.reviewCount = place.userRatingCount ?? null;
-        result.url = place.googleMapsUri ?? result.url;
-
-        // Extract review snippets
-        if (place.reviews) {
-          for (const review of place.reviews.slice(0, 5)) {
-            const text = review.text?.text;
-            if (text && text.length > 20) {
-              result.snippets.push(text);
-            }
-          }
-        }
-      }
-    }
-  } catch (err) {
-    console.error(`  Google error for ${schoolName}:`, (err as Error).message);
-  }
-
-  return result;
-}
-
-// ─── YELP SCRAPER ───────────────────────────────────────────
-
-async function scrapeYelp(
-  schoolName: string,
-  page: import("playwright").Page
-): Promise<PlatformResult> {
-  const searchUrl = `https://www.yelp.com/search?find_desc=${encodeURIComponent(schoolName + " traffic school")}`;
-  const result: PlatformResult = {
-    platform: "Yelp",
-    rating: null,
-    reviewCount: null,
-    url: searchUrl,
-    snippets: [],
-  };
-
-  try {
-    await page.goto(searchUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
-    await page.waitForTimeout(3000);
-
-    const text = await page.evaluate(() => document.body.innerText);
-
-    // Yelp shows rating as "X.0 star rating" and review count as "X reviews"
-    const ratingMatch = text.match(/(\d\.\d)\s*star rating/i);
-    if (ratingMatch) result.rating = parseFloat(ratingMatch[1]);
-
-    const countMatch = text.match(/(\d+)\s*reviews?/i);
-    if (countMatch) result.reviewCount = parseInt(countMatch[1]);
-
-    // Try to get the actual business page URL
-    const bizLink = await page.$('a[href*="/biz/"]');
-    if (bizLink) {
-      const href = await bizLink.getAttribute("href");
-      if (href) {
-        result.url = href.startsWith("http") ? href : `https://www.yelp.com${href}`;
-      }
-    }
-
-    // Extract review snippets
-    const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
-    for (const line of lines) {
-      if (
-        line.length > 50 &&
-        line.length < 500 &&
-        !line.includes("Yelp") &&
-        !line.includes("Filter") &&
-        !line.includes("Sort") &&
-        !line.includes("Sign Up") &&
-        result.snippets.length < 5
-      ) {
-        result.snippets.push(line);
-      }
-    }
-  } catch (err) {
-    console.error(`  Yelp error for ${schoolName}:`, (err as Error).message);
-  }
-
-  return result;
-}
-
-// ─── REVIEW SYNTHESIS ───────────────────────────────────────
-
-function synthesizeReviews(allSnippets: string[]): {
-  pros: string[];
-  cons: string[];
-} {
-  if (allSnippets.length === 0) return { pros: [], cons: [] };
-
-  // Keyword-based categorization of review themes
-  const proKeywords = [
-    "easy", "fast", "quick", "simple", "affordable", "cheap", "great",
-    "excellent", "helpful", "convenient", "recommend", "love", "best",
-    "smooth", "straightforward", "professional", "friendly", "worth",
-    "mobile", "app", "certificate", "dismissed", "passed",
-  ];
-  const conKeywords = [
-    "slow", "confusing", "expensive", "boring", "frustrating", "difficult",
-    "poor", "terrible", "worst", "scam", "misleading", "hidden fees",
-    "customer service", "support", "glitch", "crash", "error", "bug",
-    "outdated", "repetitive", "long", "tedious",
-  ];
-
-  const proThemes = new Map<string, number>();
-  const conThemes = new Map<string, number>();
-
-  for (const snippet of allSnippets) {
-    const lower = snippet.toLowerCase();
-
-    for (const keyword of proKeywords) {
-      if (lower.includes(keyword)) {
-        // Group similar keywords
-        const theme = getTheme(keyword, "pro");
-        proThemes.set(theme, (proThemes.get(theme) ?? 0) + 1);
-      }
-    }
-
-    for (const keyword of conKeywords) {
-      if (lower.includes(keyword)) {
-        const theme = getTheme(keyword, "con");
-        conThemes.set(theme, (conThemes.get(theme) ?? 0) + 1);
-      }
-    }
-  }
-
-  // Sort by frequency and take top 5
-  const pros = Array.from(proThemes.entries())
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
-    .map(([theme]) => theme);
-
-  const cons = Array.from(conThemes.entries())
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
-    .map(([theme]) => theme);
-
-  return { pros, cons };
-}
-
-function getTheme(keyword: string, type: "pro" | "con"): string {
-  const proThemeMap: Record<string, string> = {
-    easy: "Easy to complete",
-    fast: "Fast completion time",
-    quick: "Fast completion time",
-    simple: "Simple and straightforward",
-    straightforward: "Simple and straightforward",
-    affordable: "Affordable pricing",
-    cheap: "Affordable pricing",
-    great: "Highly rated by students",
-    excellent: "Highly rated by students",
-    best: "Highly rated by students",
-    helpful: "Helpful customer support",
-    convenient: "Convenient online format",
-    recommend: "Widely recommended",
-    love: "Widely recommended",
-    smooth: "Smooth user experience",
-    professional: "Professional service",
-    friendly: "Friendly customer support",
-    worth: "Good value for money",
-    mobile: "Works well on mobile",
-    app: "Good mobile app",
-    certificate: "Fast certificate delivery",
-    dismissed: "Successfully dismisses tickets",
-    passed: "High pass rate",
-  };
-
-  const conThemeMap: Record<string, string> = {
-    slow: "Slow loading or processing",
-    confusing: "Confusing navigation or content",
-    expensive: "Higher than expected cost",
-    boring: "Boring course content",
-    frustrating: "Frustrating user experience",
-    difficult: "Difficult to navigate",
-    poor: "Poor quality content",
-    terrible: "Very negative experiences reported",
-    worst: "Very negative experiences reported",
-    scam: "Trust concerns raised",
-    misleading: "Misleading pricing or claims",
-    "hidden fees": "Hidden fees or charges",
-    "customer service": "Customer service issues",
-    support: "Customer service issues",
-    glitch: "Technical issues reported",
-    crash: "Technical issues reported",
-    error: "Technical issues reported",
-    bug: "Technical issues reported",
-    outdated: "Outdated course material",
-    repetitive: "Repetitive content",
-    long: "Course feels too long",
-    tedious: "Tedious to complete",
-  };
-
-  if (type === "pro") return proThemeMap[keyword] ?? keyword;
-  return conThemeMap[keyword] ?? keyword;
-}
-
-// ─── NOTION I/O ─────────────────────────────────────────────
-
 interface SchoolConfig {
   pageId: string;
   name: string;
   slug: string;
-  website: string;
-  trustpilotUrl: string;
-  yelpUrl: string;
+  reviewUrl: string;       // Trustpilot URL
+  bbbUrl: string;
+  appStoreUrl: string;
+  playStoreUrl: string;
   prevTrustpilot: number | null;
-  prevGoogle: number | null;
-  prevYelp: number | null;
+  prevAppStore: number | null;
+  prevPlayStore: number | null;
 }
+
+// ─── TREND CALC ─────────────────────────────────────────────
+
+function calcTrend(
+  current: number,
+  previous: number | null
+): "↑ Improving" | "= Stable" | "↓ Declining" {
+  if (previous === null) return "= Stable";
+  const delta = current - previous;
+  if (delta >= 0.1) return "↑ Improving";
+  if (delta <= -0.1) return "↓ Declining";
+  return "= Stable";
+}
+
+// ─── 1. TRUSTPILOT ──────────────────────────────────────────
+
+interface TrustpilotResult {
+  rating: number | null;
+  reviewCount: number | null;
+  snippets: string[];
+}
+
+async function scrapeTrustpilot(reviewUrl: string): Promise<TrustpilotResult> {
+  const result: TrustpilotResult = { rating: null, reviewCount: null, snippets: [] };
+  if (!reviewUrl || !reviewUrl.includes("trustpilot.com")) return result;
+
+  try {
+    const res = await fetch(reviewUrl, {
+      headers: { "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36" },
+    });
+    const html = await res.text();
+
+    // Try JSON-LD first
+    const jsonLdMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+    if (jsonLdMatch) {
+      try {
+        const data = JSON.parse(jsonLdMatch[1]);
+        if (data.aggregateRating) {
+          result.rating = parseFloat(data.aggregateRating.ratingValue);
+          result.reviewCount = parseInt(data.aggregateRating.reviewCount);
+        }
+      } catch { /* JSON-LD parse failed, try fallback */ }
+    }
+
+    // Fallback: parse text
+    if (result.rating === null) {
+      const text = html.replace(/<[^>]+>/g, " ");
+      const reviewMatch = text.match(/Reviews\s+([\d,]+)/);
+      if (reviewMatch) {
+        result.reviewCount = parseInt(reviewMatch[1].replace(/,/g, ""));
+      }
+      const ratingMatch = text.match(/TrustScore\s+(\d\.\d)/);
+      if (ratingMatch) {
+        result.rating = parseFloat(ratingMatch[1]);
+      }
+    }
+
+    // Extract review snippets for synthesis
+    // Reviews appear in <p> tags with data-service-review-text-typography
+    const reviewTexts = html.matchAll(
+      /data-service-review-text-typography[^>]*>([^<]{40,500})/g
+    );
+    for (const m of Array.from(reviewTexts).slice(0, 10)) {
+      result.snippets.push(m[1].trim());
+    }
+
+    // Fallback snippet extraction from body text
+    if (result.snippets.length === 0) {
+      const plainText = html.replace(/<[^>]+>/g, "\n");
+      const lines = plainText.split("\n").map((l) => l.trim()).filter(Boolean);
+      const datePattern = /^[A-Z][a-z]{2} \d{1,2}, \d{4}$/;
+      let inReview = false;
+      for (let i = 0; i < lines.length && result.snippets.length < 10; i++) {
+        if (datePattern.test(lines[i])) { inReview = true; continue; }
+        if (inReview && lines[i].length > 40 && lines[i].length < 600 &&
+            !lines[i].match(/^(Useful|Share|Verified|See more|Reply|Report|Date of experience)/)) {
+          result.snippets.push(lines[i]);
+          inReview = false;
+        }
+      }
+    }
+  } catch (err) {
+    console.error(`    Trustpilot error:`, (err as Error).message);
+  }
+
+  return result;
+}
+
+// ─── 2. BBB ─────────────────────────────────────────────────
+
+async function scrapeBBB(bbbUrl: string): Promise<string | null> {
+  if (!bbbUrl) return null;
+
+  try {
+    const res = await fetch(bbbUrl, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      },
+    });
+    const html = await res.text();
+
+    // BBB grade in structured element
+    const gradeMatch = html.match(/data-testid="rating-letter">([A-F][+-]?)<\/span>/);
+    if (gradeMatch) return gradeMatch[1];
+
+    // Fallback: search for grade pattern near "BBB Rating"
+    const fallback = html.match(/BBB Rating[^]*?([A-F][+-]?)\s*<\//);
+    if (fallback) return fallback[1];
+
+    return "NR";
+  } catch (err) {
+    console.error(`    BBB error:`, (err as Error).message);
+    return null;
+  }
+}
+
+// ─── 3. APP STORE ───────────────────────────────────────────
+
+interface AppStoreResult {
+  rating: number | null;
+  reviewCount: number | null;
+}
+
+async function scrapeAppStore(appStoreUrl: string): Promise<AppStoreResult> {
+  if (!appStoreUrl) return { rating: null, reviewCount: null };
+
+  try {
+    const appIdMatch = appStoreUrl.match(/\/id(\d+)/);
+    if (!appIdMatch) return { rating: null, reviewCount: null };
+
+    const res = await fetch(
+      `https://itunes.apple.com/lookup?id=${appIdMatch[1]}&country=us`
+    );
+    const data = (await res.json()) as any;
+    const result = data.results?.[0];
+    if (!result) return { rating: null, reviewCount: null };
+
+    return {
+      rating: result.averageUserRating ? Math.round(result.averageUserRating * 10) / 10 : null,
+      reviewCount: result.userRatingCount ?? null,
+    };
+  } catch (err) {
+    console.error(`    App Store error:`, (err as Error).message);
+    return { rating: null, reviewCount: null };
+  }
+}
+
+// ─── 4. GOOGLE PLAY ─────────────────────────────────────────
+
+interface PlayStoreResult {
+  rating: number | null;
+  reviewCount: number | null;
+}
+
+async function scrapePlayStore(playStoreUrl: string): Promise<PlayStoreResult> {
+  if (!playStoreUrl) return { rating: null, reviewCount: null };
+
+  try {
+    const url = new URL(playStoreUrl);
+    const appId = url.searchParams.get("id");
+    if (!appId) return { rating: null, reviewCount: null };
+
+    const result = await gplay.app({ appId });
+    return {
+      rating: result.score ? Math.round(result.score * 10) / 10 : null,
+      reviewCount: result.ratings ?? null,
+    };
+  } catch (err) {
+    console.error(`    Play Store error:`, (err as Error).message);
+    return { rating: null, reviewCount: null };
+  }
+}
+
+// ─── 5. CLAUDE SYNTHESIS ────────────────────────────────────
+
+async function synthesiseReviews(
+  schoolName: string,
+  reviewSnippets: string[]
+): Promise<{ good: string; bad: string }> {
+  if (reviewSnippets.length === 0) {
+    return { good: "", bad: "" };
+  }
+
+  try {
+    const msg = await anthropic.messages.create({
+      model: "claude-sonnet-4-6",
+      max_tokens: 300,
+      messages: [
+        {
+          role: "user",
+          content: `You are summarising real customer reviews for ${schoolName}, an online traffic school.
+
+Reviews:
+${reviewSnippets.slice(0, 20).map((r, i) => `${i + 1}. ${r}`).join("\n")}
+
+Return JSON only, no markdown:
+{
+  "good": "One sentence (max 20 words) summarising what reviewers consistently praise.",
+  "bad": "One sentence (max 20 words) summarising the most common complaint. If no clear pattern, write 'No consistent complaints found.'"
+}`,
+        },
+      ],
+    });
+
+    const text = msg.content[0].type === "text" ? msg.content[0].text : "";
+    return JSON.parse(text);
+  } catch (err) {
+    console.error(`    Synthesis error:`, (err as Error).message);
+    return { good: "", bad: "" };
+  }
+}
+
+// ─── NOTION I/O ─────────────────────────────────────────────
 
 async function getSchoolsFromNotion(): Promise<SchoolConfig[]> {
   if (!SCHOOLS_DB) return [];
@@ -369,98 +267,64 @@ async function getSchoolsFromNotion(): Promise<SchoolConfig[]> {
   });
 
   return (response.results as any[]).map((page) => {
-    const props = page.properties;
+    const p = page.properties;
     return {
       pageId: page.id,
-      name: props["School Name"]?.title?.[0]?.plain_text ?? "",
-      slug:
-        props["Slug"]?.rich_text?.[0]?.plain_text ??
-        (props["School Name"]?.title?.[0]?.plain_text ?? "")
-          .toLowerCase()
-          .replace(/\s+/g, "-")
-          .replace(/[^a-z0-9-]/g, ""),
-      website: props["Website"]?.url ?? "",
-      trustpilotUrl: props["Review URL"]?.url ?? "",
-      yelpUrl: props["Yelp URL"]?.url ?? "",
-      prevTrustpilot: props["Rating"]?.number ?? null,
-      prevGoogle: props["Google Rating"]?.number ?? null,
-      prevYelp: props["Yelp Rating"]?.number ?? null,
+      name: p["School Name"]?.title?.[0]?.plain_text ?? "",
+      slug: p["Slug"]?.rich_text?.[0]?.plain_text ?? "",
+      reviewUrl: p["Review URL"]?.url ?? "",
+      bbbUrl: p["BBB URL"]?.url ?? "",
+      appStoreUrl: p["App Store URL"]?.url ?? "",
+      playStoreUrl: p["Play Store URL"]?.url ?? "",
+      prevTrustpilot: p["Rating"]?.number ?? null,
+      prevAppStore: p["App Store Rating"]?.number ?? null,
+      prevPlayStore: p["Play Store Rating"]?.number ?? null,
     };
   });
 }
 
-function extractDomain(url: string): string | null {
-  // From Trustpilot URL or website
-  const tpMatch = url.match(/trustpilot\.com\/review\/(.+)/);
-  if (tpMatch) return tpMatch[1].replace(/\/$/, "");
-
-  // From website URL
-  try {
-    const u = new URL(url);
-    return u.hostname;
-  } catch {
-    return null;
-  }
-}
-
-async function updateNotionSchool(
+async function writeToNotion(
   pageId: string,
-  results: PlatformResult[],
-  synthesized: { pros: string[]; cons: string[] }
+  updates: Record<string, any>
 ) {
-  const TODAY = new Date().toISOString().split("T")[0];
   const properties: any = {};
 
-  const tp = results.find((r) => r.platform === "Trustpilot");
-  const gg = results.find((r) => r.platform === "Google");
-  const yp = results.find((r) => r.platform === "Yelp");
+  for (const [field, value] of Object.entries(updates)) {
+    if (value === null || value === undefined) continue;
 
-  // Trustpilot → existing Rating/Review Count/Review URL fields
-  if (tp && tp.rating !== null) {
-    properties["Rating"] = { number: tp.rating };
-    properties["Review Count"] = { number: tp.reviewCount };
-    if (tp.url) properties["Review URL"] = { url: tp.url };
-  }
-
-  // Google → Google Rating/Google Review Count/Google URL
-  if (gg && gg.rating !== null) {
-    properties["Google Rating"] = { number: gg.rating };
-    properties["Google Review Count"] = { number: gg.reviewCount };
-    if (gg.url) properties["Google URL"] = { url: gg.url };
-  }
-
-  // Yelp → Yelp Rating/Yelp Review Count/Yelp URL
-  if (yp && yp.rating !== null) {
-    properties["Yelp Rating"] = { number: yp.rating };
-    properties["Yelp Review Count"] = { number: yp.reviewCount };
-    if (yp.url) properties["Yelp URL"] = { url: yp.url };
-  }
-
-  // Synthesized highlights
-  if (synthesized.pros.length > 0) {
-    properties["Review Highlights Good"] = {
-      rich_text: [{ text: { content: synthesized.pros.join("\n") } }],
-    };
-  }
-  if (synthesized.cons.length > 0) {
-    properties["Review Highlights Bad"] = {
-      rich_text: [{ text: { content: synthesized.cons.join("\n") } }],
-    };
+    // Detect field type by name pattern
+    if (field.startsWith("date:")) {
+      // date field — e.g. "date:Reviews Last Scraped:start"
+      properties[field] = { date: { start: value } };
+    } else if (field.includes("URL") || field.includes("Url")) {
+      properties[field] = { url: value };
+    } else if (field.includes("Trend") || field.includes("Grade") || field === "Review Scrape Status") {
+      properties[field] = { select: { name: value } };
+    } else if (field.includes("Good") || field.includes("Bad")) {
+      properties[field] = {
+        rich_text: [{ text: { content: String(value) } }],
+      };
+    } else if (typeof value === "number") {
+      properties[field] = { number: value };
+    } else {
+      properties[field] = {
+        rich_text: [{ text: { content: String(value) } }],
+      };
+    }
   }
 
   try {
     await notion.pages.update({ page_id: pageId, properties });
   } catch {
-    // Some fields may not exist yet — retry one at a time
+    // Retry field by field
     for (const [key, val] of Object.entries(properties)) {
       try {
-        const singleProp: any = { [key]: val };
         await notion.pages.update({
           page_id: pageId,
-          properties: singleProp,
+          properties: { [key]: val } as any,
         });
       } catch {
-        console.warn(`    Skipping field "${key}" (doesn't exist in DB yet)`);
+        console.warn(`    Skipping field "${key}" (doesn't exist in DB)`);
       }
       await new Promise((r) => setTimeout(r, 350));
     }
@@ -476,71 +340,104 @@ async function main() {
     return;
   }
 
-  console.log(`Scraping reviews for ${schools.length} schools across 3 platforms...\n`);
-
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
+  console.log(`Scraping reviews for ${schools.length} schools...\n`);
+  const TODAY = new Date().toISOString().split("T")[0];
 
   for (const school of schools) {
-    console.log(`${school.name}`);
-
-    const allResults: PlatformResult[] = [];
-    const allSnippets: string[] = [];
+    console.log(`━━ ${school.name} ━━`);
+    const updates: Record<string, any> = {};
 
     // 1. Trustpilot
-    const tpDomain = school.trustpilotUrl.includes("trustpilot.com")
-      ? extractDomain(school.trustpilotUrl)
-      : extractDomain(school.website);
-    if (tpDomain) {
-      console.log(`  Trustpilot (${tpDomain})...`);
-      const tp = await scrapeTrustpilot(tpDomain, page);
-      allResults.push(tp);
-      allSnippets.push(...tp.snippets);
-      if (tp.rating) console.log(`    ${tp.rating}/5 (${tp.reviewCount} reviews)`);
-      else console.log("    not found");
-      await new Promise((r) => setTimeout(r, 2000));
+    if (school.reviewUrl) {
+      console.log("  Trustpilot...");
+      const tp = await scrapeTrustpilot(school.reviewUrl);
+      if (tp.rating !== null) {
+        console.log(`    ${tp.rating}/5 (${tp.reviewCount?.toLocaleString()} reviews, ${tp.snippets.length} snippets)`);
+        updates["Previous Rating"] = school.prevTrustpilot;
+        updates["Rating"] = tp.rating;
+        updates["Review Count"] = tp.reviewCount;
+        updates["Trustpilot Trend"] = calcTrend(tp.rating, school.prevTrustpilot);
+
+        // Synthesise from Trustpilot snippets
+        if (tp.snippets.length > 0) {
+          console.log("  Synthesising with Claude...");
+          const synthesis = await synthesiseReviews(school.name, tp.snippets);
+          if (synthesis.good) {
+            updates["Review Highlights Good"] = synthesis.good;
+            console.log(`    Good: ${synthesis.good}`);
+          }
+          if (synthesis.bad) {
+            updates["Review Highlights Bad"] = synthesis.bad;
+            console.log(`    Bad: ${synthesis.bad}`);
+          }
+        }
+      } else {
+        console.log("    not found");
+      }
     }
 
-    // 2. Google Places
-    console.log("  Google Places...");
-    const google = await scrapeGoogle(school.name);
-    allResults.push(google);
-    allSnippets.push(...google.snippets);
-    if (google.rating) console.log(`    ${google.rating}/5 (${google.reviewCount} reviews)`);
-    else console.log("    not found");
-    await new Promise((r) => setTimeout(r, 500));
+    // 2. BBB
+    if (school.bbbUrl) {
+      console.log("  BBB...");
+      const grade = await scrapeBBB(school.bbbUrl);
+      if (grade) {
+        console.log(`    Grade: ${grade}`);
+        updates["BBB Grade"] = grade;
+        updates["BBB URL"] = school.bbbUrl;
+      } else {
+        console.log("    not found");
+      }
+    }
 
-    // 3. Yelp
-    console.log("  Yelp...");
-    const yelp = await scrapeYelp(school.name, page);
-    allResults.push(yelp);
-    allSnippets.push(...yelp.snippets);
-    if (yelp.rating) console.log(`    ${yelp.rating}/5 (${yelp.reviewCount} reviews)`);
-    else console.log("    not found");
-    await new Promise((r) => setTimeout(r, 2000));
+    // 3. App Store
+    if (school.appStoreUrl) {
+      console.log("  App Store...");
+      const as = await scrapeAppStore(school.appStoreUrl);
+      if (as.rating !== null) {
+        console.log(`    ${as.rating}/5 (${as.reviewCount?.toLocaleString()} ratings)`);
+        updates["App Store Previous Rating"] = school.prevAppStore;
+        updates["App Store Rating"] = as.rating;
+        updates["App Store Review Count"] = as.reviewCount;
+        updates["App Store Trend"] = calcTrend(as.rating, school.prevAppStore);
+        updates["App Store URL"] = school.appStoreUrl;
+      } else {
+        console.log("    not found");
+      }
+    }
 
-    // 4. Synthesize pros/cons from all snippets
-    const synthesized = synthesizeReviews(allSnippets);
-    if (synthesized.pros.length > 0)
-      console.log(`  Synthesized: ${synthesized.pros.length} pros, ${synthesized.cons.length} cons`);
+    // 4. Google Play
+    if (school.playStoreUrl) {
+      console.log("  Play Store...");
+      const ps = await scrapePlayStore(school.playStoreUrl);
+      if (ps.rating !== null) {
+        console.log(`    ${ps.rating}/5 (${ps.reviewCount?.toLocaleString()} ratings)`);
+        updates["Play Store Previous Rating"] = school.prevPlayStore;
+        updates["Play Store Rating"] = ps.rating;
+        updates["Play Store Review Count"] = ps.reviewCount;
+        updates["Play Store Trend"] = calcTrend(ps.rating, school.prevPlayStore);
+        updates["Play Store URL"] = school.playStoreUrl;
+      } else {
+        console.log("    not found");
+      }
+    }
 
-    // 5. Write to Notion
+    // Metadata
+    updates["Review Scrape Status"] = Object.keys(updates).length > 0 ? "OK" : "Failed";
+    updates["date:Reviews Last Scraped:start"] = TODAY;
+
+    // Write to Notion
     console.log("  Writing to Notion...");
-    await updateNotionSchool(school.pageId, allResults, synthesized);
-    await new Promise((r) => setTimeout(r, 350));
-
+    await writeToNotion(school.pageId, updates);
+    await new Promise((r) => setTimeout(r, 500));
     console.log("");
   }
 
-  await browser.close();
-
-  // Summary
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  console.log("Multi-Platform Review Scrape Complete");
+  console.log("Review Scrape Complete");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  console.log(`  Schools processed: ${schools.length}`);
-  console.log("  Platforms: Trustpilot, Google, Yelp");
-  console.log("  Check Notion for updated ratings and synthesized pros/cons");
+  console.log(`  Schools: ${schools.length}`);
+  console.log("  Sources: Trustpilot, BBB, App Store, Play Store");
+  console.log("  Synthesis: Claude (from Trustpilot snippets)");
 }
 
 /* eslint-enable @typescript-eslint/no-explicit-any */

@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllSchools, getSchoolBySlug } from "@/lib/notion";
 import { RatingStars } from "@/components/RatingStars";
-import { MultiRating } from "@/components/MultiRating";
+import { MultiRating, ReviewSynthesis } from "@/components/MultiRating";
 import { Badge } from "@/components/Badge";
 import { AffiliateButton } from "@/components/AffiliateButton";
 import {
@@ -90,9 +90,9 @@ export default async function ReviewPage({ params }: Props) {
             </h1>
             {school.badge && <Badge type={school.badge} />}
           </div>
-          {school.ratings.length > 0 ? (
+          {school.ratings.length > 0 || school.bbb ? (
             <div className="mb-4">
-              <MultiRating ratings={school.ratings} />
+              <MultiRating ratings={school.ratings} bbb={school.bbb} />
             </div>
           ) : school.rating !== null ? (
             <div className="flex items-center gap-2 mb-4">
@@ -266,9 +266,9 @@ export default async function ReviewPage({ params }: Props) {
               )}
             </div>
             <AffiliateButton school={school} />
-            {school.ratings.length > 0 ? (
+            {school.ratings.length > 0 || school.bbb ? (
               <div className="mt-4">
-                <MultiRating ratings={school.ratings} layout="vertical" />
+                <MultiRating ratings={school.ratings} bbb={school.bbb} layout="vertical" />
               </div>
             ) : school.rating !== null ? (
               <div className="mt-4 text-center">

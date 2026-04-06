@@ -1,9 +1,14 @@
 export type PlatformRating = {
-  platform: 'Trustpilot' | 'Google' | 'Yelp';
+  platform: 'Trustpilot' | 'App Store' | 'Play Store';
   rating: number;
   reviewCount: number;
   previousRating: number | null;
   trend: 'up' | 'down' | 'stable';
+  url: string | null;
+};
+
+export type BBBRating = {
+  grade: string;  // "A+", "A", "B+", etc. or "NR"
   url: string | null;
 };
 
@@ -31,8 +36,9 @@ export type School = {
   reviewUrl: string | null;
   // Multi-platform ratings
   ratings: PlatformRating[];
-  synthesizedPros: string[];
-  synthesizedCons: string[];
+  bbb: BBBRating | null;
+  synthesizedGood: string;
+  synthesizedBad: string;
   stateCodes: string[];          // ["CA","TX","FL"] or ["all"] meaning all 50
   pros: string[];                // split on newlines from Notion text field
   cons: string[];

@@ -77,7 +77,7 @@ function parseTrendSelect(raw: string | null): "up" | "down" | "stable" {
 function buildPlatformRatings(page: PageObjectResponse): import("./types").PlatformRating[] {
   const ratings: import("./types").PlatformRating[] = [];
 
-  // Trustpilot — uses existing Rating/Review Count/Previous Rating/Review URL fields
+  // Trustpilot
   const tpRating = getNumber(page, "Rating");
   const tpCount = getNumber(page, "Review Count");
   if (tpRating !== null) {
@@ -86,43 +86,49 @@ function buildPlatformRatings(page: PageObjectResponse): import("./types").Platf
       rating: tpRating,
       reviewCount: tpCount ?? 0,
       previousRating: getNumber(page, "Previous Rating"),
-      trend: parseTrendSelect(getSelect(page, "Trustpilot Trend")) ??
-        determineTrend(tpRating, getNumber(page, "Previous Rating")),
+      trend: parseTrendSelect(getSelect(page, "Trustpilot Trend")),
       url: getText(page, "Review URL") || null,
     });
   }
 
-  // Google
-  const gRating = getNumber(page, "Google Rating");
-  const gCount = getNumber(page, "Google Review Count");
-  if (gRating !== null) {
+  // App Store
+  const asRating = getNumber(page, "App Store Rating");
+  const asCount = getNumber(page, "App Store Review Count");
+  if (asRating !== null) {
     ratings.push({
-      platform: "Google",
-      rating: gRating,
-      reviewCount: gCount ?? 0,
-      previousRating: getNumber(page, "Google Previous Rating"),
-      trend: parseTrendSelect(getSelect(page, "Google Trend")) ??
-        determineTrend(gRating, getNumber(page, "Google Previous Rating")),
-      url: getText(page, "Google URL") || null,
+      platform: "App Store",
+      rating: asRating,
+      reviewCount: asCount ?? 0,
+      previousRating: getNumber(page, "App Store Previous Rating"),
+      trend: parseTrendSelect(getSelect(page, "App Store Trend")),
+      url: getText(page, "App Store URL") || null,
     });
   }
 
-  // Yelp
-  const yRating = getNumber(page, "Yelp Rating");
-  const yCount = getNumber(page, "Yelp Review Count");
-  if (yRating !== null) {
+  // Play Store
+  const psRating = getNumber(page, "Play Store Rating");
+  const psCount = getNumber(page, "Play Store Review Count");
+  if (psRating !== null) {
     ratings.push({
-      platform: "Yelp",
-      rating: yRating,
-      reviewCount: yCount ?? 0,
-      previousRating: getNumber(page, "Yelp Previous Rating"),
-      trend: parseTrendSelect(getSelect(page, "Yelp Trend")) ??
-        determineTrend(yRating, getNumber(page, "Yelp Previous Rating")),
-      url: getText(page, "Yelp URL") || null,
+      platform: "Play Store",
+      rating: psRating,
+      reviewCount: psCount ?? 0,
+      previousRating: getNumber(page, "Play Store Previous Rating"),
+      trend: parseTrendSelect(getSelect(page, "Play Store Trend")),
+      url: getText(page, "Play Store URL") || null,
     });
   }
 
   return ratings;
+}
+
+function buildBBB(page: PageObjectResponse): import("./types").BBBRating | null {
+  const grade = getSelect(page, "BBB Grade");
+  if (!grade || grade === "NR") return null;
+  return {
+    grade,
+    url: getText(page, "BBB URL") || null,
+  };
 }
 
 function mapSchool(page: PageObjectResponse): School {
@@ -156,8 +162,9 @@ function mapSchool(page: PageObjectResponse): School {
     reviewSource: getSelect(page, "Review Source") as School["reviewSource"],
     reviewUrl: getText(page, "Review URL") || null,
     ratings: buildPlatformRatings(page),
-    synthesizedPros: parseLines(getText(page, "Review Highlights Good")),
-    synthesizedCons: parseLines(getText(page, "Review Highlights Bad")),
+    bbb: buildBBB(page),
+    synthesizedGood: getText(page, "Review Highlights Good"),
+    synthesizedBad: getText(page, "Review Highlights Bad"),
     stateCodes: parseStateCodes(getText(page, "State Codes")),
     pros: parseLines(getText(page, "Pros")),
     cons: parseLines(getText(page, "Cons")),

@@ -120,8 +120,8 @@ export function ComparisonTable({
                 })()}
               </td>
               <td className="py-4 px-4">
-                {school.ratings.length > 0 ? (
-                  <MultiRatingCompact ratings={school.ratings} />
+                {school.ratings.length > 0 || school.bbb ? (
+                  <MultiRatingCompact ratings={school.ratings} bbb={school.bbb} />
                 ) : school.rating !== null ? (
                   <>
                     <RatingStars rating={school.rating} size="sm" />
