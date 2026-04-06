@@ -36,38 +36,40 @@ async function queryGooglePlaces(
   schoolName: string,
   stateCode: string
 ): Promise<PlacesResult | null> {
-  const query = `${schoolName} traffic school ${stateCode}`;
-  const url = "https://places.googleapis.com/v1/places:searchText";
+  const query = encodeURIComponent(`${schoolName} traffic school ${stateCode}`);
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Goog-Api-Key": PLACES_API_KEY,
-      "X-Goog-FieldMask":
-        "places.id,places.displayName,places.websiteUri,places.rating,places.userRatingCount",
-    },
-    body: JSON.stringify({ textQuery: query }),
-  });
+  // Use legacy Places API (Text Search) — works with standard API keys
+  const searchUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${query}&key=${PLACES_API_KEY}`;
+  const searchRes = await fetch(searchUrl);
 
-  if (!response.ok) {
-    console.error(`  Places API error: ${response.status}`);
+  if (!searchRes.ok) {
+    console.error(`  Places API error: ${searchRes.status}`);
     return null;
   }
 
-  const data = (await response.json()) as any;
+  const searchData = (await searchRes.json()) as any;
+  const place = searchData.results?.[0];
+  if (!place) return null;
 
-  if (!data.places || data.places.length === 0) {
-    return null;
+  // Get website from Place Details
+  let website: string | null = null;
+  if (place.place_id) {
+    try {
+      const detailUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.place_id}&fields=website&key=${PLACES_API_KEY}`;
+      const detailRes = await fetch(detailUrl);
+      if (detailRes.ok) {
+        const detailData = (await detailRes.json()) as any;
+        website = detailData.result?.website ?? null;
+      }
+    } catch { /* skip */ }
   }
 
-  const place = data.places[0];
   return {
-    placeId: place.id,
-    website: place.websiteUri ?? null,
+    placeId: place.place_id ?? "",
+    website,
     rating: place.rating ?? null,
-    userRatingCount: place.userRatingCount ?? null,
-    name: place.displayName?.text ?? "",
+    userRatingCount: place.user_ratings_total ?? null,
+    name: place.name ?? "",
   };
 }
 
