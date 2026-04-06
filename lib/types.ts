@@ -1,3 +1,12 @@
+export type PlatformRating = {
+  platform: 'Trustpilot' | 'Google' | 'Yelp';
+  rating: number;
+  reviewCount: number;
+  previousRating: number | null;
+  trend: 'up' | 'down' | 'stable';
+  url: string | null;
+};
+
 export type School = {
   id: string;                    // Notion page ID
   slug: string;                  // e.g. "idrivesafely"
@@ -15,10 +24,15 @@ export type School = {
   priceFL: number | null;
   priceNY: number | null;
   originalPrice: number | null;
+  // Legacy single rating (kept for backwards compat / fallback)
   rating: number | null;
   reviewCount: number | null;
   reviewSource: 'Trustpilot' | 'Google' | 'Yelp' | 'BBB' | null;
   reviewUrl: string | null;
+  // Multi-platform ratings
+  ratings: PlatformRating[];
+  synthesizedPros: string[];
+  synthesizedCons: string[];
   stateCodes: string[];          // ["CA","TX","FL"] or ["all"] meaning all 50
   pros: string[];                // split on newlines from Notion text field
   cons: string[];

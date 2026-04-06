@@ -1,5 +1,6 @@
 import type { School } from "@/lib/types";
 import { getPriceForState } from "@/lib/notion";
+import { MultiRating } from "./MultiRating";
 import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
 import { AffiliateButton } from "./AffiliateButton";
@@ -32,24 +33,11 @@ export function SchoolCard({
             {school.badge && <Badge type={school.badge} />}
           </div>
 
-          {school.rating !== null && (
-            <div className="flex items-center gap-1.5">
-              <RatingStars rating={school.rating} count={school.reviewCount ?? undefined} />
-              {school.reviewSource && school.reviewUrl && (
-                <a
-                  href={school.reviewUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-slate-500 hover:underline"
-                >
-                  {school.reviewSource}
-                </a>
-              )}
-              {school.reviewSource && !school.reviewUrl && (
-                <span className="text-xs text-slate-500">{school.reviewSource}</span>
-              )}
-            </div>
-          )}
+          {school.ratings.length > 0 ? (
+            <MultiRating ratings={school.ratings} />
+          ) : school.rating !== null ? (
+            <RatingStars rating={school.rating} count={school.reviewCount ?? undefined} />
+          ) : null}
 
           <p className="mt-2 text-sm text-slate-600">{school.tagline}</p>
 
@@ -74,15 +62,19 @@ export function SchoolCard({
             )}
           </div>
 
-          {showProsAndCons && (school.pros.length > 0 || school.cons.length > 0) && (
+          {showProsAndCons && (() => {
+            const pros = school.synthesizedPros.length > 0 ? school.synthesizedPros : school.pros;
+            const cons = school.synthesizedCons.length > 0 ? school.synthesizedCons : school.cons;
+            const label = school.synthesizedPros.length > 0 ? "What reviewers say" : "Pros";
+            return (pros.length > 0 || cons.length > 0) ? (
             <div className="grid sm:grid-cols-2 gap-4 mt-4">
-              {school.pros.length > 0 && (
+              {pros.length > 0 && (
                 <div>
                   <h4 className="flex items-center gap-1 text-xs font-semibold text-green-700 mb-1.5">
-                    <ThumbsUp className="w-3 h-3" /> Pros
+                    <ThumbsUp className="w-3 h-3" /> {label}
                   </h4>
                   <ul className="space-y-1">
-                    {school.pros.map((pro) => (
+                    {pros.map((pro) => (
                       <li key={pro} className="flex items-start gap-1.5 text-xs text-slate-600">
                         <CheckCircle className="w-3 h-3 text-green-500 mt-0.5 shrink-0" />
                         {pro}
@@ -91,13 +83,13 @@ export function SchoolCard({
                   </ul>
                 </div>
               )}
-              {school.cons.length > 0 && (
+              {cons.length > 0 && (
                 <div>
                   <h4 className="flex items-center gap-1 text-xs font-semibold text-red-700 mb-1.5">
-                    <ThumbsDown className="w-3 h-3" /> Cons
+                    <ThumbsDown className="w-3 h-3" /> {school.synthesizedCons.length > 0 ? "Common complaints" : "Cons"}
                   </h4>
                   <ul className="space-y-1">
-                    {school.cons.map((con) => (
+                    {cons.map((con) => (
                       <li key={con} className="flex items-start gap-1.5 text-xs text-slate-600">
                         <span className="text-red-400 mt-0.5 shrink-0">&minus;</span>
                         {con}
@@ -107,7 +99,8 @@ export function SchoolCard({
                 </div>
               )}
             </div>
-          )}
+          ) : null;
+          })()}
         </div>
 
         <div className="flex flex-col items-end gap-3 sm:min-w-[160px]">

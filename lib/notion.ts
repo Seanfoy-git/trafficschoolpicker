@@ -59,6 +59,79 @@ function parseLines(raw: string): string[] {
 
 // ─── SCHOOLS (Traffic Schools DB) ───────────────────────────
 
+function determineTrend(current: number, previous: number | null): "up" | "down" | "stable" {
+  if (previous === null) return "stable";
+  const diff = current - previous;
+  if (diff > 0.05) return "up";
+  if (diff < -0.05) return "down";
+  return "stable";
+}
+
+function buildPlatformRatings(page: PageObjectResponse): import("./types").PlatformRating[] {
+  const ratings: import("./types").PlatformRating[] = [];
+
+  // Trustpilot
+  const tpRating = getNumber(page, "Trustpilot Rating");
+  const tpCount = getNumber(page, "Trustpilot Count");
+  if (tpRating !== null) {
+    ratings.push({
+      platform: "Trustpilot",
+      rating: tpRating,
+      reviewCount: tpCount ?? 0,
+      previousRating: getNumber(page, "Trustpilot Prev Rating"),
+      trend: determineTrend(tpRating, getNumber(page, "Trustpilot Prev Rating")),
+      url: getText(page, "Trustpilot URL") || null,
+    });
+  }
+
+  // Google
+  const gRating = getNumber(page, "Google Rating");
+  const gCount = getNumber(page, "Google Count");
+  if (gRating !== null) {
+    ratings.push({
+      platform: "Google",
+      rating: gRating,
+      reviewCount: gCount ?? 0,
+      previousRating: getNumber(page, "Google Prev Rating"),
+      trend: determineTrend(gRating, getNumber(page, "Google Prev Rating")),
+      url: getText(page, "Google URL") || null,
+    });
+  }
+
+  // Yelp
+  const yRating = getNumber(page, "Yelp Rating");
+  const yCount = getNumber(page, "Yelp Count");
+  if (yRating !== null) {
+    ratings.push({
+      platform: "Yelp",
+      rating: yRating,
+      reviewCount: yCount ?? 0,
+      previousRating: getNumber(page, "Yelp Prev Rating"),
+      trend: determineTrend(yRating, getNumber(page, "Yelp Prev Rating")),
+      url: getText(page, "Yelp URL") || null,
+    });
+  }
+
+  // Fallback: if no per-platform ratings, use legacy single rating
+  if (ratings.length === 0) {
+    const legacyRating = getNumber(page, "Rating");
+    const legacyCount = getNumber(page, "Review Count");
+    const legacySource = getSelect(page, "Review Source") as "Trustpilot" | "Google" | "Yelp" | null;
+    if (legacyRating !== null && legacySource) {
+      ratings.push({
+        platform: legacySource,
+        rating: legacyRating,
+        reviewCount: legacyCount ?? 0,
+        previousRating: getNumber(page, "Previous Rating"),
+        trend: determineTrend(legacyRating, getNumber(page, "Previous Rating")),
+        url: getText(page, "Review URL") || null,
+      });
+    }
+  }
+
+  return ratings;
+}
+
 function mapSchool(page: PageObjectResponse): School {
   // Tier: "1 - Featured" → 1, anything else (including null) → 2
   const tier: 1 | 2 = getSelect(page, "Tier") === "1 - Featured" ? 1 : 2;
@@ -89,6 +162,9 @@ function mapSchool(page: PageObjectResponse): School {
     reviewCount: getNumber(page, "Review Count"),
     reviewSource: getSelect(page, "Review Source") as School["reviewSource"],
     reviewUrl: getText(page, "Review URL") || null,
+    ratings: buildPlatformRatings(page),
+    synthesizedPros: parseLines(getText(page, "Synthesized Pros")),
+    synthesizedCons: parseLines(getText(page, "Synthesized Cons")),
     stateCodes: parseStateCodes(getText(page, "State Codes")),
     pros: parseLines(getText(page, "Pros")),
     cons: parseLines(getText(page, "Cons")),

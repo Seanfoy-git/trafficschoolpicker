@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllSchools, getSchoolBySlug } from "@/lib/notion";
 import { RatingStars } from "@/components/RatingStars";
+import { MultiRating } from "@/components/MultiRating";
 import { Badge } from "@/components/Badge";
 import { AffiliateButton } from "@/components/AffiliateButton";
 import {
@@ -89,22 +90,15 @@ export default async function ReviewPage({ params }: Props) {
             </h1>
             {school.badge && <Badge type={school.badge} />}
           </div>
-          {school.rating !== null && (
+          {school.ratings.length > 0 ? (
+            <div className="mb-4">
+              <MultiRating ratings={school.ratings} />
+            </div>
+          ) : school.rating !== null ? (
             <div className="flex items-center gap-2 mb-4">
               <RatingStars rating={school.rating} count={school.reviewCount ?? undefined} size="lg" />
-              {school.reviewSource && (
-                <span className="text-sm text-slate-300">
-                  {school.reviewUrl ? (
-                    <a href={school.reviewUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                      {school.reviewSource} reviews
-                    </a>
-                  ) : (
-                    <>{school.reviewSource} reviews</>
-                  )}
-                </span>
-              )}
             </div>
-          )}
+          ) : null}
           <div className="flex flex-wrap gap-6 text-sm text-slate-300">
             {school.completionHours && (
               <span className="flex items-center gap-1.5">
@@ -272,14 +266,15 @@ export default async function ReviewPage({ params }: Props) {
               )}
             </div>
             <AffiliateButton school={school} />
-            {school.rating !== null && (
+            {school.ratings.length > 0 ? (
+              <div className="mt-4">
+                <MultiRating ratings={school.ratings} layout="vertical" />
+              </div>
+            ) : school.rating !== null ? (
               <div className="mt-4 text-center">
                 <RatingStars rating={school.rating} count={school.reviewCount ?? undefined} />
-                {school.reviewSource && (
-                  <div className="text-xs text-slate-500 mt-1">{school.reviewSource}</div>
-                )}
               </div>
-            )}
+            ) : null}
             <ul className="mt-4 space-y-2 text-sm text-slate-600">
               {school.completionHours && (
                 <li className="flex items-center gap-2">

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { School } from "@/lib/types";
 import { getPriceForState } from "@/lib/notion";
+import { MultiRatingCompact } from "./MultiRating";
 import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
 import { AffiliateButton } from "./AffiliateButton";
@@ -119,14 +120,16 @@ export function ComparisonTable({
                 })()}
               </td>
               <td className="py-4 px-4">
-                {school.rating !== null && (
+                {school.ratings.length > 0 ? (
+                  <MultiRatingCompact ratings={school.ratings} />
+                ) : school.rating !== null ? (
                   <>
                     <RatingStars rating={school.rating} size="sm" />
                     <div className="text-xs text-slate-500 mt-0.5">
                       {school.reviewCount?.toLocaleString()} {school.reviewSource ?? ""} reviews
                     </div>
                   </>
-                )}
+                ) : null}
               </td>
               <td className="py-4 px-4">
                 {school.completionHours && (
