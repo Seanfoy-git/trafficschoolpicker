@@ -68,33 +68,41 @@ async function scrapeTrustpilot(
     const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
 
     // Find rating and count
-    for (const line of lines) {
-      const reviewMatch = line.match(/Reviews\s+([\d,]+)/);
+    // Pattern: "Reviews 26,951" on one line, then "•" or blank, then "4.8"
+    for (let i = 0; i < lines.length; i++) {
+      const reviewMatch = lines[i].match(/Reviews\s+([\d,]+)/);
       if (reviewMatch) {
         result.reviewCount = parseInt(reviewMatch[1].replace(/,/g, ""));
+        // Rating might be on same line, next line, or line after "•"
         const ratingMatch =
-          line.match(/(\d\.\d)/) ||
-          (lines[lines.indexOf(line) + 1]?.match(/(\d\.\d)/));
+          lines[i].match(/(\d\.\d)/) ||
+          lines[i + 1]?.match(/^(\d\.\d)$/) ||
+          lines[i + 2]?.match(/^(\d\.\d)$/);
         if (ratingMatch) result.rating = parseFloat(ratingMatch[1]);
         break;
       }
     }
 
-    // Extract review snippets (look for review text blocks)
+    // Extract review snippets — look for actual review text
+    // Reviews on Trustpilot appear after date lines like "Mar 27, 2026"
+    const datePattern = /^[A-Z][a-z]{2} \d{1,2}, \d{4}$/;
+    let inReviewZone = false;
     for (let i = 0; i < lines.length && result.snippets.length < 10; i++) {
-      const line = lines[i];
-      // Review text is typically 50-500 chars, not a header/nav element
-      if (
-        line.length > 50 &&
-        line.length < 500 &&
-        !line.includes("Reviews") &&
-        !line.includes("TrustScore") &&
-        !line.includes("Copyright") &&
-        !line.includes("Cookie") &&
-        !line.match(/^\d+ (star|day|hour|month|year)/) &&
-        !line.startsWith("http")
-      ) {
-        result.snippets.push(line);
+      if (datePattern.test(lines[i])) {
+        inReviewZone = true;
+        continue;
+      }
+      if (inReviewZone && lines[i].length > 40 && lines[i].length < 600) {
+        // Skip UI elements
+        if (
+          !lines[i].match(/^(Useful|Share|Verified|See more|Reply|Report|Was this|Date of experience)/) &&
+          !lines[i].match(/^\d+ review/) &&
+          !lines[i].includes("Trustpilot") &&
+          !lines[i].includes("Cookie")
+        ) {
+          result.snippets.push(lines[i]);
+          inReviewZone = false; // One snippet per review
+        }
       }
     }
   } catch (err) {
@@ -479,11 +487,12 @@ async function main() {
     const allSnippets: string[] = [];
 
     // 1. Trustpilot
-    const domain =
-      extractDomain(school.trustpilotUrl) || extractDomain(school.website);
-    if (domain) {
-      console.log(`  Trustpilot (${domain})...`);
-      const tp = await scrapeTrustpilot(domain, page);
+    const tpDomain = school.trustpilotUrl.includes("trustpilot.com")
+      ? extractDomain(school.trustpilotUrl)
+      : extractDomain(school.website);
+    if (tpDomain) {
+      console.log(`  Trustpilot (${tpDomain})...`);
+      const tp = await scrapeTrustpilot(tpDomain, page);
       allResults.push(tp);
       allSnippets.push(...tp.snippets);
       if (tp.rating) console.log(`    ${tp.rating}/5 (${tp.reviewCount} reviews)`);
