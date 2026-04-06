@@ -1,17 +1,20 @@
 "use client";
 
 import { ExternalLink } from "lucide-react";
-import type { School } from "@/lib/types";
+import type { School, SchoolWithPrice } from "@/lib/types";
 
 export function AffiliateButton({
   school,
   variant = "primary",
 }: {
-  school: School;
+  school: School | SchoolWithPrice;
   variant?: "primary" | "secondary";
 }) {
-  const hasAffiliate = school.affiliateUrl.length > 0;
-  const url = hasAffiliate ? school.affiliateUrl : school.website;
+  // Priority: state-specific affiliate URL > school default > website
+  const stateUrl = "stateAffiliateUrl" in school ? school.stateAffiliateUrl : null;
+  const affiliateUrl = stateUrl || school.affiliateUrl;
+  const hasAffiliate = affiliateUrl.length > 0;
+  const url = hasAffiliate ? affiliateUrl : school.website;
   const label = hasAffiliate ? "Enroll Now" : "Visit Website";
 
   const baseClasses =

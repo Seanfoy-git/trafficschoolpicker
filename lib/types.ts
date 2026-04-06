@@ -1,3 +1,5 @@
+// ─── Rating types ───────────────────────────────────────────
+
 export type PlatformRating = {
   platform: 'Trustpilot' | 'Google' | 'App Store' | 'Play Store';
   rating: number;
@@ -12,35 +14,48 @@ export type BBBRating = {
   url: string | null;
 };
 
+// ─── States DB ──────────────────────────────────────────────
+
+export type OnlineStatus =
+  | 'Online — ticket dismissal'
+  | 'Online — insurance discount only'
+  | 'In-person only'
+  | 'Unknown';
+
+export type StateInfo = {
+  id: string;
+  code: string;                  // "CA"
+  name: string;                  // "California"
+  onlineStatus: OnlineStatus;
+  dmvUrl: string;
+  notes: string;
+};
+
+// ─── Traffic Schools DB (editorial + reviews) ───────────────
+
 export type School = {
   id: string;                    // Notion page ID
-  slug: string;                  // e.g. "idrivesafely"
+  slug: string;
   name: string;
   tier: 1 | 2;
   badge: 'Top Rated' | 'Editors Choice' | 'Best Value' | 'Fastest' | 'Budget Pick' | null;
-  tagline: string;               // from "One Liner" in Notion
+  tagline: string;
   website: string;
-  affiliateUrl: string;          // empty string if not set yet
+  affiliateUrl: string;          // default affiliate link
   affiliateNetwork: 'CJ' | 'Impact' | 'ShareASale' | 'Direct' | 'Unknown' | null;
   commissionRate: string;
-  price: number;
-  priceCA: number | null;
-  priceTX: number | null;
-  priceFL: number | null;
-  priceNY: number | null;
-  originalPrice: number | null;
-  // Legacy single rating (kept for backwards compat / fallback)
+  // Ratings
   rating: number | null;
   reviewCount: number | null;
   reviewSource: 'Trustpilot' | 'Google' | 'Yelp' | 'BBB' | null;
   reviewUrl: string | null;
-  // Multi-platform ratings
   ratings: PlatformRating[];
   bbb: BBBRating | null;
   synthesizedGood: string;
   synthesizedBad: string;
-  stateCodes: string[];          // ["CA","TX","FL"] or ["all"] meaning all 50
-  pros: string[];                // split on newlines from Notion text field
+  // Content
+  stateCodes: string[];          // ["CA","TX","FL"] or ["all"]
+  pros: string[];
   cons: string[];
   bestFor: string;
   completionHours: number | null;
@@ -50,11 +65,35 @@ export type School = {
   courtAcceptance: 'All Courts' | 'Most Courts' | 'Some Courts' | null;
   founded: number | null;
   showOnSite: boolean;
-  lastVerified: string | null;   // ISO date string
+  lastVerified: string | null;
 };
 
+// ─── School × State Pricing DB ──────────────────────────────
+
+export type SchoolPricing = {
+  id: string;
+  schoolId: string;              // relation to Traffic Schools
+  stateCode: string;
+  price: number | null;
+  originalPrice: number | null;
+  approved: boolean;
+  affiliateUrl: string;          // state-specific affiliate URL override
+  priceNote: string;
+};
+
+// ─── Merged type for state pages ────────────────────────────
+
+export type SchoolWithPrice = School & {
+  price: number | null;          // state-specific price (overrides school default)
+  originalPrice: number | null;
+  stateAffiliateUrl: string | null;  // overrides school.affiliateUrl if set
+  priceNote: string | null;
+};
+
+// ─── School Directory DB (DMV-scraped) ──────────────────────
+
 export type DirectorySchool = {
-  id: string;                    // Notion page ID
+  id: string;
   name: string;
   state: string;                 // "California"
   licenseNumber: string;
@@ -64,17 +103,4 @@ export type DirectorySchool = {
   onlineAvailable: boolean;
   source: string;                // "CA DMV"
   lastScraped: string | null;
-};
-
-export type StateInfo = {
-  id: string;
-  code: string;                  // "CA"
-  name: string;                  // "California"
-  onlineAllowed: boolean;
-  minHours: number | null;
-  programName: string;           // "Traffic Violator School" / "Defensive Driving" etc
-  eligibilityNotes: string;
-  courtProcess: string;
-  dmvUrl: string;
-  lastUpdated: string | null;
 };

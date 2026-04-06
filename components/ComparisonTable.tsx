@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { School } from "@/lib/types";
-import { getPriceForState } from "@/lib/notion";
+import type { SchoolWithPrice } from "@/lib/types";
 import { MultiRatingCompact } from "./MultiRating";
 import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
@@ -14,22 +13,18 @@ type SortKey = "price" | "rating" | "completionHours";
 
 export function ComparisonTable({
   schools,
-  stateCode = "CA",
 }: {
-  schools: School[];
-  stateCode?: string;
+  schools: SchoolWithPrice[];
 }) {
   const [sortBy, setSortBy] = useState<SortKey>("rating");
   const [sortAsc, setSortAsc] = useState(false);
 
   const sorted = [...schools].sort((a, b) => {
     if (sortBy === "price") {
-      const priceA = getPriceForState(a, stateCode).amount;
-      const priceB = getPriceForState(b, stateCode).amount;
-      if (priceA === null && priceB === null) return 0;
-      if (priceA === null) return 1;
-      if (priceB === null) return -1;
-      return sortAsc ? priceA - priceB : priceB - priceA;
+      if (a.price === null && b.price === null) return 0;
+      if (a.price === null) return 1;
+      if (b.price === null) return -1;
+      return sortAsc ? a.price - b.price : b.price - a.price;
     }
     const aVal = a[sortBy] ?? 0;
     const bVal = b[sortBy] ?? 0;
@@ -101,23 +96,20 @@ export function ComparisonTable({
                 </div>
               </td>
               <td className="py-4 px-4">
-                {(() => {
-                  const { amount } = getPriceForState(school, stateCode);
-                  return amount !== null ? (
-                    <>
-                      <div className="font-bold text-slate-900">
-                        ${amount.toFixed(2)}
+                {school.price !== null ? (
+                  <>
+                    <div className="font-bold text-slate-900">
+                      ${school.price.toFixed(2)}
+                    </div>
+                    {school.originalPrice && (
+                      <div className="text-xs text-slate-400 line-through">
+                        ${school.originalPrice.toFixed(2)}
                       </div>
-                      {school.originalPrice && (
-                        <div className="text-xs text-slate-400 line-through">
-                          ${school.originalPrice.toFixed(2)}
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <div className="text-xs text-slate-500">Check site</div>
-                  );
-                })()}
+                    )}
+                  </>
+                ) : (
+                  <div className="text-xs text-slate-500">Check site</div>
+                )}
               </td>
               <td className="py-4 px-4">
                 {school.ratings.length > 0 || school.bbb ? (

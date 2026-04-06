@@ -1,6 +1,10 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getSchoolsForState, getStateInfo, getDirectoryForState, getPriceForState } from "@/lib/notion";
+import {
+  getSchoolPricingForState,
+  getStateInfo,
+  getDirectoryForState,
+} from "@/lib/notion";
 import { getStateFAQs } from "@/lib/state-faqs";
 import { getStateBySlug, getAllStateSlugs } from "@/lib/state-utils";
 import { SchoolCard } from "@/components/SchoolCard";
@@ -8,7 +12,7 @@ import { SchoolFAQ, FAQJsonLd } from "@/components/SchoolFAQ";
 import { DirectoryTable } from "@/components/DirectoryTable";
 import { TrustBar } from "@/components/TrustBar";
 import { AffiliateButton } from "@/components/AffiliateButton";
-import { RatingStars } from "@/components/RatingStars";
+import { MultiRating } from "@/components/MultiRating";
 import { Badge } from "@/components/Badge";
 import Link from "next/link";
 import {
@@ -16,15 +20,14 @@ import {
   FileText,
   CheckCircle,
   AlertCircle,
-  Clock,
   ExternalLink,
+  AlertTriangle,
+  Info,
 } from "lucide-react";
 
-export const revalidate = 86400; // 24 hours
+export const revalidate = 86400;
 
-type Props = {
-  params: Promise<{ state: string }>;
-};
+type Props = { params: Promise<{ state: string }> };
 
 export async function generateStaticParams() {
   return getAllStateSlugs().map((slug) => ({ state: slug }));
@@ -52,43 +55,105 @@ export default async function StatePage({ params }: Props) {
   if (!stateMeta) notFound();
 
   const [schools, stateInfo, directory] = await Promise.all([
-    getSchoolsForState(stateMeta.code),
+    getSchoolPricingForState(stateMeta.code),
     getStateInfo(stateMeta.code),
     getDirectoryForState(stateMeta.name),
   ]);
 
+  const onlineStatus = stateInfo?.onlineStatus ?? "Unknown";
   const tier1 = schools.filter((s) => s.tier === 1);
   const tier2 = schools.filter((s) => s.tier === 2);
-  const totalCount = tier1.length + tier2.length + directory.length;
   const faqs = getStateFAQs(stateMeta.code);
-
   const year = new Date().getFullYear();
 
   return (
     <>
       <FAQJsonLd faqs={faqs} />
 
-      {/* 1. HERO */}
+      {/* HERO */}
       <section className="bg-primary text-white py-12 md:py-16">
         <div className="max-w-5xl mx-auto px-4">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
-            The {tier1.length > 0 ? tier1.length : schools.length} Best Online
-            Traffic Schools in {stateMeta.name} ({year})
+            {onlineStatus === "In-person only"
+              ? `Traffic School in ${stateMeta.name}`
+              : `The ${tier1.length > 0 ? tier1.length : schools.length} Best Online Traffic Schools in ${stateMeta.name} (${year})`}
           </h1>
-          <p className="text-lg text-slate-300 max-w-3xl">
-            Comparing {tier1.length + tier2.length} reviewed pick
-            {tier1.length + tier2.length !== 1 ? "s" : ""}
-            {directory.length > 0 && (
-              <> from {totalCount} {stateMeta.name}-approved online schools</>
-            )}
-          </p>
+          {onlineStatus === "Online — ticket dismissal" && schools.length > 0 && (
+            <p className="text-lg text-slate-300 max-w-3xl">
+              Comparing {schools.length} reviewed option
+              {schools.length !== 1 ? "s" : ""}
+              {directory.length > 0 && <> from {schools.length + directory.length} {stateMeta.name}-approved online schools</>}
+            </p>
+          )}
+          {onlineStatus === "Online — insurance discount only" && (
+            <p className="text-lg text-slate-300 max-w-3xl">
+              Online courses in {stateMeta.name} are for insurance discounts, not ticket dismissal
+            </p>
+          )}
         </div>
       </section>
 
       <TrustBar />
 
-      {/* 2. TIER 1 COMPARISON CARDS */}
-      {tier1.length > 0 && (
+      {/* STATUS BANNERS */}
+      {onlineStatus === "Online — insurance discount only" && (
+        <section className="py-6 bg-amber-50 border-b border-amber-200">
+          <div className="max-w-5xl mx-auto px-4 flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+            <div>
+              <p className="font-semibold text-amber-800">Insurance discount only</p>
+              <p className="text-sm text-amber-700">
+                Traffic school in {stateMeta.name} is for insurance discounts, not ticket dismissal.
+                Check your eligibility with your court before enrolling.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {onlineStatus === "In-person only" && (
+        <section className="py-12 bg-white">
+          <div className="max-w-3xl mx-auto px-4 text-center">
+            <AlertCircle className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-slate-900 mb-3">
+              Online traffic school isn&apos;t available in {stateMeta.name}
+            </h2>
+            <p className="text-slate-600 mb-6">
+              You&apos;ll need to attend an approved in-person course.
+              Contact the court listed on your citation for approved providers.
+            </p>
+            {stateInfo?.dmvUrl && (
+              <a
+                href={stateInfo.dmvUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-light transition-colors"
+              >
+                Visit {stateMeta.name} DMV <ExternalLink className="w-4 h-4" />
+              </a>
+            )}
+          </div>
+        </section>
+      )}
+
+      {onlineStatus === "Unknown" && (
+        <section className="py-8 bg-slate-50 border-b border-slate-200">
+          <div className="max-w-5xl mx-auto px-4 flex items-start gap-3">
+            <Info className="w-5 h-5 text-slate-500 mt-0.5 shrink-0" />
+            <div>
+              <p className="font-semibold text-slate-700">Status not confirmed</p>
+              <p className="text-sm text-slate-600">
+                We&apos;re still researching {stateMeta.name}&apos;s online traffic school rules.
+                Contact the court on your citation for current eligibility.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* TIER 1 COMPARISON CARDS — only for online states */}
+      {(onlineStatus === "Online — ticket dismissal" || onlineStatus === "Online — insurance discount only") &&
+        tier1.length > 0 && (
         <section className="py-12 bg-white">
           <div className="max-w-5xl mx-auto px-4">
             <div className="space-y-4">
@@ -102,19 +167,17 @@ export default async function StatePage({ params }: Props) {
                 />
               ))}
             </div>
-
             <p className="mt-6 text-xs text-slate-500 leading-relaxed">
               We independently research and review all schools. We may earn a
-              commission if you enroll via our links at no extra cost to you. All
-              ratings from their respective review platforms and verified April
-              2026.
+              commission if you enroll via our links at no extra cost to you.
             </p>
           </div>
         </section>
       )}
 
-      {/* 3. TIER 2 — MORE OPTIONS */}
-      {tier2.length > 0 && (
+      {/* TIER 2 — MORE OPTIONS */}
+      {(onlineStatus === "Online — ticket dismissal" || onlineStatus === "Online — insurance discount only") &&
+        tier2.length > 0 && (
         <section className="py-12 bg-slate-50">
           <div className="max-w-5xl mx-auto px-4">
             <h2 className="text-2xl font-bold text-slate-900 mb-6">
@@ -128,31 +191,27 @@ export default async function StatePage({ params }: Props) {
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <Link
-                        href={`/reviews/${school.slug}`}
-                        className="font-semibold text-slate-900 hover:text-accent"
-                      >
+                      <Link href={`/reviews/${school.slug}`} className="font-semibold text-slate-900 hover:text-accent">
                         {school.name}
                       </Link>
                       {school.badge && <Badge type={school.badge} />}
                     </div>
                     <p className="text-sm text-slate-600">{school.tagline}</p>
+                    {school.ratings.length > 0 && (
+                      <div className="mt-1">
+                        <MultiRating ratings={school.ratings} bbb={school.bbb} />
+                      </div>
+                    )}
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="text-right">
-                      {(() => {
-                        const { amount, display } = getPriceForState(school, stateMeta.code);
-                        return amount !== null ? (
-                          <div className="font-bold text-slate-900">{display}</div>
-                        ) : (
-                          <div className="text-xs text-slate-500">Check site</div>
-                        );
-                      })()}
-                      {school.rating !== null && (
-                        <div className="text-xs text-slate-500">
-                          {school.rating}/5
-                          {school.reviewSource && ` ${school.reviewSource}`}
-                        </div>
+                      {school.price !== null ? (
+                        <div className="font-bold text-slate-900">${school.price.toFixed(2)}</div>
+                      ) : (
+                        <div className="text-xs text-slate-500">Check site</div>
+                      )}
+                      {school.priceNote && (
+                        <div className="text-xs text-slate-400">{school.priceNote}</div>
                       )}
                     </div>
                     <AffiliateButton school={school} variant="secondary" />
@@ -164,56 +223,35 @@ export default async function StatePage({ params }: Props) {
         </section>
       )}
 
-      {/* 4. STATE INFO BLOCK */}
-      <section className="py-12 bg-white">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">
-            {stateMeta.name} Traffic School Rules &amp; Requirements
-          </h2>
-          {stateInfo ? (
+      {/* STATE INFO */}
+      {stateInfo && (
+        <section className="py-12 bg-white">
+          <div className="max-w-4xl mx-auto px-4">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">
+              {stateMeta.name} Traffic School Info
+            </h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-slate-50 rounded-lg p-6">
                 <div className="flex items-center gap-2 mb-3">
-                  <FileText className="w-5 h-5 text-primary" />
-                  <h3 className="font-semibold text-slate-900">
-                    Program: {stateInfo.programName}
-                  </h3>
-                </div>
-                {stateInfo.minHours && (
-                  <p className="text-sm text-slate-600 flex items-center gap-1.5 mb-2">
-                    <Clock className="w-4 h-4 text-slate-400" />
-                    Minimum {stateInfo.minHours} hours required
-                  </p>
-                )}
-                {stateInfo.courtProcess && (
-                  <p className="text-sm text-slate-600">{stateInfo.courtProcess}</p>
-                )}
-              </div>
-              <div className="bg-slate-50 rounded-lg p-6">
-                <div className="flex items-center gap-2 mb-3">
-                  <AlertCircle className="w-5 h-5 text-highlight" />
-                  <h3 className="font-semibold text-slate-900">Eligibility</h3>
-                </div>
-                <p className="text-sm text-slate-600">
-                  {stateInfo.eligibilityNotes || "Contact your local court for eligibility details."}
-                </p>
-              </div>
-              <div className="bg-slate-50 rounded-lg p-6">
-                <div className="flex items-center gap-2 mb-3">
                   <CheckCircle className="w-5 h-5 text-accent" />
-                  <h3 className="font-semibold text-slate-900">Online Allowed</h3>
+                  <h3 className="font-semibold text-slate-900">Online Status</h3>
                 </div>
-                <p className="text-sm text-slate-600">
-                  {stateInfo.onlineAllowed
-                    ? `Yes — ${stateMeta.name} allows eligible drivers to complete traffic school entirely online.`
-                    : `${stateMeta.name} has limited online options. Check with your court.`}
-                </p>
+                <p className="text-sm text-slate-600">{stateInfo.onlineStatus}</p>
               </div>
+              {stateInfo.notes && (
+                <div className="bg-slate-50 rounded-lg p-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <FileText className="w-5 h-5 text-primary" />
+                    <h3 className="font-semibold text-slate-900">Notes</h3>
+                  </div>
+                  <p className="text-sm text-slate-600">{stateInfo.notes}</p>
+                </div>
+              )}
               {stateInfo.dmvUrl && (
                 <div className="bg-slate-50 rounded-lg p-6">
                   <div className="flex items-center gap-2 mb-3">
                     <ShieldCheck className="w-5 h-5 text-blue-500" />
-                    <h3 className="font-semibold text-slate-900">Official DMV Info</h3>
+                    <h3 className="font-semibold text-slate-900">Official DMV</h3>
                   </div>
                   <a
                     href={stateInfo.dmvUrl}
@@ -226,30 +264,18 @@ export default async function StatePage({ params }: Props) {
                 </div>
               )}
             </div>
-          ) : (
-            <div className="bg-slate-50 rounded-lg p-6">
-              <p className="text-sm text-slate-600">
-                Specific {stateMeta.name} traffic school requirements vary by
-                court. We recommend contacting the court listed on your citation
-                or visiting your state DMV website for the most current
-                eligibility rules and deadlines.
-              </p>
-            </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
-      {/* 5. FAQ */}
+      {/* FAQ */}
       <section className="py-12 bg-slate-50">
         <div className="max-w-3xl mx-auto px-4">
-          <SchoolFAQ
-            faqs={faqs}
-            heading={`${stateMeta.name} Traffic School FAQ`}
-          />
+          <SchoolFAQ faqs={faqs} heading={`${stateMeta.name} Traffic School FAQ`} />
         </div>
       </section>
 
-      {/* 6. DIRECTORY TABLE */}
+      {/* DIRECTORY TABLE — always show if data exists */}
       {directory.length > 0 && (
         <section className="py-12 bg-white">
           <div className="max-w-6xl mx-auto px-4">

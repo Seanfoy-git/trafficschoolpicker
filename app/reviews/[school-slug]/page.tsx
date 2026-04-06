@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${school.name} Review (2026) — Is It Worth It?`,
-    description: `Detailed review of ${school.name} online traffic school. Price: $${school.price}. ${school.rating ? `Rating: ${school.rating}/5` : ""}. See pros, cons, and our verdict.`,
+    description: `Detailed review of ${school.name} online traffic school. ${school.rating ? `Rating: ${school.rating}/5.` : ""} See pros, cons, and our verdict.`,
     alternates: {
       canonical: `https://trafficschoolpicker.com/reviews/${school.slug}`,
     },
@@ -179,17 +179,9 @@ export default async function ReviewPage({ params }: Props) {
           <section>
             <h2 className="text-2xl font-bold text-slate-900 mb-4">Pricing</h2>
             <div className="bg-slate-50 rounded-lg p-6">
-              <div className="flex items-baseline gap-3 mb-2">
-                <span className="text-3xl font-bold text-slate-900">${school.price.toFixed(2)}</span>
-                {school.originalPrice && (
-                  <>
-                    <span className="text-lg text-slate-400 line-through">${school.originalPrice.toFixed(2)}</span>
-                    <span className="text-sm font-semibold text-accent">
-                      Save ${(school.originalPrice - school.price).toFixed(2)}
-                    </span>
-                  </>
-                )}
-              </div>
+              <p className="text-slate-600 mb-3">
+                Prices vary by state. Select your state above to see {school.name}&apos;s exact price for your location.
+              </p>
               <ul className="text-sm text-slate-600 space-y-1">
                 {school.moneyBackGuarantee && (
                   <li className="flex items-center gap-2">
@@ -222,7 +214,7 @@ export default async function ReviewPage({ params }: Props) {
                   </thead>
                   <tbody>
                     {[
-                      { label: "Price", getValue: (s: typeof school) => `$${s.price.toFixed(2)}` },
+                      { label: "Price", getValue: () => "Varies by state" },
                       { label: "Rating", getValue: (s: typeof school) => s.rating ? `${s.rating}/5` : "—" },
                       { label: "Completion Time", getValue: (s: typeof school) => s.completionHours ? `${s.completionHours}h` : "—" },
                       { label: "Mobile App", getValue: (s: typeof school) => s.mobileApp ? "Yes" : "No" },
@@ -260,10 +252,7 @@ export default async function ReviewPage({ params }: Props) {
         <aside className="space-y-6">
           <div className="bg-accent/5 border border-accent/20 rounded-xl p-6 sticky top-6">
             <div className="text-center mb-4">
-              <div className="text-3xl font-bold text-slate-900 mb-1">${school.price.toFixed(2)}</div>
-              {school.originalPrice && (
-                <div className="text-sm text-slate-400 line-through">${school.originalPrice.toFixed(2)}</div>
-              )}
+              <div className="text-lg font-semibold text-slate-700">Prices vary by state</div>
             </div>
             <AffiliateButton school={school} />
             {school.ratings.length > 0 || school.bbb ? (

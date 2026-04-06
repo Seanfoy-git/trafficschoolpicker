@@ -1,5 +1,4 @@
-import type { School } from "@/lib/types";
-import { getPriceForState } from "@/lib/notion";
+import type { School, SchoolWithPrice } from "@/lib/types";
 import { MultiRating, ReviewSynthesis } from "./MultiRating";
 import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
@@ -11,14 +10,17 @@ export function SchoolCard({
   school,
   rank,
   showProsAndCons = false,
-  stateCode,
 }: {
-  school: School;
+  school: School | SchoolWithPrice;
   rank?: number;
   showProsAndCons?: boolean;
   stateCode?: string;
 }) {
-  const { amount, display } = getPriceForState(school, stateCode ?? "CA");
+  // SchoolWithPrice has price directly; plain School needs no price display
+  const hasPrice = "price" in school && school.price !== null;
+  const amount = hasPrice ? (school as SchoolWithPrice).price : null;
+  const display = amount !== null ? `$${amount.toFixed(2)}` : "Check website";
+  const originalPrice = "originalPrice" in school ? (school as SchoolWithPrice).originalPrice : null;
   return (
     <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex flex-col sm:flex-row sm:items-start gap-4">
@@ -106,9 +108,9 @@ export function SchoolCard({
           <div className="text-right">
             {amount !== null ? (
               <>
-                {school.originalPrice && (
+                {originalPrice && (
                   <span className="text-sm text-slate-400 line-through">
-                    ${school.originalPrice.toFixed(2)}
+                    ${originalPrice.toFixed(2)}
                   </span>
                 )}
                 <div className="text-2xl font-bold text-slate-900">

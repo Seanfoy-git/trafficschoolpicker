@@ -1,11 +1,19 @@
 import { Client } from "@notionhq/client";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import type { School, DirectorySchool, StateInfo } from "./types";
+import type {
+  School,
+  SchoolWithPrice,
+  DirectorySchool,
+  StateInfo,
+  OnlineStatus,
+} from "./types";
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
-const SCHOOLS_DB = process.env.NOTION_SCHOOLS_DB; // Traffic Schools (Tier 1/2 curated)
-const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB; // School Directory (DMV-scraped)
+const SCHOOLS_DB = process.env.NOTION_SCHOOLS_DB;
+const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB;
+const STATES_DB = process.env.NOTION_STATES_DB;
+const PRICING_DB = process.env.NOTION_PRICING_DB;
 
 // ─── HELPERS ────────────────────────────────────────────────
 
@@ -41,30 +49,20 @@ function getDate(page: PageObjectResponse, field: string): string | null {
   return prop?.date?.start ?? null;
 }
 
+function getRelationIds(page: PageObjectResponse, field: string): string[] {
+  const prop = (page.properties as any)[field];
+  if (prop?.type !== "relation") return [];
+  return (prop.relation ?? []).map((r: any) => r.id);
+}
+
 function parseStateCodes(raw: string): string[] {
   if (!raw || raw.trim() === "") return [];
   if (raw.trim().toLowerCase() === "all") return ["all"];
-  return raw
-    .split(",")
-    .map((s) => s.trim().toUpperCase())
-    .filter(Boolean);
+  return raw.split(",").map((s) => s.trim().toUpperCase()).filter(Boolean);
 }
 
 function parseLines(raw: string): string[] {
-  return raw
-    .split("\n")
-    .map((s) => s.replace(/^[-•*]\s*/, "").trim())
-    .filter(Boolean);
-}
-
-// ─── SCHOOLS (Traffic Schools DB) ───────────────────────────
-
-function determineTrend(current: number, previous: number | null): "up" | "down" | "stable" {
-  if (previous === null) return "stable";
-  const diff = current - previous;
-  if (diff > 0.05) return "up";
-  if (diff < -0.05) return "down";
-  return "stable";
+  return raw.split("\n").map((s) => s.replace(/^[-•*]\s*/, "").trim()).filter(Boolean);
 }
 
 function parseTrendSelect(raw: string | null): "up" | "down" | "stable" {
@@ -73,6 +71,54 @@ function parseTrendSelect(raw: string | null): "up" | "down" | "stable" {
   if (raw.startsWith("↓")) return "down";
   return "stable";
 }
+
+async function queryAllPages(
+  databaseId: string,
+  filter?: any,
+  sorts?: any[]
+): Promise<PageObjectResponse[]> {
+  const results: PageObjectResponse[] = [];
+  let cursor: string | undefined;
+  do {
+    const params: any = { database_id: databaseId, page_size: 100, start_cursor: cursor };
+    if (filter) params.filter = filter;
+    if (sorts) params.sorts = sorts;
+    const response: any = await notion.databases.query(params);
+    results.push(...(response.results as PageObjectResponse[]));
+    cursor = response.has_more ? response.next_cursor ?? undefined : undefined;
+  } while (cursor);
+  return results;
+}
+
+// ─── STATES DB ──────────────────────────────────────────────
+
+export async function getStateInfo(stateCode: string): Promise<StateInfo | null> {
+  if (!process.env.NOTION_TOKEN || !STATES_DB) return null;
+  try {
+    const response = await notion.databases.query({
+      database_id: STATES_DB,
+      filter: {
+        property: "State Code",
+        rich_text: { equals: stateCode.toUpperCase() },
+      },
+      page_size: 1,
+    });
+    if (!response.results.length) return null;
+    const page = response.results[0] as PageObjectResponse;
+    return {
+      id: page.id,
+      code: getText(page, "State Code"),
+      name: getText(page, "State Name"),
+      onlineStatus: (getSelect(page, "Online Status") ?? "Unknown") as OnlineStatus,
+      dmvUrl: getText(page, "DMV URL"),
+      notes: getText(page, "Notes"),
+    };
+  } catch {
+    return null;
+  }
+}
+
+// ─── SCHOOLS (Traffic Schools DB) ───────────────────────────
 
 function buildPlatformRatings(page: PageObjectResponse): import("./types").PlatformRating[] {
   const ratings: import("./types").PlatformRating[] = [];
@@ -91,7 +137,7 @@ function buildPlatformRatings(page: PageObjectResponse): import("./types").Platf
     });
   }
 
-  // Google (only show if confidence is not "Wrong match")
+  // Google (only if confidence is not "Wrong match")
   const gConfidence = getSelect(page, "Google Place Confidence");
   if (gConfidence !== "Wrong match") {
     const gRating = getNumber(page, "Google Rating");
@@ -142,24 +188,18 @@ function buildPlatformRatings(page: PageObjectResponse): import("./types").Platf
 function buildBBB(page: PageObjectResponse): import("./types").BBBRating | null {
   const grade = getSelect(page, "BBB Grade");
   if (!grade || grade === "NR") return null;
-  return {
-    grade,
-    url: getText(page, "BBB URL") || null,
-  };
+  return { grade, url: getText(page, "BBB URL") || null };
 }
 
 function mapSchool(page: PageObjectResponse): School {
-  // Tier: "1 - Featured" → 1, anything else (including null) → 2
-  const tier: 1 | 2 = getSelect(page, "Tier") === "1 - Featured" ? 1 : 2;
+  const tierRaw = getSelect(page, "Tier") ?? "";
+  const tier: 1 | 2 = tierRaw === "1 - Featured" ? 1 : 2;
 
   return {
     id: page.id,
     slug:
       getText(page, "Slug") ||
-      getText(page, "School Name")
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-]/g, ""),
+      getText(page, "School Name").toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, ""),
     name: getText(page, "School Name"),
     tier,
     badge: getSelect(page, "Badge") as School["badge"],
@@ -168,12 +208,6 @@ function mapSchool(page: PageObjectResponse): School {
     affiliateUrl: getText(page, "Affiliate URL"),
     affiliateNetwork: getSelect(page, "Affiliate Network") as School["affiliateNetwork"],
     commissionRate: getText(page, "Commission Rate"),
-    price: getNumber(page, "Price CA") ?? getNumber(page, "Price") ?? 0,
-    priceCA: getNumber(page, "Price CA"),
-    priceTX: getNumber(page, "Price TX"),
-    priceFL: getNumber(page, "Price FL"),
-    priceNY: getNumber(page, "Price NY"),
-    originalPrice: getNumber(page, "Original Price"),
     rating: getNumber(page, "Rating"),
     reviewCount: getNumber(page, "Review Count"),
     reviewSource: getSelect(page, "Review Source") as School["reviewSource"],
@@ -216,22 +250,87 @@ export async function getAllSchools(): Promise<School[]> {
   }
 }
 
-export async function getSchoolsForState(stateCode: string): Promise<School[]> {
-  const all = await getAllSchools();
-  return all
-    .filter((school) => {
-      if (school.stateCodes.includes("all")) return true;
-      return school.stateCodes.includes(stateCode.toUpperCase());
-    })
-    .sort((a, b) => {
-      if (a.tier !== b.tier) return a.tier - b.tier;
-      return (b.reviewCount ?? 0) - (a.reviewCount ?? 0);
-    });
-}
-
 export async function getSchoolBySlug(slug: string): Promise<School | null> {
   const all = await getAllSchools();
   return all.find((s) => s.slug === slug) ?? null;
+}
+
+// ─── SCHOOL PRICING DB ──────────────────────────────────────
+
+export async function getSchoolPricingForState(
+  stateCode: string
+): Promise<SchoolWithPrice[]> {
+  if (!process.env.NOTION_TOKEN || !SCHOOLS_DB) return [];
+
+  // Get all active schools first (single API call)
+  const schools = await getAllSchools();
+  if (schools.length === 0) return [];
+
+  // If Pricing DB exists, query it for state-specific prices
+  let pricingMap = new Map<string, {
+    price: number | null;
+    originalPrice: number | null;
+    affiliateUrl: string;
+    priceNote: string;
+    approved: boolean;
+  }>();
+
+  if (PRICING_DB) {
+    try {
+      const pricingPages = await queryAllPages(PRICING_DB, {
+        and: [
+          { property: "State Code", rich_text: { equals: stateCode.toUpperCase() } },
+          { property: "Approved", checkbox: { equals: true } },
+        ],
+      });
+
+      for (const pp of pricingPages) {
+        // Get the school ID from the relation
+        const schoolIds = getRelationIds(pp, "School");
+        const schoolId = schoolIds[0];
+        if (!schoolId) continue;
+
+        pricingMap.set(schoolId, {
+          price: getNumber(pp, "Price"),
+          originalPrice: getNumber(pp, "Original Price"),
+          affiliateUrl: getText(pp, "Affiliate URL"),
+          priceNote: getText(pp, "Price Note"),
+          approved: true,
+        });
+      }
+    } catch {
+      // Pricing DB may not exist yet — fall back to schools without prices
+    }
+  }
+
+  // Merge schools with their state-specific pricing
+  const results: SchoolWithPrice[] = [];
+  for (const school of schools) {
+    // Check if school serves this state
+    const servesState =
+      school.stateCodes.includes("all") ||
+      school.stateCodes.includes(stateCode.toUpperCase());
+    if (!servesState) continue;
+
+    const pricing = pricingMap.get(school.id);
+
+    results.push({
+      ...school,
+      price: pricing?.price ?? null,
+      originalPrice: pricing?.originalPrice ?? null,
+      stateAffiliateUrl: pricing?.affiliateUrl || null,
+      priceNote: pricing?.priceNote || null,
+    });
+  }
+
+  // Sort: Tier 1 first, then by price (nulls at end)
+  return results.sort((a, b) => {
+    if (a.tier !== b.tier) return a.tier - b.tier;
+    if (a.price === null && b.price === null) return 0;
+    if (a.price === null) return 1;
+    if (b.price === null) return -1;
+    return a.price - b.price;
+  });
 }
 
 // ─── DIRECTORY (School Directory DB) ────────────────────────
@@ -251,27 +350,6 @@ function mapDirectorySchool(page: PageObjectResponse): DirectorySchool {
   };
 }
 
-async function queryAllPages(
-  databaseId: string,
-  filter: any,
-  sorts?: any[]
-): Promise<PageObjectResponse[]> {
-  const results: PageObjectResponse[] = [];
-  let cursor: string | undefined;
-  do {
-    const response: any = await notion.databases.query({
-      database_id: databaseId,
-      filter,
-      sorts,
-      start_cursor: cursor,
-      page_size: 100,
-    });
-    results.push(...(response.results as PageObjectResponse[]));
-    cursor = response.has_more ? response.next_cursor ?? undefined : undefined;
-  } while (cursor);
-  return results;
-}
-
 export async function getDirectoryForState(
   stateName: string
 ): Promise<DirectorySchool[]> {
@@ -288,64 +366,18 @@ export async function getDirectoryForState(
   }
 }
 
-// ─── STATES (no separate DB yet — use static fallback) ──────
-
-export async function getStateInfo(
-  _stateCode: string
-): Promise<StateInfo | null> {
-  if (!process.env.NOTION_STATES_DB) return null;
-  try {
-    const response = await notion.databases.query({
-      database_id: process.env.NOTION_STATES_DB,
-      filter: {
-        or: [
-          { property: "State Code", rich_text: { equals: _stateCode.toUpperCase() } },
-          { property: "Abbreviation", rich_text: { equals: _stateCode.toUpperCase() } },
-        ],
-      },
-      page_size: 1,
-    });
-    if (!response.results.length) return null;
-    const page = response.results[0] as PageObjectResponse;
-    return {
-      id: page.id,
-      code: getText(page, "State Code") || getText(page, "Abbreviation") || "",
-      name: getText(page, "State Name") || getText(page, "Name") || "",
-      onlineAllowed: getCheckbox(page, "Online Allowed"),
-      minHours: getNumber(page, "Min Hours"),
-      programName: getText(page, "Program Name") || "Traffic School",
-      eligibilityNotes: getText(page, "Eligibility") || "",
-      courtProcess: getText(page, "Court Process") || "",
-      dmvUrl: getText(page, "DMV URL") || "",
-      lastUpdated: getDate(page, "Last Updated"),
-    };
-  } catch {
-    return null;
-  }
-}
-
-export async function getAllStates(): Promise<StateInfo[]> {
-  return []; // Use static STATE_LIST from state-utils.ts
-}
-
 // ─── PRICE HELPER ───────────────────────────────────────────
 
-export function getPriceForState(
-  school: School,
-  stateCode: string
+export function getEffectiveAffiliateUrl(school: SchoolWithPrice): string {
+  return school.stateAffiliateUrl || school.affiliateUrl || school.website;
+}
+
+export function getPriceDisplay(
+  school: SchoolWithPrice
 ): { amount: number | null; display: string } {
-  const stateMap: Record<string, number | null> = {
-    CA: school.priceCA,
-    TX: school.priceTX,
-    FL: school.priceFL,
-    NY: school.priceNY,
-  };
-
-  const amount = stateMap[stateCode.toUpperCase()] ?? (school.price || null);
-
   return {
-    amount,
-    display: amount !== null ? `$${amount.toFixed(2)}` : "Check website",
+    amount: school.price,
+    display: school.price !== null ? `$${school.price.toFixed(2)}` : "Check website",
   };
 }
 
@@ -356,7 +388,8 @@ export async function getAdminStats() {
     notionToken: !!process.env.NOTION_TOKEN,
     schoolsDb: !!SCHOOLS_DB,
     directoryDb: !!DIRECTORY_DB,
-    statesDb: !!process.env.NOTION_STATES_DB,
+    statesDb: !!STATES_DB,
+    pricingDb: !!PRICING_DB,
     deployHook: !!process.env.VERCEL_DEPLOY_HOOK,
   };
 
@@ -374,11 +407,7 @@ export async function getAdminStats() {
   const tier1 = schools.filter((s) => s.tier === 1);
   const tier2 = schools.filter((s) => s.tier === 2);
   const noAffiliate = schools.filter((s) => !s.affiliateUrl);
-  const latestVerified = schools
-    .map((s) => s.lastVerified)
-    .filter(Boolean)
-    .sort()
-    .pop();
+  const latestVerified = schools.map((s) => s.lastVerified).filter(Boolean).sort().pop();
 
   let caCount = 0, txCount = 0, flCount = 0;
   try {
@@ -387,9 +416,7 @@ export async function getAdminStats() {
       getDirectoryForState("Texas"),
       getDirectoryForState("Florida"),
     ]);
-    caCount = ca.length;
-    txCount = tx.length;
-    flCount = fl.length;
+    caCount = ca.length; txCount = tx.length; flCount = fl.length;
   } catch { /* */ }
 
   return {
