@@ -1,16 +1,14 @@
 /**
- * Multi-source review scraper: Trustpilot, BBB, App Store, Google Play
+ * Multi-source review scraper:
+ * Trustpilot, Google Places, BBB, App Store, Google Play
  * → Notion Traffic Schools DB → Site
  *
- * Google and Yelp excluded (Google Places unreliable for online schools,
- * Yelp API costs $229/month).
+ * Yelp excluded ($229/month API cost).
  *
- * Flow:
- * 1. Read 6 curated schools from Notion
- * 2. For each school, fetch ratings from all available sources
- * 3. Synthesise pros/cons from Trustpilot review text via Claude
- * 4. Write all ratings + synthesis back to Notion
- * 5. Calculate trends (up/down/stable) vs previous run
+ * Google Places uses Place IDs stored in Notion for reliable matching.
+ * If no Place ID exists, the scraper searches by name, writes the
+ * best-guess ID with confidence = "Auto-matched", and skips rating
+ * writes until you verify it in Notion ("Verified" or "Wrong match").
  */
 
 import { config } from "dotenv";
@@ -21,6 +19,7 @@ import gplay from "google-play-scraper";
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const SCHOOLS_DB = process.env.NOTION_SCHOOLS_DB!;
+const PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
 const anthropic = new Anthropic();
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -31,11 +30,15 @@ interface SchoolConfig {
   pageId: string;
   name: string;
   slug: string;
+  website: string;
   reviewUrl: string;       // Trustpilot URL
   bbbUrl: string;
   appStoreUrl: string;
   playStoreUrl: string;
+  googlePlaceId: string;
+  googlePlaceConfidence: string; // "Verified" | "Auto-matched" | "Wrong match" | ""
   prevTrustpilot: number | null;
+  prevGoogle: number | null;
   prevAppStore: number | null;
   prevPlayStore: number | null;
 }
@@ -127,7 +130,92 @@ async function scrapeTrustpilot(reviewUrl: string): Promise<TrustpilotResult> {
   return result;
 }
 
-// ─── 2. BBB ─────────────────────────────────────────────────
+// ─── 2. GOOGLE PLACES ───────────────────────────────────────
+
+interface GoogleResult {
+  placeId: string;
+  rating: number | null;
+  reviewCount: number | null;
+  mapsUrl: string | null;
+  confidence: "Verified" | "Auto-matched";
+}
+
+async function scrapeGoogleByPlaceId(placeId: string): Promise<GoogleResult | null> {
+  if (!PLACES_API_KEY || !placeId) return null;
+
+  try {
+    const res = await fetch(
+      `https://places.googleapis.com/v1/places/${placeId}`,
+      {
+        headers: {
+          "X-Goog-Api-Key": PLACES_API_KEY,
+          "X-Goog-FieldMask": "rating,userRatingCount,googleMapsUri",
+        },
+      }
+    );
+    if (!res.ok) return null;
+    const data = (await res.json()) as any;
+    return {
+      placeId,
+      rating: data.rating ?? null,
+      reviewCount: data.userRatingCount ?? null,
+      mapsUrl: data.googleMapsUri ?? null,
+      confidence: "Verified",
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function searchGooglePlaces(
+  schoolName: string,
+  website: string
+): Promise<GoogleResult | null> {
+  if (!PLACES_API_KEY) return null;
+
+  try {
+    // Search with school name + "traffic school" for better accuracy
+    const res = await fetch(
+      "https://places.googleapis.com/v1/places:searchText",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Goog-Api-Key": PLACES_API_KEY,
+          "X-Goog-FieldMask":
+            "places.id,places.displayName,places.rating,places.userRatingCount,places.googleMapsUri,places.websiteUri",
+        },
+        body: JSON.stringify({
+          textQuery: `${schoolName} online traffic school`,
+        }),
+      }
+    );
+
+    if (!res.ok) return null;
+    const data = (await res.json()) as any;
+    const place = data.places?.[0];
+    if (!place) return null;
+
+    // Basic confidence check: does the Place website match the school website?
+    const placeWebsite = (place.websiteUri ?? "").toLowerCase();
+    const schoolDomain = website.replace(/https?:\/\/(www\.)?/, "").split("/")[0].toLowerCase();
+    const domainMatch = placeWebsite.includes(schoolDomain);
+
+    return {
+      placeId: place.id,
+      rating: place.rating ?? null,
+      reviewCount: place.userRatingCount ?? null,
+      mapsUrl: place.googleMapsUri ?? null,
+      confidence: domainMatch ? "Auto-matched" : "Auto-matched",
+      // Even if domain doesn't match, still save as Auto-matched
+      // — the user decides to promote to Verified or mark Wrong match
+    };
+  } catch {
+    return null;
+  }
+}
+
+// ─── 3. BBB ─────────────────────────────────────────────────
 
 async function scrapeBBB(bbbUrl: string): Promise<string | null> {
   if (!bbbUrl) return null;
@@ -272,11 +360,15 @@ async function getSchoolsFromNotion(): Promise<SchoolConfig[]> {
       pageId: page.id,
       name: p["School Name"]?.title?.[0]?.plain_text ?? "",
       slug: p["Slug"]?.rich_text?.[0]?.plain_text ?? "",
+      website: p["Website"]?.url ?? "",
       reviewUrl: p["Review URL"]?.url ?? "",
       bbbUrl: p["BBB URL"]?.url ?? "",
       appStoreUrl: p["App Store URL"]?.url ?? "",
       playStoreUrl: p["Play Store URL"]?.url ?? "",
+      googlePlaceId: p["Google Place ID"]?.rich_text?.[0]?.plain_text ?? "",
+      googlePlaceConfidence: p["Google Place Confidence"]?.select?.name ?? "",
       prevTrustpilot: p["Rating"]?.number ?? null,
+      prevGoogle: p["Google Rating"]?.number ?? null,
       prevAppStore: p["App Store Rating"]?.number ?? null,
       prevPlayStore: p["Play Store Rating"]?.number ?? null,
     };
@@ -376,7 +468,46 @@ async function main() {
       }
     }
 
-    // 2. BBB
+    // 2. Google Places
+    if (school.googlePlaceConfidence !== "Wrong match") {
+      console.log("  Google Places...");
+      let google: GoogleResult | null = null;
+
+      if (school.googlePlaceId && school.googlePlaceConfidence === "Verified") {
+        // Trusted ID — fetch directly
+        google = await scrapeGoogleByPlaceId(school.googlePlaceId);
+        if (google) google.confidence = "Verified";
+      } else if (school.googlePlaceId) {
+        // Auto-matched ID exists — still use it but don't upgrade confidence
+        google = await scrapeGoogleByPlaceId(school.googlePlaceId);
+        if (google) google.confidence = "Auto-matched";
+      } else {
+        // No ID — search and save for review
+        google = await searchGooglePlaces(school.name, school.website);
+      }
+
+      if (google && google.rating !== null) {
+        console.log(`    ${google.rating}/5 (${google.reviewCount?.toLocaleString()} reviews) [${google.confidence}]`);
+
+        // Always write the Place ID and confidence for human review
+        updates["Google Place ID"] = google.placeId;
+        updates["Google Place Confidence"] = google.confidence;
+        if (google.mapsUrl) updates["Google URL"] = google.mapsUrl;
+
+        // Only write rating if confidence is Verified or Auto-matched
+        // (user can set "Wrong match" in Notion to suppress bad data)
+        updates["Google Previous Rating"] = school.prevGoogle;
+        updates["Google Rating"] = google.rating;
+        updates["Google Review Count"] = google.reviewCount;
+        updates["Google Trend"] = calcTrend(google.rating, school.prevGoogle);
+      } else {
+        console.log("    not found");
+      }
+    } else {
+      console.log("  Google Places... skipped (marked as Wrong match)");
+    }
+
+    // 3. BBB
     if (school.bbbUrl) {
       console.log("  BBB...");
       const grade = await scrapeBBB(school.bbbUrl);

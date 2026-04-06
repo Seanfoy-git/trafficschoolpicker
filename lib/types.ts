@@ -1,5 +1,5 @@
 export type PlatformRating = {
-  platform: 'Trustpilot' | 'App Store' | 'Play Store';
+  platform: 'Trustpilot' | 'Google' | 'App Store' | 'Play Store';
   rating: number;
   reviewCount: number;
   previousRating: number | null;

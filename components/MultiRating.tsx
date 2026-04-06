@@ -3,13 +3,15 @@ import { Star, TrendingUp, TrendingDown, Minus, Shield } from "lucide-react";
 
 const platformColors: Record<string, string> = {
   Trustpilot: "text-green-600",
+  Google: "text-blue-600",
   "App Store": "text-blue-500",
   "Play Store": "text-emerald-600",
 };
 
 const platformBg: Record<string, string> = {
   Trustpilot: "bg-green-50",
-  "App Store": "bg-blue-50",
+  Google: "bg-blue-50",
+  "App Store": "bg-sky-50",
   "Play Store": "bg-emerald-50",
 };
 

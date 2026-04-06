@@ -91,6 +91,23 @@ function buildPlatformRatings(page: PageObjectResponse): import("./types").Platf
     });
   }
 
+  // Google (only show if confidence is not "Wrong match")
+  const gConfidence = getSelect(page, "Google Place Confidence");
+  if (gConfidence !== "Wrong match") {
+    const gRating = getNumber(page, "Google Rating");
+    const gCount = getNumber(page, "Google Review Count");
+    if (gRating !== null) {
+      ratings.push({
+        platform: "Google",
+        rating: gRating,
+        reviewCount: gCount ?? 0,
+        previousRating: getNumber(page, "Google Previous Rating"),
+        trend: parseTrendSelect(getSelect(page, "Google Trend")),
+        url: getText(page, "Google URL") || null,
+      });
+    }
+  }
+
   // App Store
   const asRating = getNumber(page, "App Store Rating");
   const asCount = getNumber(page, "App Store Review Count");
