@@ -36,41 +36,43 @@ async function queryGooglePlaces(
   schoolName: string,
   stateCode: string
 ): Promise<PlacesResult | null> {
-  const query = encodeURIComponent(`${schoolName} traffic school ${stateCode}`);
+  try {
+    const response = await fetch(
+      "https://places.googleapis.com/v1/places:searchText",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Goog-Api-Key": PLACES_API_KEY,
+          "X-Goog-FieldMask":
+            "places.id,places.displayName,places.websiteUri,places.rating,places.userRatingCount",
+        },
+        body: JSON.stringify({
+          textQuery: `${schoolName} traffic school ${stateCode}`,
+        }),
+      }
+    );
 
-  // Use legacy Places API (Text Search) — works with standard API keys
-  const searchUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${query}&key=${PLACES_API_KEY}`;
-  const searchRes = await fetch(searchUrl);
+    if (!response.ok) {
+      console.error(`  Places API error: ${response.status}`);
+      return null;
+    }
 
-  if (!searchRes.ok) {
-    console.error(`  Places API error: ${searchRes.status}`);
+    const data = (await response.json()) as any;
+    const place = data.places?.[0];
+    if (!place) return null;
+
+    return {
+      placeId: place.id ?? "",
+      website: place.websiteUri ?? null,
+      rating: place.rating ?? null,
+      userRatingCount: place.userRatingCount ?? null,
+      name: place.displayName?.text ?? "",
+    };
+  } catch (err) {
+    console.error(`  Places API error:`, (err as Error).message);
     return null;
   }
-
-  const searchData = (await searchRes.json()) as any;
-  const place = searchData.results?.[0];
-  if (!place) return null;
-
-  // Get website from Place Details
-  let website: string | null = null;
-  if (place.place_id) {
-    try {
-      const detailUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.place_id}&fields=website&key=${PLACES_API_KEY}`;
-      const detailRes = await fetch(detailUrl);
-      if (detailRes.ok) {
-        const detailData = (await detailRes.json()) as any;
-        website = detailData.result?.website ?? null;
-      }
-    } catch { /* skip */ }
-  }
-
-  return {
-    placeId: place.place_id ?? "",
-    website,
-    rating: place.rating ?? null,
-    userRatingCount: place.user_ratings_total ?? null,
-    name: place.name ?? "",
-  };
 }
 
 // State name → 2-letter code for better Places query accuracy

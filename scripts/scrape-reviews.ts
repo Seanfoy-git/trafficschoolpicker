@@ -128,20 +128,36 @@ async function scrapeGoogle(
   if (!PLACES_API_KEY) return result;
 
   try {
-    // Use legacy Places API (Text Search) — works with standard API keys
-    const query = encodeURIComponent(schoolName);
-    const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${query}&key=${PLACES_API_KEY}`;
-    const response = await fetch(url);
+    const response = await fetch(
+      "https://places.googleapis.com/v1/places:searchText",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Goog-Api-Key": PLACES_API_KEY,
+          "X-Goog-FieldMask":
+            "places.id,places.rating,places.userRatingCount,places.reviews,places.googleMapsUri",
+        },
+        body: JSON.stringify({ textQuery: `${schoolName} traffic school` }),
+      }
+    );
 
     if (response.ok) {
       const data = (await response.json()) as any;
-      const place = data.results?.[0];
+      const place = data.places?.[0];
       if (place) {
         result.rating = place.rating ?? null;
-        result.reviewCount = place.user_ratings_total ?? null;
-        const placeId = place.place_id;
-        if (placeId) {
-          result.url = `https://www.google.com/maps/place/?q=place_id:${placeId}`;
+        result.reviewCount = place.userRatingCount ?? null;
+        result.url = place.googleMapsUri ?? result.url;
+
+        // Extract review snippets
+        if (place.reviews) {
+          for (const review of place.reviews.slice(0, 5)) {
+            const text = review.text?.text;
+            if (text && text.length > 20) {
+              result.snippets.push(text);
+            }
+          }
         }
       }
     }
