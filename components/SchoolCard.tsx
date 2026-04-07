@@ -1,4 +1,5 @@
 import type { School, SchoolWithPrice } from "@/lib/types";
+import { getProsForState, getConsForState } from "@/lib/notion";
 import { MultiRating, ReviewSynthesis } from "./MultiRating";
 import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
@@ -10,6 +11,7 @@ export function SchoolCard({
   school,
   rank,
   showProsAndCons = false,
+  stateCode,
 }: {
   school: School | SchoolWithPrice;
   rank?: number;
@@ -77,15 +79,19 @@ export function SchoolCard({
             <ReviewSynthesis good={school.synthesizedGood} bad={school.synthesizedBad} />
           )}
 
-          {showProsAndCons && !school.synthesizedGood && (school.pros.length > 0 || school.cons.length > 0) && (
+          {showProsAndCons && !school.synthesizedGood && (() => {
+            const sc = stateCode ?? "";
+            const pros = getProsForState(school, sc);
+            const cons = getConsForState(school, sc);
+            return (pros.length > 0 || cons.length > 0) ? (
             <div className="grid sm:grid-cols-2 gap-4 mt-4">
-              {school.pros.length > 0 && (
+              {pros.length > 0 && (
                 <div>
                   <h4 className="flex items-center gap-1 text-xs font-semibold text-green-700 mb-1.5">
                     <ThumbsUp className="w-3 h-3" /> Pros
                   </h4>
                   <ul className="space-y-1">
-                    {school.pros.map((pro) => (
+                    {pros.map((pro) => (
                       <li key={pro} className="flex items-start gap-1.5 text-xs text-slate-600">
                         <CheckCircle className="w-3 h-3 text-green-500 mt-0.5 shrink-0" />
                         {pro}
@@ -94,13 +100,13 @@ export function SchoolCard({
                   </ul>
                 </div>
               )}
-              {school.cons.length > 0 && (
+              {cons.length > 0 && (
                 <div>
                   <h4 className="flex items-center gap-1 text-xs font-semibold text-red-700 mb-1.5">
                     <ThumbsDown className="w-3 h-3" /> Cons
                   </h4>
                   <ul className="space-y-1">
-                    {school.cons.map((con) => (
+                    {cons.map((con) => (
                       <li key={con} className="flex items-start gap-1.5 text-xs text-slate-600">
                         <span className="text-red-400 mt-0.5 shrink-0">&minus;</span>
                         {con}
@@ -110,7 +116,8 @@ export function SchoolCard({
                 </div>
               )}
             </div>
-          )}
+            ) : null;
+          })()}
         </div>
 
         <div className="flex flex-col items-end gap-3 sm:min-w-[160px]">

@@ -215,6 +215,30 @@ function buildBBB(page: PageObjectResponse): import("./types").BBBRating | null 
   return { grade, url: getText(page, "BBB URL") || null };
 }
 
+// Read state-specific fields like "Pros CA", "Pros TX", "Cons GA" etc.
+// Returns a Record keyed by state code with parsed lines.
+// Fields that don't exist in Notion return empty string → empty array → not in the record.
+const STATE_CODES_TO_CHECK = [
+  "CA", "TX", "FL", "NY", "AZ", "GA", "OH", "IL", "VA", "CO",
+  "NV", "NJ", "PA", "MI", "TN", "MO", "WI", "IN", "KS", "LA",
+  "OK", "NE", "MD", "WA", "OR", "CT", "NM", "ND", "SC",
+];
+
+function buildStateSpecificField(
+  page: PageObjectResponse,
+  fieldPrefix: string
+): Record<string, string[]> {
+  const result: Record<string, string[]> = {};
+  for (const code of STATE_CODES_TO_CHECK) {
+    const raw = getText(page, `${fieldPrefix} ${code}`);
+    if (raw) {
+      const lines = parseLines(raw);
+      if (lines.length > 0) result[code] = lines;
+    }
+  }
+  return result;
+}
+
 function mapSchool(page: PageObjectResponse): School {
   const tierRaw = getSelect(page, "Tier") ?? "";
   const tier: 1 | 2 = tierRaw === "1 - Featured" ? 1 : 2;
@@ -243,6 +267,8 @@ function mapSchool(page: PageObjectResponse): School {
     stateCodes: parseStateCodes(getText(page, "State Codes")),
     pros: parseLines(getText(page, "Pros")),
     cons: parseLines(getText(page, "Cons")),
+    statePros: buildStateSpecificField(page, "Pros"),
+    stateCons: buildStateSpecificField(page, "Cons"),
     bestFor: getText(page, "Best For"),
     completionHours: getNumber(page, "Completion Time (hrs)"),
     mobileApp: getCheckbox(page, "Mobile App"),
@@ -389,6 +415,16 @@ export async function getDirectoryForState(
   } catch {
     return [];
   }
+}
+
+// ─── PROS/CONS HELPER ───────────────────────────────────────
+
+export function getProsForState(school: School | SchoolWithPrice, stateCode: string): string[] {
+  return school.statePros[stateCode.toUpperCase()] ?? school.pros;
+}
+
+export function getConsForState(school: School | SchoolWithPrice, stateCode: string): string[] {
+  return school.stateCons[stateCode.toUpperCase()] ?? school.cons;
 }
 
 // ─── PRICE HELPER ───────────────────────────────────────────

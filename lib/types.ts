@@ -65,6 +65,9 @@ export type School = {
   stateCodes: string[];          // ["CA","TX","FL"] or ["all"]
   pros: string[];
   cons: string[];
+  // State-specific pros/cons — keyed by state code, read from "Pros CA" / "Cons GA" etc.
+  statePros: Record<string, string[]>;
+  stateCons: Record<string, string[]>;
   bestFor: string;
   completionHours: number | null;
   mobileApp: boolean;
