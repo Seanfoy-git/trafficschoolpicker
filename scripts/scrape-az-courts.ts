@@ -26,7 +26,7 @@ async function scrape(): Promise<ScrapedSchool[]> {
     // Selector: #dnn_ctr7434_XModPro_ctl00_ctl00_ctl00_schoolCode or select with school options
     const options = await page.$$eval("select option", (opts) =>
       opts.map((o) => ({
-        value: o.value,
+        value: (o as HTMLOptionElement).value,
         text: o.textContent?.trim() ?? "",
       })).filter((o) => o.value && o.text && o.text !== "Select" && o.text.length > 2)
     );
