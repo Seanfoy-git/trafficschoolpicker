@@ -178,6 +178,27 @@ export default async function StatePage({ params }: Props) {
         </section>
       )}
 
+      {/* GEORGIA-SPECIFIC CALLOUT */}
+      {stateSlug === "georgia" && (
+        <section className="py-6 bg-amber-50 border-b border-amber-200">
+          <div className="max-w-5xl mx-auto px-4 flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+            <div>
+              <p className="font-semibold text-amber-800 mb-1">
+                Important: Georgia online courses are for ticket dismissal only
+              </p>
+              <p className="text-sm text-amber-700">
+                Georgia&apos;s DDS point reduction program requires a 6-hour course
+                completed in a classroom or via Zoom — online-only courses are not
+                accepted for that benefit. The schools listed below are accepted by
+                many Georgia courts for ticket dismissal. Check with your court
+                before enrolling.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* TIER 1 COMPARISON CARDS — only for online states */}
       {(onlineStatus === "Online — ticket dismissal" || onlineStatus === "Online — insurance discount only") &&
         tier1.length > 0 && (
