@@ -1,0 +1,393 @@
+# TrafficSchoolPicker.com — Full State Reference
+
+> Structured facts for every US state traffic school program.
+> Source: Official DMV and court records, verified April 2026.
+> Data updates automatically from the TrafficSchoolPicker fact database.
+
+## Arizona
+
+**URL:** https://www.trafficschoolpicker.com/arizona
+
+**Who submits my certificate in Arizona?**
+You submit the certificate to the court yourself after completing the course. Keep a copy of your certificate for your records.
+*Key fact: Driver submits to court*
+
+**Does Arizona defensive driving dismiss my ticket?**
+Yes — Arizona's Defensive Driving School (DDS) program results in full dismissal of the ticket and prevents any points from being assessed to your record. It is one of the most complete dismissal programs in the country.
+*Key fact: Full dismissal. No points assessed.*
+
+**How often can I do Arizona defensive driving?**
+Once every 24 months. You are not eligible if you completed an Arizona defensive driving program within the past 24 months, or if your citation is for an offense that makes you ineligible (e.g. DUI, excessive speeding, CDL holder on duty).
+*Key fact: Once per 24 months*
+
+**How long is Arizona defensive driving?**
+The course is 8 hours, which can be completed online at your own pace.
+*Key fact: 8 hours*
+
+**Can I do Arizona defensive driving online?**
+Yes. Arizona Supreme Court-approved online defensive driving courses are accepted statewide. Verify your course provider is listed on the Arizona Supreme Court website before enrolling.
+*Key fact: Online accepted — must be AZ Supreme Court approved*
+
+---
+
+## California
+
+**URL:** https://www.trafficschoolpicker.com/california
+
+**Who submits my certificate to the California court?**
+Your school submits the certificate electronically to the DMV and court on your behalf. You do not need to mail anything — but confirm the school offers electronic submission before enrolling, as some older schools still require you to handle it yourself.
+*Key fact: School submits electronically*
+
+**How often can I do California traffic school?**
+Once every 18 months. The 18-month period is calculated from the date of the violation for which you last used traffic school, not the completion date. If you receive another eligible ticket within 18 months, you cannot use traffic school for that ticket.
+*Key fact: Once per 18 months (from violation date)*
+
+**Can I complete California traffic school online?**
+Yes. California courts accept DMV-licensed online traffic schools. You must confirm your specific court has granted permission to attend traffic school before enrolling — not all violations or courts automatically qualify.
+*Key fact: Online accepted — confirm court permission first*
+
+**Does California traffic school erase my ticket?**
+No — California traffic school masks your ticket, it does not erase it. The conviction is held confidential from insurers and the public, but it remains on your internal DMV record. You still pay the full court fine before enrolling.
+*Key fact: Masks ticket (confidential) — not erased. Fine still owed.*
+
+**How long is California traffic school?**
+California requires a minimum of 8 hours of instruction. Most online courses are self-paced and can be completed in a single sitting or spread across multiple sessions.
+*Key fact: 8 hours minimum*
+
+---
+
+## Colorado
+
+**URL:** https://www.trafficschoolpicker.com/colorado
+
+**Who submits my certificate in Colorado?**
+The court will provide submission instructions when approving your participation. Typically the driver submits the certificate to the court by the deadline provided.
+*Key fact: Driver submits to court. Court provides deadline and instructions.*
+
+**Does Colorado defensive driving dismiss my ticket?**
+Colorado has no statewide ticket dismissal program — it is entirely at individual court discretion. If approved by your court, completing a defensive driving course can dismiss your ticket, avoid points, or remove existing points. Contact your court first to determine eligibility.
+*Key fact: No statewide program. Court-by-court. Dismissal, point avoidance, or point removal possible.*
+
+**How often can I use Colorado defensive driving for ticket dismissal?**
+No statewide standard — determined by the individual court handling your case.
+*Key fact: Court-determined. No statewide cooldown.*
+
+**How long is a Colorado defensive driving course?**
+Course length is determined by the individual court. The court will provide specific requirements if you are approved for ticket dismissal. Voluntary courses have timelines set by the provider.
+*Key fact: Court-determined. No statewide standard.*
+
+**Can I do Colorado defensive driving online?**
+Yes — both online and classroom options are available. The court determines whether an online course is acceptable for your case. Confirm with your court before enrolling online.
+*Key fact: Online available. Court must approve for ticket dismissal.*
+
+---
+
+## Connecticut
+
+**URL:** https://www.trafficschoolpicker.com/connecticut
+
+**Does Connecticut defensive driving dismiss my ticket?**
+Connecticut has no statewide ticket dismissal program. Individual courts may allow defensive driving on a case-by-case basis. Contact your court before enrolling to confirm whether this is an option for your violation.
+*Key fact: No statewide program. Court-by-court.*
+
+---
+
+## Florida
+
+**URL:** https://www.trafficschoolpicker.com/florida
+
+**Who submits my certificate to the Florida court?**
+Your school submits the certificate electronically to the Florida DHSMV within 5 days of your completion, and to the court within 3 days after that. You do not need to mail anything yourself — but check with your school to confirm they handle electronic submission.
+*Key fact: School submits electronically within 5 days*
+
+**Does Florida traffic school dismiss my ticket?**
+Florida withholds adjudication rather than dismissing the ticket outright. Completing BDI means no points are added to your record and your insurer is not notified of the violation, but the citation itself remains as a withheld adjudication.
+*Key fact: Withholds adjudication (not full dismissal). No points added.*
+
+**Can I do Florida traffic school online?**
+Yes. DHSMV-approved online BDI courses are accepted by all Florida courts. You must elect traffic school within 30 days of the citation date — do not pay the ticket before electing traffic school or you may waive your right to attend.
+*Key fact: Online accepted — elect within 30 days of citation. Do not pay ticket first.*
+
+**How long is Florida traffic school?**
+The standard Basic Driver Improvement (BDI) course for minor violations is 4 hours. An 8-hour Advanced Driver Improvement (ADI) course is required for repeat offenders or license reinstatement cases. A 12-hour ADI is used for habitual offenders.
+*Key fact: 4hr BDI (standard), 8hr ADI (repeat), 12hr ADI (habitual)*
+
+**How often can I elect Florida BDI?**
+Once per 12 months, and no more than 5 times in your lifetime. Florida law allows you to elect BDI once within any 12-month period for eligible violations.
+*Key fact: Once per 12 months. 5 lifetime uses maximum.*
+
+---
+
+## Georgia
+
+**URL:** https://www.trafficschoolpicker.com/georgia
+
+**How often can I do Georgia defensive driving?**
+You can take a Georgia defensive driving course at any time, but the point reduction benefit is only available once every 5 years. Subsequent courses within that 5-year window do not remove additional points.
+*Key fact: Once per 5 years for point reduction benefit*
+
+**How long is Georgia defensive driving?**
+The approved course is 6 hours.
+*Key fact: 6 hours*
+
+**Can I do Georgia defensive driving online?**
+Yes. Georgia DDS-approved online defensive driving courses are accepted statewide.
+*Key fact: Online accepted — must be GA DDS approved*
+
+**Who submits my certificate in Georgia?**
+You submit your certificate of completion to the Georgia DDS. Once processed, the point reduction is automatically applied to your driving record.
+*Key fact: Driver submits to GA DDS*
+
+**Does Georgia defensive driving dismiss my ticket?**
+No. Georgia's approved course reduces your active points by up to 7 points and may qualify you for an insurance discount, but it does not dismiss the ticket or remove the conviction from your record.
+*Key fact: No dismissal. Up to 7-point reduction.*
+
+---
+
+## Illinois
+
+**URL:** https://www.trafficschoolpicker.com/illinois
+
+**Can I do Illinois traffic school online?**
+Yes. Illinois Secretary of State-approved online IDSS courses are accepted statewide.
+*Key fact: Online accepted — must be IL SOS approved*
+
+**How often can I do Illinois traffic school?**
+Once every 12 months for the point-reduction benefit.
+*Key fact: Once per 12 months*
+
+**How long is Illinois traffic school?**
+The Illinois Driver Safety School (IDSS) course is a minimum of 4 hours.
+*Key fact: 4 hours minimum*
+
+**Does Illinois traffic school dismiss my ticket?**
+Illinois does not offer ticket dismissal through traffic school. A Secretary of State-approved defensive driving course (IDSS) reduces your active points by up to 3 and may provide an auto insurance discount.
+*Key fact: No dismissal. Up to 3-point reduction.*
+
+**Who submits my certificate in Illinois?**
+Your school reports your completion to the Illinois Secretary of State's office, which processes the point reduction automatically.
+*Key fact: School submits to IL Secretary of State*
+
+---
+
+## Indiana
+
+**URL:** https://www.trafficschoolpicker.com/indiana
+
+**Does Indiana traffic school dismiss my ticket?**
+No. Indiana’s Basic Driver Improvement Course (BDIC) does not dismiss your ticket. Instead, it applies a 4-point credit to your official driving record, which can prevent license suspension and lower insurance rates. You must receive an eligibility notice from the Indiana BMV before enrolling.
+*Key fact: No dismissal. 4-point credit. Must receive BMV eligibility notice first.*
+
+**Who submits my certificate in Indiana?**
+Your course provider reports completion directly to the Indiana BMV. You must complete the course within 90 days of your eligibility notification or your driving privileges may be suspended.
+*Key fact: School reports to BMV. 90-day completion deadline from eligibility notice.*
+
+**How long is the Indiana BDIC?**
+The Indiana Basic Driver Improvement Course is a minimum of 4 hours, available in classroom, DVD, or online format.
+*Key fact: 4 hours minimum.*
+
+**How often can I take the Indiana BDIC?**
+Eligibility is controlled by the Indiana BMV, which sends a notification when you qualify. You must wait for an eligibility letter from the BMV before you can enroll — you cannot self-select into the program. Drivers under 21 may be required to take it if convicted of two or more traffic offenses within 12 months.
+*Key fact: BMV-controlled. Must receive eligibility notice. Not available on demand.*
+
+**Can I do Indiana BDIC online?**
+Yes. BMV-approved online BDIC courses are available. The course is also available in classroom and DVD format.
+*Key fact: Online accepted. Must be BMV-approved.*
+
+---
+
+## Michigan
+
+**URL:** https://www.trafficschoolpicker.com/michigan
+
+**Who submits my certificate in Michigan?**
+Your course provider notifies the Michigan Secretary of State electronically, typically within 1–2 business days of completion. You will also receive a certificate by mail, but you do not need to submit it anywhere yourself — the school handles state reporting.
+*Key fact: School reports to SOS electronically. Certificate mailed to driver. No further action required.*
+
+**Does Michigan traffic school dismiss my ticket?**
+Michigan’s Basic Driver Improvement Course (BDIC) does not dismiss your ticket. Instead, it allows eligible drivers to avoid points being added to their record for the cited violation. You must receive an eligibility notice from the Michigan Secretary of State (SOS) before you can enroll — you cannot self-select into the program.
+*Key fact: No dismissal. Avoids points for cited violation. Must receive SOS eligibility notice.*
+
+**How often can I take the Michigan BDIC?**
+Eligibility is controlled by the Michigan SOS, which mails a notification when you qualify. You must complete the course within 60 days of receiving the eligibility letter. You cannot enroll without this notification.
+*Key fact: 60 days from SOS eligibility notice. One-time per ticket eligibility.*
+
+**Can I do Michigan BDIC online?**
+Yes. Michigan Secretary of State-approved online BDIC courses are available.
+*Key fact: Online accepted. Must be SOS-approved.*
+
+**How long is the Michigan BDIC?**
+The Michigan BDIC is a minimum of 4 hours. Courses cannot legally charge more than $100.
+*Key fact: 4 hours minimum. Max cost $100.*
+
+---
+
+## Nevada
+
+**URL:** https://www.trafficschoolpicker.com/nevada
+
+**Does Nevada defensive driving dismiss my ticket?**
+Nevada does not dismiss tickets via defensive driving. Instead, eligible drivers can receive a 3-point credit on their driving record by completing a Nevada DMV-approved course. You must have between 3 and 11 active points on your record and no violations pending at the time of enrollment.
+*Key fact: No dismissal. 3-point credit. Must have 3–11 active points. No pending violations.*
+
+---
+
+## New Hampshire
+
+**URL:** https://www.trafficschoolpicker.com/new-hampshire
+
+**Does New Hampshire defensive driving dismiss my ticket?**
+New Hampshire has no statewide ticket dismissal or defensive driving program. Individual courts may allow traffic school courses on a case-by-case basis. Contact your court to find out what options are available for your specific violation.
+*Key fact: No statewide program. Court-by-court.*
+
+---
+
+## New Jersey
+
+**URL:** https://www.trafficschoolpicker.com/new-jersey
+
+**Does New Jersey defensive driving dismiss my ticket?**
+New Jersey does not offer ticket dismissal through defensive driving. However, drivers may reduce their active point total by 2 points by completing an approved defensive driving course. This benefit is available once every 5 years.
+*Key fact: No dismissal. 2-point reduction. Once every 5 years.*
+
+**How often can I take New Jersey defensive driving?**
+Once every 5 years for the 2-point reduction benefit.
+*Key fact: Once per 5 years.*
+
+---
+
+## New York
+
+**URL:** https://www.trafficschoolpicker.com/new-york
+
+**How long is New York PIRP?**
+The course is 6 hours (320 minutes), which is the state minimum. It can be completed online at your own pace but must be finished within 30 days of registration.
+*Key fact: 6 hours (320 minutes). Must complete within 30 days.*
+
+**How often can I take New York PIRP?**
+Once every 18 months for the point-reduction benefit. You can retake it every 3 years to renew your 10% insurance discount. Note: only violations from the 18 months prior to course completion are eligible for the point reduction.
+*Key fact: 18 months for point reduction. 3 years for insurance renewal.*
+
+**Does New York defensive driving dismiss my ticket?**
+No. New York's Point and Insurance Reduction Program (PIRP) does not dismiss tickets or remove violations from your driving record. It reduces your active point total by up to 4 points and earns a mandatory 10% auto insurance discount for 3 years — but the underlying ticket remains.
+*Key fact: No dismissal. Up to 4-point reduction + 10% insurance discount for 3 years.*
+
+**Who submits my PIRP certificate in New York?**
+Your school reports completion electronically to the NY DMV, which automatically applies the point reduction to your record. You are responsible for submitting the certificate to your insurance company yourself to receive the 10% discount.
+*Key fact: School reports to DMV. Driver submits to insurer.*
+
+**Can I do New York PIRP online?**
+Yes. NY DMV-approved online PIRP courses are accepted statewide. The course is not court-ordered — any licensed NY driver can take it voluntarily at any time to earn point reduction and insurance benefits.
+*Key fact: Online accepted. Voluntary — no court involvement required.*
+
+---
+
+## Ohio
+
+**URL:** https://www.trafficschoolpicker.com/ohio
+
+**Does Ohio traffic school dismiss my ticket?**
+No. Ohio does not offer ticket dismissal through defensive driving. Completing a BMV-approved Driver Safety Program (DSP) reduces your active points by 2 and may qualify you for an auto insurance discount.
+*Key fact: No dismissal. 2-point reduction only.*
+
+**How often can I do Ohio traffic school?**
+Once every 3 years for the point-reduction benefit.
+*Key fact: Once per 3 years*
+
+**How long is Ohio traffic school?**
+Ohio BMV-approved Driver Safety Program (DSP) courses are a minimum of 8 hours in length.
+*Key fact: 8 hours minimum*
+
+**Can I do Ohio traffic school online?**
+Yes. Ohio BMV-approved online DSP courses are accepted statewide.
+*Key fact: Online accepted — must be OH BMV approved*
+
+---
+
+## Texas
+
+**URL:** https://www.trafficschoolpicker.com/texas
+
+**How often can I use Texas defensive driving for ticket dismissal?**
+Once per 12 months. You cannot use defensive driving for ticket dismissal if you have already done so within the past 12 months. Additional eligibility: the violation cannot be more than 25 mph over the posted speed limit.
+*Key fact: Once per 12 months. Max 25 mph over limit.*
+
+**Can I do Texas defensive driving online?**
+Yes. TDLR-approved online defensive driving courses are accepted by all Texas county courts. Always verify your course provider is listed on the TDLR website before enrolling.
+*Key fact: Online accepted — must be TDLR-approved*
+
+**Does Texas defensive driving dismiss my ticket?**
+Yes — Texas uses deferred disposition. You request it from the court, plead no contest, pay a court fee, complete a 6-hour defensive driving course within 90 days, and the ticket is dismissed entirely from your public record.
+*Key fact: Full dismissal via deferred disposition. 90-day completion deadline.*
+
+**How long is Texas defensive driving?**
+Texas requires exactly 6 hours — the shortest state-mandated course length in the country. The course includes 5 hours of instruction plus 1 hour of mandatory breaks.
+*Key fact: 6 hours (includes mandatory breaks)*
+
+**Who submits my certificate to the Texas court?**
+You do. After completing the course, you receive a certificate and must submit it — along with a copy of your Texas driving record — to the court yourself, by the deadline specified in your deferred disposition order (usually 90 days from the plea date).
+*Key fact: Driver submits. Also need Type 3A driving record.*
+
+---
+
+## Vermont
+
+**URL:** https://www.trafficschoolpicker.com/vermont
+
+**Does Vermont defensive driving dismiss my ticket?**
+Vermont has no statewide ticket dismissal or defensive driving program. Individual courts may allow traffic school on a case-by-case basis. Contact your court directly to find out what options are available for your violation.
+*Key fact: No statewide program. Court-by-court.*
+
+---
+
+## Virginia
+
+**URL:** https://www.trafficschoolpicker.com/virginia
+
+**Does Virginia driver improvement dismiss my ticket?**
+No. Virginia's Driver Improvement Clinic (DIC) reduces demerit points by 5 points and earns a mandatory insurance discount — but it does not dismiss the ticket or remove the underlying conviction.
+*Key fact: No dismissal. 5-point reduction + insurance discount.*
+
+**Who submits my certificate in Virginia?**
+Your school submits completion to the Virginia DMV, which processes the 5-point reduction automatically. You submit the certificate to your insurance company separately to receive the discount.
+*Key fact: School submits to VA DMV. Driver submits to insurer.*
+
+**How long is Virginia driver improvement?**
+Virginia Driver Improvement Clinic (DIC) courses are 8 hours.
+*Key fact: 8 hours*
+
+**Can I do Virginia driver improvement online?**
+Yes. Virginia DMV-approved online Driver Improvement Clinics are accepted statewide.
+*Key fact: Online accepted (VA DMV approved)*
+
+**How often can I do Virginia driver improvement?**
+Once every 12 months for the demerit point reduction benefit. The auto insurance discount typically lasts 3 years from the date of completion.
+*Key fact: Once per 12 months (point reduction). Insurance discount lasts 3 years.*
+
+---
+
+## Washington
+
+**URL:** https://www.trafficschoolpicker.com/washington
+
+**Can I do Washington defensive driving online?**
+Yes. Washington-approved online defensive driving courses are available (including from iDriveSafely and others). Ensure your course is approved for Washington deferred finding before enrolling.
+*Key fact: Online accepted. Confirm course is WA-approved.*
+
+**Does Washington defensive driving dismiss my ticket?**
+Washington does not dismiss traffic tickets. Instead, the court may grant a “deferred finding” — preventing the citation from being reported to the Department of Licensing (DOL), which protects your driving record and insurance rates. You must request this from your court and plead no contest before completing the course.
+*Key fact: Deferred finding (not full dismissal). Prevents citation from appearing on DOL record. Plea of no contest required.*
+
+**How often can I use Washington’s deferred finding program?**
+Once every 7 years. You may only defer a traffic ticket once in any 7-year period. You must also not have any other citations pending at the time of requesting deferral.
+*Key fact: Once per 7 years. No pending citations allowed.*
+
+**How long is a Washington defensive driving course?**
+The standard Washington Level 1 defensive driving course is 4 hours, designed for most minor moving violations. A Level 2 course is available for more serious violations.
+*Key fact: 4 hours (Level 1). Level 2 available for more serious violations.*
+
+**Who submits my certificate in Washington?**
+The driver submits the completion certificate to the court by the deadline the court sets (typically 60 days). Most courts do not grant extensions, so complete the course promptly.
+*Key fact: Driver submits to court. Typically 60-day deadline. No extensions typically granted.*
+
+---
