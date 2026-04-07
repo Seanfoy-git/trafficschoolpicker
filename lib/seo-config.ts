@@ -194,7 +194,7 @@ export const HOME_SEO: PageSeoConfig = {
 export const BLOG_SEO: Record<string, PageSeoConfig> = {
   "how-to-dismiss-traffic-ticket-online": {
     title: "How to Dismiss a Traffic Ticket Online (2026)",
-    description: "Step-by-step guide to dismissing your traffic ticket through online traffic school. Covers eligibility, enrollment, certificate submission, and state-specific rules.",
+    description: "Step-by-step guide to dismissing your traffic ticket through online traffic school. Eligibility, enrollment, and certificate submission.",
     h1: "How to Dismiss a Traffic Ticket Online: A Complete 2026 Guide",
     primaryKeyword: "how to dismiss a traffic ticket",
     canonicalPath: "/blog/how-to-dismiss-traffic-ticket-online",
