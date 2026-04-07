@@ -1,29 +1,33 @@
-import { Metadata } from "next";
-import { blogPosts } from "@/lib/blog";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { Calendar, Clock } from "lucide-react";
+import { getAllPosts } from "@/lib/blog";
+import { Calendar } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Blog — Traffic School Tips & Guides",
+  title: "Traffic School Blog — Guides & Tips",
   description:
-    "Expert guides on online traffic school, ticket dismissal, and keeping your driving record clean. Updated for 2025.",
-  alternates: { canonical: "https://trafficschoolpicker.com/blog" },
+    "Expert guides on traffic ticket dismissal, defensive driving, and how to choose the right online traffic school in your state.",
+  alternates: {
+    canonical: "https://www.trafficschoolpicker.com/blog",
+  },
 };
 
-export default function BlogIndex() {
+export default function BlogPage() {
+  const posts = getAllPosts();
+
   return (
     <section className="py-12 md:py-16">
-      <div className="max-w-4xl mx-auto px-4">
-        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
+      <div className="max-w-3xl mx-auto px-4">
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
           Traffic School Blog
         </h1>
         <p className="text-lg text-slate-600 mb-10">
-          Expert guides, tips, and insights to help you navigate traffic school
-          and keep your driving record clean.
+          Expert guides on dismissing traffic tickets, understanding state
+          rules, and choosing the best online traffic school.
         </p>
 
         <div className="space-y-8">
-          {blogPosts.map((post) => (
+          {posts.map((post) => (
             <article
               key={post.slug}
               className="border-b border-slate-200 pb-8"
@@ -33,23 +37,19 @@ export default function BlogIndex() {
                   {post.title}
                 </h2>
               </Link>
-              <div className="flex items-center gap-4 text-sm text-slate-500 mb-3">
-                <span className="flex items-center gap-1">
-                  <Calendar className="w-4 h-4" />
-                  {post.date}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Clock className="w-4 h-4" />
-                  {post.readTime}
-                </span>
+              <p className="text-slate-600 text-sm mb-3">
+                {post.description}
+              </p>
+              <div className="flex items-center gap-2 text-xs text-slate-400">
+                <Calendar className="w-3.5 h-3.5" />
+                <time dateTime={post.publishedAt}>
+                  {new Date(post.publishedAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
               </div>
-              <p className="text-slate-600">{post.excerpt}</p>
-              <Link
-                href={`/blog/${post.slug}`}
-                className="inline-block mt-3 text-accent font-semibold text-sm hover:underline"
-              >
-                Read more &rarr;
-              </Link>
             </article>
           ))}
         </div>

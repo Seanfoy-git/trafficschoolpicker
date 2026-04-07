@@ -206,12 +206,54 @@ export const BLOG_SEO: Record<string, PageSeoConfig> = {
     primaryKeyword: "traffic school vs paying ticket",
     canonicalPath: "/blog/traffic-school-vs-paying-ticket",
   },
-  "best-online-traffic-schools-2025": {
+  "best-online-traffic-schools-2026": {
     title: "Best Online Traffic Schools in 2026: Expert Rankings",
     description: "Our editorial team reviewed and ranked the top online traffic schools based on price, quality, user experience, and court acceptance across all states.",
     h1: "The 5 Best Online Traffic Schools in 2026 (Independently Reviewed)",
     primaryKeyword: "best online traffic school 2026",
-    canonicalPath: "/blog/best-online-traffic-schools-2025",
+    canonicalPath: "/blog/best-online-traffic-schools-2026",
+  },
+  "does-traffic-school-remove-points": {
+    title: "Does Traffic School Remove Points? (State Guide)",
+    description: "Not every state removes points. Some mask, some reduce, some dismiss. This state-by-state guide explains what happens to your record.",
+    h1: "Does Traffic School Remove Points From Your Record?",
+    primaryKeyword: "does traffic school remove points from record",
+    canonicalPath: "/blog/does-traffic-school-remove-points",
+  },
+  "how-long-does-online-traffic-school-take": {
+    title: "How Long Does Online Traffic School Take? (By State)",
+    description: "California requires 8 hours. Texas requires 6. Florida requires 4. This guide covers every state so you know before you enroll.",
+    h1: "How Long Does Online Traffic School Take to Complete?",
+    primaryKeyword: "how long does online traffic school take",
+    canonicalPath: "/blog/how-long-does-online-traffic-school-take",
+  },
+  "idrivesafely-vs-aceable": {
+    title: "iDriveSafely vs Aceable (2026): Which Is Better?",
+    description: "An honest comparison of iDriveSafely and Aceable — price, state availability, course experience, certificate speed, and customer reviews.",
+    h1: "iDriveSafely vs Aceable: Honest 2026 Comparison",
+    primaryKeyword: "iDriveSafely vs Aceable",
+    canonicalPath: "/blog/idrivesafely-vs-aceable",
+  },
+  "how-to-dismiss-traffic-ticket-california": {
+    title: "How to Dismiss a Traffic Ticket in California (2026)",
+    description: "Step-by-step: how to get court approval, choose a DMV-licensed school, complete the course, and submit your certificate in California.",
+    h1: "How to Dismiss a Traffic Ticket in California: 2026 Guide",
+    primaryKeyword: "how to dismiss traffic ticket California",
+    canonicalPath: "/blog/how-to-dismiss-traffic-ticket-california",
+  },
+  "texas-deferred-disposition": {
+    title: "Texas Deferred Disposition: Complete Driver Guide (2026)",
+    description: "Everything Texas drivers need to know about deferred disposition — how to request it, what course to take, and how to submit proof.",
+    h1: "Texas Deferred Disposition Explained: Complete 2026 Guide",
+    primaryKeyword: "Texas deferred disposition explained",
+    canonicalPath: "/blog/texas-deferred-disposition",
+  },
+  "florida-bdi-vs-adi": {
+    title: "Florida BDI vs ADI: Which Traffic School Do You Need?",
+    description: "BDI is 4 hours for first-time violations. ADI is 8 or 12 hours for repeat offenders. This guide explains which one applies to you.",
+    h1: "Florida BDI vs ADI: Which Course Do You Actually Need?",
+    primaryKeyword: "Florida BDI vs ADI",
+    canonicalPath: "/blog/florida-bdi-vs-adi",
   },
 };
 
