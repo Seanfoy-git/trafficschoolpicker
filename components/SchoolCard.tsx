@@ -41,7 +41,16 @@ export function SchoolCard({
             <RatingStars rating={school.rating} count={school.reviewCount ?? undefined} />
           ) : null}
 
-          <p className="mt-2 text-sm text-slate-600">{school.tagline}</p>
+          {school.tagline && (
+            <div className="mt-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">
+                In their own words
+              </p>
+              <p className="text-sm text-slate-600 italic">
+                &ldquo;{school.tagline}&rdquo;
+              </p>
+            </div>
+          )}
 
           <div className="flex flex-wrap gap-4 mt-3 text-sm text-slate-600">
             {school.completionHours && (

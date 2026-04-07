@@ -244,7 +244,11 @@ export default async function StatePage({ params }: Props) {
                       </Link>
                       {school.badge && <Badge type={school.badge} />}
                     </div>
-                    <p className="text-sm text-slate-600">{school.tagline}</p>
+                    {school.tagline && (
+                      <p className="text-sm text-slate-600 italic">
+                        &ldquo;{school.tagline}&rdquo;
+                      </p>
+                    )}
                     {school.ratings.length > 0 && (
                       <div className="mt-1">
                         <MultiRating ratings={school.ratings} bbb={school.bbb} />
