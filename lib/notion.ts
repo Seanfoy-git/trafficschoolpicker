@@ -252,6 +252,7 @@ function mapSchool(page: PageObjectResponse): School {
     founded: getNumber(page, "Founded"),
     showOnSite: getCheckbox(page, "Show On Site"),
     lastVerified: getDate(page, "Last Verified"),
+    genericPrice: getNumber(page, "Price"),
   };
 }
 
@@ -340,7 +341,7 @@ export async function getSchoolPricingForState(
 
     results.push({
       ...school,
-      price: pricing?.price ?? null,
+      price: pricing?.price ?? school.genericPrice ?? null,
       originalPrice: pricing?.originalPrice ?? null,
       stateAffiliateUrl: pricing?.affiliateUrl || null,
       priceNote: pricing?.priceNote || null,

@@ -74,6 +74,7 @@ export type School = {
   founded: number | null;
   showOnSite: boolean;
   lastVerified: string | null;
+  genericPrice: number | null;  // "Price" field from Traffic Schools DB — fallback when no state-specific price
 };
 
 // ─── School × State Pricing DB ──────────────────────────────
