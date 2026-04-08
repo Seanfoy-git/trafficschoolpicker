@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { GraduationCap } from "lucide-react";
 
 const popularStates = [
   { name: "California", slug: "california" },
@@ -18,9 +17,20 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <GraduationCap className="w-6 h-6" />
-              <span className="font-bold">TrafficSchoolPicker</span>
+            <div className="flex items-center gap-2.5 mb-3">
+              <svg width="28" height="28" viewBox="100 40 114 114" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="157" cy="97" r="55" fill="#085041"/>
+                <circle cx="157" cy="97" r="51" fill="#1D9E75"/>
+                <polygon points="157,58 187,72 157,86 127,72" fill="white"/>
+                <rect x="145" y="86" width="24" height="13" rx="3" fill="white"/>
+                <line x1="187" y1="72" x2="187" y2="94" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+                <circle cx="187" cy="97" r="4" fill="white"/>
+                <path d="M 140,114 L 157,132 L 174,114" fill="none" stroke="white" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span className="font-medium">
+                <span className="text-white">trafficschool</span>
+                <span className="text-emerald-400">picker</span>
+              </span>
             </div>
             <p className="text-sm text-slate-300 leading-relaxed">
               Independent comparison site helping drivers find the best

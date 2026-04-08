@@ -1,0 +1,20 @@
+<svg width="100%" viewBox="0 0 680 210" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>trafficschoolpicker.com logo</title>
+  <desc>Teal circular badge with graduation cap and downward chevron, next to the trafficschoolpicker.com wordmark and tagline</desc>
+
+  <circle cx="157" cy="97" r="55" fill="#085041"/>
+  <circle cx="157" cy="97" r="51" fill="#1D9E75"/>
+
+  <polygon points="157,58 187,72 157,86 127,72" fill="white"/>
+  <rect x="145" y="86" width="24" height="13" rx="3" fill="white"/>
+  <line x1="187" y1="72" x2="187" y2="94" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="187" cy="97" r="4" fill="white"/>
+
+  <path d="M 140,114 L 157,132 L 174,114" fill="none" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="228" y="88" font-family="system-ui, sans-serif" font-size="31" font-weight="500">
+    <tspan fill="#1a1a1a">trafficschool</tspan><tspan fill="#1D9E75">picker</tspan>
+  </text>
+  <text x="228" y="114" fill="#666666" font-family="system-ui, sans-serif" font-size="16">.com</text>
+  <text x="228" y="143" fill="#666666" font-family="system-ui, sans-serif" font-size="15" font-style="italic">Find the right traffic school, fast.</text>
+</svg>
