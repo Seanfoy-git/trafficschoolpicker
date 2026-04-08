@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "How We Rank Traffic Schools — Our Methodology",
   description:
     "Learn how TrafficSchoolPicker independently evaluates and ranks online traffic schools based on price, quality, user reviews, and court acceptance.",
-  alternates: { canonical: "https://trafficschoolpicker.com/about" },
+  alternates: { canonical: "https://www.trafficschoolpicker.com/about" },
 };
 
 export default function AboutPage() {

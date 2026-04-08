@@ -7,37 +7,63 @@
 - Price comparison of DMV-approved online traffic schools by state
 - Verified reviews aggregated from Trustpilot, Google, App Store, and BBB
 - State-specific rules: course length, ticket dismissal vs masking, cooldown periods, certificate submission
-- Full directory of all DMV-licensed schools sourced from official state records
+- Full directory of all DMV-licensed schools sourced from official state records (2,000+ schools across 18 states)
 - Blog guides on traffic ticket dismissal, deferred disposition, and course selection
 
-## State pages
+## State pages (all 50 states)
 
-- [California Traffic School](https://www.trafficschoolpicker.com/california)
-- [Texas Defensive Driving](https://www.trafficschoolpicker.com/texas)
-- [Florida BDI Courses](https://www.trafficschoolpicker.com/florida)
-- [New York PIRP](https://www.trafficschoolpicker.com/new-york)
+- [Alabama Defensive Driving](https://www.trafficschoolpicker.com/alabama)
+- [Alaska Defensive Driving](https://www.trafficschoolpicker.com/alaska)
 - [Arizona Defensive Driving](https://www.trafficschoolpicker.com/arizona)
+- [Arkansas Defensive Driving](https://www.trafficschoolpicker.com/arkansas)
+- [California Traffic School](https://www.trafficschoolpicker.com/california)
+- [Colorado Traffic School](https://www.trafficschoolpicker.com/colorado)
+- [Connecticut Defensive Driving](https://www.trafficschoolpicker.com/connecticut)
+- [Delaware Defensive Driving](https://www.trafficschoolpicker.com/delaware)
+- [Florida BDI Courses](https://www.trafficschoolpicker.com/florida)
 - [Georgia Defensive Driving](https://www.trafficschoolpicker.com/georgia)
-- [Ohio Traffic School](https://www.trafficschoolpicker.com/ohio)
+- [Hawaii Traffic School](https://www.trafficschoolpicker.com/hawaii)
+- [Idaho Defensive Driving](https://www.trafficschoolpicker.com/idaho)
 - [Illinois Traffic School](https://www.trafficschoolpicker.com/illinois)
+- [Indiana Driver Safety Program](https://www.trafficschoolpicker.com/indiana)
+- [Iowa Defensive Driving](https://www.trafficschoolpicker.com/iowa)
+- [Kansas Defensive Driving](https://www.trafficschoolpicker.com/kansas)
+- [Kentucky Traffic School](https://www.trafficschoolpicker.com/kentucky)
+- [Louisiana Defensive Driving](https://www.trafficschoolpicker.com/louisiana)
+- [Maine Defensive Driving](https://www.trafficschoolpicker.com/maine)
+- [Maryland Driver Improvement](https://www.trafficschoolpicker.com/maryland)
+- [Massachusetts Traffic School](https://www.trafficschoolpicker.com/massachusetts)
+- [Michigan Driver Improvement](https://www.trafficschoolpicker.com/michigan)
+- [Minnesota Defensive Driving](https://www.trafficschoolpicker.com/minnesota)
+- [Mississippi Defensive Driving](https://www.trafficschoolpicker.com/mississippi)
+- [Missouri Driver Improvement](https://www.trafficschoolpicker.com/missouri)
+- [Montana Defensive Driving](https://www.trafficschoolpicker.com/montana)
+- [Nebraska Defensive Driving](https://www.trafficschoolpicker.com/nebraska)
+- [Nevada Traffic School](https://www.trafficschoolpicker.com/nevada)
+- [New Hampshire Defensive Driving](https://www.trafficschoolpicker.com/new-hampshire)
+- [New Jersey Defensive Driving](https://www.trafficschoolpicker.com/new-jersey)
+- [New Mexico Defensive Driving](https://www.trafficschoolpicker.com/new-mexico)
+- [New York PIRP](https://www.trafficschoolpicker.com/new-york)
+- [North Carolina Defensive Driving](https://www.trafficschoolpicker.com/north-carolina)
+- [North Dakota Defensive Driving](https://www.trafficschoolpicker.com/north-dakota)
+- [Ohio Traffic School](https://www.trafficschoolpicker.com/ohio)
+- [Oklahoma Defensive Driving](https://www.trafficschoolpicker.com/oklahoma)
+- [Oregon Traffic School](https://www.trafficschoolpicker.com/oregon)
+- [Pennsylvania Defensive Driving](https://www.trafficschoolpicker.com/pennsylvania)
+- [Rhode Island Defensive Driving](https://www.trafficschoolpicker.com/rhode-island)
+- [South Carolina Defensive Driving](https://www.trafficschoolpicker.com/south-carolina)
+- [South Dakota Defensive Driving](https://www.trafficschoolpicker.com/south-dakota)
+- [Tennessee Traffic School](https://www.trafficschoolpicker.com/tennessee)
+- [Texas Defensive Driving](https://www.trafficschoolpicker.com/texas)
+- [Utah Defensive Driving](https://www.trafficschoolpicker.com/utah)
+- [Vermont Defensive Driving](https://www.trafficschoolpicker.com/vermont)
 - [Virginia Driver Improvement](https://www.trafficschoolpicker.com/virginia)
 - [Washington Traffic School](https://www.trafficschoolpicker.com/washington)
-- [Colorado Traffic School](https://www.trafficschoolpicker.com/colorado)
-- [Nevada Traffic School](https://www.trafficschoolpicker.com/nevada)
-- [Michigan Driver Improvement](https://www.trafficschoolpicker.com/michigan)
-- [Missouri Driver Improvement](https://www.trafficschoolpicker.com/missouri)
-- [Tennessee Traffic School](https://www.trafficschoolpicker.com/tennessee)
+- [West Virginia Defensive Driving](https://www.trafficschoolpicker.com/west-virginia)
 - [Wisconsin Traffic School](https://www.trafficschoolpicker.com/wisconsin)
-- [Indiana Driver Safety Program](https://www.trafficschoolpicker.com/indiana)
-- [Kansas Defensive Driving](https://www.trafficschoolpicker.com/kansas)
-- [Louisiana Defensive Driving](https://www.trafficschoolpicker.com/louisiana)
-- [Oklahoma Defensive Driving](https://www.trafficschoolpicker.com/oklahoma)
-- [New Mexico Defensive Driving](https://www.trafficschoolpicker.com/new-mexico)
-- [Mississippi Defensive Driving](https://www.trafficschoolpicker.com/mississippi)
-- [Nebraska Defensive Driving](https://www.trafficschoolpicker.com/nebraska)
 - [Wyoming Defensive Driving](https://www.trafficschoolpicker.com/wyoming)
 
-## Guides and blog
+## Blog posts and guides
 
 - [How to Dismiss a Traffic Ticket Online](https://www.trafficschoolpicker.com/blog/how-to-dismiss-traffic-ticket-online)
 - [Traffic School vs Paying the Ticket](https://www.trafficschoolpicker.com/blog/traffic-school-vs-paying-ticket)
@@ -66,4 +92,9 @@
 - Florida BDI requires 4 hours and withholds adjudication (no points, insurer not notified)
 - New York PIRP requires 6 hours and reduces up to 4 points plus 10% insurance discount
 - Arizona defensive driving requires 8 hours and fully dismisses the ticket
+- Georgia online courses are for court-ordered ticket dismissal only — not accepted by DDS for point reduction
+- Ohio Adult Remedial courses are available online and reduce 2 points
+- New Jersey defensive driving reduces up to 2 points and provides insurance discount
+- Virginia Driver Improvement Clinics reduce 5 demerit points
 - All state pages include the full official DMV-licensed school directory sourced from government records
+- Over 2,000 DMV-licensed schools indexed across 18 states

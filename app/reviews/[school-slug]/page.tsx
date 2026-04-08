@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${school.name} Review (2026) — Is It Worth It?`,
     description: `Detailed review of ${school.name} online traffic school. ${school.rating ? `Rating: ${school.rating}/5.` : ""} See pros, cons, and our verdict.`,
     alternates: {
-      canonical: `https://trafficschoolpicker.com/reviews/${school.slug}`,
+      canonical: `https://www.trafficschoolpicker.com/reviews/${school.slug}`,
     },
     openGraph: {
       title: `${school.name} Review — TrafficSchoolPicker`,
