@@ -1,5 +1,5 @@
 import type { School, SchoolWithPrice, ResolvedSchoolContent } from "@/lib/types";
-import { MultiRating, ReviewSynthesis } from "./MultiRating";
+import { MultiRating } from "./MultiRating";
 import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
 import { AffiliateButton } from "./AffiliateButton";
@@ -71,11 +71,7 @@ export function SchoolCard({
             )}
           </div>
 
-          {showProsAndCons && (school.synthesizedGood || school.synthesizedBad) && (
-            <ReviewSynthesis good={school.synthesizedGood} bad={school.synthesizedBad} />
-          )}
-
-          {showProsAndCons && !school.synthesizedGood && (() => {
+          {showProsAndCons && (() => {
             const { pros, cons } = resolved;
             return (pros.length > 0 || cons.length > 0) ? (
             <div className="grid sm:grid-cols-2 gap-4 mt-4">

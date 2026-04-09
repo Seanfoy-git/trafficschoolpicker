@@ -66,7 +66,15 @@ function parseStateCodes(raw: string): string[] {
 }
 
 function parseLines(raw: string): string[] {
-  return raw.split("\n").map((s) => s.replace(/^[-•*]\s*/, "").trim()).filter(Boolean);
+  // Split on newlines first; if that yields a single element with pipes, split on pipes
+  const lines = raw.split("\n").map((s) => s.replace(/^[-•*]\s*/, "").trim()).filter(Boolean);
+  if (lines.length === 1 && lines[0].includes("|")) {
+    return lines[0].split("|").map((s) => s.trim()).filter(Boolean);
+  }
+  // Also handle multi-line where individual lines contain pipes
+  return lines.flatMap((line) =>
+    line.includes("|") ? line.split("|").map((s) => s.trim()).filter(Boolean) : [line]
+  );
 }
 
 function parseTrendSelect(raw: string | null): "up" | "down" | "stable" {
