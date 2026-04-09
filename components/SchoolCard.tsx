@@ -1,5 +1,4 @@
-import type { School, SchoolWithPrice, StateRequirement, SchoolStateVariant } from "@/lib/types";
-import { getProsForState, getConsForState, resolveStateContent } from "@/lib/notion";
+import type { School, SchoolWithPrice, ResolvedSchoolContent } from "@/lib/types";
 import { MultiRating, ReviewSynthesis } from "./MultiRating";
 import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
@@ -9,28 +8,17 @@ import Link from "next/link";
 
 export function SchoolCard({
   school,
+  resolved,
   rank,
   showProsAndCons = false,
-  stateCode,
-  stateReqs,
-  variants,
 }: {
   school: School | SchoolWithPrice;
+  resolved: ResolvedSchoolContent;
   rank?: number;
   showProsAndCons?: boolean;
-  stateCode?: string;
-  stateReqs?: Map<string, StateRequirement>;
-  variants?: Map<string, SchoolStateVariant>;
 }) {
-  // Resolve state-specific content if we have the data
-  const resolved = stateCode && stateReqs && variants
-    ? resolveStateContent(school, stateCode, stateReqs, variants)
-    : null;
-  // SchoolWithPrice has price directly; plain School needs no price display
-  const hasPrice = "price" in school && school.price !== null;
-  const amount = hasPrice ? (school as SchoolWithPrice).price : null;
-  const display = amount !== null ? `$${amount.toFixed(2)}` : "Check website";
   const originalPrice = "originalPrice" in school ? (school as SchoolWithPrice).originalPrice : null;
+
   return (
     <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex flex-col sm:flex-row sm:items-start gap-4">
@@ -51,28 +39,28 @@ export function SchoolCard({
             <RatingStars rating={school.rating} count={school.reviewCount ?? undefined} />
           ) : null}
 
-          {(resolved?.oneLiner || school.tagline) && (
+          {resolved.oneLiner && (
             <div className="mt-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">
                 In their own words
               </p>
               <p className="text-sm text-slate-600 italic">
-                &ldquo;{resolved?.oneLiner || school.tagline}&rdquo;
+                &ldquo;{resolved.oneLiner}&rdquo;
               </p>
             </div>
           )}
 
           <div className="flex flex-wrap gap-4 mt-3 text-sm text-slate-600">
-            {school.completionHours && (
+            {resolved.mandatedHours && (
               <span className="flex items-center gap-1">
                 <Clock className="w-4 h-4 text-slate-400" />
-                {school.completionHours} hours
+                {resolved.mandatedHours} hours
               </span>
             )}
-            {school.courtAcceptance && (
+            {resolved.approvalBodyShort !== "State Approved" && (
               <span className="flex items-center gap-1">
                 <CheckCircle className="w-4 h-4 text-slate-400" />
-                {school.courtAcceptance}
+                {resolved.approvalBodyShort}-approved
               </span>
             )}
             {school.mobileApp && (
@@ -88,8 +76,7 @@ export function SchoolCard({
           )}
 
           {showProsAndCons && !school.synthesizedGood && (() => {
-            const pros = resolved?.pros ?? getProsForState(school, stateCode ?? "");
-            const cons = resolved?.cons ?? getConsForState(school, stateCode ?? "");
+            const { pros, cons } = resolved;
             return (pros.length > 0 || cons.length > 0) ? (
             <div className="grid sm:grid-cols-2 gap-4 mt-4">
               {pros.length > 0 && (
@@ -126,7 +113,7 @@ export function SchoolCard({
             ) : null;
           })()}
 
-          {resolved?.bestFor && (
+          {resolved.bestFor && (
             <div className="mt-3 text-xs text-slate-600">
               <span className="font-semibold text-slate-700">Best for:</span> {resolved.bestFor}
             </div>
@@ -135,7 +122,7 @@ export function SchoolCard({
 
         <div className="flex flex-col items-end gap-3 sm:min-w-[160px]">
           <div className="text-right">
-            {amount !== null ? (
+            {resolved.price !== null ? (
               <>
                 {originalPrice && (
                   <span className="text-sm text-slate-400 line-through">
@@ -143,7 +130,7 @@ export function SchoolCard({
                   </span>
                 )}
                 <div className="text-2xl font-bold text-slate-900">
-                  {display}
+                  {resolved.priceDisplay}
                 </div>
               </>
             ) : (

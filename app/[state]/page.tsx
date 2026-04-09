@@ -6,6 +6,7 @@ import {
   getDirectoryForState,
   getStateRequirements,
   getSchoolVariantsForState,
+  resolveStateContent,
 } from "@/lib/notion";
 import { STATE_SEO } from "@/lib/seo-config";
 import { getStateFAQs } from "@/lib/state-faqs";
@@ -213,11 +214,9 @@ export default async function StatePage({ params }: Props) {
                 <SchoolCard
                   key={school.id}
                   school={school}
+                  resolved={resolveStateContent(school, stateMeta.code, stateReqs, variants)}
                   rank={i + 1}
                   showProsAndCons
-                  stateCode={stateMeta.code}
-                  stateReqs={stateReqs}
-                  variants={variants}
                 />
               ))}
             </div>

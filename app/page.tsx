@@ -4,7 +4,7 @@ import { StateSelector } from "@/components/StateSelector";
 import { TrustBar } from "@/components/TrustBar";
 import { SchoolCard } from "@/components/SchoolCard";
 import { SchoolFAQ, FAQJsonLd } from "@/components/SchoolFAQ";
-import { getAllSchools } from "@/lib/notion";
+import { getAllSchools, getStateRequirements, resolveStateContent } from "@/lib/notion";
 import { STATE_LIST } from "@/lib/state-utils";
 import Link from "next/link";
 import { ArrowRight, Search, BarChart3, MousePointerClick } from "lucide-react";
@@ -60,7 +60,11 @@ const homeFaqs = [
 ];
 
 export default async function HomePage() {
-  const allSchools = await getAllSchools();
+  const [allSchools, stateReqs] = await Promise.all([
+    getAllSchools(),
+    getStateRequirements(),
+  ]);
+  const emptyVariants = new Map();
   const topSchools = allSchools.filter((s) => s.tier === 1).slice(0, 3);
 
   return (
@@ -137,7 +141,13 @@ export default async function HomePage() {
             </p>
             <div className="space-y-4">
               {topSchools.map((school, i) => (
-                <SchoolCard key={school.id} school={school} rank={i + 1} showProsAndCons />
+                <SchoolCard
+                  key={school.id}
+                  school={school}
+                  resolved={resolveStateContent(school, null, stateReqs, emptyVariants)}
+                  rank={i + 1}
+                  showProsAndCons
+                />
               ))}
             </div>
           </div>

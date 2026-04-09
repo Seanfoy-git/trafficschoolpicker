@@ -243,6 +243,17 @@ function buildStateSpecificField(
   return result;
 }
 
+const PRICE_STATE_CODES = ["CA", "TX", "FL", "NY", "AZ", "OH", "VA", "NJ", "MI", "WA", "NC"];
+
+function buildStatePrices(page: PageObjectResponse): Partial<Record<string, number>> {
+  const result: Partial<Record<string, number>> = {};
+  for (const code of PRICE_STATE_CODES) {
+    const val = getNumber(page, `Price ${code}`);
+    if (val !== null) result[code] = val;
+  }
+  return result;
+}
+
 function mapSchool(page: PageObjectResponse): School {
   const tierRaw = getSelect(page, "Tier") ?? "";
   const tier: 1 | 2 = tierRaw === "1 - Featured" ? 1 : 2;
@@ -274,6 +285,7 @@ function mapSchool(page: PageObjectResponse): School {
     statePros: buildStateSpecificField(page, "Pros"),
     stateCons: buildStateSpecificField(page, "Cons"),
     bestFor: getText(page, "Best For"),
+    notFor: getText(page, "Not For"),
     completionHours: getNumber(page, "Completion Time (hrs)"),
     mobileApp: getCheckbox(page, "Mobile App"),
     moneyBackGuarantee: getCheckbox(page, "Money Back Guarantee"),
@@ -283,6 +295,7 @@ function mapSchool(page: PageObjectResponse): School {
     showOnSite: getCheckbox(page, "Show On Site"),
     lastVerified: getDate(page, "Last Verified"),
     genericPrice: getNumber(page, "Price"),
+    statePrices: buildStatePrices(page),
   };
 }
 
@@ -534,42 +547,53 @@ export async function getSchoolVariantsForState(
 
 export function resolveStateContent(
   school: School | SchoolWithPrice,
-  stateCode: string,
+  stateCode: string | null,
   stateReqs: Map<string, StateRequirement>,
   variants: Map<string, SchoolStateVariant>
 ): import("./types").ResolvedSchoolContent {
-  const variantKey = `${school.slug}:${stateCode}`;
-  const variant = variants.get(variantKey);
-  const state = stateReqs.get(stateCode);
+  const variant = stateCode ? variants.get(`${school.slug}:${stateCode}`) : undefined;
+  const state = stateCode ? stateReqs.get(stateCode) : undefined;
 
+  // Price waterfall: variant override → per-state column → SchoolWithPrice.price → genericPrice → null
   const price =
     variant?.priceOverride ??
+    (stateCode ? school.statePrices[stateCode] : undefined) ??
     ("price" in school ? (school as SchoolWithPrice).price : null) ??
     school.genericPrice ??
     null;
 
+  // Has Final Exam: variant override → state requirement → true (conservative default)
   const hasFinalExam =
     variant?.hasFinalExamOverride === "Yes" ? true :
     variant?.hasFinalExamOverride === "No" ? false :
     state?.hasFinalExam ?? true;
 
   return {
-    oneLiner: variant?.oneLiner || school.tagline,
-    pros: variant?.pros?.length ? variant.pros : getProsForState(school, stateCode),
-    cons: variant?.cons?.length ? variant.cons : getConsForState(school, stateCode),
-    bestFor: variant?.bestFor || school.bestFor,
-    notFor: variant?.notFor || "",
-    officialTerm: state?.officialTerm ?? "Traffic School",
-    approvalBody: state?.approvalBodyShort ?? "State Approved",
-    mandatedHours: state?.mandatedHours ?? school.completionHours,
-    hasFinalExam,
-    ticketOutcome: state?.ticketOutcome ?? "Varies",
-    ticketOutcomeNote: state?.ticketOutcomeNote ?? "",
-    hasLessonTimers: state?.hasLessonTimers ?? false,
-    courtFeeRequired: state?.courtFeeRequired ?? false,
-    courtFeeNote: state?.courtFeeNote ?? "",
+    // Editorial — variant overrides school defaults
+    oneLiner: variant?.oneLiner || school.tagline || null,
+    pros: variant?.pros?.length ? variant.pros : getProsForState(school, stateCode ?? ""),
+    cons: variant?.cons?.length ? variant.cons : getConsForState(school, stateCode ?? ""),
+    bestFor: variant?.bestFor || school.bestFor || null,
+    notFor: variant?.notFor || school.notFor || null,
+
+    // Price
     price,
     priceDisplay: price !== null ? `$${price.toFixed(2)}` : "Check website",
+
+    // Regulatory — structural facts from state requirements
+    officialTerm: state?.officialTerm ?? "Traffic School",
+    approvalBody: state?.approvalBody ?? "State Approved",
+    approvalBodyShort: state?.approvalBodyShort ?? "State Approved",
+    mandatedHours: state?.mandatedHours ?? school.completionHours,
+    hasFinalExam,
+    examAttemptsAllowed: state?.examAttemptsAllowed ?? null,
+    examIsOpenBook: state?.examIsOpenBook ?? false,
+    hasLessonTimers: state?.hasLessonTimers ?? false,
+    ticketOutcome: state?.ticketOutcome ?? "Varies",
+    ticketOutcomeNote: state?.ticketOutcomeNote ?? null,
+    eligibilityWindowMonths: state?.eligibilityWindowMonths ?? null,
+    courtFeeRequired: state?.courtFeeRequired ?? false,
+    courtFeeNote: state?.courtFeeNote ?? null,
   };
 }
 

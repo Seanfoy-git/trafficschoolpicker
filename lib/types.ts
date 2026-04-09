@@ -69,6 +69,7 @@ export type School = {
   statePros: Record<string, string[]>;
   stateCons: Record<string, string[]>;
   bestFor: string;
+  notFor: string;
   completionHours: number | null;
   mobileApp: boolean;
   moneyBackGuarantee: boolean;
@@ -78,6 +79,7 @@ export type School = {
   showOnSite: boolean;
   lastVerified: string | null;
   genericPrice: number | null;  // "Price" field from Traffic Schools DB — fallback when no state-specific price
+  statePrices: Partial<Record<string, number>>;  // per-state price columns: { CA: 24.95, TX: 19.95, ... }
 };
 
 // ─── School × State Pricing DB ──────────────────────────────
@@ -152,22 +154,31 @@ export type SchoolStateVariant = {
 // ─── Resolved state content (frontend) ──────────────────────
 
 export type ResolvedSchoolContent = {
-  oneLiner: string;
-  pros: string[];
-  cons: string[];
-  bestFor: string;
-  notFor: string;
+  // Editorial
+  oneLiner: string | null;
+  pros: string[];                    // already split, never null — empty array if no data
+  cons: string[];                    // already split, never null — empty array if no data
+  bestFor: string | null;
+  notFor: string | null;
+
+  // Price
+  price: number | null;
+  priceDisplay: string;              // '$24.95' or 'Check website' — always a string
+
+  // Regulatory — structural facts about this state
   officialTerm: string;
   approvalBody: string;
+  approvalBodyShort: string;
   mandatedHours: number | null;
   hasFinalExam: boolean;
-  ticketOutcome: string;
-  ticketOutcomeNote: string;
+  examAttemptsAllowed: number | null;
+  examIsOpenBook: boolean;
   hasLessonTimers: boolean;
+  ticketOutcome: string;
+  ticketOutcomeNote: string | null;
+  eligibilityWindowMonths: number | null;
   courtFeeRequired: boolean;
-  courtFeeNote: string;
-  price: number | null;
-  priceDisplay: string;
+  courtFeeNote: string | null;
 };
 
 // ─── School Directory DB (DMV-scraped) ──────────────────────
