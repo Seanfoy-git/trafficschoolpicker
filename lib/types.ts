@@ -102,6 +102,74 @@ export type SchoolWithPrice = School & {
   priceNote: string | null;
 };
 
+// ─── State Requirements DB ──────────────────────────────────
+
+export type StateRequirement = {
+  id: string;
+  stateCode: string;
+  stateName: string;
+  officialTerm: string;
+  approvalBody: string;
+  approvalBodyShort: string;
+  mandatedHours: number | null;
+  hasFinalExam: boolean;
+  examIsOpenBook: boolean;
+  examAttemptsAllowed: number | null;
+  hasLessonTimers: boolean;
+  ticketOutcome: string;           // "Dismissed" | "Masked" | "Reduced"
+  ticketOutcomeNote: string;
+  eligibilityWindowMonths: number | null;
+  certificateDelivery: string;
+  courtFeeRequired: boolean;
+  courtFeeNote: string;
+  dmvLicenseRequired: boolean;
+  licenseFormat: string;
+  terminologyNotes: string;
+  sourceUrl: string;
+  lastVerified: string | null;
+};
+
+// ─── School State Variants DB ───────────────────────────────
+
+export type SchoolStateVariant = {
+  id: string;
+  name: string;                    // "safe2drive:CA"
+  schoolSlug: string;
+  stateCode: string;
+  generationStatus: 'Generated' | 'Locked' | 'Needs Review';
+  lockReason: string;
+  oneLiner: string;
+  pros: string[];
+  cons: string[];
+  bestFor: string;
+  notFor: string;
+  priceOverride: number | null;
+  hasFinalExamOverride: 'Yes' | 'No' | null;
+  generationNotes: string;
+  lastGenerated: string | null;
+};
+
+// ─── Resolved state content (frontend) ──────────────────────
+
+export type ResolvedSchoolContent = {
+  oneLiner: string;
+  pros: string[];
+  cons: string[];
+  bestFor: string;
+  notFor: string;
+  officialTerm: string;
+  approvalBody: string;
+  mandatedHours: number | null;
+  hasFinalExam: boolean;
+  ticketOutcome: string;
+  ticketOutcomeNote: string;
+  hasLessonTimers: boolean;
+  courtFeeRequired: boolean;
+  courtFeeNote: string;
+  price: number | null;
+  priceDisplay: string;
+};
+
 // ─── School Directory DB (DMV-scraped) ──────────────────────
 
 export type DirectorySchool = {

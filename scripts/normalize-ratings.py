@@ -168,6 +168,10 @@ def main():
                 else:
                     print(f"  ^ WRITE FAILED")
 
+        if not resp.get("has_more"):
+            break
+        cursor = resp.get("next_cursor")
+
     print("-" * 75)
     print(f"Total: {total} | Updated: {updated} | Skipped: {skipped}")
     if DRY_RUN:

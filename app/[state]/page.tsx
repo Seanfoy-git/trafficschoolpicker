@@ -4,6 +4,8 @@ import {
   getSchoolPricingForState,
   getStateInfo,
   getDirectoryForState,
+  getStateRequirements,
+  getSchoolVariantsForState,
 } from "@/lib/notion";
 import { STATE_SEO } from "@/lib/seo-config";
 import { getStateFAQs } from "@/lib/state-faqs";
@@ -74,11 +76,13 @@ export default async function StatePage({ params }: Props) {
   const stateMeta = getStateBySlug(stateSlug);
   if (!stateMeta) notFound();
 
-  const [schools, stateInfo, directory, notionFaqs] = await Promise.all([
+  const [schools, stateInfo, directory, notionFaqs, stateReqs, variants] = await Promise.all([
     getSchoolPricingForState(stateMeta.code),
     getStateInfo(stateMeta.code),
     getDirectoryForState(stateMeta.name),
     getNotionStateFaqs(stateSlug),
+    getStateRequirements(),
+    getSchoolVariantsForState(stateMeta.code),
   ]);
 
   // Use Notion FAQs if available, fall back to static
@@ -212,6 +216,8 @@ export default async function StatePage({ params }: Props) {
                   rank={i + 1}
                   showProsAndCons
                   stateCode={stateMeta.code}
+                  stateReqs={stateReqs}
+                  variants={variants}
                 />
               ))}
             </div>

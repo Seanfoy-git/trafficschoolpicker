@@ -6,6 +6,8 @@ import type {
   DirectorySchool,
   StateInfo,
   OnlineStatus,
+  StateRequirement,
+  SchoolStateVariant,
 } from "./types";
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
@@ -14,6 +16,8 @@ const SCHOOLS_DB = process.env.NOTION_SCHOOLS_DB;
 const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB;
 const STATES_DB = process.env.NOTION_STATES_DB;
 const PRICING_DB = process.env.NOTION_PRICING_DB;
+const STATE_REQUIREMENTS_DB = process.env.NOTION_STATE_REQUIREMENTS_DB;
+const SCHOOL_VARIANTS_DB = process.env.NOTION_SCHOOL_VARIANTS_DB;
 
 // ─── HELPERS ────────────────────────────────────────────────
 
@@ -439,6 +443,133 @@ export function getPriceDisplay(
   return {
     amount: school.price,
     display: school.price !== null ? `$${school.price.toFixed(2)}` : "Check website",
+  };
+}
+
+// ─── STATE REQUIREMENTS DB ──────────────────────────────────
+
+function mapStateRequirement(page: PageObjectResponse): StateRequirement {
+  return {
+    id: page.id,
+    stateCode: getText(page, "State Code"),
+    stateName: getText(page, "State Name"),
+    officialTerm: getSelect(page, "Official Term") ?? "",
+    approvalBody: getText(page, "Approval Body"),
+    approvalBodyShort: getText(page, "Approval Body Short"),
+    mandatedHours: getNumber(page, "Mandated Hours"),
+    hasFinalExam: getCheckbox(page, "Has Final Exam"),
+    examIsOpenBook: getCheckbox(page, "Exam Is Open Book"),
+    examAttemptsAllowed: getNumber(page, "Exam Attempts Allowed"),
+    hasLessonTimers: getCheckbox(page, "Has Lesson Timers"),
+    ticketOutcome: getSelect(page, "Ticket Outcome") ?? "",
+    ticketOutcomeNote: getText(page, "Ticket Outcome Note"),
+    eligibilityWindowMonths: getNumber(page, "Eligibility Window Months"),
+    certificateDelivery: getSelect(page, "Certificate Delivery") ?? "",
+    courtFeeRequired: getCheckbox(page, "Court Fee Required"),
+    courtFeeNote: getText(page, "Court Fee Note"),
+    dmvLicenseRequired: getCheckbox(page, "DMV License Required"),
+    licenseFormat: getText(page, "License Format"),
+    terminologyNotes: getText(page, "Terminology Notes"),
+    sourceUrl: getText(page, "Source URL"),
+    lastVerified: getDate(page, "Last Verified"),
+  };
+}
+
+export async function getStateRequirements(): Promise<Map<string, StateRequirement>> {
+  const map = new Map<string, StateRequirement>();
+  if (!process.env.NOTION_TOKEN || !STATE_REQUIREMENTS_DB) return map;
+  try {
+    const pages = await queryAllPages(STATE_REQUIREMENTS_DB);
+    for (const page of pages) {
+      const req = mapStateRequirement(page);
+      if (req.stateCode) map.set(req.stateCode, req);
+    }
+  } catch { /* DB may not exist yet */ }
+  return map;
+}
+
+// ─── SCHOOL STATE VARIANTS DB ───────────────────────────────
+
+function mapSchoolVariant(page: PageObjectResponse): SchoolStateVariant {
+  const prosRaw = getText(page, "Pros");
+  const consRaw = getText(page, "Cons");
+  return {
+    id: page.id,
+    name: getText(page, "Name"),
+    schoolSlug: getText(page, "School Slug"),
+    stateCode: getSelect(page, "State Code") ?? "",
+    generationStatus: (getSelect(page, "Generation Status") ?? "Generated") as SchoolStateVariant["generationStatus"],
+    lockReason: getText(page, "Lock Reason"),
+    oneLiner: getText(page, "One Liner"),
+    pros: prosRaw ? prosRaw.split("|").map(s => s.trim()).filter(Boolean) : [],
+    cons: consRaw ? consRaw.split("|").map(s => s.trim()).filter(Boolean) : [],
+    bestFor: getText(page, "Best For"),
+    notFor: getText(page, "Not For"),
+    priceOverride: getNumber(page, "Price Override"),
+    hasFinalExamOverride: getSelect(page, "Has Final Exam Override") as SchoolStateVariant["hasFinalExamOverride"],
+    generationNotes: getText(page, "Generation Notes"),
+    lastGenerated: getDate(page, "Last Generated"),
+  };
+}
+
+export async function getSchoolVariantsForState(
+  stateCode: string
+): Promise<Map<string, SchoolStateVariant>> {
+  const map = new Map<string, SchoolStateVariant>();
+  if (!process.env.NOTION_TOKEN || !SCHOOL_VARIANTS_DB) return map;
+  try {
+    const pages = await queryAllPages(SCHOOL_VARIANTS_DB, {
+      property: "State Code",
+      select: { equals: stateCode.toUpperCase() },
+    });
+    for (const page of pages) {
+      const variant = mapSchoolVariant(page);
+      map.set(variant.name, variant); // keyed by "slug:STATE"
+    }
+  } catch { /* DB may not exist yet */ }
+  return map;
+}
+
+// ─── RESOLVE STATE CONTENT ──────────────────────────────────
+
+export function resolveStateContent(
+  school: School | SchoolWithPrice,
+  stateCode: string,
+  stateReqs: Map<string, StateRequirement>,
+  variants: Map<string, SchoolStateVariant>
+): import("./types").ResolvedSchoolContent {
+  const variantKey = `${school.slug}:${stateCode}`;
+  const variant = variants.get(variantKey);
+  const state = stateReqs.get(stateCode);
+
+  const price =
+    variant?.priceOverride ??
+    ("price" in school ? (school as SchoolWithPrice).price : null) ??
+    school.genericPrice ??
+    null;
+
+  const hasFinalExam =
+    variant?.hasFinalExamOverride === "Yes" ? true :
+    variant?.hasFinalExamOverride === "No" ? false :
+    state?.hasFinalExam ?? true;
+
+  return {
+    oneLiner: variant?.oneLiner || school.tagline,
+    pros: variant?.pros?.length ? variant.pros : getProsForState(school, stateCode),
+    cons: variant?.cons?.length ? variant.cons : getConsForState(school, stateCode),
+    bestFor: variant?.bestFor || school.bestFor,
+    notFor: variant?.notFor || "",
+    officialTerm: state?.officialTerm ?? "Traffic School",
+    approvalBody: state?.approvalBodyShort ?? "State Approved",
+    mandatedHours: state?.mandatedHours ?? school.completionHours,
+    hasFinalExam,
+    ticketOutcome: state?.ticketOutcome ?? "Varies",
+    ticketOutcomeNote: state?.ticketOutcomeNote ?? "",
+    hasLessonTimers: state?.hasLessonTimers ?? false,
+    courtFeeRequired: state?.courtFeeRequired ?? false,
+    courtFeeNote: state?.courtFeeNote ?? "",
+    price,
+    priceDisplay: price !== null ? `$${price.toFixed(2)}` : "Check website",
   };
 }
 

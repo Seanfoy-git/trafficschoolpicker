@@ -23,7 +23,10 @@
     "scrape:reviews": "npx tsx scripts/scrape-reviews.ts",
     "scrape:prices": "npx tsx scripts/scrape-prices.ts",
     "enrich:places": "npx tsx scripts/enrich-places.ts",
-    "scrape:all": "npm run scrape:dmv && npm run scrape:reviews && npm run scrape:prices && npm run enrich:places"
+    "scrape:all": "npm run scrape:dmv && npm run scrape:reviews && npm run scrape:prices && npm run enrich:places",
+    "populate:state-reqs": "npx tsx scripts/populate-state-requirements.ts",
+    "generate:variants": "npx tsx scripts/generate-state-variants.ts",
+    "seed:safe2drive-ca": "npx tsx scripts/seed-safe2drive-ca.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.82.0",

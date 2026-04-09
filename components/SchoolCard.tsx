@@ -1,5 +1,5 @@
-import type { School, SchoolWithPrice } from "@/lib/types";
-import { getProsForState, getConsForState } from "@/lib/notion";
+import type { School, SchoolWithPrice, StateRequirement, SchoolStateVariant } from "@/lib/types";
+import { getProsForState, getConsForState, resolveStateContent } from "@/lib/notion";
 import { MultiRating, ReviewSynthesis } from "./MultiRating";
 import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
@@ -12,12 +12,20 @@ export function SchoolCard({
   rank,
   showProsAndCons = false,
   stateCode,
+  stateReqs,
+  variants,
 }: {
   school: School | SchoolWithPrice;
   rank?: number;
   showProsAndCons?: boolean;
   stateCode?: string;
+  stateReqs?: Map<string, StateRequirement>;
+  variants?: Map<string, SchoolStateVariant>;
 }) {
+  // Resolve state-specific content if we have the data
+  const resolved = stateCode && stateReqs && variants
+    ? resolveStateContent(school, stateCode, stateReqs, variants)
+    : null;
   // SchoolWithPrice has price directly; plain School needs no price display
   const hasPrice = "price" in school && school.price !== null;
   const amount = hasPrice ? (school as SchoolWithPrice).price : null;
@@ -43,13 +51,13 @@ export function SchoolCard({
             <RatingStars rating={school.rating} count={school.reviewCount ?? undefined} />
           ) : null}
 
-          {school.tagline && (
+          {(resolved?.oneLiner || school.tagline) && (
             <div className="mt-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">
                 In their own words
               </p>
               <p className="text-sm text-slate-600 italic">
-                &ldquo;{school.tagline}&rdquo;
+                &ldquo;{resolved?.oneLiner || school.tagline}&rdquo;
               </p>
             </div>
           )}
@@ -80,9 +88,8 @@ export function SchoolCard({
           )}
 
           {showProsAndCons && !school.synthesizedGood && (() => {
-            const sc = stateCode ?? "";
-            const pros = getProsForState(school, sc);
-            const cons = getConsForState(school, sc);
+            const pros = resolved?.pros ?? getProsForState(school, stateCode ?? "");
+            const cons = resolved?.cons ?? getConsForState(school, stateCode ?? "");
             return (pros.length > 0 || cons.length > 0) ? (
             <div className="grid sm:grid-cols-2 gap-4 mt-4">
               {pros.length > 0 && (
@@ -118,6 +125,12 @@ export function SchoolCard({
             </div>
             ) : null;
           })()}
+
+          {resolved?.bestFor && (
+            <div className="mt-3 text-xs text-slate-600">
+              <span className="font-semibold text-slate-700">Best for:</span> {resolved.bestFor}
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col items-end gap-3 sm:min-w-[160px]">
