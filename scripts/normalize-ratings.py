@@ -35,26 +35,40 @@ if not NOTION_TOKEN:
     sys.exit(1)
 
 
-def notion_request(method, path, body=None):
+import time
+
+def notion_request(method, path, body=None, retries=3):
     url = f"https://api.notion.com/v1{path}"
     data = json.dumps(body).encode() if body else None
-    req = urllib.request.Request(
-        url,
-        data=data,
-        method=method,
-        headers={
-            "Authorization": f"Bearer {NOTION_TOKEN}",
-            "Notion-Version": NOTION_VERSION,
-            "Content-Type": "application/json",
-        },
-    )
-    try:
-        with urllib.request.urlopen(req) as resp:
-            return json.loads(resp.read())
-    except urllib.error.HTTPError as e:
-        error_body = e.read().decode()
-        print(f"  Notion API error {e.code}: {error_body[:200]}")
-        return None
+    for attempt in range(retries):
+        req = urllib.request.Request(
+            url,
+            data=data,
+            method=method,
+            headers={
+                "Authorization": f"Bearer {NOTION_TOKEN}",
+                "Notion-Version": NOTION_VERSION,
+                "Content-Type": "application/json",
+            },
+        )
+        try:
+            with urllib.request.urlopen(req) as resp:
+                return json.loads(resp.read())
+        except urllib.error.HTTPError as e:
+            error_body = e.read().decode()
+            if e.code == 429 or e.code >= 500:
+                wait = (attempt + 1) * 2
+                print(f"  Retrying in {wait}s (HTTP {e.code})...")
+                time.sleep(wait)
+                continue
+            print(f"  Notion API error {e.code}: {error_body[:200]}")
+            return None
+        except (ConnectionResetError, urllib.error.URLError) as e:
+            wait = (attempt + 1) * 3
+            print(f"  Connection error, retrying in {wait}s: {e}")
+            time.sleep(wait)
+            continue
+    return None
 
 
 def get_number(props, field):
@@ -137,7 +151,13 @@ def main():
 
             print(f"{name:<35} {source_name:<12} {rating:>6.1f} {count:>8,} {normalized:>10.2f}")
 
+            # Skip if already has the same normalized rating
+            existing_norm = get_number(props, "Normalized Rating")
+            if existing_norm == normalized:
+                continue
+
             if not DRY_RUN:
+                time.sleep(0.4)  # Respect Notion rate limits
                 patch_resp = notion_request("PATCH", f"/pages/{page['id']}", {
                     "properties": {
                         "Normalized Rating": {"number": normalized}
