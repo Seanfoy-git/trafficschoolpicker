@@ -307,6 +307,14 @@ function mapSchool(page: PageObjectResponse): School {
   };
 }
 
+const MONETIZABLE_NETWORKS = ["CJ", "Impact", "ShareASale", "Direct", "Pending"];
+
+function isEligibleToShow(school: School): boolean {
+  if (!school.showOnSite) return false;
+  if (!MONETIZABLE_NETWORKS.includes(school.affiliateNetwork ?? "")) return false;
+  return true;
+}
+
 export async function getAllSchools(): Promise<School[]> {
   if (!process.env.NOTION_TOKEN || !SCHOOLS_DB) return [];
   try {
@@ -320,7 +328,7 @@ export async function getAllSchools(): Promise<School[]> {
       },
       sorts: [{ property: "Rating", direction: "descending" }],
     });
-    return (response.results as PageObjectResponse[]).map(mapSchool);
+    return (response.results as PageObjectResponse[]).map(mapSchool).filter(isEligibleToShow);
   } catch {
     return [];
   }
