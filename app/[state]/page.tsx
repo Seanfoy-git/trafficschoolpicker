@@ -219,6 +219,26 @@ export default async function StatePage({ params }: Props) {
         </section>
       )}
 
+      {/* STATE VIDEO EXPLAINER */}
+      {STATE_VIDEOS[stateSlug] && (
+        <section className="py-10 bg-white">
+          <div className="max-w-3xl mx-auto px-4">
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">
+              {stateMeta.name} Traffic School — Video Guide
+            </h2>
+            <div className="relative w-full overflow-hidden rounded-xl shadow-md" style={{ paddingBottom: "56.25%" }}>
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src={`https://www.youtube.com/embed/${STATE_VIDEOS[stateSlug]}`}
+                title={`${stateMeta.name} traffic school explainer`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* TIER 1 COMPARISON CARDS — only for online states */}
       {(onlineStatus === "Online — ticket dismissal" || onlineStatus === "Online — insurance discount only") &&
         tier1.length > 0 && (
@@ -367,26 +387,6 @@ export default async function StatePage({ params }: Props) {
                   <p className="text-sm text-slate-600">{stateInfo.notes}</p>
                 </div>
               )}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* STATE VIDEO EXPLAINER */}
-      {STATE_VIDEOS[stateSlug] && (
-        <section className="py-12 bg-slate-50">
-          <div className="max-w-3xl mx-auto px-4">
-            <h2 className="text-2xl font-bold text-slate-900 mb-4">
-              {stateMeta.name} Traffic School — Video Guide
-            </h2>
-            <div className="relative w-full overflow-hidden rounded-xl shadow-md" style={{ paddingBottom: "56.25%" }}>
-              <iframe
-                className="absolute inset-0 w-full h-full"
-                src={`https://www.youtube.com/embed/${STATE_VIDEOS[stateSlug]}`}
-                title={`${stateMeta.name} traffic school explainer`}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
             </div>
           </div>
         </section>
