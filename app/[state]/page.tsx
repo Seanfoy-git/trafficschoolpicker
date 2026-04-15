@@ -20,6 +20,7 @@ import { TrustBar } from "@/components/TrustBar";
 import { AffiliateButton } from "@/components/AffiliateButton";
 import { MultiRating } from "@/components/MultiRating";
 import { Badge } from "@/components/Badge";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ShieldCheck,
@@ -105,11 +106,20 @@ export default async function StatePage({ params }: Props) {
       {/* HERO */}
       <section className="bg-primary text-white py-12 md:py-16">
         <div className="max-w-5xl mx-auto px-4">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
-            {onlineStatus === "In-person only"
-              ? `Traffic School in ${stateMeta.name}`
-              : h1}
-          </h1>
+          <div className="flex items-center gap-4 mb-3">
+            <Image
+              src={`/flags/${stateSlug}.png`}
+              alt={`${stateMeta.name} state flag`}
+              width={64}
+              height={42}
+              className="rounded shadow-md border border-white/20 object-cover"
+            />
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+              {onlineStatus === "In-person only"
+                ? `Traffic School in ${stateMeta.name}`
+                : h1}
+            </h1>
+          </div>
           {onlineStatus === "Online — ticket dismissal" && schools.length > 0 && (
             <p className="text-lg text-slate-300 max-w-3xl">
               Comparing {schools.length} reviewed option
