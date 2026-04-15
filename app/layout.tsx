@@ -47,6 +47,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
+        <meta name="impact-site-verification" content="7773539a-3df5-43dd-82e7-8d322626aced" />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-18090793804"
           strategy="afterInteractive"
