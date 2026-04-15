@@ -35,6 +35,7 @@ import {
 // YouTube video IDs for state explainer videos — add new states as videos are published
 const STATE_VIDEOS: Record<string, string> = {
   "texas": "kLiynsBRIkc",
+  "california": "csik5zxdVDs",
 };
 
 export const revalidate = 86400;
