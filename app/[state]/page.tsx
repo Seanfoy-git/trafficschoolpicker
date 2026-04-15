@@ -106,13 +106,13 @@ export default async function StatePage({ params }: Props) {
       {/* HERO */}
       <section className="bg-primary text-white py-12 md:py-16">
         <div className="max-w-5xl mx-auto px-4">
-          <div className="flex items-center gap-4 mb-3">
+          <div className="flex items-center gap-5 mb-3">
             <Image
               src={`/flags/${stateSlug}.png`}
               alt={`${stateMeta.name} state flag`}
-              width={64}
-              height={42}
-              className="rounded shadow-md border border-white/20 object-cover"
+              width={80}
+              height={53}
+              className="hidden md:block rounded shadow-md border border-white/20 object-cover shrink-0"
             />
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
               {onlineStatus === "In-person only"
