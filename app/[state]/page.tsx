@@ -34,7 +34,7 @@ import {
 
 // YouTube video IDs for state explainer videos — add new states as videos are published
 const STATE_VIDEOS: Record<string, string> = {
-  "texas": "kLiynsBRIkc",
+  "texas": "jAH-kz9dhF0",
   "california": "kx_B0jgBjW4",
   "florida": "1zM7hwLvWPc",
   "new-york": "-eYzNko2dmQ",
