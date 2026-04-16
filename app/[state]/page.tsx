@@ -36,7 +36,7 @@ import {
 const STATE_VIDEOS: Record<string, string> = {
   "texas": "kLiynsBRIkc",
   "california": "csik5zxdVDs",
-  "florida": "QG12_HGlsAQ",
+  "florida": "1zM7hwLvWPc",
   "new-york": "-eYzNko2dmQ",
   "georgia": "VtNRogHhy_A",
 };
