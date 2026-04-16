@@ -36,6 +36,7 @@ import {
 const STATE_VIDEOS: Record<string, string> = {
   "texas": "kLiynsBRIkc",
   "california": "csik5zxdVDs",
+  "florida": "QG12_HGlsAQ",
 };
 
 export const revalidate = 86400;
