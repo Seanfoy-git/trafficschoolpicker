@@ -24,6 +24,9 @@ export function Header() {
           </span>
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm">
+          <Link href="/schools" className="hover:text-highlight transition-colors">
+            All Schools
+          </Link>
           <Link href="/about" className="hover:text-highlight transition-colors">
             How We Rank
           </Link>
