@@ -17,11 +17,7 @@ import { FaqSection } from "@/components/FaqSection";
 import { FAQJsonLd } from "@/components/SchoolFAQ";
 import { DirectoryTable } from "@/components/DirectoryTable";
 import { TrustBar } from "@/components/TrustBar";
-import { AffiliateButton } from "@/components/AffiliateButton";
-import { MultiRating } from "@/components/MultiRating";
-import { Badge } from "@/components/Badge";
 import Image from "next/image";
-import Link from "next/link";
 import {
   ShieldCheck,
   FileText,
@@ -104,8 +100,8 @@ export default async function StatePage({ params }: Props) {
 
   const seo = STATE_SEO[stateSlug];
   const onlineStatus = stateInfo?.onlineStatus ?? "Unknown";
+  // State grids are Tier 1 only. Tier 2 schools appear in the /schools directory only.
   const tier1 = schools.filter((s) => s.tier === 1);
-  const tier2 = schools.filter((s) => s.tier === 2);
   const year = new Date().getFullYear();
   const h1 = seo?.h1 ?? `Online Traffic Schools in ${stateMeta.name} (${year})`;
 
@@ -264,58 +260,6 @@ export default async function StatePage({ params }: Props) {
               We independently research and review all schools. We may earn a
               commission if you enroll via our links at no extra cost to you.
             </p>
-          </div>
-        </section>
-      )}
-
-      {/* TIER 2 — MORE OPTIONS */}
-      {(onlineStatus === "Online — ticket dismissal" || onlineStatus === "Online — insurance discount only") &&
-        tier2.length > 0 && (
-        <section className="py-12 bg-slate-50">
-          <div className="max-w-5xl mx-auto px-4">
-            <h2 className="text-2xl font-bold text-slate-900 mb-6">
-              More approved options in {stateMeta.name}
-            </h2>
-            <div className="space-y-3">
-              {tier2.map((school) => (
-                <div
-                  key={school.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white rounded-lg border border-slate-200 p-4"
-                >
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Link href={`/reviews/${school.slug}`} className="font-semibold text-slate-900 hover:text-accent">
-                        {school.name}
-                      </Link>
-                      {school.badge && <Badge type={school.badge} />}
-                    </div>
-                    {school.tagline && (
-                      <p className="text-sm text-slate-600 italic">
-                        &ldquo;{school.tagline}&rdquo;
-                      </p>
-                    )}
-                    {school.ratings.length > 0 && (
-                      <div className="mt-1">
-                        <MultiRating ratings={school.ratings} bbb={school.bbb} />
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-right">
-                      {school.price !== null ? (
-                        <div className="font-bold text-slate-900">${school.price.toFixed(2)}</div>
-                      ) : (
-                        <div className="text-xs text-slate-500">Check site</div>
-                      )}
-                      {school.priceNote && (
-                        <div className="text-xs text-slate-400">{school.priceNote}</div>
-                      )}
-                    </div>
-                    <AffiliateButton school={school} variant="secondary" />
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
       )}

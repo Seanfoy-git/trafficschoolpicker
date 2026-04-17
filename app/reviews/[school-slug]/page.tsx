@@ -270,10 +270,12 @@ export default async function ReviewPage({ params }: Props) {
                   <Clock className="w-4 h-4 text-slate-400" /> {school.completionHours} hours to complete
                 </li>
               )}
-              <li className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-slate-400" />
-                {school.stateCodes.includes("all") ? "All 50 states" : `${school.stateCodes.length} states`}
-              </li>
+              {school.stateCodes.length > 0 && (
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-slate-400" />
+                  {school.stateCodes.includes("all") ? "All 50 states" : `${school.stateCodes.length} states`}
+                </li>
+              )}
               {school.moneyBackGuarantee && (
                 <li className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-slate-400" /> Money-back guarantee
