@@ -304,6 +304,9 @@ function mapSchool(page: PageObjectResponse): School {
     lastVerified: getDate(page, "Last Verified"),
     genericPrice: getNumber(page, "Price"),
     statePrices: buildStatePrices(page),
+    trackingMethod: getSelect(page, "Tracking Method") as School["trackingMethod"],
+    partnerSlug: getText(page, "Partner Slug"),
+    couponCode: getText(page, "Coupon Code"),
   };
 }
 

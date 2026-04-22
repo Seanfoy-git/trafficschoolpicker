@@ -80,6 +80,10 @@ export type School = {
   lastVerified: string | null;
   genericPrice: number | null;  // "Price" field from Traffic Schools DB — fallback when no state-specific price
   statePrices: Partial<Record<string, number>>;  // per-state price columns: { CA: 24.95, TX: 19.95, ... }
+  // Tracking method routing
+  trackingMethod: 'network' | 'direct' | 'coupon_code' | null;
+  partnerSlug: string;      // used when trackingMethod = 'direct'
+  couponCode: string;       // used when trackingMethod = 'coupon_code'
 };
 
 // ─── School × State Pricing DB ──────────────────────────────
