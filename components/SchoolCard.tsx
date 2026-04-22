@@ -3,6 +3,7 @@ import { MultiRating } from "./MultiRating";
 import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
 import { AffiliateButton } from "./AffiliateButton";
+import { CouponCode } from "./CouponCode";
 import { Clock, CheckCircle, Smartphone, ThumbsUp, ThumbsDown } from "lucide-react";
 import Link from "next/link";
 
@@ -142,6 +143,10 @@ export function SchoolCard({
           </div>
 
           <AffiliateButton school={school} />
+
+          {school.trackingMethod === "coupon_code" && school.couponCode && (
+            <CouponCode code={school.couponCode} />
+          )}
 
           <Link
             href={`/reviews/${school.slug}`}
