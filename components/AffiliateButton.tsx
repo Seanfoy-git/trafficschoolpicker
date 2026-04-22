@@ -2,19 +2,34 @@
 
 import { ExternalLink } from "lucide-react";
 import type { School, SchoolWithPrice } from "@/lib/types";
+import { buildAffiliateLink } from "@/lib/affiliate";
 
 export function AffiliateButton({
   school,
   variant = "primary",
+  stateCode,
 }: {
   school: School | SchoolWithPrice;
   variant?: "primary" | "secondary";
+  stateCode?: string;
 }) {
-  // Priority: state-specific affiliate URL > school default > website
   const stateUrl = "stateAffiliateUrl" in school ? school.stateAffiliateUrl : null;
-  const affiliateUrl = stateUrl || school.affiliateUrl;
-  const hasAffiliate = affiliateUrl.length > 0;
-  const url = hasAffiliate ? affiliateUrl : school.website;
+  const networkUrl = stateUrl || school.affiliateUrl;
+  const hasAffiliate = Boolean(networkUrl);
+
+  const { href, rel, target } = buildAffiliateLink({
+    school: { slug: school.slug, name: school.name },
+    affiliateProgram: {
+      trackingMethod: school.trackingMethod,
+      networkUrl,
+      partnerSlug: school.partnerSlug,
+      couponCode: school.couponCode,
+      destinationUrl: school.website,
+    },
+    stateCode,
+    sourcePageId: school.id,
+  });
+
   const label = hasAffiliate ? "Enroll Now" : "Visit Website";
 
   const baseClasses =
@@ -26,13 +41,9 @@ export function AffiliateButton({
 
   return (
     <a
-      href={url}
-      target="_blank"
-      rel={
-        hasAffiliate
-          ? "noopener noreferrer nofollow sponsored"
-          : "noopener noreferrer"
-      }
+      href={href}
+      target={target}
+      rel={hasAffiliate ? `noopener noreferrer ${rel}` : "noopener noreferrer"}
       className={`${baseClasses} ${variantClasses}`}
     >
       {label} <ExternalLink className="w-4 h-4" />
