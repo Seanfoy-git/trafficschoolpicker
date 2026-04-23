@@ -36,6 +36,7 @@ const STATE_VIDEOS: Record<string, string> = {
   "new-york": "-eYzNko2dmQ",
   "georgia": "VtNRogHhy_A",
   "ohio": "IlMoa1atiBY",
+  "arizona": "udlHdWl1cdM",
 };
 
 export const revalidate = 86400;
