@@ -1,937 +1,1264 @@
-# TrafficSchoolPicker.com — Complete Technical Documentation
+# trafficschoolpicker.com — System Documentation
 
-Last updated: April 7, 2026
+> **Last updated**: 2026-05-01
+> **Live site**: https://www.trafficschoolpicker.com
+> **Repo**: https://github.com/Seanfoy-git/trafficschoolpicker
+
+This is the comprehensive reference for the codebase, data model, content
+pipeline, and operational practices behind trafficschoolpicker.com. It covers
+*how* the system works **and the design decisions behind it** — both are
+important when deciding how to extend or modify it.
 
 ---
 
 ## Table of Contents
 
-1. [Project Overview](#1-project-overview)
-2. [Tech Stack](#2-tech-stack)
-3. [Architecture Overview](#3-architecture-overview)
-4. [Database Architecture](#4-database-architecture)
-5. [Data Flow](#5-data-flow)
-6. [Page Structure](#6-page-structure)
-7. [Components](#7-components)
-8. [SEO Implementation](#8-seo-implementation)
-9. [LLM Optimization](#9-llm-optimization)
-10. [FAQ System](#10-faq-system)
-11. [Blog System](#11-blog-system)
-12. [Scraper Pipeline](#12-scraper-pipeline)
-13. [Review Aggregation](#13-review-aggregation)
-14. [Pricing System](#14-pricing-system)
-15. [Affiliate Link Handling](#15-affiliate-link-handling)
-16. [Admin Dashboard](#16-admin-dashboard)
-17. [Issue Tracking](#17-issue-tracking)
-18. [Environment Variables](#18-environment-variables)
-19. [Deployment](#19-deployment)
-20. [Admin Guide — Day-to-Day Operations](#20-admin-guide)
-21. [Maintenance Checklists](#21-maintenance-checklists)
+1. [What this site is](#1-what-this-site-is)
+2. [Tech stack](#2-tech-stack)
+3. [Repository structure](#3-repository-structure)
+4. [Data architecture — the eight Notion databases](#4-data-architecture--the-eight-notion-databases)
+5. [Three-layer state-aware rendering](#5-three-layer-state-aware-rendering)
+6. [The affiliate gate and tracking method system](#6-the-affiliate-gate-and-tracking-method-system)
+7. [Frontend pages and routing](#7-frontend-pages-and-routing)
+8. [Components reference](#8-components-reference)
+9. [The scraping pipeline](#9-the-scraping-pipeline)
+10. [Multi-source review aggregation](#10-multi-source-review-aggregation)
+11. [Bayesian normalized rating](#11-bayesian-normalized-rating)
+12. [AI editorial generation](#12-ai-editorial-generation)
+13. [Video embeds](#13-video-embeds)
+14. [SEO and AI discoverability](#14-seo-and-ai-discoverability)
+15. [Build and deploy](#15-build-and-deploy)
+16. [GitHub Actions monthly refresh](#16-github-actions-monthly-refresh)
+17. [Environment variables](#17-environment-variables)
+18. [Maintenance playbook](#18-maintenance-playbook)
+19. [Design and operating decisions](#19-design-and-operating-decisions)
+20. [Known issues and future work](#20-known-issues-and-future-work)
 
 ---
 
-## 1. Project Overview
+## 1. What this site is
 
-TrafficSchoolPicker.com is a comparison site that helps US drivers find court-approved online traffic schools. It compares schools by price, ratings, and features across all 50 states.
+**trafficschoolpicker.com** is a comparison and affiliate review site for online
+traffic schools across all 50 US states. The product is editorial: we research
+each school, gather independent ratings from multiple platforms, write
+state-specific pros/cons, and earn affiliate revenue when a visitor enrolls
+through our links.
 
-**Revenue model:** Affiliate commissions from school enrollments, with transparent disclosure.
+### Business model
 
-**Key metrics:**
-- 50 state pages (each with unique SEO-optimized content)
-- 12 curated Tier 1/2 schools with multi-platform ratings
-- 2,000+ DMV-scraped directory schools across 18 states
-- 9 blog posts optimized for search and AI citation
-- 27 states with verified FAQ facts (137 facts total)
-- Automated monthly data refresh pipeline with issue tracking
+- Affiliate commissions paid by traffic school operators when a referred user
+  enrolls. Networks include CJ, Impact, ShareASale, and direct relationships.
+- Some schools route through a **direct tracking host** (`track.trafficschoolpicker.com`)
+  rather than a network — see [§6](#6-the-affiliate-gate-and-tracking-method-system).
+
+### Target visitor
+
+A driver who just got a ticket. They are stressed, time-pressured, and
+comparison-shopping under a court deadline. The site is built around their
+mental model: "what state am I in, what are my options, what's the cheapest
+legitimate option, and how do I enroll?"
+
+### Content tiers
+
+Every school has a **Tier**:
+- **Tier 1 (Featured)** — appears as a comparison card on the relevant state
+  page. We have an active or in-progress affiliate relationship and editorial
+  endorsement. State pages render Tier 1 only.
+- **Tier 2 (Listed)** — appears in [/schools](https://www.trafficschoolpicker.com/schools)
+  and on individual `/reviews/[slug]` detail pages. Not surfaced on state
+  comparison grids. Still subject to the affiliate gate (must have a monetizable
+  network field).
+
+A school that fails the affiliate gate (Network = Unknown or empty) is not
+rendered anywhere on the site.
 
 ---
 
-## 2. Tech Stack
+## 2. Tech stack
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| Framework | Next.js 16.2.2 (App Router) | Server-rendered React with ISR |
-| Language | TypeScript (strict mode) | Type safety across the codebase |
-| Styling | Tailwind CSS v4 | Utility-first CSS |
-| Database | Notion API (6 databases) | Headless CMS — no admin panel to build |
-| Blog | MDX files in repo | Static blog content with React components |
-| Scraping | Playwright | Browser automation for DMV sites, pricing pages |
-| AI | Claude Sonnet 4.6 (Anthropic API) | Review synthesis from Trustpilot snippets |
-| Reviews | Trustpilot, Google Places, BBB, App Store, Play Store | Multi-platform rating aggregation |
-| Hosting | Vercel | Automatic deploys, ISR, edge functions |
-| DNS/CDN | Cloudflare | DNS, SSL, redirect rules (non-www → www) |
-| CI/CD | GitHub Actions | Monthly automated scraping pipeline |
-| Icons | Lucide React | Consistent SVG icon set |
-| Images | Sharp | Image optimization |
+| Layer | Choice | Notes |
+|---|---|---|
+| Framework | Next.js 16.2.2 App Router | ISR with 24h revalidation on most pages |
+| Language | TypeScript (strict) | All app, lib, and scripts code |
+| Styling | Tailwind CSS v4 | Custom design tokens via `globals.css` |
+| Hosting | Vercel | Auto-deploy on push to `main` |
+| CMS | Notion API v2 (`@notionhq/client@^2.3.0`) | 8 databases (see §4) |
+| Editorial AI | Claude Sonnet 4.6 (`@anthropic-ai/sdk`) | Per-school×state variant generation |
+| Scraping | Playwright | Headless Chromium for DMV/review/price scrapes |
+| PDF parsing | `pdf-parse@1.1.1` | OK / MN / WY / RI directory PDFs |
+| Google Places | Places API (New) | School website enrichment + ratings |
+| App store data | iTunes Lookup API + `google-play-scraper` | Mobile app ratings |
+| Blog | MDX via `@next/mdx` | 9 long-form posts in `content/blog/` |
+| Analytics | Google Tag (gtag.js, `AW-18090793804`) | Loaded `afterInteractive` from layout |
+| Verification | Impact site verification meta tag | For Impact affiliate network |
+
+### Why Next.js 16 + ISR
+
+Each state page is heavy to render (multiple parallel Notion queries, state
+variants, reviews, FAQs, directory). Server-render at build time + revalidate
+every 24h gives instant page loads and fresh data without per-request latency.
+
+### Why Notion as CMS
+
+Sean (editorial owner) maintains content directly in Notion. The alternative
+was Postgres + an admin panel, which is meaningfully more code for a one-person
+editorial team. The tradeoff: Notion API is slow (~500ms per query) so we batch
+fetches in `Promise.all` and cache via ISR, and joins happen in application
+code rather than SQL.
 
 ---
 
-## 3. Architecture Overview
+## 3. Repository structure
 
 ```
-┌───────────────────────────────────────────────────────────────┐
-│                    NOTION (6 Databases)                        │
-│                                                               │
-│  Traffic Schools    School Directory    States                │
-│  (12 curated)      (2,000+ scraped)    (50 rows)            │
-│                                                               │
-│  School Pricing    State FAQs          Issues                │
-│  (school×state)    (137 verified)      (scraper tracking)    │
-└────────────┬──────────────────────────────────┬───────────────┘
-             │ Notion API (lib/notion.ts)       │
-             ▼                                  ▼
-┌───────────────────────────────────────────────────────────────┐
-│                    NEXT.JS APP                                │
-│                                                               │
-│  50 State Pages (ISR 24h)  │  9 Blog Posts (MDX, static)    │
-│  12 Review Pages (ISR 24h) │  Homepage (ISR 24h)            │
-│  Admin Dashboard (dynamic) │  API Routes (click tracking)   │
-│                                                               │
-│  SEO: JSON-LD schema, OG tags, canonical URLs, sitemap.xml  │
-│  LLM: llms.txt, llms-full.txt (auto-generated)              │
-└───────────────────────────────────────────────────────────────┘
-             │
-             ▼
-┌───────────────────────────────────────────────────────────────┐
-│  AUTOMATED PIPELINE (Monthly GitHub Actions)                  │
-│                                                               │
-│  1. Scrape 18 state DMV sources → Notion Directory           │
-│     (8 dedicated scripts + 1 generic config-driven scraper)  │
-│  2. Scrape Trustpilot/BBB/App Store/Play Store → Schools DB  │
-│  3. Scrape school pricing pages → Pricing DB                 │
-│  4. Enrich directory via Google Places API                    │
-│  5. Log failures to Issues DB                                │
-│  6. Trigger Vercel redeploy                                  │
-└───────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 4. Database Architecture
-
-### 4.1 Traffic Schools DB (NOTION_SCHOOLS_DB)
-
-The editorial database for curated schools. You manage this manually in Notion.
-
-| Field | Type | Purpose |
-|-------|------|---------|
-| School Name | title | Display name |
-| Slug | text | URL slug (e.g. "idrivesafely") |
-| Tier | select | "1 - Featured" or "2 - Listed" |
-| Status | select | "Active" / "Needs Research" / "Inactive" |
-| Show On Site | checkbox | Must be true to appear on the site |
-| Badge | select | "Best Value" / "Top Rated" / "Editors Choice" / "Fastest" |
-| Website | url | School's official website |
-| Affiliate URL | url | Default affiliate tracking link |
-| State Codes | text | "all" or "CA,TX,FL" (comma-separated) |
-| Price | number | Generic/default price (fallback when no state-specific price) |
-| Rating | number | Trustpilot star rating |
-| Review Count | number | Trustpilot review count |
-| Google Rating | number | Google Places rating |
-| Google Review Count | number | Google review count |
-| Google Place ID | text | Stored for reliable lookups |
-| Google Place Confidence | select | "Verified" / "Auto-matched" / "Wrong match" |
-| BBB Grade | select | "A+" through "F" or "NR" |
-| App Store Rating | number | iOS App Store rating |
-| Play Store Rating | number | Google Play rating |
-| Review Highlights Good | text | Claude-synthesized positive summary |
-| Review Highlights Bad | text | Claude-synthesized negative summary |
-| One Liner | text | Provider's own description (shown in quotes as "In their own words") |
-| Pros | text | Manual editorial pros (one per line) |
-| Cons | text | Manual editorial cons (one per line) |
-| Pros {STATE} | text | State-specific pros (e.g. "Pros GA") — optional, falls back to generic |
-| Cons {STATE} | text | State-specific cons (e.g. "Cons GA") — optional, falls back to generic |
-| Best For | text | "Budget-conscious drivers in CA/FL" |
-| Completion Time (hrs) | number | Course duration |
-| Mobile App | checkbox | Has dedicated mobile app |
-| Money Back Guarantee | checkbox | Offers guarantee |
-| Founded | number | Year established |
-
-**Trend fields** (Trustpilot Trend, Google Trend, App Store Trend, Play Store Trend):
-- "↑ Improving" / "= Stable" / "↓ Declining"
-- Calculated by the review scraper each run
-
-**State-specific Pros/Cons:**
-- Add fields like "Pros GA", "Cons OH" to the Notion schema as needed
-- The code reads `Pros {STATE_CODE}` for all 29 active states
-- Fallback: if no state-specific field exists or is empty, generic Pros/Cons renders
-- Example: "Cons GA" can contain "Not accepted for DDS 6-hour point reduction"
-
-### 4.2 School Directory DB (NOTION_DIRECTORY_DB)
-
-DMV-scraped official school listings. Populated entirely by scrapers across 18 states.
-
-| Field | Type | Purpose |
-|-------|------|---------|
-| School Name | title | Official DMV name |
-| License Number | text | State license ID (e.g. "E1988", "DI200066") |
-| State | select | "California" / "Texas" / "Georgia" etc. |
-| Phone | text | Contact number |
-| Address | text | Physical address or delivery method |
-| Website | url | Enriched via Google Places |
-| Online Available | checkbox | Offers online courses |
-| Source | select | "CA DMV" / "TX TDLR" / "GA DDS" / "OH DPS" etc. |
-| Date Scraped | date | Last scrape timestamp |
-| Notes | text | Additional info (e.g. county restrictions) |
-
-**Current directory coverage (2,023 schools):**
-
-| State | Schools | Source | Scraper |
-|---|---|---|---|
-| TX | 829 | TX TDLR | `scrape-tx-tdlr.ts` (CSV) |
-| AZ | 527 | AZ Courts | `scrape-az-courts.ts` (dropdown extraction) |
-| CA | 204 | CA DMV | `scrape-ca-dmv.ts` (Playwright/Salesforce) |
-| GA | 100 | GA DDS | `scrape-ga-dds.ts` (Playwright/form) |
-| NE | 89 | NE DMV | `scrape-states.ts` (generic) |
-| NJ | 86 | NJ MVC | `scrape-states.ts` (generic) |
-| TN | 25 | TN Safety | `scrape-states.ts` (generic) |
-| OH | 25 | OH DPS | `scrape-oh-dps.ts` (Playwright/dropdown) |
-| NV | 25 | NV DMV | `scrape-states.ts` (generic) |
-| NY | 24 | NY DMV | `scrape-ny-dmv.ts` (Playwright/tables) |
-| CT | 22 | CT DMV | `scrape-states.ts` (generic) |
-| FL | 19 | FL DHSMV | `scrape-fl-dhsmv.ts` (Playwright/table) |
-| OR | 11 | OR ODOT | `scrape-states.ts` (generic) |
-| MD | 10 | MD MVA | `scrape-states.ts` (generic) |
-| VA | 10 | VA DMV | `scrape-va-dmv.ts` (Playwright/Drupal) |
-| WA | 9 | WA DOL | `scrape-states.ts` (generic) |
-| ND | 7 | ND HP | `scrape-states.ts` (generic) |
-| SC | 1 | SC DMV | `scrape-states.ts` (generic) |
-
-### 4.3 States DB (NOTION_STATES_DB)
-
-One row per state (50 rows). Populated manually.
-
-| Field | Type | Purpose |
-|-------|------|---------|
-| State Name | title | "California" |
-| Abbreviation | text | "CA" (the join key used everywhere) |
-| Online Allowed | checkbox | Can you do traffic school online? |
-| Online Dismisses Ticket | checkbox | Does online school dismiss the ticket? |
-| Insurance Discount Available | checkbox | Available for insurance discount? |
-| DMV URL | url | Link to state DMV traffic school page |
-| Minimum Hours | number | State-mandated minimum course length |
-| Certificate Submission | select | "Electronic" / "Mail to Court" / "Driver Submits" |
-| Eligibility Requirements | text | Who qualifies |
-| Court Acceptance Notes | text | Which courts accept online |
-| Research Notes | text | Internal editorial notes |
-| Status | select | "Research Complete" / "In Progress" / "Not Started" |
-
-**Online status derivation logic:**
-```
-If Online Allowed AND Online Dismisses Ticket → "Online — ticket dismissal"
-If Online Allowed AND Insurance Discount → "Online — insurance discount only"
-If NOT Online Allowed → "In-person only"
-Otherwise → "Unknown"
-```
-
-### 4.4 School Pricing DB (NOTION_PRICING_DB)
-
-One row per school×state combination. Created by the price scraper.
-
-| Field | Type | Purpose |
-|-------|------|---------|
-| Label | title | "{slug}-{state}" e.g. "idrivesafely-CA" |
-| School | relation | Links to Traffic Schools DB |
-| State Code | text | "CA", "TX" etc. |
-| Price | number | Current price in dollars |
-| Original Price | number | Pre-discount price (for strikethrough) |
-| Approved | checkbox | Manually verified as court-approved |
-| Affiliate URL | url | State-specific affiliate link override |
-| Price Note | text | "Includes state fee" etc. |
-| Price Scrape Status | select | "OK" / "Changed" / "Failed" / "Blocked" |
-| Last Scraped | date | Timestamp |
-
-### 4.5 State FAQs DB (NOTION_FAQ_DB_ID)
-
-Per-state FAQ facts. Populated manually, rendered on state pages.
-
-| Field | Type | Purpose |
-|-------|------|---------|
-| Name | title | "California — Course Length" (human label) |
-| State | text | "California" |
-| State Code | text | "california" (matches URL slug) |
-| Question | text | The FAQ question |
-| Answer | text | The full answer |
-| Key Fact | text | One-line summary (used in llms-full.txt) |
-| Status | select | "Verified" / "Needs Review" / "Outdated" / "Needs Research" |
-| Source URL | url | Official DMV/court source |
-
-**Only rows with Status = "Verified" appear on the live site.**
-
-### 4.6 Issues DB (NOTION_ISSUES_DB) — Optional
-
-Tracks scraper problems for triage. Created automatically by scraper runs.
-
-| Field | Type | Purpose |
-|-------|------|---------|
-| Title | title | "Trustpilot blocked for iDriveSafely" |
-| Source | select | "Trustpilot" / "Google" / "BBB" / "App Store" / "Play Store" / "Price Scraper" / "DMV Scraper" |
-| Severity | select | "Critical" / "Warning" / "Info" |
-| School | text | School name or slug |
-| Status | select | "Open" / "In Progress" / "Resolved" / "Won't Fix" |
-| Details | text | Full error message or context |
-| First Seen | date | When the issue first appeared |
-| Last Seen | date | Updated each time the issue recurs |
-| Occurrences | number | How many times this has happened |
-
-If `NOTION_ISSUES_DB` is not set, issues log to console only — no crash.
-
----
-
-## 5. Data Flow
-
-### How data gets to the site
-
-```
-18 State DMV websites ──→ 8 dedicated + 1 generic scraper ──→ Notion Directory DB
-Trustpilot/BBB/etc ─────→ Review scraper (Playwright) ──────→ Notion Schools DB
-School pricing pages ───→ Price scraper (Playwright) ────────→ Notion Pricing DB
-Manual research ────────→ Admin edits in Notion ─────────────→ States DB + FAQs DB
-Scraper failures ───────→ Issue tracker ─────────────────────→ Issues DB
-```
-
-### How a state page loads
-
-1. User visits `/california`
-2. Next.js checks ISR cache (valid for 24h)
-3. If stale, fetches in parallel:
-   - `getSchoolPricingForState("CA")` → Schools DB + Pricing DB
-   - `getStateInfo("CA")` → States DB
-   - `getDirectoryForState("California")` → Directory DB
-   - `getNotionStateFaqs("california")` → FAQs DB
-4. Renders page with state-specific data
-5. Caches result for next 24h
-
-### Price display fallback chain
-
-1. State-specific price from Pricing DB (e.g. `idrivesafely-CA: $29`)
-2. Generic Price from Traffic Schools DB (e.g. `$24.95`)
-3. "Check website" — only if both are null
-
-### Pros/Cons fallback chain
-
-1. State-specific field (e.g. `Pros GA`) if populated in Notion
-2. Generic `Pros` field
-3. Synthesized "What reviewers say" block (from Claude) if available
-
-### How data stays fresh
-
-- **ISR**: Pages auto-refresh every 24 hours
-- **Monthly pipeline**: GitHub Actions runs all scrapers on the 1st
-- **Manual deploy**: Admin clicks "Trigger Redeploy" at `/admin`
-- **Notion edit**: Change a field in Notion → visible within 24h (or immediate after redeploy)
-- **Preserve-previous-score**: If a source fails, previous data stays — never overwritten with null
-
----
-
-## 6. Page Structure
-
-### Homepage (`/`)
-- Hero with state selector dropdown
-- "How It Works" 3-step section
-- Top Tier 1 school picks
-- "Why Trust Us" editorial block
-- 50-state clickable grid
-- FAQ accordion with JSON-LD
-
-### State Pages (`/[state]`)
-Content varies by online status:
-
-**"Online — ticket dismissal"** (CA, TX, FL, NY, AZ, GA, OH, etc.):
-1. Hero with school count
-2. Georgia-specific callout (if `/georgia` — DDS point reduction limitation)
-3. Tier 1 comparison cards (full detail, multi-platform ratings, state-specific pros/cons, price, CTA)
-4. Tier 2 "More options" compact rows
-5. State rules & requirements (eligibility, court process, DMV link)
-6. FAQ accordion with JSON-LD
-7. Full directory table (searchable, all DMV-licensed schools)
-
-**"Online — insurance discount only"** (WA):
-- Same as above but with amber warning banner
-
-**"In-person only"** (MA, OR, WY):
-- Message: "Online traffic school isn't available"
-- Link to state DMV
-- Directory table still shows (physical schools)
-
-**"Unknown"** (remaining states):
-- Neutral holding page
-- Suggests contacting court directly
-
-### Review Pages (`/reviews/[slug]`)
-- Header: name, badge, multi-platform ratings with trends
-- Quick summary: best for, pros/cons or synthesized highlights
-- Pricing: "Varies by state" (no hardcoded price — directs to state page)
-- Feature comparison table vs competitors
-- Verdict + CTA
-- Sidebar: sticky enroll button, ratings, features
-
-### Blog (`/blog` and `/blog/[slug]`)
-- Listing page: all published posts sorted by date
-- Post pages: MDX content with QuickAnswer block, JSON-LD Article schema
-- Custom components: QuickAnswer (styled answer box), styled tables/headings
-
-### Admin (`/admin`)
-- School counts (total, tier 1, tier 2, missing affiliates)
-- Directory counts by state
-- Environment variable health checks
-- "Trigger Redeploy" button
-- "Open Notion" link
-
----
-
-## 7. Components
-
-| Component | Type | Purpose |
-|-----------|------|---------|
-| `SchoolCard` | Server | Full comparison card with ratings, state-specific price/pros/cons, "In their own words" tagline |
-| `ComparisonTable` | Client | Sortable comparison table (by price, rating, time) |
-| `MultiRating` | Server | Shows Trustpilot + Google + App Store + Play Store + BBB badges with trend arrows |
-| `MultiRatingCompact` | Server | Condensed version for table rows |
-| `ReviewSynthesis` | Server | "What reviewers say" good/bad block (Claude-generated) |
-| `AffiliateButton` | Client | Enroll Now / Visit Website CTA (priority: state URL > default > website) |
-| `StateSelector` | Client | Dropdown of 50 states, navigates on change |
-| `DirectoryTable` | Client | Searchable table of DMV-licensed schools |
-| `FaqSection` | Server | Accordion FAQ with JSON-LD schema (Notion-powered) |
-| `SchoolFAQ` | Server | Legacy FAQ component (static fallback) |
-| `Badge` | Server | "Best Value" / "Top Rated" etc. colored badges |
-| `RatingStars` | Server | 5-star visual rating with count |
-| `TrustBar` | Server | Trust indicators strip |
-| `Header` | Server | Nav bar with logo, links, state selector |
-| `Footer` | Server | Links, popular states, legal disclosure |
-| `BlogMdxComponents` | Server | Custom MDX components (QuickAnswer, tables, links) |
-
----
-
-## 8. SEO Implementation
-
-### Centralised SEO Config (`lib/seo-config.ts`)
-
-Every page's metadata is defined in one file:
-- `STATE_SEO`: 24 states with custom titles, descriptions, H1s, primary keywords
-- `HOME_SEO`: Homepage metadata
-- `BLOG_SEO`: 9 blog posts with SEO metadata
-- States without custom SEO get a dynamic fallback
-
-### Rules enforced:
-- One primary keyword per page (never duplicated)
-- Title max 60 characters, description max 155
-- Layout template auto-appends "| TrafficSchoolPicker"
-- Canonical URLs use `www.trafficschoolpicker.com`
-- Every page has OG + Twitter card tags
-- Exactly one H1 per page (from seo-config, not hardcoded)
-- `validateSeoConfig()` warns in dev if limits exceeded
-
-### JSON-LD Schema:
-- **FAQPage** on state pages (from Notion or static fallback)
-- **Article** on blog posts
-- **Review** on school review pages
-
-### Sitemap (`/sitemap.xml`)
-Auto-generated from:
-- All 50 state slugs
-- All blog posts in `BLOG_SEO`
-- Static pages (homepage, about, blog index)
-
-### Robots (`/robots.txt`)
-- Allow all
-- Disallow `/api/` and `/_next/`
-- Points to sitemap
-
----
-
-## 9. LLM Optimization
-
-### `public/llms.txt`
-Static file describing the site for AI crawlers:
-- What the site covers
-- Links to all state pages, blog posts, school reviews
-- Key facts for AI responses (course lengths, dismissal mechanisms, prices)
-
-### `public/llms-full.txt`
-Auto-generated at build time from Notion FAQ database:
-- Per-state structured facts (question, answer, key fact)
-- 27 states, 137 verified facts (regenerated every deploy)
-- Regenerated on every `npm run build` via prebuild script
-
-### Blog posts
-- Every post starts with a `<QuickAnswer>` block — a concise 1-2 sentence answer
-- Styled distinctly for visual + machine readability
-- Tables with structured data for extraction
-- Definitive factual statements (no hedging)
-
----
-
-## 10. FAQ System
-
-### Two-layer approach:
-1. **Notion FAQs** (primary): Fetched live from `NOTION_FAQ_DB_ID`, filtered by State Code + Status = "Verified"
-2. **Static fallback** (`lib/state-faqs.ts`): Hardcoded FAQs for CA, TX, FL + generic defaults
-
-### On each state page:
-- Notion FAQs attempted first
-- If none returned (DB not configured, state not populated), falls back to static
-- FAQs rendered as accessible `<details>` accordion
-- JSON-LD FAQPage schema injected for Google featured snippets
-
-### Managing FAQs:
-- Add/edit rows in Notion FAQ database
-- Set Status = "Verified" to publish
-- Set Status = "Needs Review" to hide from site
-- State Code must match URL slug exactly (lowercase, hyphenated)
-
----
-
-## 11. Blog System
-
-### Content storage:
-- 9 MDX files in `content/blog/`
-- Each has frontmatter: title, description, publishedAt, updatedAt, slug, primaryKeyword, published
-- Content is React-compatible Markdown with custom components
-
-### Custom components (via BlogMdxComponents):
-- `<QuickAnswer>`: Styled answer block at top of every post
-- Custom `<a>`: Internal links use Next.js `<Link>`, external links open in new tab
-- Styled tables, headings (h2, h3)
-
-### Publishing a new post:
-1. Create `content/blog/[slug].mdx` with `published: true`
-2. Add SEO entry to `BLOG_SEO` in `lib/seo-config.ts`
-3. Add URL to `public/llms.txt`
-4. Commit and deploy
-
----
-
-## 12. Scraper Pipeline
-
-### Config-driven architecture
-
-All state scrapers are registered in `scripts/config/state-sources.ts`. Each entry defines:
-- State code, name, source label
-- Method: `playwright`, `csv`, `static-html`, or `manual`
-- URL and enabled flag
-- Notes for documentation
-
-To add a new state scraper: add an entry to `state-sources.ts`, set `enabled: true`. For simple static-HTML pages, no new script file is needed — the generic scraper handles it.
-
-### Dedicated scrapers (8 scripts)
-
-| Script | State | Method | Schools |
-|--------|-------|--------|---------|
-| `scrape-ca-dmv.ts` | CA | Playwright (Salesforce Lightning) | 204 |
-| `scrape-tx-tdlr.ts` | TX | CSV download | 829 |
-| `scrape-fl-dhsmv.ts` | FL | Playwright (static table) | 19 |
-| `scrape-ny-dmv.ts` | NY | Playwright (tables, needs User-Agent) | 24 |
-| `scrape-az-courts.ts` | AZ | Playwright (dropdown extraction) | 527 |
-| `scrape-va-dmv.ts` | VA | Playwright (Drupal paginated) | 10 |
-| `scrape-oh-dps.ts` | OH | Playwright (DataTables dropdown) | 25 |
-| `scrape-ga-dds.ts` | GA | Playwright (form, text parsing) | 100 |
-
-### Generic scraper (`scrape-states.ts`)
-
-Handles all enabled `static-html` states automatically:
-- NV (25), NJ (86), WA (9), NE (89), CT (22), ND (7), MD (10), OR (11), TN (25), SC (1)
-
-Run specific states: `npx tsx scripts/scrape-states.ts NV NJ WA`
-
-### States not yet automated
-
-| Status | States |
-|--------|--------|
-| PDF-only (manual entry) | IL, OK, MN, ID, NC, WY, RI |
-| WAF blocked | IL (Akamai) |
-| No public list | CO, PA, MI, MO, LA, WI, KS, IN, DE, NM, KY, AL, AR, HI, IA, MS, MT, SD, WV |
-
-### Monthly workflow (`.github/workflows/monthly-update.yml`)
-Runs on the 1st of every month at 9am UTC (or manual trigger).
-
-| Step | Command | What it does |
-|------|---------|-------------|
-| 1 | `scrape:dmv` | All 8 dedicated scripts + generic scraper |
-| 2 | `scrape:reviews` | Trustpilot (Playwright), Google, BBB, App Store, Play Store |
-| 3 | `scrape:prices` | State-specific pricing pages |
-| 4 | `enrich:places` | Google Places API enrichment |
-| 5 | Deploy | Trigger Vercel redeploy |
-
-### Shared infrastructure
-
-| File | Purpose |
-|------|---------|
-| `scripts/lib/scraper-utils.ts` | `syncToNotion()` — common write pattern for all scrapers |
-| `scripts/lib/issues.ts` | Issue tracker — logs failures to Notion Issues DB |
-| `scripts/config/state-sources.ts` | State source registry (32 states configured) |
-| `scripts/config/price-sources.ts` | Price scraping targets (school × state URLs) |
-
-### Rate limits respected:
-- Notion: 350ms between writes (3 req/sec)
-- Trustpilot: 2s between page loads (Playwright)
-- Google Places: 150ms between lookups
-- Playwright scraping: natural page load delays + 1s between states
-
-### Data preservation rule:
-**Never overwrite a value with null.** If a source fails, the previous score/grade/rating stays in Notion. Failures are logged to the Issues DB for triage.
-
----
-
-## 13. Review Aggregation
-
-### Sources (5 platforms):
-
-| Platform | Method | Cost | Data |
-|----------|--------|------|------|
-| Trustpilot | Playwright browser | Free | Rating, count, review snippets |
-| Google Places | Places API (New) | ~$0.017/lookup | Rating, count, Maps URL |
-| BBB | HTTP scrape | Free | Letter grade (A+ to F) |
-| App Store | iTunes Lookup API | Free | Rating, count |
-| Play Store | google-play-scraper | Free | Rating, count |
-
-### Google Place ID confidence:
-- **Verified**: Human confirmed correct match → ratings shown
-- **Auto-matched**: Scraper guessed → ratings shown, flagged for review
-- **Wrong match**: Human marked incorrect → ratings hidden, scraper skips
-
-### Review synthesis:
-- Extracts 10+ review snippets from Trustpilot via Playwright
-- Sends to Claude Sonnet 4.6 via Anthropic API
-- Returns one-sentence good + bad summary
-- Written to "Review Highlights Good/Bad" fields in Notion
-- Displayed on school cards as "What reviewers say" block
-
-### Trend calculation:
-- Compares current rating to previous run's rating
-- ≥0.1 increase → "↑ Improving"
-- ≤0.1 decrease → "↓ Declining"
-- Otherwise → "= Stable"
-- 0 rating with 0 reviews → treated as "not found" (not a real score)
-
----
-
-## 14. Pricing System
-
-### Architecture:
-- Prices live in the **School Pricing DB** (one row per school×state)
-- Generic Price field on Traffic Schools DB is used as fallback
-- Price scraper reads targets from `scripts/config/price-sources.ts`
-
-### Price display priority:
-1. State-specific price from Pricing DB (e.g. `idrivesafely-CA: $29`)
-2. Generic Price from Traffic Schools DB (e.g. `$24.95`)
-3. "Check website" — only if both are null
-4. Schools with no price sort to bottom of comparison tables
-
-### Price scraper logic:
-- Fixed prices (e.g. $5 Dollar Traffic School) → never scraped
-- DOM prices → Playwright visits state-specific URL, extracts smallest $X.XX value
-- Detects bot blocking (captcha, 403, Cloudflare) → marks as "Blocked"
-- Failed extractions → marks as "Failed" (set price manually in Notion)
-
----
-
-## 15. Affiliate Link Handling
-
-### Priority order:
-1. **State-specific affiliate URL** (from Pricing DB `Affiliate URL` field)
-2. **School default affiliate URL** (from Schools DB)
-3. **School website** (fallback, not an affiliate link)
-
-### Link attributes:
-- Affiliate links: `target="_blank" rel="noopener noreferrer nofollow sponsored"`
-- Non-affiliate links: `target="_blank" rel="noopener noreferrer"`
-- Button label: "Enroll Now" (affiliate) or "Visit Website" (non-affiliate)
-
-### Click tracking:
-- `POST /api/click` logs: school, state, source, timestamp
-- Stored in `data/clicks.json` (local, git-ignored)
-- Silent failures (never blocks user navigation)
-
----
-
-## 16. Admin Dashboard
-
-### URL: `/admin`
-
-**Not an admin panel** — Notion is the admin. This page is a read-only health check.
-
-### What it shows:
-- Total schools visible on site
-- Tier 1 / Tier 2 breakdown
-- Schools missing affiliate links (need attention)
-- Directory school counts (CA, TX, FL)
-- Environment variable status (set or missing)
-- Latest verification date
-
-### Actions:
-- **Trigger Redeploy**: POSTs to Vercel deploy hook for immediate update
-- **Open Notion**: Direct link to workspace
-
----
-
-## 17. Issue Tracking
-
-### Purpose:
-Tracks scraper failures so data source changes are caught and triaged, not silently lost.
-
-### How it works:
-1. Every scraper calls `logIssue()` when a source fails
-2. Issues are buffered during the run
-3. At the end, `flushIssues()` writes them all to the Notion Issues DB
-4. Recurring issues bump the Occurrences count + Last Seen date (no duplicates)
-5. Severity levels: Critical (all sources failed), Warning (one source failed), Info (minor)
-
-### If NOTION_ISSUES_DB is not configured:
-Issues log to console only. The scraper still runs — no crash.
-
-### Workflow:
-1. Monthly scraper runs
-2. Issues appear in Notion with "Open" status
-3. Admin reviews and either fixes the source, marks "Resolved", or "Won't Fix"
-4. Next run updates Last Seen and Occurrences for recurring issues
-
----
-
-## 18. Environment Variables
-
-| Variable | Required | Purpose |
-|----------|----------|---------|
-| `NOTION_TOKEN` | Yes | Notion internal integration token |
-| `NOTION_SCHOOLS_DB` | Yes | Traffic Schools database ID |
-| `NOTION_DIRECTORY_DB` | Yes | School Directory database ID |
-| `NOTION_STATES_DB` | Yes | States database ID |
-| `NOTION_PRICING_DB` | Yes | School Pricing database ID |
-| `NOTION_FAQ_DB_ID` | Yes | State FAQs database ID |
-| `NOTION_ISSUES_DB` | Optional | Issues tracking database ID |
-| `GOOGLE_PLACES_API_KEY` | For enrichment | Google Places API (New) key |
-| `VERCEL_DEPLOY_HOOK` | For auto-deploy | Vercel deploy hook URL |
-| `NEXT_PUBLIC_SITE_URL` | Optional | Canonical site URL |
-| `NEXT_PUBLIC_GA_ID` | Optional | Google Analytics ID |
-
-Set in both `.env.local` (local dev) and Vercel project settings (production).
-
----
-
-## 19. Deployment
-
-### Automatic:
-- Push to `main` → Vercel builds and deploys
-- `prebuild` script generates `llms-full.txt` from Notion FAQs
-- ISR pages serve cached content, refresh in background after 24h
-
-### Manual:
-- `/admin` → "Trigger Redeploy" button
-- Or: Vercel dashboard → Deployments → Redeploy
-
-### Monthly pipeline:
-- GitHub Actions runs all scrapers → updates Notion → triggers Vercel deploy
-- Can also be triggered manually from GitHub Actions UI
-
-### Domain:
-- Canonical domain: `www.trafficschoolpicker.com`
-- Cloudflare redirect rule: non-www → www (301)
-
----
-
-## 20. Admin Guide — Day-to-Day Operations
-
-### To update a school's price:
-1. Open School Pricing DB in Notion
-2. Find the row (e.g. "idrivesafely-CA")
-3. Change the Price field
-4. Wait 24h or trigger redeploy
-
-### To add a new curated school:
-1. Add row to Traffic Schools DB
-2. Fill in: School Name, Slug, Tier, Status = Active, Show On Site = true
-3. Set State Codes ("all" or "CA,TX,FL,AZ,GA,OH,IL")
-4. Set Price (generic fallback) and Affiliate URL if available
-5. Trigger redeploy
-
-### To hide a school:
-1. Uncheck "Show On Site" in Notion
-2. Trigger redeploy
-
-### To add an affiliate link:
-1. Paste URL into "Affiliate URL" field
-2. For state-specific links, add to School Pricing DB row
-3. Trigger redeploy — CTA switches from "Visit Website" to "Enroll Now"
-
-### To update a state's rules:
-1. Edit the state's row in States DB
-2. Update eligibility, court notes, DMV URL as needed
-3. Wait 24h or trigger redeploy
-
-### To add/edit FAQs:
-1. Add or edit rows in State FAQs DB
-2. Set Status = "Verified" to publish
-3. State Code must match URL slug (lowercase, hyphenated)
-4. Wait 24h or trigger redeploy
-
-### To publish a blog post:
-1. Create `content/blog/[slug].mdx` with frontmatter
-2. Add to `BLOG_SEO` in `lib/seo-config.ts`
-3. Add URL to `public/llms.txt`
-4. Commit to git and push
-
-### To mark a Google Place ID as wrong:
-1. In Traffic Schools DB, find the school
-2. Set "Google Place Confidence" to "Wrong match"
-3. The Google rating disappears from the site
-4. Paste the correct Place ID if known, set confidence to "Verified"
-
-### To add state-specific pros/cons:
-1. Add "Pros GA" (text field) to Traffic Schools DB in Notion
-2. Fill it in for schools with state-specific points
-3. Schools without the field populated → generic Pros shows
-4. Trigger redeploy
-
-### To add a new state scraper:
-1. Add entry to `scripts/config/state-sources.ts`
-2. For simple HTML pages: set method to "static-html", set enabled: true — done
-3. For complex pages: create a dedicated script, reference it in notes
-4. Add the script to `scrape:dmv` in package.json
-5. Run and verify
-
-### To triage scraper issues:
-1. Check the Issues DB in Notion (if configured)
-2. Filter by Status = "Open"
-3. Investigate: has the source URL changed? Is the site blocking us?
-4. Fix the scraper or mark "Won't Fix" with explanation
-5. Set Status = "Resolved" when done
-
----
-
-## 21. Maintenance Checklists
-
-### Daily (5 minutes)
-- [ ] Check `/admin` — any schools missing affiliate links?
-- [ ] Check Vercel dashboard — any failed deploys?
-
-### Weekly (15 minutes)
-- [ ] Review any schools with "Price Scrape Status = Failed" in Notion
-- [ ] Check for price changes flagged as "Changed" in Pricing DB
-- [ ] Spot-check a few state pages to ensure data renders correctly
-- [ ] Review Google Search Console for crawl errors
-- [ ] Check Issues DB for new open issues (if configured)
-
-### Monthly (1 hour)
-- [ ] Verify GitHub Actions monthly workflow ran successfully
-- [ ] Review new schools added to directory (check Directory DB for recent Date Scraped)
-- [ ] Review Trustpilot ratings — any significant changes?
-- [ ] Check "Google Place Confidence = Auto-matched" entries — verify or mark wrong
-- [ ] Update any states still marked "Unknown" in States DB
-- [ ] Check FAQ status — any marked "Needs Review" or "Outdated"?
-- [ ] Run `npm run scrape:reviews` manually if ratings seem stale
-- [ ] Run `npm run scrape:dmv` to refresh directory data
-- [ ] Resolve or close open issues in Issues DB
-
-### Quarterly (2 hours)
-- [ ] Full audit of all curated school prices vs actual websites
-- [ ] Verify affiliate links still work (click each, confirm tracking)
-- [ ] Check BBB grades — any downgrades?
-- [ ] Review blog posts — any outdated information?
-- [ ] Update `llms.txt` key facts if any state rules changed
-- [ ] Check Google Search Console performance — any pages dropping?
-- [ ] Review Vercel Analytics for traffic patterns
-- [ ] Update copyright year in Footer if needed
-- [ ] Check if any new states have published official provider lists
-
-### Annual
-- [ ] Update year references in seo-config.ts titles (e.g. 2026 → 2027)
-- [ ] Update blog post titles with new year
-- [ ] Full review of all state rules (some states change laws annually)
-- [ ] Rotate Notion token and Google API key
-- [ ] Review and update the llms.txt file structure
-
----
-
-## Appendix: File Map
-
-```
-trafficschoolpicker/
-├── app/
-│   ├── layout.tsx              # Root layout (Header + Footer + global meta + SEO validation)
-│   ├── page.tsx                # Homepage (ISR 24h)
-│   ├── globals.css             # Tailwind imports + custom CSS vars
-│   ├── sitemap.ts              # Auto-generated XML sitemap from seo-config.ts
-│   ├── robots.ts               # robots.txt (allow all, disallow /api/)
-│   ├── [state]/
-│   │   └── page.tsx            # Dynamic state pages (50 states, ISR 24h)
-│   ├── blog/
-│   │   ├── page.tsx            # Blog listing
-│   │   └── [slug]/
-│   │       └── page.tsx        # Individual blog post (MDX)
-│   ├── reviews/
-│   │   └── [school-slug]/
-│   │       └── page.tsx        # School review pages (ISR 24h)
-│   ├── about/
-│   │   └── page.tsx            # Methodology page
-│   ├── admin/
-│   │   ├── page.tsx            # System status dashboard (dynamic, no cache)
-│   │   └── AdminActions.tsx    # Deploy button (client component)
-│   └── api/
-│       ├── click/
-│       │   └── route.ts        # Click tracking endpoint
-│       └── admin/
-│           └── deploy/
-│               └── route.ts    # Vercel deploy hook trigger
-├── components/
-│   ├── SchoolCard.tsx          # School comparison card (state-aware pricing + pros/cons)
-│   ├── ComparisonTable.tsx     # Sortable comparison table
-│   ├── MultiRating.tsx         # Multi-platform rating badges + ReviewSynthesis
-│   ├── AffiliateButton.tsx     # Enroll Now / Visit Website CTA
-│   ├── StateSelector.tsx       # State dropdown
-│   ├── DirectoryTable.tsx      # Searchable DMV school directory
-│   ├── FaqSection.tsx          # FAQ accordion + JSON-LD (Notion-powered)
-│   ├── SchoolFAQ.tsx           # Legacy FAQ component (static fallback)
-│   ├── Badge.tsx               # School badges
-│   ├── RatingStars.tsx         # Star rating visual
-│   ├── TrustBar.tsx            # Trust indicators
-│   ├── Header.tsx              # Navigation
-│   ├── Footer.tsx              # Footer
-│   └── BlogMdxComponents.tsx   # MDX overrides (QuickAnswer, tables, links)
-├── content/
-│   └── blog/                   # 9 MDX blog posts
+.
+├── app/                          # Next.js App Router pages
+│   ├── [state]/page.tsx          # Dynamic state page (50 routes)
+│   ├── reviews/[school-slug]/    # School detail pages
+│   ├── blog/[slug]/              # MDX blog posts
+│   ├── schools/page.tsx          # Full schools directory
+│   ├── about/page.tsx            # Methodology page
+│   ├── admin/page.tsx            # Internal admin dashboard
+│   ├── api/                      # Click tracking, deploy hook
+│   ├── layout.tsx                # Root layout with Header/Footer/gtag
+│   ├── page.tsx                  # Homepage
+│   ├── sitemap.ts                # Generated XML sitemap
+│   └── robots.ts                 # robots.txt
+│
+├── components/                   # React components (server + client)
+│   ├── SchoolCard.tsx            # Tier 1 comparison card
+│   ├── SchoolsDirectoryTable.tsx # /schools sortable table (client)
+│   ├── AffiliateButton.tsx       # CTA, uses buildAffiliateLink
+│   ├── CouponCode.tsx            # Coupon-code chip with copy-to-clipboard
+│   ├── MultiRating.tsx           # Multi-platform rating badges + ReviewSynthesis
+│   ├── DirectoryTable.tsx        # DMV-scraped school listing per state
+│   ├── FaqSection.tsx            # FAQ accordion (also emits JSON-LD)
+│   ├── BlogMdxComponents.tsx     # MDX renderer overrides
+│   ├── ComparisonTable.tsx, RatingStars.tsx, Badge.tsx, etc.
+│   ├── StateSelector.tsx         # Header dropdown
+│   ├── TrustBar.tsx              # "Trusted by" bar under heroes
+│   ├── Header.tsx, Footer.tsx
+│
 ├── lib/
-│   ├── notion.ts               # Notion API client — all DB queries, helpers, price/pros resolvers
-│   ├── notion-faqs.ts          # FAQ fetching from Notion FAQ DB
-│   ├── types.ts                # All TypeScript types (School, SchoolWithPrice, StateInfo, etc.)
-│   ├── seo-config.ts           # Centralised SEO metadata (24 states, 9 blogs, homepage)
-│   ├── state-utils.ts          # State slug/code/name mapping (50 states)
-│   ├── state-faqs.ts           # Static fallback FAQs (CA, TX, FL + generic)
-│   ├── blog.ts                 # MDX frontmatter reader (gray-matter)
-│   ├── affiliate.ts            # Affiliate URL builder (legacy)
-│   ├── schools.ts              # Hardcoded school data (legacy fallback)
-│   └── states.ts               # Hardcoded state data (legacy fallback)
+│   ├── notion.ts                 # Single data layer for all Notion DBs
+│   ├── types.ts                  # All TypeScript types
+│   ├── affiliate.ts              # buildAffiliateLink (tracking method branches)
+│   ├── seo-config.ts             # Per-page SEO metadata (50 states + 9 posts)
+│   ├── state-utils.ts            # Slug / code / name utilities
+│   ├── state-faqs.ts             # Static fallback FAQs per state
+│   ├── notion-faqs.ts            # Notion FAQ DB query
+│   └── blog.ts                   # MDX frontmatter reader
+│
+├── content/
+│   └── blog/*.mdx                # 9 blog posts with MDX + QuickAnswer
+│
 ├── scripts/
-│   ├── scrape-ca-dmv.ts        # CA DMV directory scraper (Playwright/Salesforce)
-│   ├── scrape-tx-tdlr.ts       # TX TDLR CSV scraper
-│   ├── scrape-fl-dhsmv.ts      # FL DHSMV BDI scraper (Playwright)
-│   ├── scrape-ny-dmv.ts        # NY DMV PIRP scraper (Playwright + User-Agent)
-│   ├── scrape-az-courts.ts     # AZ Courts dropdown scraper (Playwright)
-│   ├── scrape-va-dmv.ts        # VA DMV online clinics (Playwright/Drupal)
-│   ├── scrape-oh-dps.ts        # OH DPS school scraper (Playwright/DataTables)
-│   ├── scrape-ga-dds.ts        # GA DDS clinics scraper (Playwright/form)
-│   ├── scrape-states.ts        # Generic config-driven scraper (NV, NJ, WA, NE, CT, etc.)
-│   ├── scrape-reviews.ts       # Multi-platform review scraper (Playwright + APIs + Claude)
-│   ├── scrape-prices.ts        # School pricing scraper (Playwright)
-│   ├── enrich-places.ts        # Google Places enrichment
-│   ├── generate-llms-full.ts   # Auto-generates llms-full.txt from Notion FAQs
-│   ├── config/
-│   │   ├── state-sources.ts    # State source registry (32 states configured)
-│   │   └── price-sources.ts    # Price scraping target config
-│   └── lib/
-│       ├── scraper-utils.ts    # Shared Notion write utilities for all scrapers
-│       └── issues.ts           # Issue tracker (logs failures to Notion Issues DB)
+│   ├── lib/                      # Shared scraper utils + issue tracking
+│   ├── scrape-*.ts               # 10 DMV scrapers (per-state + generic)
+│   ├── scrape-pdf-states.ts      # PDF parsers for OK/MN/WY/RI
+│   ├── scrape-reviews.ts         # Multi-source review aggregator
+│   ├── scrape-prices.ts          # Per-school×state price scraping
+│   ├── enrich-places.ts          # Google Places enrichment
+│   ├── generate-state-variants.ts # Claude editorial generation
+│   ├── populate-state-requirements.ts # Seed State Requirements DB
+│   ├── seed-safe2drive-ca.ts     # Locked variant seed
+│   ├── normalize-ratings.py      # Bayesian normalized rating
+│   ├── generate-llms-full.ts     # Auto-generates llms-full.txt
+│   ├── compare-and-diff.ts       # Diff helper
+│   └── config/                   # State source registry + price source config
+│
 ├── public/
-│   ├── llms.txt                # AI discoverability file (static)
-│   └── llms-full.txt           # Auto-generated state facts (prebuild)
-├── .github/
-│   └── workflows/
-│       └── monthly-update.yml  # Monthly scraping pipeline
-├── next.config.ts              # MDX support, page extensions
-├── vercel.json                 # Security headers (X-Frame-Options, X-Content-Type-Options)
-├── mdx-components.tsx          # MDX component provider
-├── package.json                # 20+ npm scripts + dependencies
-├── tsconfig.json               # TypeScript config (strict mode)
-├── DOCUMENTATION.md            # This file
-└── .env.local.example          # Environment variable template
+│   ├── flags/*.png               # 50 US state flags
+│   ├── icon.svg, logo.svg
+│   ├── llms.txt                  # AI discoverability (manual)
+│   └── llms-full.txt             # Auto-generated from Notion FAQs
+│
+├── .github/workflows/
+│   └── monthly-update.yml        # Monthly scrape + redeploy
+│
+├── DOCUMENTATION.md              # This file
+├── README.md, AGENTS.md, CLAUDE.md
+├── package.json
+├── tsconfig.json
+├── next.config.ts
+└── .env.local.example
 ```
+
+---
+
+## 4. Data architecture — the eight Notion databases
+
+The site has **eight Notion databases**, each with a clear single
+responsibility. Database IDs are stored in env vars; the frontend reads
+them at module-init time (see [lib/notion.ts](lib/notion.ts)).
+
+### 4.1 Traffic Schools DB
+Env: `NOTION_SCHOOLS_DB`
+
+The editorial spine. One row per school we review.
+
+Key fields:
+- **School Name** (title)
+- **Slug** (rich text) — URL identifier, e.g. `safe2drive`
+- **Tier** (select) — `1 - Featured` or `2 - Listed`
+- **Badge** (select) — `Top Rated`, `Editors Choice`, `Best Value`, `Fastest`, `Budget Pick`
+- **State Codes** (rich text) — comma-separated, or `all`. Empty = no state coverage.
+- **Show On Site** (checkbox) — manual kill switch
+- **Status** (select) — `Active` etc.
+- **Affiliate Network** (select) — `CJ`, `Impact`, `ShareASale`, `Direct`, `Pending`, `Unknown`. Used by the affiliate gate.
+- **Affiliate URL** (URL) — network deep link
+- **Tracking Method** (select) — `network` (default), `direct`, or `coupon_code`. Routes outbound links via `buildAffiliateLink`.
+- **Partner Slug** (rich text) — used when Tracking Method = `direct`
+- **Coupon Code** (rich text) — used when Tracking Method = `coupon_code`
+- **Pros**, **Cons**, **Pros CA**, **Cons GA**, ... — pipe- or newline-delimited
+- **Best For**, **Not For**, **One Liner** — editorial copy
+- **Rating**, **Review Count**, **Review Source** — aggregated
+- **Trustpilot/Google/App Store/Play Store** rating columns + trends + previous ratings
+- **BBB Grade**, **BBB URL**
+- **Review Highlights Good**, **Review Highlights Bad** — synthesized via Claude
+- **Mobile App**, **Money Back Guarantee**, **Certificate Delivery**, **Court Acceptance**, **Completion Time (hrs)**, **Founded**
+- **Price** — generic fallback. Per-state columns: `Price CA`, `Price TX`, `Price FL`, `Price NY`, `Price AZ`, `Price OH`, `Price VA`, `Price NJ`, `Price MI`, `Price WA`, `Price NC`
+- **Last Verified** (date)
+- **Normalized Rating** (number) — Bayesian-corrected score for ranking
+
+Volume: 12-20 schools (curated).
+
+### 4.2 School Pricing DB
+Env: `NOTION_PRICING_DB`
+
+Per-school × per-state pricing rows. One row per (school, state) combination
+where price differs from the global default. Each row has:
+- **Label** (title) — e.g. `safe2drive-CA`
+- **School** (relation → Traffic Schools DB)
+- **State Code** (rich text)
+- **Price**, **Original Price** (numbers)
+- **Affiliate URL** (state-specific override of network URL)
+- **Price Note** (e.g. "$24.95 with code")
+- **Approved** (checkbox) — gate
+
+The price waterfall in the resolver is:
+`variant.priceOverride → pricing DB → school.statePrices[STATE] → school.genericPrice → null`
+
+### 4.3 School Directory DB
+Env: `NOTION_DIRECTORY_DB`
+
+DMV-scraped third-party schools (not curated; used for the directory tables on
+state pages and for trust signals like "from 200+ approved schools"). One row
+per school-state combination. Populated by the DMV scrapers monthly.
+
+Fields: School Name, License Number, Phone, Address, Website, Online Available,
+Source, State, Date Scraped.
+
+Volume: ~2,200 schools across 22 states.
+
+### 4.4 States DB
+Env: `NOTION_STATES_DB`
+
+One row per state (25 covered, expanding). Holds operational facts:
+- **State Name**, **Abbreviation**
+- **Online Allowed**, **Online Dismisses Ticket**, **Insurance Discount Available** — three checkboxes that combine into the rendered `OnlineStatus`
+- **Eligibility Requirements**, **Court Acceptance Notes**, **Certificate Submission**, **Minimum Hours**
+- **DMV URL**, **Research Notes**, **Fun Fact**
+
+Used for the "State Rules & Requirements" section on each state page.
+
+### 4.5 State Requirements DB
+Env: `NOTION_STATE_REQUIREMENTS_DB`
+
+Regulatory facts per state, separate from the operational States DB.
+**Authoritative for variant generation** — the AI reads from here to know what
+the official course term is, whether there's an exam, etc.
+
+Fields: Official Term, Approval Body, Approval Body Short, Mandated Hours, Has
+Final Exam, Exam Is Open Book, Exam Attempts Allowed, Has Lesson Timers, Ticket
+Outcome, Ticket Outcome Note, Eligibility Window Months, Certificate Delivery,
+Court Fee Required, Court Fee Note, DMV License Required, License Format,
+Terminology Notes, Source URL, Last Verified.
+
+Currently populated for 11 states (CA, TX, FL, AZ, OH, VA, NY, NC, NJ, WA, MI).
+
+### 4.6 School State Variants DB
+Env: `NOTION_SCHOOL_VARIANTS_DB`
+
+Per-school × per-state editorial overrides. AI-generated by
+[scripts/generate-state-variants.ts](scripts/generate-state-variants.ts), human-lockable.
+
+Each row has a `Name` field that is the lookup key: `{slug}:{STATE}` — e.g.
+`safe2drive:CA`, `idrivesafely:TX`.
+
+Fields: School Slug, State Code, Generation Status (`Generated` | `Locked` |
+`Needs Review`), Lock Reason, One Liner, Pros (pipe-delimited), Cons
+(pipe-delimited), Best For, Not For, Price Override, Has Final Exam Override,
+Generation Notes, Last Generated.
+
+**Critical rule**: `Locked` rows are sacred. The generator will never overwrite
+a Locked row; it logs and skips. This lets a human verify a card and trust it
+will remain stable.
+
+Volume: 98 variants (10 schools × 11 states, plus the seeded `safe2drive:CA`
+locked row).
+
+### 4.7 State FAQs DB
+Env: `NOTION_FAQ_DB_ID`
+
+Per-state FAQ content with a Status (`Verified` is required for rendering).
+~250 verified facts across 50 states. Surfaces on each state page in the FAQ
+section, also feeds `public/llms-full.txt`.
+
+### 4.8 Issues DB
+Env: `NOTION_ISSUES_DB` (optional)
+
+Scraper failure tracking. The scraping infrastructure logs to this DB instead
+of failing silently or breaking the build. Each issue has Title, Source,
+Severity, School relation, Details, Occurrences, First Seen, Last Seen.
+Recurring issues bump Occurrences rather than creating duplicates.
+
+### Data flow summary
+
+```
+                    ┌──────────────────────┐
+                    │  Traffic Schools DB  │ ← editorial baseline
+                    │  (12-20 schools)     │
+                    └──────────┬───────────┘
+                               │
+    ┌──────────────────┬───────┴────────┬────────────────────┐
+    │                  │                │                    │
+┌───▼─────┐    ┌───────▼──────┐  ┌──────▼──────┐   ┌────────▼────────┐
+│ Pricing │    │ State Reqs   │  │ Variants    │   │ State FAQs      │
+│ DB      │    │ DB           │  │ DB          │   │ DB              │
+└─────────┘    └──────────────┘  └─────────────┘   └─────────────────┘
+                                       │
+                                       ▼
+                          resolveStateContent() [lib/notion.ts]
+                          ↓
+                          SchoolCard renders ResolvedSchoolContent
+```
+
+---
+
+## 5. Three-layer state-aware rendering
+
+The single most important design pattern in this codebase.
+
+### The problem
+
+Traffic school is a state-regulated product. The same school operates
+differently across states — different prices, different course structures,
+different regulatory bodies, different correct terminology. Rendering a single
+school record verbatim on every state page produces factually wrong claims
+("no final exam" might be true in AZ but false in CA for the same school).
+
+### The solution — a resolution waterfall
+
+For every render of a school card on a state page, three data sources are
+combined into a single `ResolvedSchoolContent` object:
+
+```
+                                   resolveStateContent(school, stateCode, ...)
+                                          │
+              ┌───────────────────────────┼──────────────────────────┐
+              ▼                           ▼                          ▼
+    School State Variant          Traffic Schools DB         State Requirements DB
+    (per school × state)          (school defaults)          (regulatory facts)
+
+    EDITORIAL fields:             Fallback for editorial      STRUCTURAL facts:
+    - oneLiner                    fields if variant blank.    - officialTerm
+    - pros / cons (pipe)                                      - approvalBody
+    - bestFor / notFor                                        - mandatedHours
+    - priceOverride                                           - hasFinalExam
+    - hasFinalExamOverride                                    - examAttemptsAllowed
+                                                              - examIsOpenBook
+                                                              - hasLessonTimers
+                                                              - ticketOutcome
+                                                              - ticketOutcomeNote
+                                                              - eligibilityWindowMonths
+                                                              - courtFeeRequired
+                                                              - courtFeeNote
+```
+
+### Resolution rules (`lib/notion.ts:resolveStateContent`)
+
+#### Editorial fields
+```
+variant?.<field>  →  school.<field>  →  null
+```
+A blank variant field falls back to the school default. If both are blank,
+the field is null and the component renders nothing.
+
+#### Price waterfall
+```
+variant.priceOverride
+  →  school.statePrices[stateCode]    (Price CA, Price TX, ... columns)
+  →  (school as SchoolWithPrice).price (from Pricing DB, joined separately)
+  →  school.genericPrice               (Traffic Schools DB "Price" field)
+  →  null  →  rendered as "Check website"
+```
+
+#### `hasFinalExam`
+```
+variant.hasFinalExamOverride === 'Yes'  →  true
+variant.hasFinalExamOverride === 'No'   →  false
+otherwise                               →  state.hasFinalExam
+default                                 →  true (conservative — never falsely promise no exam)
+```
+
+#### Structural facts
+Only flow from State Requirements. There is no per-variant override path
+(except `hasFinalExam`) because these describe state law, not school behaviour.
+If a school genuinely differs from the state norm, add a new override field to
+the Variants schema rather than hardcoding in components.
+
+#### Defaults when State Requirements is missing
+| Field | Default |
+|---|---|
+| officialTerm | `'Traffic School'` |
+| approvalBody / approvalBodyShort | `'State Approved'` |
+| mandatedHours | school's `completionHours`, or null |
+| hasFinalExam | `true` |
+| examIsOpenBook | `false` |
+| hasLessonTimers | `false` |
+| ticketOutcome | `'Varies'` |
+| ticketOutcomeNote | `null` |
+| courtFeeRequired | `false` |
+| courtFeeNote | `null` |
+
+### Homepage and `/schools` resolution
+
+The homepage and `/schools` directory pages call `resolveStateContent` with
+`stateCode = null`. In that path, the variant lookup is skipped, all editorial
+falls back to school defaults, and structural facts use the hardcoded defaults
+above. This avoids any state-specific claim leaking into a non-state context.
+
+### The `null`-handling guarantee
+
+`resolveStateContent` never throws. All map lookups are optional-chained, all
+fallbacks are explicit. Components can safely access any `resolved.*` field
+without guarding.
+
+### Component contract
+
+[components/SchoolCard.tsx](components/SchoolCard.tsx) reads exclusively from
+`resolved.*` for editorial, regulatory, and price fields. It never reads
+`school.tagline`, `school.pros`, `school.price` directly. This is enforced by
+the type signature: `SchoolCard` requires a `resolved: ResolvedSchoolContent`
+prop. Add new state-aware fields by:
+
+1. Add to `ResolvedSchoolContent` interface in [lib/types.ts](lib/types.ts)
+2. Populate in `resolveStateContent`
+3. Source from a database (variant, school, or state requirement) or hardcode default
+4. Read from `resolved` in the component
+
+---
+
+## 6. The affiliate gate and tracking method system
+
+Two-layer gating system that controls *which* schools render and *how* their
+outbound links are built.
+
+### Layer 1: Affiliate gate (`getAllSchools` in `lib/notion.ts`)
+
+A school surfaces on the site only if **both** conditions hold:
+
+```typescript
+function isEligibleToShow(school: School): boolean {
+  if (!school.showOnSite) return false;
+  if (!MONETIZABLE_NETWORKS.includes(school.affiliateNetwork ?? "")) return false;
+  return true;
+}
+```
+
+`MONETIZABLE_NETWORKS = ['CJ', 'Impact', 'ShareASale', 'Direct', 'Pending']`
+
+`Pending` is included so we can list a school whose paperwork is mid-flight.
+`Unknown` and `null` are blocked — no relationship, no listing.
+
+**Adding a new network**: update `MONETIZABLE_NETWORKS` in `lib/notion.ts` AND
+add the option to the Notion `Affiliate Network` select. Both steps are
+required — a network in Notion but not the array silently blocks those schools.
+
+### Layer 2: Tracking method (link routing)
+
+Implemented in [lib/affiliate.ts](lib/affiliate.ts) as `buildAffiliateLink`.
+Three branches:
+
+#### `network` (default, null-treated)
+Pass through `affiliateProgram.networkUrl` unchanged. Falls back to
+`destinationUrl` if missing, then to `#`. Always logs warnings on fallback.
+This is what every school does today.
+
+#### `direct`
+Build a tracker URL:
+```
+{NEXT_PUBLIC_TRACKER_HOST}/c/{partnerSlug}?s={stateCode}&p={sourcePageId}
+```
+
+If the env var is unset OR `partnerSlug` is missing, fail safe to network
+behavior with a warning. The user-facing link **never breaks**, even if
+configuration is incomplete.
+
+#### `coupon_code`
+Return `destinationUrl` (typically the school's enrollment page) plus
+`couponCode` for separate display. The CouponCode component renders an
+amber-accented chip with click-to-copy.
+
+### Activation (per school, in Notion)
+
+To switch a school to direct tracking:
+1. Set `Tracking Method = direct`
+2. Fill `Partner Slug` matching the slug on the tracker
+3. Ensure `NEXT_PUBLIC_TRACKER_HOST` is set in Vercel
+
+To switch to coupon-code:
+1. Set `Tracking Method = coupon_code`
+2. Fill `Coupon Code`
+3. Leave `Affiliate URL` as the school's enrollment page
+
+### Invariants
+
+- `rel = "sponsored nofollow"` on every affiliate link
+- `target = "_blank"` always
+- `buildAffiliateLink` never throws — it runs inside render paths
+
+---
+
+## 7. Frontend pages and routing
+
+| Route | File | Purpose | ISR |
+|---|---|---|---|
+| `/` | [app/page.tsx](app/page.tsx) | Homepage with top 3 Tier 1 schools | 24h |
+| `/[state]` | [app/[state]/page.tsx](app/[state]/page.tsx) | 50 dynamic state pages | 24h |
+| `/schools` | [app/schools/page.tsx](app/schools/page.tsx) | Full schools directory (sortable, filterable) | 24h |
+| `/reviews/[school-slug]` | [app/reviews/[school-slug]/page.tsx](app/reviews/[school-slug]/page.tsx) | School detail / review pages | 24h |
+| `/blog` | [app/blog/page.tsx](app/blog/page.tsx) | Blog index | 24h |
+| `/blog/[slug]` | [app/blog/[slug]/page.tsx](app/blog/[slug]/page.tsx) | MDX blog posts (9 posts) | 24h |
+| `/about` | [app/about/page.tsx](app/about/page.tsx) | Methodology + affiliate disclosure | static |
+| `/admin` | [app/admin/page.tsx](app/admin/page.tsx) | Internal dashboard (env checks, school counts) | dynamic |
+| `/api/click` | route handler | Click tracking endpoint | dynamic |
+| `/api/admin/deploy` | route handler | Manual deploy hook trigger | dynamic |
+
+### State page (`app/[state]/page.tsx`)
+
+The most complex page. Flow:
+
+1. `generateStaticParams()` returns all 50 state slugs (from `lib/state-utils.ts`)
+2. `generateMetadata()` reads from `STATE_SEO` map, falls back to a generic title
+3. Page fetches **6 things in parallel** (`Promise.all`):
+   - Schools with state-specific pricing (filtered by state code in app code)
+   - State info (online status, eligibility, court notes)
+   - Directory schools (DMV-scraped, per state)
+   - Notion FAQs (verified entries for this state)
+   - State Requirements (all states, used by resolver)
+   - School State Variants (filtered by state code in Notion query)
+4. Branches on `onlineStatus`:
+   - **`Online — ticket dismissal`**: full Tier 1 grid + state info + FAQs + directory
+   - **`Online — insurance discount only`**: amber banner + reduced grid
+   - **`In-person only`**: no schools, just a "find local" CTA
+   - **`Unknown`**: research-in-progress notice
+5. Georgia-specific callout banner (DDS quirks)
+6. Hero with state flag (desktop only — `hidden md:block`)
+7. YouTube video embed if `STATE_VIDEOS[stateSlug]` is configured
+8. Each school card receives `resolved` prop (computed by `resolveStateContent`)
+
+### Schools directory (`/schools`)
+
+Server component fetches all schools that pass the gate; client component
+([components/SchoolsDirectoryTable.tsx](components/SchoolsDirectoryTable.tsx))
+provides sort (name/rating/reviews/price/hours) and filter (by state, by name
+search). This is the home for Tier 2 schools — they are not on state pages.
+
+### School detail page (`/reviews/[school-slug]`)
+
+`generateStaticParams` builds one route per school. Renders ratings,
+synthesized review highlights, pros/cons (school defaults, not state-specific),
+a feature comparison table against 3 competitors, and a sidebar CTA. Includes
+JSON-LD `Review` schema.
+
+### Blog
+
+MDX with frontmatter (`title`, `description`, `date`, `published`, `category`).
+Each post can use a `<QuickAnswer>` component for above-the-fold direct answers.
+9 long-form posts; index page sorts by date.
+
+---
+
+## 8. Components reference
+
+### Hero / state cards
+
+| Component | Notes |
+|---|---|
+| `SchoolCard` | Tier 1 card. Reads from `resolved`. Renders one-liner, pros/cons, best-for, price, AffiliateButton, optional CouponCode, link to `/reviews/[slug]`. |
+| `SchoolsDirectoryTable` | `/schools` table. Client. Sortable, filterable. |
+| `DirectoryTable` | DMV-scraped school list per state. |
+| `MultiRating` + `ReviewSynthesis` | Multi-platform rating badges (Trustpilot, Google, App Store, Play Store, BBB). Color-coded by platform. ReviewSynthesis renders the "What reviewers say" good/bad block on detail pages only. |
+| `RatingStars` | Single-source fallback rating display. |
+| `Badge` | Top Rated / Editors Choice / Best Value / etc. |
+| `AffiliateButton` | CTA. Calls `buildAffiliateLink`. Always `target="_blank"`. `rel="sponsored nofollow"` for affiliate, `noopener noreferrer` otherwise. |
+| `CouponCode` | Amber chip with click-to-copy. Renders only when `trackingMethod === 'coupon_code'`. |
+
+### Layout / nav
+
+| Component | Notes |
+|---|---|
+| `Header` | Logo, nav (All Schools / How We Rank / Blog), state selector. |
+| `Footer` | Links, affiliate disclosure, copyright. |
+| `TrustBar` | "Trusted by N drivers" strip under heroes. |
+| `StateSelector` | Dropdown — drives the state-page navigation. |
+
+### FAQ / blog
+
+| Component | Notes |
+|---|---|
+| `FaqSection` | Accordion + JSON-LD `FAQPage` schema. |
+| `SchoolFAQ` | Per-school FAQ + JSON-LD on detail pages. |
+| `BlogMdxComponents` | Custom MDX renderers (headings, links, callouts). |
+
+---
+
+## 9. The scraping pipeline
+
+Three categories: **directory scrapers** (DMV-approved school lists),
+**review scrapers** (multi-source aggregator), and **price scrapers**
+(per-school × per-state).
+
+### 9.1 DMV directory scrapers
+
+Each US state DMV/court site has a different format. We have **22 states
+covered** as of May 2026. Scrapers fall into 4 method buckets:
+
+| Method | Tools | States |
+|---|---|---|
+| Playwright (interactive) | `scripts/scrape-{ca,tx,fl,oh,ga,ny,az,va}-*.ts` | CA, TX, FL, OH, GA, NY, AZ, VA |
+| Static HTML (config-driven) | `scripts/scrape-states.ts` reading `scripts/config/state-sources.ts` | NV, IL, IN, KS, MO, NE, NM, ND, SC, ... |
+| PDF parsing | `scripts/scrape-pdf-states.ts` (`pdf-parse@1.1.1`) | OK, MN, WY, RI |
+| Manual | (no scraper) | tail states with no machine-readable source |
+
+**Architecture**: each scraper uses [scripts/lib/scraper-utils.ts](scripts/lib/scraper-utils.ts):
+- `getExistingSchools(stateName)` — returns Map<name, pageId> for dedup
+- `syncToNotion(scraped[], stateName, source, stateCode)` — upsert pattern, matches by name (case-insensitive). Returns `{created, updated}`.
+
+Failures are logged to the **Issues DB** via `scripts/lib/issues.ts`. The
+scraper continues; one site being down doesn't fail the whole pipeline.
+
+### 9.2 Review scraper — `scripts/scrape-reviews.ts`
+
+Multi-source aggregator (~500 lines). For each Tier 1/2 school:
+
+1. **Trustpilot** — Playwright scrapes the review page (HTTP requests are
+   blocked). Pulls rating + count.
+2. **Google Places** — Places API (New). Place ID confidence is verified each
+   run (Verified / Auto-matched / Wrong match). "Wrong match" Place IDs are
+   ignored on read in `lib/notion.ts:buildPlatformRatings`.
+3. **BBB** — HTTP fetch + parse for grade letter and URL.
+4. **App Store** — iTunes Lookup API.
+5. **Play Store** — `google-play-scraper` npm package.
+
+Then **Claude Sonnet** synthesizes "Review Highlights Good" and "Review
+Highlights Bad" from the raw review text.
+
+#### Preserve-previous-score pattern
+
+Critical invariant: the scraper **never overwrites a populated rating with
+null**. If Trustpilot is down on a given run, the previous rating stays in
+Notion. An issue is logged for triage. This prevents transient outages from
+emptying card content.
+
+#### Trend calculation
+
+`Previous Rating` is updated only when a new run produces a different rating.
+The select fields `Trustpilot Trend`, `Google Trend`, etc. are ↑ / ↓ / —
+based on a ≥0.1 delta.
+
+### 9.3 Price scraper — `scripts/scrape-prices.ts`
+
+Reads [scripts/config/price-sources.ts](scripts/config/price-sources.ts) — a
+list of `{schoolSlug, stateCode, method: 'dom' | 'fixed', url, selector}`.
+Writes to the **School Pricing DB** keyed by `{slug}-{stateCode}`. Updates
+existing rows in place via the School relation.
+
+DriversEd.com and other JS-heavy storefronts often fail DOM scraping; those
+are set with `method: 'fixed'` and updated manually.
+
+### 9.4 Google Places enrichment — `scripts/enrich-places.ts`
+
+For DMV-scraped schools without a website, query Places API to find their
+official site. Updates the `Website` field on the Directory DB row.
+
+### 9.5 Configuration files
+
+- [scripts/config/state-sources.ts](scripts/config/state-sources.ts) — registry of state DMV sources, method, URL, enabled flag. Adding a new state = adding one entry.
+- [scripts/config/price-sources.ts](scripts/config/price-sources.ts) — 18+ school×state price targets. Method: `dom` (live scrape) or `fixed` (hardcoded).
+
+---
+
+## 10. Multi-source review aggregation
+
+Each school accumulates ratings from up to 4 platforms plus BBB. The schema
+is intentionally additive: if a school has no Play Store presence, the
+`Play Store Rating` field is null and the platform doesn't appear in the
+`MultiRating` badge row.
+
+### Why multiple sources
+
+A single 4.5-star Trustpilot rating is noisier than Trustpilot + Google +
+App Store agreeing on 4.7. Diversity also catches review-pumping — a school
+with 4.9 on Trustpilot but 3.8 on Google is flagged by the difference.
+
+### Display logic
+
+[components/MultiRating.tsx](components/MultiRating.tsx) renders one chip per
+platform with a brand color and a trend arrow. BBB renders as a separate
+letter-grade chip with grade-based coloring (A+ green, F red).
+
+### Google Place ID confidence system
+
+The Google Places API can return wrong businesses (especially for schools
+with generic names). Each match is human-reviewed once and tagged with a
+confidence:
+
+- `Verified` — manually confirmed correct
+- `Auto-matched` — name match, not yet reviewed
+- `Wrong match` — manually flagged; rating is hidden on the frontend
+
+`buildPlatformRatings` in `lib/notion.ts` skips Google ratings when
+confidence is `Wrong match`. The data stays in Notion for audit but never
+renders.
+
+---
+
+## 11. Bayesian normalized rating
+
+[scripts/normalize-ratings.py](scripts/normalize-ratings.py) (Python) writes a
+**Normalized Rating** to each Traffic Schools row.
+
+### The formula
+
+```
+normalized = (n × r + C × m) / (n + C)
+```
+
+Where:
+- `n` = review count (highest count across platforms for that school)
+- `r` = raw rating (from that platform)
+- `C = 50` — prior weight
+- `m = 4.0` — prior mean
+
+### Why
+
+A school with 5.0 stars from 8 reviews shouldn't outrank a school with 4.7
+stars from 30,000 reviews. Bayesian smoothing pulls thinly-reviewed schools
+toward the prior mean (4.0) until they have enough data to earn their
+position.
+
+### Operational notes
+
+- Picks the highest-review-count source per school (typically Trustpilot or
+  App Store)
+- Skips schools with no review data
+- 400ms delay between writes; 3-retry backoff on Notion connection resets
+- Skip-if-unchanged: re-running is idempotent
+- **Pagination bug history**: an earlier version was missing
+  `has_more`/`next_cursor` handling and looped on the first page indefinitely.
+  Fixed; never revert.
+
+---
+
+## 12. AI editorial generation
+
+[scripts/generate-state-variants.ts](scripts/generate-state-variants.ts)
+generates state-specific editorial copy per school × state using Claude.
+
+### Inputs
+
+For each (school, state) combination:
+- School data from Traffic Schools DB (name, ratings, completion time, etc.)
+- State Requirements DB row (regulatory facts)
+- Existing variant row (if any) — for skip detection
+
+### System prompt
+
+Detailed instructions to:
+- Only claim "no final exam" if `Has Final Exam = false` for that state
+- Reference the correct approval body (CA DMV, TDLR, AZ Supreme Court, ...)
+- Use state-specific terminology ("mask" for CA, "dismiss" for AZ/TX, etc.)
+- Never include price in oneLiner (rendered separately)
+- Pros/cons must be factually grounded; no marketing fluff
+
+### Output format
+
+JSON with `oneLiner`, `pros` (pipe-delimited), `cons`, `bestFor`, `notFor`,
+`generationNotes`. Retried once on JSON parse failure; second failure produces
+a `Needs Review` row with a parse-failed note.
+
+### Critical rules
+
+- **Never overwrite Locked rows**. Generation Status = `Locked` is sacred.
+- **Idempotent runs**. `Generated` rows are overwritten; `Locked` rows are
+  skipped silently.
+- **Name format**: `{slug}:{STATE}` always (e.g. `safe2drive:CA`).
+- **Rate limit**: 500ms between writes.
+
+### Filters
+
+- `--school <slug>` — generate only for one school
+- `--state <CODE>` — generate only for one state
+- `--dry-run` — preview without writing
+
+### Volume
+
+Currently 98 variants (10 schools × 11 states with State Requirements rows).
+Adding a state's Requirements row + running the generator produces ~10 new
+variants for that state.
+
+### Editorial correction example
+
+In April 2026 a fabricated "24-month eligibility window" claim appeared in
+multiple AZ variants (the actual AZ rule is 12 months). The fix required:
+1. Correcting the State Requirements DB row
+2. Auditing all AZ variants for the stale phrase
+3. Targeted text replacement in `Cons` and `Not For` fields
+4. Token replacement in `Generation Notes` + appended correction note
+5. Validation: zero occurrences of stale phrase across all 6 text fields
+
+This pattern (audit → correct → validate) is the standard for any factual
+correction.
+
+---
+
+## 13. Video embeds
+
+[app/[state]/page.tsx](app/[state]/page.tsx) has a `STATE_VIDEOS` map at the
+top of the file:
+
+```typescript
+const STATE_VIDEOS: Record<string, string> = {
+  "texas": "jAH-kz9dhF0",
+  "california": "kx_B0jgBjW4",
+  "florida": "1zM7hwLvWPc",
+  // ...
+};
+```
+
+When a state has an entry, the page renders a 16:9 responsive iframe with
+modest branding and `rel=0` (related videos restricted to the channel).
+Embedded between the trust bar and Tier 1 cards for above-fold visibility.
+
+Adding a new state video is a one-line change: paste the `youtu.be/XXXX` ID
+into the map.
+
+---
+
+## 14. SEO and AI discoverability
+
+### `lib/seo-config.ts`
+
+Centralised metadata: `STATE_SEO` (50 entries), `BLOG_SEO` (9 posts),
+`HOME_SEO`. Each entry has title (≤60 chars), description (≤155 chars), h1,
+primaryKeyword, canonicalPath. `validateSeoConfig()` warns in dev on overlong
+strings.
+
+### Sitemap (`app/sitemap.ts`)
+
+Generates entries for: homepage, /schools, /about, /blog, all 50 state pages,
+all 9 blog posts. Priorities: home 1.0, state pages 0.9, /schools 0.9, blog
+0.7-0.8, about 0.5.
+
+### JSON-LD
+
+- `FAQPage` on every state page (via `FAQJsonLd` component)
+- `Review` on each `/reviews/[slug]` page
+- `Article` on each blog post
+
+### LLM discoverability
+
+- `public/llms.txt` — static, hand-curated (50 states + 9 posts + 6 reviews + 12 key facts)
+- `public/llms-full.txt` — auto-generated by `scripts/generate-llms-full.ts` at prebuild from Notion FAQ DB. Currently 51 entries × ~250 verified facts.
+
+This is run by the `prebuild` npm hook so every Vercel build gets fresh content.
+
+### Analytics
+
+Google Tag (gtag) loaded in `app/layout.tsx` via `next/script` with
+`strategy="afterInteractive"` so it doesn't block first paint. Conversion ID:
+`AW-18090793804`.
+
+---
+
+## 15. Build and deploy
+
+### Vercel
+
+- Auto-deploys on push to `main`
+- Production branch: `main`
+- Build command: `npm run build` (which runs `prebuild` → `generate-llms` first)
+- ISR pages revalidate every 86400s (24h); deploys force a rebuild
+
+### Cloudflare DNS
+
+- `trafficschoolpicker.com` → 301 redirect to `www.trafficschoolpicker.com`
+  (canonical)
+- All `<link rel="canonical">` use the `www.` form
+
+### Build hook
+
+[app/api/admin/deploy/route.ts](app/api/admin/deploy/route.ts) wraps the
+`VERCEL_DEPLOY_HOOK` env var. Used by the GitHub Actions workflow after a
+data refresh, and available as a manual trigger from `/admin`.
+
+---
+
+## 16. GitHub Actions monthly refresh
+
+[.github/workflows/monthly-update.yml](.github/workflows/monthly-update.yml)
+
+### Schedule
+
+`0 9 1 * *` — first of every month at 09:00 UTC. Plus `workflow_dispatch`
+for manual triggers.
+
+### Steps
+
+1. Checkout (`actions/checkout@v5`)
+2. Setup Node 22 LTS (`actions/setup-node@v5`)
+3. Verify required secrets are present (preflight, fails fast with clear error)
+4. `npm ci`
+5. `npx playwright install chromium --with-deps`
+6. `npm run scrape:dmv` — runs all 10 DMV scrapers sequentially
+7. `npm run scrape:reviews`
+8. `npm run scrape:prices`
+9. `npm run enrich:places`
+10. POST to `VERCEL_DEPLOY_HOOK` to trigger redeploy
+
+### Required secrets
+
+`NOTION_TOKEN`, `NOTION_SCHOOLS_DB`, `NOTION_DIRECTORY_DB`, `NOTION_STATES_DB`,
+`NOTION_PRICING_DB`, `NOTION_FAQ_DB_ID`, `NOTION_STATE_REQUIREMENTS_DB`,
+`NOTION_SCHOOL_VARIANTS_DB`, `GOOGLE_PLACES_API_KEY`. Optional:
+`NOTION_ISSUES_DB`, `VERCEL_DEPLOY_HOOK`.
+
+---
+
+## 17. Environment variables
+
+Single source of truth: [.env.local.example](.env.local.example)
+
+| Variable | Purpose | Required? |
+|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | canonical base URL | yes |
+| `NEXT_PUBLIC_GA_ID` | Google Analytics ID | optional |
+| `NOTION_TOKEN` | Notion integration token | yes |
+| `NOTION_SCHOOLS_DB` | Traffic Schools DB ID | yes |
+| `NOTION_DIRECTORY_DB` | Directory DB ID | yes |
+| `NOTION_STATES_DB` | States DB ID | yes |
+| `NOTION_PRICING_DB` | School Pricing DB ID | yes |
+| `NOTION_FAQ_DB_ID` | State FAQs DB ID | yes |
+| `NOTION_STATE_REQUIREMENTS_DB` | State Requirements DB ID | yes (else state regulatory facts default) |
+| `NOTION_SCHOOL_VARIANTS_DB` | School State Variants DB ID | yes (else editorial falls back to school defaults) |
+| `NOTION_ISSUES_DB` | scraper issue tracker | optional |
+| `GOOGLE_PLACES_API_KEY` | Places API (New) | yes for review/enrich scripts |
+| `ANTHROPIC_API_KEY` | Claude API key | yes for `generate:variants` script only |
+| `NEXT_PUBLIC_TRACKER_HOST` | direct affiliate tracker base URL | optional — fallback to network URL when unset |
+| `VERCEL_DEPLOY_HOOK` | Vercel build trigger URL | optional |
+
+The Notion integration must be **connected to each database** (not just the
+workspace) — Share → Connections → Traffic School. A common failure mode is
+adding a DB ID to env but forgetting to share the DB with the integration; the
+API returns `404 object_not_found`.
+
+---
+
+## 18. Maintenance playbook
+
+### Add a new state video
+
+Edit `STATE_VIDEOS` in [app/[state]/page.tsx](app/[state]/page.tsx). One-line
+change. Commit and push. Vercel auto-deploys within ~3 minutes.
+
+### Promote a school from Tier 2 to Tier 1
+
+In Notion Traffic Schools row:
+- Set `Tier = 1 - Featured`
+- Confirm `State Codes` is non-empty (which states it serves)
+- Confirm `Affiliate Network` is monetizable (`CJ`, `Impact`, `ShareASale`,
+  `Direct`, or `Pending`)
+
+State pages will show the school after the next ISR revalidation (≤24h) or a
+forced redeploy.
+
+### Demote a school (declined affiliate)
+
+Mirror of promotion:
+- `Tier = 2 - Listed`
+- Clear `State Codes` if you want to remove it from state pages entirely
+- Optionally update Affiliate Programs DB Status
+
+The school remains accessible at `/reviews/[slug]` and on `/schools`. The
+empty `stateCodes` array filters it out of every state grid via
+`stateCodes.includes(stateCode)` returning `false`.
+
+### Activate a direct tracking partnership
+
+1. Add `NEXT_PUBLIC_TRACKER_HOST` to Vercel env vars
+2. In Notion: `Tracking Method = direct` and fill `Partner Slug`
+3. Trigger a Vercel rebuild
+
+The school's outbound link will route through the tracker. If anything's
+misconfigured (host unset, slug missing), `buildAffiliateLink` falls back to
+the network URL and logs a warning. **Links never break for the user.**
+
+### Add a coupon code deal
+
+1. In Notion: `Tracking Method = coupon_code` and fill `Coupon Code`
+2. Leave `Affiliate URL` as the school's enrollment page (used as destination)
+3. The CouponCode component renders an amber chip with copy-to-clipboard
+
+### Add a new state requirement
+
+1. In Notion State Requirements DB, add a row with the state's regulatory
+   facts. Reference: `scripts/populate-state-requirements.ts` for the seed
+   format.
+2. Run `npm run generate:variants -- --state CODE` to generate variants for
+   schools that cover that state
+3. Spot-check a few variants in Notion before deploying
+
+### Correct a fabricated AI fact
+
+Pattern (from the April 2026 AZ "24-month" correction):
+
+1. Audit: query all variants for the state, search for the stale phrase across
+   all text fields
+2. Targeted replacement: write a script that uses both exact-pattern matching
+   for known phrases and token replacement for free-form text
+3. Update Generation Notes with a correction provenance note
+4. Validate: re-run audit, confirm zero occurrences
+5. Check codebase for any hardcoded mentions (`grep -r "24-month" content/`)
+
+Locked variants are flagged `Needs Review` rather than overwritten.
+
+---
+
+## 19. Design and operating decisions
+
+### Why Notion instead of Postgres + admin panel
+
+Editorial workflow is one human (Sean). Notion has comments, mentions, undo,
+revision history, and zero ops. A custom admin panel would have been ~3000
+LOC for the CMS alone. The cost: slow queries (~500ms), no JOINs (we
+application-join in TS), and integration setup friction (must connect each
+DB to the integration). Net: solid trade for a small editorial team.
+
+### Why eight Notion DBs instead of one big one
+
+Each DB has a single responsibility. State Requirements is shared across all
+schools; baking it into each school row would mean updating 20 records to
+correct one fact. Pricing is per-school × per-state; folding it into the
+school row would require dozens of columns and break with new states.
+
+### Why ISR with 24h revalidation
+
+Most content updates are batched (monthly scrapes, weekly editorial). A
+24-hour ISR window gives near-instant page loads and a fresh-enough data
+guarantee. Editorial changes that need to ship faster can force a rebuild via
+the deploy hook.
+
+### Why the affiliate gate is a defensive double-check
+
+Sean controls Notion. A school could accidentally be flipped to `Show On Site
+= __YES__` without an active affiliate program, exposing us to listings we
+don't earn from. The `MONETIZABLE_NETWORKS` check is a programmatic
+guarantee: no monetization, no listing, regardless of Notion state.
+
+### Why Tier 2 schools moved off state pages
+
+Originally state pages had a "More approved options" section listing Tier 2
+schools. As the directory grew, this section bloated and diluted the
+comparison. Moving Tier 2 to a dedicated `/schools` page (with sort and
+filter) keeps state pages focused on the curated comparison and gives Tier 2
+schools a permanent home — they don't disappear, they just live in a more
+appropriate context.
+
+### Why state grids only show Tier 1
+
+Three reasons:
+1. **Editorial focus**: a stressed driver with 6 cards is making a faster
+   decision than one with 12. Curation > exhaustiveness.
+2. **Affiliate strength**: Tier 1 schools have active relationships and
+   higher commission rates. Surfacing them on state pages aligns
+   monetization and editorial.
+3. **Defensive against demotion accidents**: a Tier 2 school with populated
+   `State Codes` (forgotten from a prior promotion) won't accidentally leak
+   onto state grids.
+
+### Why three layers (variant → school → state requirement) instead of two
+
+Two layers (variant + school) wouldn't accommodate the structural facts
+that are *purely* state-driven (approval body, mandated hours, ticket
+outcome). A school's pros could correctly differ across states (Variant
+covers that), but the regulatory facts shouldn't have a per-school
+override path — they describe state law. Three layers cleanly separates
+"editorial truth" from "regulatory truth".
+
+### Why pipe-delimited pros/cons in variants but newline-delimited in school defaults
+
+Historical: school defaults predate variants. Newlines worked when authors
+typed pros directly. Variants are AI-generated and pipe is more compact and
+JSON-friendly. `parseLines` in `lib/notion.ts` handles both: splits on
+newlines first, then on pipes if a single line contains them. Either format
+in either field is safe.
+
+### Why preserve-previous-score on review scrapes
+
+Trustpilot occasionally returns 0/0 or fails entirely. Without preservation,
+the next render would show empty ratings — visually worse than slightly
+stale ratings. The cost is detection: a permanently-broken source needs to
+be flagged via the Issues DB, not by users seeing empty cards.
+
+### Why Bayesian normalization instead of raw ratings for ranking
+
+Already covered in §11. Short version: 5.0 from 8 reviews shouldn't beat 4.7
+from 30,000.
+
+### Why no automated tests
+
+Considered. Dropped because:
+- The codebase is largely composition (Notion → resolver → component) where
+  unit tests of pure functions are mostly trivial assertions
+- Manual verification scripts (e.g. the `verify-affiliate-links.ts` we wrote
+  for the tracking-method work) cover the high-leverage logic
+- A test framework adds CI complexity for a one-developer project
+
+This decision should be revisited if the team grows or the link-building or
+resolution logic becomes more complex.
+
+### Why YouTube embeds instead of self-hosted video
+
+YouTube embeds are free (no bandwidth), come with built-in CDN and adaptive
+bitrate, and view metrics count toward the channel. The cost is the
+uneliminable "Watch on YouTube" link in the corner. Self-hosting would be
+~$5/mo bandwidth + worse playback quality + zero discovery upside.
+
+### Why the deploy hook lives in `/api/admin/deploy` instead of being public
+
+The deploy hook URL is a secret (anyone who has it can trigger builds).
+Routing it through an authenticated server endpoint adds a permission gate;
+in practice it's used internally and from the admin page only.
+
+### Why three GitHub Actions secrets are optional
+
+`NOTION_ISSUES_DB` — issue tracking is nice-to-have; if missing, scrapers
+just `console.warn` instead.
+
+`VERCEL_DEPLOY_HOOK` — if missing, the workflow finishes successfully but
+the site won't redeploy until the next manual push.
+
+`NEXT_PUBLIC_TRACKER_HOST` — direct-method schools fall back to network
+URLs when unset. The site keeps working.
+
+The pattern: optional means "missing = degraded but functional, never broken".
+
+### Why scrapers run sequentially, not in parallel
+
+Notion's API rate limit is ~3 req/sec sustained. Running CA + TX + FL in
+parallel quickly trips the limit and produces 429 errors. Sequential keeps
+us well under the ceiling and the total runtime is acceptable (~5 min for
+the full DMV pass).
+
+---
+
+## 20. Known issues and future work
+
+### Known issues
+
+- **TN scraper**: `ERR_CONNECTION_RESET` from the state site intermittently.
+  Previous data preserved; transient.
+- **UT scraper**: times out. Needs investigation.
+- **VA scraper pagination**: only fetches first page (10 clinics). Selector
+  needs fixing.
+- **IL**: blocked by Akamai WAF. Would need a residential proxy or manual
+  curation.
+- **ID and NC PDF URLs**: 404 — need alternative sources.
+- **DriversEd.com price scraping**: JS-heavy storefront. All states fail. Set
+  to `method: 'fixed'` and updated manually.
+- **RI PDF parser**: only extracts 1 school. Regex needs improvement.
+- **Aceable FL** and **TicketSchool CA** price scraping: both fail; manual
+  fallback in place.
+
+### Future work
+
+- **Build the direct tracker** (`track.trafficschoolpicker.com`) — the
+  `buildAffiliateLink` direct branch is plumbed but the receiving end isn't
+  live yet. See the companion brief.
+- **`/schools` directory enhancements** — facets for "no final exam",
+  "money-back guarantee", "mobile app", etc.
+- **Automated AZ-style fact-correction guard** — build-time check that
+  flags variant copy containing time-period tokens that contradict state
+  Eligibility Requirements. Spec in §12 ("Editorial correction example") and
+  Work Item 3 of the AZ correction brief.
+- **NJ / VA / NC variant audit pass** — those states had regulatory
+  corrections in April 2026 that the variants haven't been re-checked
+  against.
+- **Vitest setup** — add a minimal test framework so `buildAffiliateLink`,
+  `resolveStateContent`, and `parseLines` have proper assertions instead of
+  ad-hoc verification scripts.
+- **Move `buildAffiliateLink` warnings** from `console.warn` to a real
+  observability target (e.g. Sentry breadcrumbs, or a Notion Issues row).
+- **Per-school×network branding** — some networks (CJ, Impact) require
+  specific link parameters. Currently we pass through whatever's in the
+  Affiliate URL field; a structured per-network builder would make
+  parameter additions safer.
+
+---
+
+## Appendix A — Glossary
+
+| Term | Meaning |
+|---|---|
+| **Tier 1 / Tier 2** | Editorial tier in Traffic Schools DB. Tier 1 = featured, on state pages; Tier 2 = listed, on `/schools` only. |
+| **Affiliate gate** | Two-condition filter (`showOnSite && monetizable network`) applied in `getAllSchools`. |
+| **Tracking method** | `network` / `direct` / `coupon_code`. Determines how `buildAffiliateLink` builds outbound URLs. |
+| **State Requirement** | A regulatory fact about a state (mandated hours, exam policy, etc.) — sourced from the State Requirements DB. |
+| **Variant** | A school×state editorial override row in the School State Variants DB. Keyed by `{slug}:{STATE}`. |
+| **Resolver / `resolveStateContent`** | The pure function in `lib/notion.ts` that combines variant + school + state requirement into a single `ResolvedSchoolContent` for rendering. |
+| **Locked** | A variant Generation Status meaning "human-verified, never overwrite". |
+| **ISR** | Incremental Static Regeneration. Pages are static but rebuild on a schedule. |
+| **DMV directory** | The DMV-scraped third-party schools listed in the Directory DB. Distinct from the curated Traffic Schools DB. |
+| **Bayesian normalized rating** | `(n × r + 50 × 4.0) / (n + 50)` — smoothed rating used for ranking. |
+
+---
+
+## Appendix B — Common commands
+
+```bash
+# Local dev
+npm run dev
+
+# Build (runs prebuild → generate-llms first)
+npm run build
+
+# Scraping (need .env.local with all required vars)
+npm run scrape:ca           # one state
+npm run scrape:dmv          # all DMV scrapers in sequence
+npm run scrape:reviews      # multi-source review aggregation
+npm run scrape:prices       # per-school × state prices
+npm run enrich:places       # Google Places enrichment
+npm run scrape:all          # full monthly pass
+
+# Editorial AI generation
+npm run generate:variants                       # all schools × states
+npm run generate:variants -- --state CA          # one state
+npm run generate:variants -- --school safe2drive # one school
+npm run generate:variants -- --dry-run          # preview only
+
+# Seed scripts (one-time)
+npm run populate:state-reqs                # populate State Requirements DB
+npm run populate:state-reqs -- CA TX        # specific states only
+npm run seed:safe2drive-ca                 # locked safe2drive:CA test variant
+
+# Bayesian rating
+NOTION_TOKEN=$(grep NOTION_TOKEN .env.local | cut -d= -f2) python3 scripts/normalize-ratings.py
+```
+
+---
+
+*If you change anything covered by this document, update it. Documentation
+that drifts is documentation that misleads.*
