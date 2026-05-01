@@ -8,6 +8,17 @@ on:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    env:
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_SCHOOLS_DB: ${{ secrets.NOTION_SCHOOLS_DB }}
+      NOTION_DIRECTORY_DB: ${{ secrets.NOTION_DIRECTORY_DB }}
+      NOTION_STATES_DB: ${{ secrets.NOTION_STATES_DB }}
+      NOTION_PRICING_DB: ${{ secrets.NOTION_PRICING_DB }}
+      NOTION_FAQ_DB_ID: ${{ secrets.NOTION_FAQ_DB_ID }}
+      NOTION_STATE_REQUIREMENTS_DB: ${{ secrets.NOTION_STATE_REQUIREMENTS_DB }}
+      NOTION_SCHOOL_VARIANTS_DB: ${{ secrets.NOTION_SCHOOL_VARIANTS_DB }}
+      NOTION_ISSUES_DB: ${{ secrets.NOTION_ISSUES_DB }}
+      GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
     steps:
       - uses: actions/checkout@v5
 
@@ -15,41 +26,35 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Verify required secrets are set
+        run: |
+          missing=()
+          for v in NOTION_TOKEN NOTION_SCHOOLS_DB NOTION_DIRECTORY_DB NOTION_PRICING_DB GOOGLE_PLACES_API_KEY; do
+            if [ -z "${!v}" ]; then missing+=("$v"); fi
+          done
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "::error::Missing required secrets: ${missing[*]}"
+            exit 1
+          fi
+          echo "All required secrets present."
+
       - run: npm ci
 
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
-      # JOB 1 — DMV directory scrape (CA, TX, FL)
       - name: Scrape state DMV sources → Notion Directory
-        env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_DIRECTORY_DB: ${{ secrets.NOTION_DIRECTORY_DB }}
         run: npm run scrape:dmv
 
-      # JOB 2 — Review scrape (Trustpilot for Tier 1/2 schools)
       - name: Scrape Trustpilot ratings → Notion Schools
-        env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_SCHOOLS_DB: ${{ secrets.NOTION_SCHOOLS_DB }}
         run: npm run scrape:reviews
 
-      # JOB 3 — Price scrape (state-specific prices for Tier 1/2 schools)
       - name: Scrape school prices → Notion
-        env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_SCHOOLS_DB: ${{ secrets.NOTION_SCHOOLS_DB }}
         run: npm run scrape:prices
 
-      # JOB 4 — Google Places enrichment (websites for new directory schools)
       - name: Enrich new schools via Google Places API
-        env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_DIRECTORY_DB: ${{ secrets.NOTION_DIRECTORY_DB }}
-          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
         run: npm run enrich:places
 
-      # Trigger site redeploy after all data is updated
       - name: Trigger Vercel redeploy
         env:
           VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
