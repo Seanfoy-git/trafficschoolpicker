@@ -1,0 +1,114 @@
+{
+  "michigan": [
+    {
+      "kept_question": "Who submits my certificate in Michigan?",
+      "dropped_question": "Who submits my certificate in Michigan?",
+      "dropped_answer": "Your provider reports completion to the Michigan SOS within one business day. For court-based dismissal, you receive a downloadable certificate to present to the court directly."
+    },
+    {
+      "kept_question": "Does Michigan traffic school dismiss my ticket?",
+      "dropped_question": "Does Michigan traffic school dismiss my ticket?",
+      "dropped_answer": "Michigan's BDIC prevents points from being added to your record and prevents the ticket from being reported to your insurer. Some courts also allow outright dismissal via BDIC. Critical: this benefit is available only ONCE in a driver's lifetime."
+    }
+  ],
+  "indiana": [
+    {
+      "kept_question": "Does Indiana traffic school dismiss my ticket?",
+      "dropped_question": "Does Indiana traffic school dismiss my ticket?",
+      "dropped_answer": "Indiana does not dismiss tickets. Completing the DSP provides a 4-point credit on your driving record but the ticket and conviction remain."
+    },
+    {
+      "kept_question": "Who submits my certificate in Indiana?",
+      "dropped_question": "Who submits my certificate in Indiana?",
+      "dropped_answer": "Your provider submits completion results to the Indiana BMV electronically on your behalf. Allow 7–10 business days for the credit to appear on your record."
+    }
+  ],
+  "colorado": [
+    {
+      "kept_question": "Who submits my certificate in Colorado?",
+      "dropped_question": "Who submits my certificate in Colorado?",
+      "dropped_answer": "Driver submits certificate to court. Your provider emails you the certificate; you must deliver it to your court by the deadline. Some courts also accept electronic submissions from providers."
+    }
+  ],
+  "washington": [
+    {
+      "kept_question": "Who submits my certificate in Washington?",
+      "dropped_question": "Who submits my certificate in Washington?",
+      "dropped_answer": "Driver submits. After completing the course you receive a paper certificate that must be mailed or hand-delivered to your court. The court then processes the deferral with the DOL. Confirm with your specific court whether mail or in-person is required."
+    }
+  ],
+  "georgia": [
+    {
+      "kept_question": "How long is Georgia traffic school?",
+      "dropped_question": "How long is Georgia traffic school?",
+      "dropped_answer": "Georgia's DDS allows you to use the defensive driving point reduction benefit once every 5 years. If you received a 7-point reduction less than 5 years ago, you cannot use traffic school for point reduction again until that period has elapsed."
+    }
+  ],
+  "tennessee": [
+    {
+      "kept_question": "How long is Tennessee traffic school?",
+      "dropped_question": "How long is Tennessee traffic school?",
+      "dropped_answer": "Tennessee requires 8 hours for a TDOS-approved defensive driving course. Online courses must meet this minimum to qualify for ticket dismissal or point reduction."
+    },
+    {
+      "kept_question": "Does Tennessee traffic school dismiss my ticket?",
+      "dropped_question": "Does Tennessee traffic school dismiss my ticket?",
+      "dropped_answer": "Yes. Tennessee courts accept TDOS-approved defensive driving course completion for both ticket dismissal and point reduction on your driving record. The course must come from an approved provider."
+    },
+    {
+      "kept_question": "Can I do Tennessee traffic school online?",
+      "dropped_question": "Can I do Tennessee traffic school online?",
+      "dropped_answer": "Yes. TDOS-approved online defensive driving courses are available in Tennessee. You can complete the full 8-hour course online at your own pace."
+    }
+  ],
+  "louisiana": [
+    {
+      "kept_question": "Does Louisiana traffic school dismiss my ticket?",
+      "dropped_question": "Does Louisiana traffic school dismiss my ticket?",
+      "dropped_answer": "Yes. Louisiana has a statewide defensive driving program that can dismiss your ticket and remove up to 3 points from your driving record. The school submits your completion directly to the OMV electronically — you do not need to mail anything to the court."
+    }
+  ],
+  "wisconsin": [
+    {
+      "kept_question": "Can I do Wisconsin traffic school online?",
+      "dropped_question": "Can I do Wisconsin traffic school online?",
+      "dropped_answer": "Yes. Online defensive driving courses are approved in Wisconsin. Drivers can complete their course entirely online from home through a state-approved provider."
+    },
+    {
+      "kept_question": "Does Wisconsin traffic school dismiss my ticket?",
+      "dropped_question": "Does Wisconsin traffic school dismiss my ticket?",
+      "dropped_answer": "No. Wisconsin does not offer statewide ticket dismissal via defensive driving. Completing an approved course qualifies you for an insurance discount but does not affect your driving record or dismiss the ticket."
+    },
+    {
+      "kept_question": "How long is Wisconsin traffic school?",
+      "dropped_question": "How long is Wisconsin traffic school?",
+      "dropped_answer": "Wisconsin requires a minimum of 6 hours for a state-approved defensive driving course. Online and in-person formats both qualify at this length."
+    }
+  ],
+  "mississippi": [
+    {
+      "kept_question": "Does Mississippi traffic school dismiss my ticket?",
+      "dropped_question": "Does Mississippi traffic school dismiss my ticket?",
+      "dropped_answer": "Yes, at the court's discretion. Mississippi judges may allow ticket dismissal for minor moving violations if you complete an approved defensive driving course. There is no statewide mandate — confirm with your specific court before enrolling."
+    }
+  ],
+  "missouri": [
+    {
+      "kept_question": "Does Missouri traffic school dismiss my ticket?",
+      "dropped_question": "Does Missouri traffic school dismiss my ticket?",
+      "dropped_answer": "Yes, with caveats. Missouri doesn’t technically “dismiss” your ticket — the conviction remains on your record. However, completing a state-approved defensive driving course masks the violation from your insurance company for 3 years, which can prevent premium increases."
+    }
+  ],
+  "ohio": [
+    {
+      "kept_question": "Can I do Ohio traffic school online?",
+      "dropped_question": "Can I do Ohio traffic school online?",
+      "dropped_answer": "Yes. Ohio BMV-approved online defensive driving courses are available statewide. You can complete your course entirely online from home."
+    },
+    {
+      "kept_question": "Does Ohio traffic school dismiss my ticket?",
+      "dropped_question": "Does Ohio traffic school dismiss my ticket?",
+      "dropped_answer": "Ohio ticket dismissal depends entirely on the individual court. Some Ohio courts offer formal diversion programmes where completing a BMV-approved 8-hour Driver Safety Program leads to full ticket dismissal. Other courts use the course only for point prevention — preventing points from being applied rather than dismissing the ticket. The BMV's statewide DSP programme itself does not guarantee dismissal. Always contact your specific court before enrolling to confirm what benefit is available in your jurisdiction."
+    }
+  ]
+}
