@@ -11,6 +11,7 @@ import type {
   StateFaqEntry,
   ContentStatus,
 } from "./types";
+import { pickCanonicalRow } from "./state-canonical";
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
@@ -196,16 +197,20 @@ function mapStateInfo(page: PageObjectResponse): StateInfo {
 export async function getStateInfo(stateCode: string): Promise<StateInfo | null> {
   if (!process.env.NOTION_TOKEN || !STATES_DB) return null;
   try {
+    // Pulls all rows matching the abbreviation. The States DB has duplicate
+    // rows per state from prior seed batches; pickCanonicalRow scores them
+    // by editorial richness so we never accidentally render the empty
+    // 04-02 seed row. See lib/state-canonical.ts for the heuristic.
     const response = await notion.databases.query({
       database_id: STATES_DB,
       filter: {
         property: "Abbreviation",
         rich_text: { equals: stateCode.toUpperCase() },
       },
-      page_size: 1,
     });
-    if (!response.results.length) return null;
-    return mapStateInfo(response.results[0] as PageObjectResponse);
+    const canonical = pickCanonicalRow(response.results as PageObjectResponse[]);
+    if (!canonical) return null;
+    return mapStateInfo(canonical);
   } catch {
     return null;
   }

@@ -1,0 +1,1554 @@
+Mode: DRY RUN (no writes)
+
+(node:62527) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Total rows in States DB: 118
+
+=== Alabama ===
+Rows found: 3
+  - 3362c5a8-ad0a-810d-a613-ea3293a9e287 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-81c0-b7ea-d61b8fa23bad created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+  - 33c2c5a8-ad0a-81a2-8d03-ceab441079d0 created 2026-04-08 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+Canonical pick: richness=2 tie, broken by most recent last_edited_time
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    CONFLICT (strict policy)
+    33c2c5a8-ad0a-81a2-8d03-ceab441079d0 (canonical): "Must hold valid Alabama driver's license; eligible for one course per violation; not available for D…"
+    3362c5a8-ad0a-810d-a613-ea3293a9e287: "Valid AL license, minor moving violation, not CDL holder at time of violation"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    33c2c5a8-ad0a-81a2-8d03-ceab441079d0 (canonical): "Alabama courts generally accept DMV-approved online defensive driving. Confirm with your specific co…"
+    3362c5a8-ad0a-810d-a613-ea3293a9e287: "Court-approved online defensive driving accepted statewide"
+  Average Price:               CONFLICT (strict policy)
+    33c2c5a8-ad0a-81a2-8d03-ceab441079d0 (canonical): "24.95"
+    3362c5a8-ad0a-810d-a613-ea3293a9e287: "19"
+  DMV URL:                     canonical wins (auto policy) — discarding 2 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-810d-a613-ea3293a9e287: "https://www.alabamadmv.org/"
+    [DISCARD WARN] 33a2c5a8-ad0a-81c0-b7ea-d61b8fa23bad: "https://www.alea.gov/dps/driver-license/driver-license-online-services"
+  SEO Title:                   canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-810d-a613-ea3293a9e287: "Best Online Traffic School in Alabama 2025 — Compared & Ranked"
+  SEO Description:             canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-810d-a613-ea3293a9e287: "Compare Alabama-approved online traffic schools. Prices from $19.95. Court-approved for ticket dismi…"
+  Fun Fact:                    canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-810d-a613-ea3293a9e287: "Alabama uses a point system — 12+ points in 2 years triggers license suspension"
+  Certificate Submission:      canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-810d-a613-ea3293a9e287: "School Submits"
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-81c0-b7ea-d61b8fa23bad
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-810d-a613-ea3293a9e287
+
+Trash plan: SKIPPED — 3 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Average Price
+  3362c5a8-ad0a-810d-a613-ea3293a9e287 → untouched (resolve conflict manually)
+  33a2c5a8-ad0a-81c0-b7ea-d61b8fa23bad → untouched (resolve conflict manually)
+
+=== Alaska ===
+Rows found: 3
+  - 3362c5a8-ad0a-8182-b4a2-f817c1934f08 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-814a-ab8c-cd31129cc03b created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+  - 33c2c5a8-ad0a-81e1-961c-df2f56f4f920 created 2026-04-08 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+Canonical pick: richness=2 tie, broken by most recent last_edited_time
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    CONFLICT (strict policy)
+    33c2c5a8-ad0a-81e1-961c-df2f56f4f920 (canonical): "Must hold a valid Alaska driver's license. Ticket dismissal is at individual court discretion — conf…"
+    3362c5a8-ad0a-8182-b4a2-f817c1934f08: "Valid AK license, voluntary or court-ordered"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    33c2c5a8-ad0a-81e1-961c-df2f56f4f920 (canonical): "Alaska does not have a statewide mandatory ticket dismissal program. Some courts may accept completi…"
+    3362c5a8-ad0a-8182-b4a2-f817c1934f08: "Defensive driving accepted for insurance discount; ticket dismissal handled case-by-case by courts"
+  Average Price:               CONFLICT (strict policy)
+    33c2c5a8-ad0a-81e1-961c-df2f56f4f920 (canonical): "29.95"
+    3362c5a8-ad0a-8182-b4a2-f817c1934f08: "25"
+  SEO Description:             canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-8182-b4a2-f817c1934f08: "Compare Alaska-approved defensive driving courses. Prices from $19.95. Insurance discounts available…"
+  Fun Fact:                    canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-8182-b4a2-f817c1934f08: "Alaska has one of the lowest traffic violation rates in the US due to low population density"
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-814a-ab8c-cd31129cc03b
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-8182-b4a2-f817c1934f08
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-8182-b4a2-f817c1934f08
+
+Trash plan: SKIPPED — 3 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Average Price
+  3362c5a8-ad0a-8182-b4a2-f817c1934f08 → untouched (resolve conflict manually)
+  33a2c5a8-ad0a-814a-ab8c-cd31129cc03b → untouched (resolve conflict manually)
+
+=== Arizona ===
+Rows found: 2
+  - 3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-81ab-b764-d5808b449444 created 2026-04-06 [intro:Y faq:Y verified:Y status:Y elig:N court:N]   ← CANONICAL
+Canonical pick: richness=4
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   canonical (no merge)
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    ← MERGE FROM 3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8
+  Court Acceptance Notes:      ← MERGE FROM 3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8
+  Average Price:               ← MERGE FROM 3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8: "https://www.azcourts.gov/drive"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8
+  Research Notes:              ← MERGE FROM 3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8
+
+Trash plan:
+  3362c5a8-ad0a-81a0-bdd6-f3a63be59bc8 → archived: true
+
+=== Arkansas ===
+Rows found: 3
+  - 3362c5a8-ad0a-8143-9b01-c58c4b993285 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-812e-bd71-ecc7ea6803fe created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+  - 33c2c5a8-ad0a-81cd-809b-f605a361ff1c created 2026-04-08 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+Canonical pick: richness=2 tie, broken by most recent last_edited_time
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    CONFLICT (strict policy)
+    33c2c5a8-ad0a-81cd-809b-f605a361ff1c (canonical): "Valid Arkansas driver's license; minor moving violation; not eligible for DUI, reckless driving, or …"
+    3362c5a8-ad0a-8143-9b01-c58c4b993285: "Valid AR license, minor moving violation"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    33c2c5a8-ad0a-81cd-809b-f605a361ff1c (canonical): "Arkansas courts accept state-approved online defensive driving for ticket dismissal. Court approval …"
+    3362c5a8-ad0a-8143-9b01-c58c4b993285: "Online traffic safety education accepted by AR courts statewide"
+  Average Price:               CONFLICT (strict policy)
+    33c2c5a8-ad0a-81cd-809b-f605a361ff1c (canonical): "24.95"
+    3362c5a8-ad0a-8143-9b01-c58c4b993285: "20"
+  DMV URL:                     canonical wins (auto policy) — discarding 2 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-8143-9b01-c58c4b993285: "https://www.dfa.arkansas.gov/driver-services/"
+    [DISCARD WARN] 33a2c5a8-ad0a-812e-bd71-ecc7ea6803fe: "https://www.dfa.arkansas.gov/revenues/motor-vehicle/"
+  SEO Title:                   canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-8143-9b01-c58c4b993285: "Best Online Traffic School in Arkansas 2025 — Compared & Ranked"
+  SEO Description:             canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-8143-9b01-c58c4b993285: "Compare Arkansas-approved traffic safety courses. Prices from $19.95. Court-accepted for ticket dism…"
+  Fun Fact:                    canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-8143-9b01-c58c4b993285: "Arkansas allows online defensive driving for both ticket dismissal and insurance discounts"
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-812e-bd71-ecc7ea6803fe
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-8143-9b01-c58c4b993285
+
+Trash plan: SKIPPED — 3 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Average Price
+  3362c5a8-ad0a-8143-9b01-c58c4b993285 → untouched (resolve conflict manually)
+  33a2c5a8-ad0a-812e-bd71-ecc7ea6803fe → untouched (resolve conflict manually)
+
+=== California ===
+Rows found: 2
+  - 3362c5a8-ad0a-811b-b401-d9859d427651 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-8151-a771-da02d698f8d5 created 2026-04-06 [intro:Y faq:Y verified:Y status:Y elig:N court:N]   ← CANONICAL
+Canonical pick: richness=4
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   canonical (no merge)
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    ← MERGE FROM 3362c5a8-ad0a-811b-b401-d9859d427651
+  Court Acceptance Notes:      ← MERGE FROM 3362c5a8-ad0a-811b-b401-d9859d427651
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-811b-b401-d9859d427651
+  Average Price:               ← MERGE FROM 3362c5a8-ad0a-811b-b401-d9859d427651
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-811b-b401-d9859d427651: "https://www.dmv.ca.gov/"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-811b-b401-d9859d427651
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-811b-b401-d9859d427651
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-811b-b401-d9859d427651
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-811b-b401-d9859d427651
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-811b-b401-d9859d427651
+  Approved School Count:       ← MERGE FROM 3362c5a8-ad0a-811b-b401-d9859d427651
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-811b-b401-d9859d427651
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-811b-b401-d9859d427651
+
+Trash plan:
+  3362c5a8-ad0a-811b-b401-d9859d427651 → archived: true
+
+=== Colorado ===
+Rows found: 2
+  - 3362c5a8-ad0a-81d1-ba72-da991d788480 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-81d9-8873-d661c348040a created 2026-04-06 [intro:Y faq:Y verified:Y status:Y elig:N court:N]   ← CANONICAL
+Canonical pick: richness=4
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   canonical (no merge)
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    ← MERGE FROM 3362c5a8-ad0a-81d1-ba72-da991d788480
+  Court Acceptance Notes:      ← MERGE FROM 3362c5a8-ad0a-81d1-ba72-da991d788480
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-81d1-ba72-da991d788480
+  Average Price:               ← MERGE FROM 3362c5a8-ad0a-81d1-ba72-da991d788480
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81d1-ba72-da991d788480: "https://dmv.colorado.gov/"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-81d1-ba72-da991d788480
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-81d1-ba72-da991d788480
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-81d1-ba72-da991d788480
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-81d1-ba72-da991d788480
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-81d1-ba72-da991d788480
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-81d1-ba72-da991d788480
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-81d1-ba72-da991d788480
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-81d1-ba72-da991d788480
+
+Trash plan:
+  3362c5a8-ad0a-81d1-ba72-da991d788480 → archived: true
+
+=== Connecticut ===
+Rows found: 2
+  - 3362c5a8-ad0a-81c8-9891-fc7a15aadfc8 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-81c3-9b99-ceda4c21a5c0 created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-81c3-9b99-ceda4c21a5c0
+
+Trash plan:
+  33a2c5a8-ad0a-81c3-9b99-ceda4c21a5c0 → archived: true
+
+=== Delaware ===
+Rows found: 2
+  - 3362c5a8-ad0a-81de-a102-e3e4273a0bc5 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-8104-b427-de9041851d4c created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  (no merges needed — all data already on canonical or empty everywhere)
+
+Trash plan:
+  33a2c5a8-ad0a-8104-b427-de9041851d4c → archived: true
+
+=== Florida ===
+Rows found: 2
+  - 3362c5a8-ad0a-812f-8b77-fbd196925bb0 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-818a-b56a-e11dc26050ec created 2026-04-06 [intro:Y faq:Y verified:Y status:Y elig:N court:N]   ← CANONICAL
+Canonical pick: richness=4
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   canonical (no merge)
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    ← MERGE FROM 3362c5a8-ad0a-812f-8b77-fbd196925bb0
+  Court Acceptance Notes:      ← MERGE FROM 3362c5a8-ad0a-812f-8b77-fbd196925bb0
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-812f-8b77-fbd196925bb0
+  Average Price:               ← MERGE FROM 3362c5a8-ad0a-812f-8b77-fbd196925bb0
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-812f-8b77-fbd196925bb0: "https://www.flhsmv.gov/"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-812f-8b77-fbd196925bb0
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-812f-8b77-fbd196925bb0
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-812f-8b77-fbd196925bb0
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-812f-8b77-fbd196925bb0
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-812f-8b77-fbd196925bb0
+  Approved School Count:       ← MERGE FROM 3362c5a8-ad0a-812f-8b77-fbd196925bb0
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-812f-8b77-fbd196925bb0
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-812f-8b77-fbd196925bb0
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-812f-8b77-fbd196925bb0
+
+Trash plan:
+  3362c5a8-ad0a-812f-8b77-fbd196925bb0 → archived: true
+
+=== Georgia ===
+Rows found: 3
+  - 3362c5a8-ad0a-8149-8da6-f4e7b4a7690d created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-8154-b9a2-f658c0bc7e49 created 2026-04-06 [intro:Y faq:N verified:Y status:Y elig:N court:N]   ← CANONICAL
+  - 33c2c5a8-ad0a-81d2-8e76-d786f81d15ef created 2026-04-08 [intro:N faq:Y verified:N status:N elig:Y court:Y]
+Canonical pick: richness=3 tie, broken by Content Status=Complete
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   ← MERGE FROM 33c2c5a8-ad0a-81d2-8e76-d786f81d15ef
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    CONFLICT (strict policy)
+    3362c5a8-ad0a-8149-8da6-f4e7b4a7690d: "Valid GA license, completion of DDS-approved course, not more than 6 points in 12 months"
+    33c2c5a8-ad0a-81d2-8e76-d786f81d15ef: "Valid Georgia license; may use the 7-point reduction once every 5 years; not eligible for DUI, aggre…"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    3362c5a8-ad0a-8149-8da6-f4e7b4a7690d: "Georgia DDS-approved online defensive driving accepted statewide. Reduces points by up to 7 every 5 …"
+    33c2c5a8-ad0a-81d2-8e76-d786f81d15ef: "Georgia's DDS-approved online courses are accepted statewide. Completing a course can mask a convict…"
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-8149-8da6-f4e7b4a7690d (multiple dupes have identical value)
+  Average Price:               CONFLICT (strict policy)
+    3362c5a8-ad0a-8149-8da6-f4e7b4a7690d: "20"
+    33c2c5a8-ad0a-81d2-8e76-d786f81d15ef: "24.95"
+  DMV URL:                     canonical wins (auto policy) — discarding 2 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-8149-8da6-f4e7b4a7690d: "https://dds.georgia.gov/"
+    [DISCARD WARN] 33c2c5a8-ad0a-81d2-8e76-d786f81d15ef: "https://dds.georgia.gov/"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-8149-8da6-f4e7b4a7690d (multiple dupes have identical value)
+  SEO Description:             ← MERGE FROM 33c2c5a8-ad0a-81d2-8e76-d786f81d15ef (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-8149-8da6-f4e7b4a7690d: "Compare DDS-approved Georgia defensive driving courses. Prices from $19.95. Remove up to 7 points fr…"
+  Fun Fact:                    ← MERGE FROM 33c2c5a8-ad0a-81d2-8e76-d786f81d15ef (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-8149-8da6-f4e7b4a7690d: "Georgia allows drivers to reduce up to 7 points every 5 years — among the most generous point reduct…"
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-8149-8da6-f4e7b4a7690d (multiple dupes have identical value)
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-8149-8da6-f4e7b4a7690d (multiple dupes have identical value)
+  Last Updated:                ← MERGE FROM 33c2c5a8-ad0a-81d2-8e76-d786f81d15ef
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-8149-8da6-f4e7b4a7690d (multiple dupes have identical value)
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-8149-8da6-f4e7b4a7690d (multiple dupes have identical value)
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-8149-8da6-f4e7b4a7690d (multiple dupes have identical value)
+
+Trash plan: SKIPPED — 3 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Average Price
+  3362c5a8-ad0a-8149-8da6-f4e7b4a7690d → untouched (resolve conflict manually)
+  33c2c5a8-ad0a-81d2-8e76-d786f81d15ef → untouched (resolve conflict manually)
+
+=== Hawaii ===
+Rows found: 3
+  - 3362c5a8-ad0a-81c0-b3d9-c56e102acc90 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-813b-b327-ffdd2da48e1e created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+  - 33c2c5a8-ad0a-813e-ac8b-ce1dacc45a4b created 2026-04-08 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+Canonical pick: richness=2 tie, broken by most recent last_edited_time
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    CONFLICT (strict policy)
+    33c2c5a8-ad0a-813e-ac8b-ce1dacc45a4b (canonical): "Valid Hawaii driver's license; minor moving violation; ticket dismissal at court discretion; not eli…"
+    3362c5a8-ad0a-81c0-b3d9-c56e102acc90: "Valid HI license, court order or voluntary enrollment"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    33c2c5a8-ad0a-813e-ac8b-ce1dacc45a4b (canonical): "Hawaii judges have discretion on whether to accept online defensive driving for ticket dismissal. Co…"
+    3362c5a8-ad0a-81c0-b3d9-c56e102acc90: "Online abstract driver improvement accepted by HI courts. Must use state-approved provider."
+  Average Price:               CONFLICT (strict policy)
+    33c2c5a8-ad0a-813e-ac8b-ce1dacc45a4b (canonical): "34.95"
+    3362c5a8-ad0a-81c0-b3d9-c56e102acc90: "25"
+  DMV URL:                     canonical wins (auto policy) — discarding 2 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81c0-b3d9-c56e102acc90: "https://hidot.hawaii.gov/"
+    [DISCARD WARN] 33a2c5a8-ad0a-813b-b327-ffdd2da48e1e: "https://www.hawaii.gov/dot/highways/"
+  SEO Title:                   canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81c0-b3d9-c56e102acc90: "Best Online Traffic School in Hawaii 2025 — Compared & Ranked"
+  SEO Description:             canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81c0-b3d9-c56e102acc90: "Compare Hawaii-approved online traffic schools. Prices from $19.95. Court-accepted for ticket dismis…"
+  Fun Fact:                    canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81c0-b3d9-c56e102acc90: "Hawaii is one of the few island states with a fully functional online traffic school system accepted…"
+  Certificate Submission:      canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81c0-b3d9-c56e102acc90: "School Submits"
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-813b-b327-ffdd2da48e1e
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-81c0-b3d9-c56e102acc90
+
+Trash plan: SKIPPED — 3 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Average Price
+  3362c5a8-ad0a-81c0-b3d9-c56e102acc90 → untouched (resolve conflict manually)
+  33a2c5a8-ad0a-813b-b327-ffdd2da48e1e → untouched (resolve conflict manually)
+
+=== Idaho ===
+Rows found: 3
+  - 3362c5a8-ad0a-81fe-8919-c83f447c16c1 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-814d-91e8-c2c03138b562 created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+  - 33c2c5a8-ad0a-8182-99e8-e1109ff55b12 created 2026-04-08 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+Canonical pick: richness=2 tie, broken by most recent last_edited_time
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    CONFLICT (strict policy)
+    33c2c5a8-ad0a-8182-99e8-e1109ff55b12 (canonical): "Valid Idaho driver's license; minor moving violation; court must approve ticket dismissal before you…"
+    3362c5a8-ad0a-81fe-8919-c83f447c16c1: "Valid ID license, ITD-approved course"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    33c2c5a8-ad0a-8182-99e8-e1109ff55b12 (canonical): "Idaho courts may allow ticket dismissal via an approved defensive driving course. Always get court a…"
+    3362c5a8-ad0a-81fe-8919-c83f447c16c1: "Online defensive driving accepted by Idaho courts for point reduction and insurance discounts."
+  Average Price:               CONFLICT (strict policy)
+    33c2c5a8-ad0a-8182-99e8-e1109ff55b12 (canonical): "24.95"
+    3362c5a8-ad0a-81fe-8919-c83f447c16c1: "20"
+  SEO Description:             canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81fe-8919-c83f447c16c1: "Compare Idaho-approved online defensive driving courses. Prices from $19.95. Reduce points and save …"
+  Fun Fact:                    canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81fe-8919-c83f447c16c1: "Idaho has some of the most scenic driving routes in the US, but traffic violations still follow you …"
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-81fe-8919-c83f447c16c1
+
+Trash plan: SKIPPED — 3 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Average Price
+  3362c5a8-ad0a-81fe-8919-c83f447c16c1 → untouched (resolve conflict manually)
+  33a2c5a8-ad0a-814d-91e8-c2c03138b562 → untouched (resolve conflict manually)
+
+=== Illinois ===
+Rows found: 2
+  - 3362c5a8-ad0a-8149-a119-e3540e78a0ad created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-81ed-bc4f-d25f0162d791 created 2026-04-06 [intro:Y faq:Y verified:Y status:Y elig:N court:N]   ← CANONICAL
+Canonical pick: richness=4
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   canonical (no merge)
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    ← MERGE FROM 3362c5a8-ad0a-8149-a119-e3540e78a0ad
+  Court Acceptance Notes:      ← MERGE FROM 3362c5a8-ad0a-8149-a119-e3540e78a0ad
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-8149-a119-e3540e78a0ad
+  Average Price:               ← MERGE FROM 3362c5a8-ad0a-8149-a119-e3540e78a0ad
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-8149-a119-e3540e78a0ad: "https://www.ilsos.gov/departments/drivers/"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-8149-a119-e3540e78a0ad
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-8149-a119-e3540e78a0ad
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-8149-a119-e3540e78a0ad
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-8149-a119-e3540e78a0ad
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-8149-a119-e3540e78a0ad
+  Insurance Discount Available: ← MERGE FROM 3362c5a8-ad0a-8149-a119-e3540e78a0ad
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-8149-a119-e3540e78a0ad
+
+Trash plan:
+  3362c5a8-ad0a-8149-a119-e3540e78a0ad → archived: true
+
+=== Indiana ===
+Rows found: 2
+  - 3362c5a8-ad0a-81bd-8123-fe3fd1529603 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-8186-8581-f78940b0620d created 2026-04-06 [intro:Y faq:Y verified:Y status:Y elig:N court:N]   ← CANONICAL
+Canonical pick: richness=4
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   canonical (no merge)
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    ← MERGE FROM 3362c5a8-ad0a-81bd-8123-fe3fd1529603
+  Court Acceptance Notes:      ← MERGE FROM 3362c5a8-ad0a-81bd-8123-fe3fd1529603
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-81bd-8123-fe3fd1529603
+  Average Price:               ← MERGE FROM 3362c5a8-ad0a-81bd-8123-fe3fd1529603
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-81bd-8123-fe3fd1529603
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-81bd-8123-fe3fd1529603
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-81bd-8123-fe3fd1529603
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-81bd-8123-fe3fd1529603
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-81bd-8123-fe3fd1529603
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-81bd-8123-fe3fd1529603
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-81bd-8123-fe3fd1529603
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-81bd-8123-fe3fd1529603
+
+Trash plan:
+  3362c5a8-ad0a-81bd-8123-fe3fd1529603 → archived: true
+
+=== Iowa ===
+Rows found: 2
+  - 3362c5a8-ad0a-81ba-8b73-dd1b24c8971d created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-8139-affb-f76abca805b1 created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-8139-affb-f76abca805b1
+
+Trash plan:
+  33a2c5a8-ad0a-8139-affb-f76abca805b1 → archived: true
+
+=== Kansas ===
+Rows found: 2
+  - 3362c5a8-ad0a-818e-a44f-f0262a24b150 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-81da-8ce3-f7598ad91df2 created 2026-04-06 [intro:Y faq:Y verified:Y status:Y elig:N court:N]   ← CANONICAL
+Canonical pick: richness=4
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   canonical (no merge)
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    ← MERGE FROM 3362c5a8-ad0a-818e-a44f-f0262a24b150
+  Court Acceptance Notes:      ← MERGE FROM 3362c5a8-ad0a-818e-a44f-f0262a24b150
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-818e-a44f-f0262a24b150
+  Average Price:               ← MERGE FROM 3362c5a8-ad0a-818e-a44f-f0262a24b150
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-818e-a44f-f0262a24b150
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-818e-a44f-f0262a24b150
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-818e-a44f-f0262a24b150
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-818e-a44f-f0262a24b150
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-818e-a44f-f0262a24b150
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-818e-a44f-f0262a24b150
+  Insurance Discount Available: ← MERGE FROM 3362c5a8-ad0a-818e-a44f-f0262a24b150
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-818e-a44f-f0262a24b150
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-818e-a44f-f0262a24b150
+
+Trash plan:
+  3362c5a8-ad0a-818e-a44f-f0262a24b150 → archived: true
+
+=== Kentucky ===
+Rows found: 2
+  - 3362c5a8-ad0a-81aa-831f-d47b696c565a created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-8174-bea0-e3e156db170f created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  (no merges needed — all data already on canonical or empty everywhere)
+
+Trash plan:
+  33a2c5a8-ad0a-8174-bea0-e3e156db170f → archived: true
+
+=== Louisiana ===
+Rows found: 3
+  - 3362c5a8-ad0a-81b9-859f-ea6e207ede4e created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-8140-b685-e06c1a4501c0 created 2026-04-06 [intro:Y faq:N verified:Y status:Y elig:N court:N]   ← CANONICAL
+  - 33c2c5a8-ad0a-81af-96ad-f707c45ee308 created 2026-04-08 [intro:N faq:Y verified:N status:N elig:Y court:Y]
+Canonical pick: richness=3 tie, broken by Content Status=Complete
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   ← MERGE FROM 33c2c5a8-ad0a-81af-96ad-f707c45ee308
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    CONFLICT (strict policy)
+    3362c5a8-ad0a-81b9-859f-ea6e207ede4e: "Valid LA license, OMV-approved course, court permission for ticket dismissal"
+    33c2c5a8-ad0a-81af-96ad-f707c45ee308: "Valid Louisiana license; one eligible violation in 12 months; not available for DUI, reckless drivin…"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    3362c5a8-ad0a-81b9-859f-ea6e207ede4e: "Louisiana OMV-approved online defensive driving accepted statewide. Ticket dismissal subject to cour…"
+    33c2c5a8-ad0a-81af-96ad-f707c45ee308: "Louisiana-approved online defensive driving is accepted statewide. The school electronically submits…"
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-81b9-859f-ea6e207ede4e (multiple dupes have identical value)
+  Average Price:               CONFLICT (strict policy)
+    3362c5a8-ad0a-81b9-859f-ea6e207ede4e: "22"
+    33c2c5a8-ad0a-81af-96ad-f707c45ee308: "24.95"
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81b9-859f-ea6e207ede4e: "https://offices.dps.louisiana.gov/OMV.aspx"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-81b9-859f-ea6e207ede4e (multiple dupes have identical value)
+  SEO Description:             ← MERGE FROM 33c2c5a8-ad0a-81af-96ad-f707c45ee308 (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-81b9-859f-ea6e207ede4e: "Compare Louisiana OMV-approved defensive driving courses. Prices from $19.95. Court-accepted for tic…"
+  Fun Fact:                    ← MERGE FROM 33c2c5a8-ad0a-81af-96ad-f707c45ee308 (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-81b9-859f-ea6e207ede4e: "Louisiana has some of the highest auto insurance rates in the US — making the insurance discount fro…"
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-81b9-859f-ea6e207ede4e (auto policy, longest dup value)
+    [DISCARD WARN] 33c2c5a8-ad0a-81af-96ad-f707c45ee308: "School Submits"
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-81b9-859f-ea6e207ede4e (multiple dupes have identical value)
+  Last Updated:                ← MERGE FROM 33c2c5a8-ad0a-81af-96ad-f707c45ee308
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-81b9-859f-ea6e207ede4e (multiple dupes have identical value)
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-81b9-859f-ea6e207ede4e (multiple dupes have identical value)
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-81b9-859f-ea6e207ede4e (multiple dupes have identical value)
+
+Trash plan: SKIPPED — 3 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Average Price
+  3362c5a8-ad0a-81b9-859f-ea6e207ede4e → untouched (resolve conflict manually)
+  33c2c5a8-ad0a-81af-96ad-f707c45ee308 → untouched (resolve conflict manually)
+
+=== Maine ===
+Rows found: 2
+  - 3362c5a8-ad0a-8123-bb75-fac6353248cc created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-81e3-8988-d59cedec6e11 created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-81e3-8988-d59cedec6e11
+
+Trash plan:
+  33a2c5a8-ad0a-81e3-8988-d59cedec6e11 → archived: true
+
+=== Maryland ===
+Rows found: 2
+  - 3362c5a8-ad0a-811c-92f1-f1d10425a599 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-817c-a049-e1b843633dbe created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 33a2c5a8-ad0a-817c-a049-e1b843633dbe: "https://mva.maryland.gov/drivers/pages/driver-improvement-program.aspx"
+
+Trash plan:
+  33a2c5a8-ad0a-817c-a049-e1b843633dbe → archived: true
+
+=== Massachusetts ===
+Rows found: 2
+  - 3362c5a8-ad0a-819f-bd05-d3e78e077ce7 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-8166-a0f1-c08a0d32ce81 created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-8166-a0f1-c08a0d32ce81
+
+Trash plan:
+  33a2c5a8-ad0a-8166-a0f1-c08a0d32ce81 → archived: true
+
+=== Michigan ===
+Rows found: 3
+  - 3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-81a0-a5ea-fb54aa75d20d created 2026-04-06 [intro:Y faq:N verified:Y status:Y elig:N court:N]   ← CANONICAL
+  - 33c2c5a8-ad0a-81c4-beab-e59c5cba3e68 created 2026-04-08 [intro:N faq:Y verified:N status:N elig:Y court:Y]
+Canonical pick: richness=3 tie, broken by Content Status=Complete
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   ← MERGE FROM 33c2c5a8-ad0a-81c4-beab-e59c5cba3e68
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    CONFLICT (strict policy)
+    3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3: "Valid non-commercial Michigan license, 2 or fewer points on record at time of violation, ticket must…"
+    33c2c5a8-ad0a-81c4-beab-e59c5cba3e68: "Valid Michigan license; 2 or more points on record; not eligible more than once every 3 years"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3: "Michigan's Basic Driver Improvement Course (BDIC) is an invitation-only program — you must receive a…"
+    33c2c5a8-ad0a-81c4-beab-e59c5cba3e68: "Michigan's Driver Improvement Program reduces points from your record but does not dismiss tickets. …"
+  Minimum Hours:               CONFLICT (strict policy)
+    3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3: "4"
+    33c2c5a8-ad0a-81c4-beab-e59c5cba3e68: "8"
+  Average Price:               CONFLICT (strict policy)
+    3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3: "20"
+    33c2c5a8-ad0a-81c4-beab-e59c5cba3e68: "24.95"
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3: "https://www.michigan.gov/sos/license-id/bdic"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3 (multiple dupes have identical value)
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3 (auto policy, longest dup value)
+    [DISCARD WARN] 33c2c5a8-ad0a-81c4-beab-e59c5cba3e68: "Compare Michigan-approved online driver improvement courses. Remove 2 points from your record and lo…"
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3 (auto policy, longest dup value)
+    [DISCARD WARN] 33c2c5a8-ad0a-81c4-beab-e59c5cba3e68: "Michigan's program removes 2 points from your driving record — but unlike most states, it won't dism…"
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3 (multiple dupes have identical value)
+  Research Notes:              ← MERGE FROM 3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3 (multiple dupes have identical value)
+  Last Updated:                ← MERGE FROM 33c2c5a8-ad0a-81c4-beab-e59c5cba3e68
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3 (multiple dupes have identical value)
+  Insurance Discount Available: ← MERGE FROM 3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3 (multiple dupes have identical value)
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3 (multiple dupes have identical value)
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3 (multiple dupes have identical value)
+
+Trash plan: SKIPPED — 4 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Minimum Hours, Average Price
+  3362c5a8-ad0a-81b2-914d-d03cf8ecd0f3 → untouched (resolve conflict manually)
+  33c2c5a8-ad0a-81c4-beab-e59c5cba3e68 → untouched (resolve conflict manually)
+
+=== Minnesota ===
+Rows found: 2
+  - 3362c5a8-ad0a-81dd-b0d5-c0f5e5fbabf1 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-8117-b953-c508e8925bd7 created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 33a2c5a8-ad0a-8117-b953-c508e8925bd7: "https://dps.mn.gov/divisions/dvs/Pages/default.aspx"
+  Online Dismisses Ticket:     ← MERGE FROM 33a2c5a8-ad0a-8117-b953-c508e8925bd7
+
+Trash plan:
+  33a2c5a8-ad0a-8117-b953-c508e8925bd7 → archived: true
+
+=== Mississippi ===
+Rows found: 3
+  - 3362c5a8-ad0a-8185-8f08-c425fcf718f1 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-813d-9bcf-ed4a4f67966a created 2026-04-06 [intro:Y faq:N verified:Y status:Y elig:N court:N]   ← CANONICAL
+  - 33c2c5a8-ad0a-81c6-8e6f-ecbe8cfc2d9e created 2026-04-08 [intro:N faq:Y verified:N status:N elig:Y court:Y]
+Canonical pick: richness=3 tie, broken by Content Status=Complete
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   ← MERGE FROM 33c2c5a8-ad0a-81c6-8e6f-ecbe8cfc2d9e
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    CONFLICT (strict policy)
+    3362c5a8-ad0a-8185-8f08-c425fcf718f1: "Valid MS license, court permission for ticket dismissal, DPS-approved course"
+    33c2c5a8-ad0a-81c6-8e6f-ecbe8cfc2d9e: "Valid Mississippi license; non-commercial driver; minor moving violation; court must approve before …"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    3362c5a8-ad0a-8185-8f08-c425fcf718f1: "Mississippi DPS-approved online defensive driving accepted statewide. Ticket dismissal subject to co…"
+    33c2c5a8-ad0a-81c6-8e6f-ecbe8cfc2d9e: "Mississippi ticket dismissal via defensive driving is at the judge's discretion. Contact your court …"
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-8185-8f08-c425fcf718f1 (multiple dupes have identical value)
+  Average Price:               CONFLICT (strict policy)
+    3362c5a8-ad0a-8185-8f08-c425fcf718f1: "20"
+    33c2c5a8-ad0a-81c6-8e6f-ecbe8cfc2d9e: "24.95"
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-8185-8f08-c425fcf718f1: "https://www.dps.ms.gov/public-safety-programs/driver-services"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-8185-8f08-c425fcf718f1 (multiple dupes have identical value)
+  SEO Description:             ← MERGE FROM 33c2c5a8-ad0a-81c6-8e6f-ecbe8cfc2d9e (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-8185-8f08-c425fcf718f1: "Compare Mississippi DPS-approved online defensive driving courses. Prices from $19.95. Court-accepte…"
+  Fun Fact:                    ← MERGE FROM 33c2c5a8-ad0a-81c6-8e6f-ecbe8cfc2d9e (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-8185-8f08-c425fcf718f1: "Mississippi courts have broad discretion to offer defensive driving as an alternative to traffic fin…"
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-8185-8f08-c425fcf718f1 (multiple dupes have identical value)
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-8185-8f08-c425fcf718f1 (multiple dupes have identical value)
+  Last Updated:                ← MERGE FROM 33c2c5a8-ad0a-81c6-8e6f-ecbe8cfc2d9e
+  Online Allowed:              ← MERGE FROM 3362c5a8-ad0a-8185-8f08-c425fcf718f1 (multiple dupes have identical value)
+  Online Dismisses Ticket:     ← MERGE FROM 3362c5a8-ad0a-8185-8f08-c425fcf718f1 (multiple dupes have identical value)
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-8185-8f08-c425fcf718f1
+  Insurance Discount Available: ← MERGE FROM 3362c5a8-ad0a-8185-8f08-c425fcf718f1 (multiple dupes have identical value)
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-8185-8f08-c425fcf718f1 (multiple dupes have identical value)
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-8185-8f08-c425fcf718f1 (multiple dupes have identical value)
+
+Trash plan: SKIPPED — 3 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Average Price
+  3362c5a8-ad0a-8185-8f08-c425fcf718f1 → untouched (resolve conflict manually)
+  33c2c5a8-ad0a-81c6-8e6f-ecbe8cfc2d9e → untouched (resolve conflict manually)
+
+=== Missouri ===
+Rows found: 3
+  - 3362c5a8-ad0a-81f8-836c-f0194f2e0a93 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-81e1-a21b-c05b58324dbe created 2026-04-06 [intro:Y faq:N verified:Y status:Y elig:N court:N]   ← CANONICAL
+  - 33c2c5a8-ad0a-812e-9514-e268d8054df8 created 2026-04-08 [intro:N faq:Y verified:N status:N elig:Y court:Y]
+Canonical pick: richness=3 tie, broken by Content Status=Complete
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   ← MERGE FROM 33c2c5a8-ad0a-812e-9514-e268d8054df8
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    CONFLICT (strict policy)
+    3362c5a8-ad0a-81f8-836c-f0194f2e0a93: "Valid MO license, DOR-approved course, court permission for ticket dismissal"
+    33c2c5a8-ad0a-812e-9514-e268d8054df8: "Valid Missouri license; minor moving violation; not available for DUI, excessive speeding, or commer…"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    3362c5a8-ad0a-81f8-836c-f0194f2e0a93: "Missouri DOR-approved online defensive driving accepted statewide. Reduces points and qualifies for …"
+    33c2c5a8-ad0a-812e-9514-e268d8054df8: "Missouri courts accept state-approved defensive driving for ticket masking. Note: the violation stay…"
+  Minimum Hours:               CONFLICT (strict policy)
+    3362c5a8-ad0a-81f8-836c-f0194f2e0a93: "4"
+    33c2c5a8-ad0a-812e-9514-e268d8054df8: "6"
+  Average Price:               CONFLICT (strict policy)
+    3362c5a8-ad0a-81f8-836c-f0194f2e0a93: "22"
+    33c2c5a8-ad0a-812e-9514-e268d8054df8: "24.95"
+  DMV URL:                     canonical wins (auto policy) — discarding 2 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81f8-836c-f0194f2e0a93: "https://dor.mo.gov/motor-vehicle/"
+    [DISCARD WARN] 33c2c5a8-ad0a-812e-9514-e268d8054df8: "https://dor.mo.gov/motor-vehicle/"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-81f8-836c-f0194f2e0a93 (multiple dupes have identical value)
+  SEO Description:             ← MERGE FROM 33c2c5a8-ad0a-812e-9514-e268d8054df8 (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-81f8-836c-f0194f2e0a93: "Compare Missouri DOR-approved online defensive driving courses. Prices from $19.95. Reduce points an…"
+  Fun Fact:                    ← MERGE FROM 33c2c5a8-ad0a-812e-9514-e268d8054df8 (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-81f8-836c-f0194f2e0a93: "Missouri allows point reduction through defensive driving once every 36 months"
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-81f8-836c-f0194f2e0a93 (multiple dupes have identical value)
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-81f8-836c-f0194f2e0a93 (multiple dupes have identical value)
+  Last Updated:                ← MERGE FROM 33c2c5a8-ad0a-812e-9514-e268d8054df8
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-81f8-836c-f0194f2e0a93
+  Insurance Discount Available: ← MERGE FROM 3362c5a8-ad0a-81f8-836c-f0194f2e0a93 (multiple dupes have identical value)
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-81f8-836c-f0194f2e0a93 (multiple dupes have identical value)
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-81f8-836c-f0194f2e0a93 (multiple dupes have identical value)
+
+Trash plan: SKIPPED — 4 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Minimum Hours, Average Price
+  3362c5a8-ad0a-81f8-836c-f0194f2e0a93 → untouched (resolve conflict manually)
+  33c2c5a8-ad0a-812e-9514-e268d8054df8 → untouched (resolve conflict manually)
+
+=== Montana ===
+Rows found: 2
+  - 3362c5a8-ad0a-816a-9056-c71777f56eb3 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-815d-83b4-cdbcc3ad28f1 created 2026-04-06 [intro:Y faq:Y verified:Y status:Y elig:N court:N]   ← CANONICAL
+Canonical pick: richness=4
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   canonical (no merge)
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    ← MERGE FROM 3362c5a8-ad0a-816a-9056-c71777f56eb3
+  Court Acceptance Notes:      ← MERGE FROM 3362c5a8-ad0a-816a-9056-c71777f56eb3
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-816a-9056-c71777f56eb3
+  Average Price:               ← MERGE FROM 3362c5a8-ad0a-816a-9056-c71777f56eb3
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-816a-9056-c71777f56eb3
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-816a-9056-c71777f56eb3
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-816a-9056-c71777f56eb3
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-816a-9056-c71777f56eb3
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-816a-9056-c71777f56eb3
+  Online Allowed:              ← MERGE FROM 3362c5a8-ad0a-816a-9056-c71777f56eb3
+  Online Dismisses Ticket:     ← MERGE FROM 3362c5a8-ad0a-816a-9056-c71777f56eb3
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-816a-9056-c71777f56eb3
+  Insurance Discount Available: ← MERGE FROM 3362c5a8-ad0a-816a-9056-c71777f56eb3
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-816a-9056-c71777f56eb3
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-816a-9056-c71777f56eb3
+
+Trash plan:
+  3362c5a8-ad0a-816a-9056-c71777f56eb3 → archived: true
+
+=== Nebraska ===
+Rows found: 2
+  - 3362c5a8-ad0a-8151-a959-dd2f7e980e5f created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-8122-af95-f91e2bd0fc6b created 2026-04-06 [intro:Y faq:Y verified:Y status:Y elig:N court:N]   ← CANONICAL
+Canonical pick: richness=4
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   canonical (no merge)
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    ← MERGE FROM 3362c5a8-ad0a-8151-a959-dd2f7e980e5f
+  Court Acceptance Notes:      ← MERGE FROM 3362c5a8-ad0a-8151-a959-dd2f7e980e5f
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-8151-a959-dd2f7e980e5f
+  Average Price:               ← MERGE FROM 3362c5a8-ad0a-8151-a959-dd2f7e980e5f
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-8151-a959-dd2f7e980e5f
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-8151-a959-dd2f7e980e5f
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-8151-a959-dd2f7e980e5f
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-8151-a959-dd2f7e980e5f
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-8151-a959-dd2f7e980e5f
+  Online Allowed:              ← MERGE FROM 3362c5a8-ad0a-8151-a959-dd2f7e980e5f
+  Online Dismisses Ticket:     ← MERGE FROM 3362c5a8-ad0a-8151-a959-dd2f7e980e5f
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-8151-a959-dd2f7e980e5f
+  Insurance Discount Available: ← MERGE FROM 3362c5a8-ad0a-8151-a959-dd2f7e980e5f
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-8151-a959-dd2f7e980e5f
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-8151-a959-dd2f7e980e5f
+
+Trash plan:
+  3362c5a8-ad0a-8151-a959-dd2f7e980e5f → archived: true
+
+=== Nevada ===
+Rows found: 2
+  - 3362c5a8-ad0a-818e-9b44-e9cfa7e2e160 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-816a-804d-d466ec55cedd created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  (no merges needed — all data already on canonical or empty everywhere)
+
+Trash plan:
+  33a2c5a8-ad0a-816a-804d-d466ec55cedd → archived: true
+
+=== New Hampshire ===
+Rows found: 2
+  - 3362c5a8-ad0a-8128-99d7-d2bc86c65484 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-8186-b918-c7b001d4643a created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-8186-b918-c7b001d4643a
+
+Trash plan:
+  33a2c5a8-ad0a-8186-b918-c7b001d4643a → archived: true
+
+=== New Jersey ===
+Rows found: 2
+  - 3362c5a8-ad0a-81d0-acf6-f72de0b223d7 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-8137-a14d-c9e3774a71f9 created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 33a2c5a8-ad0a-8137-a14d-c9e3774a71f9: "https://www.state.nj.us/mvc/"
+  Online Dismisses Ticket:     ← MERGE FROM 33a2c5a8-ad0a-8137-a14d-c9e3774a71f9
+
+Trash plan:
+  33a2c5a8-ad0a-8137-a14d-c9e3774a71f9 → archived: true
+
+=== New Mexico ===
+Rows found: 3
+  - 3362c5a8-ad0a-81f2-964f-fb033dc6878f created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-8195-ba0b-dbe3a0423940 created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+  - 33c2c5a8-ad0a-8189-9153-cd298a88c489 created 2026-04-08 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+Canonical pick: richness=2 tie, broken by most recent last_edited_time
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    CONFLICT (strict policy)
+    33c2c5a8-ad0a-8189-9153-cd298a88c489 (canonical): "Valid New Mexico license; minor moving violation; not eligible for DUI, reckless driving, or commerc…"
+    3362c5a8-ad0a-81f2-964f-fb033dc6878f: "Valid NM license, MVD-approved course, court permission"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    33c2c5a8-ad0a-8189-9153-cd298a88c489 (canonical): "New Mexico MVD-approved online defensive driving is accepted statewide and can reduce points on your…"
+    3362c5a8-ad0a-81f2-964f-fb033dc6878f: "New Mexico MVD-approved online defensive driving accepted. Ticket dismissal subject to court approva…"
+  Minimum Hours:               CONFLICT (strict policy)
+    33c2c5a8-ad0a-8189-9153-cd298a88c489 (canonical): "6"
+    3362c5a8-ad0a-81f2-964f-fb033dc6878f: "8"
+  Average Price:               CONFLICT (strict policy)
+    33c2c5a8-ad0a-8189-9153-cd298a88c489 (canonical): "24.95"
+    3362c5a8-ad0a-81f2-964f-fb033dc6878f: "22"
+  SEO Description:             canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81f2-964f-fb033dc6878f: "Compare New Mexico MVD-approved online defensive driving courses. Prices from $19.95. Court-accepted…"
+  Fun Fact:                    canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81f2-964f-fb033dc6878f: "New Mexico's vast rural highway network makes speeding violations common — and defensive driving esp…"
+
+Trash plan: SKIPPED — 4 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Minimum Hours, Average Price
+  3362c5a8-ad0a-81f2-964f-fb033dc6878f → untouched (resolve conflict manually)
+  33a2c5a8-ad0a-8195-ba0b-dbe3a0423940 → untouched (resolve conflict manually)
+
+=== New York ===
+Rows found: 3
+  - 3362c5a8-ad0a-817a-a33a-cce2dd352b18 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-81be-b70b-d8744a5e4555 created 2026-04-06 [intro:Y faq:N verified:Y status:Y elig:N court:N]   ← CANONICAL
+  - 33c2c5a8-ad0a-819b-98f5-c05af40e9464 created 2026-04-08 [intro:N faq:Y verified:N status:N elig:Y court:Y]
+Canonical pick: richness=3 tie, broken by Content Status=Complete
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   ← MERGE FROM 33c2c5a8-ad0a-819b-98f5-c05af40e9464
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    CONFLICT (strict policy)
+    3362c5a8-ad0a-817a-a33a-cce2dd352b18: "Valid NY license, not completed PIRP in past 18 months, licensed for at least 6 months"
+    33c2c5a8-ad0a-819b-98f5-c05af40e9464: "Valid NY license; any driver with a moving violation or looking to reduce points; may take PIRP once…"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    3362c5a8-ad0a-817a-a33a-cce2dd352b18: "New York PIRP (Point & Insurance Reduction Program) is available online. Removes up to 4 points from…"
+    33c2c5a8-ad0a-819b-98f5-c05af40e9464: "New York's PIRP does not dismiss tickets — the conviction still appears on your record. However it r…"
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-817a-a33a-cce2dd352b18 (multiple dupes have identical value)
+  Average Price:               CONFLICT (strict policy)
+    3362c5a8-ad0a-817a-a33a-cce2dd352b18: "35"
+    33c2c5a8-ad0a-819b-98f5-c05af40e9464: "29.95"
+  DMV URL:                     canonical wins (auto policy) — discarding 2 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-817a-a33a-cce2dd352b18: "https://dmv.ny.gov/"
+    [DISCARD WARN] 33c2c5a8-ad0a-819b-98f5-c05af40e9464: "https://dmv.ny.gov/tickets/point-and-insurance-reduction-program-pirp"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-817a-a33a-cce2dd352b18 (auto policy, longest dup value)
+    [DISCARD WARN] 33c2c5a8-ad0a-819b-98f5-c05af40e9464: "Best Online PIRP Course in New York 2025 — Compared & Ranked"
+  SEO Description:             ← MERGE FROM 33c2c5a8-ad0a-819b-98f5-c05af40e9464 (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-817a-a33a-cce2dd352b18: "Compare NY DMV-approved PIRP online courses. Remove up to 4 points, save 10% on insurance. Prices fr…"
+  Fun Fact:                    ← MERGE FROM 33c2c5a8-ad0a-819b-98f5-c05af40e9464 (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-817a-a33a-cce2dd352b18: "New York's PIRP program offers a guaranteed 10% insurance discount for 3 years — one of the most con…"
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-817a-a33a-cce2dd352b18 (multiple dupes have identical value)
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-817a-a33a-cce2dd352b18 (multiple dupes have identical value)
+  Last Updated:                ← MERGE FROM 33c2c5a8-ad0a-819b-98f5-c05af40e9464
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-817a-a33a-cce2dd352b18 (multiple dupes have identical value)
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-817a-a33a-cce2dd352b18 (multiple dupes have identical value)
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-817a-a33a-cce2dd352b18 (multiple dupes have identical value)
+
+Trash plan: SKIPPED — 3 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Average Price
+  3362c5a8-ad0a-817a-a33a-cce2dd352b18 → untouched (resolve conflict manually)
+  33c2c5a8-ad0a-819b-98f5-c05af40e9464 → untouched (resolve conflict manually)
+
+=== North Carolina ===
+Rows found: 2
+  - 3362c5a8-ad0a-8157-8650-de9c6ba2ec45 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-819e-a656-c1f3538b781f created 2026-04-06 [intro:Y faq:N verified:Y status:Y elig:N court:N]   ← CANONICAL
+Canonical pick: richness=3
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    ← MERGE FROM 3362c5a8-ad0a-8157-8650-de9c6ba2ec45
+  Court Acceptance Notes:      ← MERGE FROM 3362c5a8-ad0a-8157-8650-de9c6ba2ec45
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-8157-8650-de9c6ba2ec45
+  Average Price:               ← MERGE FROM 3362c5a8-ad0a-8157-8650-de9c6ba2ec45
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-8157-8650-de9c6ba2ec45
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-8157-8650-de9c6ba2ec45
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-8157-8650-de9c6ba2ec45
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-8157-8650-de9c6ba2ec45
+  Research Notes:              canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-8157-8650-de9c6ba2ec45: "State-mandated course length varies by county: 4 hours in Wake and Guilford counties; 8 hours in all…"
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-8157-8650-de9c6ba2ec45
+  Online Allowed:              ← MERGE FROM 3362c5a8-ad0a-8157-8650-de9c6ba2ec45
+  Online Dismisses Ticket:     ← MERGE FROM 3362c5a8-ad0a-8157-8650-de9c6ba2ec45
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-8157-8650-de9c6ba2ec45
+  Insurance Discount Available: ← MERGE FROM 3362c5a8-ad0a-8157-8650-de9c6ba2ec45
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-8157-8650-de9c6ba2ec45
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-8157-8650-de9c6ba2ec45
+
+Trash plan:
+  3362c5a8-ad0a-8157-8650-de9c6ba2ec45 → archived: true
+
+=== North Dakota ===
+Rows found: 2
+  - 3362c5a8-ad0a-8130-8267-df10a5938a10 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-816d-be87-d1ef9cd56559 created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 33a2c5a8-ad0a-816d-be87-d1ef9cd56559: "https://www.dot.nd.gov/divisions/mv/mv.htm"
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-816d-be87-d1ef9cd56559
+
+Trash plan:
+  33a2c5a8-ad0a-816d-be87-d1ef9cd56559 → archived: true
+
+=== Ohio ===
+Rows found: 3
+  - 3362c5a8-ad0a-8165-bf85-f30db035ddde created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-8138-bc59-db0424e03978 created 2026-04-06 [intro:Y faq:N verified:Y status:Y elig:N court:N]   ← CANONICAL
+  - 33c2c5a8-ad0a-8138-8a42-e867c8d26ef2 created 2026-04-08 [intro:N faq:N verified:N status:N elig:Y court:Y]
+Canonical pick: richness=3
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    CONFLICT (strict policy)
+    3362c5a8-ad0a-8165-bf85-f30db035ddde: "Valid OH license, BMV-approved course, not more than 12 points on record"
+    33c2c5a8-ad0a-8138-8a42-e867c8d26ef2: "Valid Ohio license; minor moving violation; eligibility and benefit depends on the court's ruling fo…"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    3362c5a8-ad0a-8165-bf85-f30db035ddde: "Ohio BMV-approved online defensive driving accepted statewide. Reduces up to 2 points from record. J…"
+    33c2c5a8-ad0a-8138-8a42-e867c8d26ef2: "Ohio courts may allow ticket dismissal or reduced fines via a defensive driving course. Acceptance i…"
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-8165-bf85-f30db035ddde (multiple dupes have identical value)
+  Average Price:               CONFLICT (strict policy)
+    3362c5a8-ad0a-8165-bf85-f30db035ddde: "22"
+    33c2c5a8-ad0a-8138-8a42-e867c8d26ef2: "24.95"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-8165-bf85-f30db035ddde (multiple dupes have identical value)
+  SEO Description:             ← MERGE FROM 33c2c5a8-ad0a-8138-8a42-e867c8d26ef2 (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-8165-bf85-f30db035ddde: "Compare Ohio BMV-approved online defensive driving courses. Prices from $19.95. Remove up to 2 point…"
+  Fun Fact:                    ← MERGE FROM 33c2c5a8-ad0a-8138-8a42-e867c8d26ef2 (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-8165-bf85-f30db035ddde: "Ohio's BMV will suspend your license at 12 points — making a 2-point reduction from defensive drivin…"
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-8165-bf85-f30db035ddde (multiple dupes have identical value)
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-8165-bf85-f30db035ddde (multiple dupes have identical value)
+  Last Updated:                ← MERGE FROM 33c2c5a8-ad0a-8138-8a42-e867c8d26ef2
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-8165-bf85-f30db035ddde
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-8165-bf85-f30db035ddde (multiple dupes have identical value)
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-8165-bf85-f30db035ddde (multiple dupes have identical value)
+
+Trash plan: SKIPPED — 3 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Average Price
+  3362c5a8-ad0a-8165-bf85-f30db035ddde → untouched (resolve conflict manually)
+  33c2c5a8-ad0a-8138-8a42-e867c8d26ef2 → untouched (resolve conflict manually)
+
+=== Oklahoma ===
+Rows found: 2
+  - 3362c5a8-ad0a-8151-84dc-f41981c40254 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-81ab-b57f-ca921a369e2e created 2026-04-06 [intro:Y faq:Y verified:Y status:Y elig:N court:N]   ← CANONICAL
+Canonical pick: richness=4
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   canonical (no merge)
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    ← MERGE FROM 3362c5a8-ad0a-8151-84dc-f41981c40254
+  Court Acceptance Notes:      ← MERGE FROM 3362c5a8-ad0a-8151-84dc-f41981c40254
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-8151-84dc-f41981c40254
+  Average Price:               ← MERGE FROM 3362c5a8-ad0a-8151-84dc-f41981c40254
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-8151-84dc-f41981c40254
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-8151-84dc-f41981c40254
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-8151-84dc-f41981c40254
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-8151-84dc-f41981c40254
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-8151-84dc-f41981c40254
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-8151-84dc-f41981c40254
+  Insurance Discount Available: ← MERGE FROM 3362c5a8-ad0a-8151-84dc-f41981c40254
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-8151-84dc-f41981c40254
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-8151-84dc-f41981c40254
+
+Trash plan:
+  3362c5a8-ad0a-8151-84dc-f41981c40254 → archived: true
+
+=== Oregon ===
+Rows found: 3
+  - 3362c5a8-ad0a-81c8-828d-fd8f8e101cdf created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-814f-8fec-cddd7d8fe7a0 created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+  - 33c2c5a8-ad0a-811a-9e6f-dcf932ea0e67 created 2026-04-08 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+Canonical pick: richness=2 tie, broken by most recent last_edited_time
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    CONFLICT (strict policy)
+    33c2c5a8-ad0a-811a-9e6f-dcf932ea0e67 (canonical): "Valid Oregon license; minor moving violation; one course per 12-month period; not available for DUI …"
+    3362c5a8-ad0a-81c8-828d-fd8f8e101cdf: "Valid OR license, DMV-approved course, court permission for ticket dismissal"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    33c2c5a8-ad0a-811a-9e6f-dcf932ea0e67 (canonical): "Oregon courts accept approved online defensive driving courses for ticket dismissal. Oregon does not…"
+    3362c5a8-ad0a-81c8-828d-fd8f8e101cdf: "Oregon DMV-approved online traffic safety courses accepted. Ticket dismissal and point reduction ava…"
+  Minimum Hours:               CONFLICT (strict policy)
+    33c2c5a8-ad0a-811a-9e6f-dcf932ea0e67 (canonical): "6"
+    3362c5a8-ad0a-81c8-828d-fd8f8e101cdf: "8"
+  Average Price:               CONFLICT (strict policy)
+    33c2c5a8-ad0a-811a-9e6f-dcf932ea0e67 (canonical): "24.95"
+    3362c5a8-ad0a-81c8-828d-fd8f8e101cdf: "25"
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 33a2c5a8-ad0a-814f-8fec-cddd7d8fe7a0: "https://www.oregon.gov/odot/dmv/pages/driverid/dds.aspx"
+  SEO Title:                   canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81c8-828d-fd8f8e101cdf: "Best Online Traffic Safety Course in Oregon 2025 — Compared & Ranked"
+  SEO Description:             canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81c8-828d-fd8f8e101cdf: "Compare Oregon DMV-approved online traffic safety courses. Prices from $19.95. Reduce points and sav…"
+  Fun Fact:                    canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-81c8-828d-fd8f8e101cdf: "Oregon requires court permission for ticket dismissal through defensive driving — judges have broad …"
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-814f-8fec-cddd7d8fe7a0
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-81c8-828d-fd8f8e101cdf
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-81c8-828d-fd8f8e101cdf
+
+Trash plan: SKIPPED — 4 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Minimum Hours, Average Price
+  3362c5a8-ad0a-81c8-828d-fd8f8e101cdf → untouched (resolve conflict manually)
+  33a2c5a8-ad0a-814f-8fec-cddd7d8fe7a0 → untouched (resolve conflict manually)
+
+=== Pennsylvania ===
+Rows found: 2
+  - 3362c5a8-ad0a-8172-8bf7-d8f5e697913b created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-8181-8549-ce7ae3aceb75 created 2026-04-06 [intro:Y faq:N verified:Y status:Y elig:N court:N]   ← CANONICAL
+Canonical pick: richness=3
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    ← MERGE FROM 3362c5a8-ad0a-8172-8bf7-d8f5e697913b
+  Court Acceptance Notes:      ← MERGE FROM 3362c5a8-ad0a-8172-8bf7-d8f5e697913b
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-8172-8bf7-d8f5e697913b
+  Average Price:               ← MERGE FROM 3362c5a8-ad0a-8172-8bf7-d8f5e697913b
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-8172-8bf7-d8f5e697913b: "https://www.pa.gov/agencies/dmv.html"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-8172-8bf7-d8f5e697913b
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-8172-8bf7-d8f5e697913b
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-8172-8bf7-d8f5e697913b
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-8172-8bf7-d8f5e697913b
+  Research Notes:              ← MERGE FROM 3362c5a8-ad0a-8172-8bf7-d8f5e697913b
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-8172-8bf7-d8f5e697913b
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-8172-8bf7-d8f5e697913b
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-8172-8bf7-d8f5e697913b
+
+Trash plan:
+  3362c5a8-ad0a-8172-8bf7-d8f5e697913b → archived: true
+
+=== Rhode Island ===
+Rows found: 2
+  - 3362c5a8-ad0a-81a4-a825-dfaf1c273999 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-811d-8098-cba81a2051c1 created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-811d-8098-cba81a2051c1
+
+Trash plan:
+  33a2c5a8-ad0a-811d-8098-cba81a2051c1 → archived: true
+
+=== South Carolina ===
+Rows found: 2
+  - 3362c5a8-ad0a-81a1-8713-e025fcf1abb5 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-813c-a63d-eab141319921 created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-813c-a63d-eab141319921
+
+Trash plan:
+  33a2c5a8-ad0a-813c-a63d-eab141319921 → archived: true
+
+=== South Dakota ===
+Rows found: 2
+  - 3362c5a8-ad0a-810b-b397-db23f1e99086 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-8117-ba6a-e5ad2aacd893 created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 33a2c5a8-ad0a-8117-ba6a-e5ad2aacd893: "https://dor.sd.gov/motor-vehicles/"
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-8117-ba6a-e5ad2aacd893
+
+Trash plan:
+  33a2c5a8-ad0a-8117-ba6a-e5ad2aacd893 → archived: true
+
+=== Tennessee ===
+Rows found: 3
+  - 3362c5a8-ad0a-818d-9d0a-d33d51c6d3a6 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-811d-a26b-e085507b8f9d created 2026-04-06 [intro:Y faq:N verified:Y status:Y elig:N court:N]   ← CANONICAL
+  - 33c2c5a8-ad0a-8130-a999-cfd692569f64 created 2026-04-08 [intro:N faq:Y verified:N status:N elig:Y court:Y]
+Canonical pick: richness=3 tie, broken by Content Status=Complete
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   ← MERGE FROM 33c2c5a8-ad0a-8130-a999-cfd692569f64
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    CONFLICT (strict policy)
+    3362c5a8-ad0a-818d-9d0a-d33d51c6d3a6: "Valid TN license, DOS-approved course, court permission for ticket dismissal"
+    33c2c5a8-ad0a-8130-a999-cfd692569f64: "Valid Tennessee license; minor moving violation; not available for DUI, reckless driving, or violati…"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    3362c5a8-ad0a-818d-9d0a-d33d51c6d3a6: "Tennessee DOS-approved online defensive driving accepted statewide. Ticket dismissal available. Judg…"
+    33c2c5a8-ad0a-8130-a999-cfd692569f64: "Tennessee courts accept state-approved online defensive driving for ticket dismissal and point reduc…"
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-818d-9d0a-d33d51c6d3a6 (multiple dupes have identical value)
+  Average Price:               CONFLICT (strict policy)
+    3362c5a8-ad0a-818d-9d0a-d33d51c6d3a6: "22"
+    33c2c5a8-ad0a-8130-a999-cfd692569f64: "24.95"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-818d-9d0a-d33d51c6d3a6 (multiple dupes have identical value)
+  SEO Description:             ← MERGE FROM 33c2c5a8-ad0a-8130-a999-cfd692569f64 (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-818d-9d0a-d33d51c6d3a6: "Compare Tennessee DOS-approved online defensive driving courses. Prices from $19.95. Court-accepted …"
+  Fun Fact:                    ← MERGE FROM 33c2c5a8-ad0a-8130-a999-cfd692569f64 (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-818d-9d0a-d33d51c6d3a6: "Tennessee allows ticket dismissal through defensive driving — Nashville and Memphis courts process t…"
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-818d-9d0a-d33d51c6d3a6 (multiple dupes have identical value)
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-818d-9d0a-d33d51c6d3a6 (multiple dupes have identical value)
+  Last Updated:                ← MERGE FROM 33c2c5a8-ad0a-8130-a999-cfd692569f64
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-818d-9d0a-d33d51c6d3a6 (multiple dupes have identical value)
+  Insurance Discount Available: ← MERGE FROM 3362c5a8-ad0a-818d-9d0a-d33d51c6d3a6 (multiple dupes have identical value)
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-818d-9d0a-d33d51c6d3a6 (multiple dupes have identical value)
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-818d-9d0a-d33d51c6d3a6 (multiple dupes have identical value)
+
+Trash plan: SKIPPED — 3 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Average Price
+  3362c5a8-ad0a-818d-9d0a-d33d51c6d3a6 → untouched (resolve conflict manually)
+  33c2c5a8-ad0a-8130-a999-cfd692569f64 → untouched (resolve conflict manually)
+
+=== Texas ===
+Rows found: 2
+  - 3362c5a8-ad0a-819b-96f5-c6e7f470d390 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-8114-b528-c392e7e8ab6a created 2026-04-06 [intro:Y faq:Y verified:Y status:Y elig:N court:N]   ← CANONICAL
+Canonical pick: richness=4
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   canonical (no merge)
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    ← MERGE FROM 3362c5a8-ad0a-819b-96f5-c6e7f470d390
+  Court Acceptance Notes:      ← MERGE FROM 3362c5a8-ad0a-819b-96f5-c6e7f470d390
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-819b-96f5-c6e7f470d390
+  Average Price:               ← MERGE FROM 3362c5a8-ad0a-819b-96f5-c6e7f470d390
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-819b-96f5-c6e7f470d390: "https://www.txdmv.gov/"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-819b-96f5-c6e7f470d390
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-819b-96f5-c6e7f470d390
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-819b-96f5-c6e7f470d390
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-819b-96f5-c6e7f470d390
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-819b-96f5-c6e7f470d390
+  Approved School Count:       ← MERGE FROM 3362c5a8-ad0a-819b-96f5-c6e7f470d390
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-819b-96f5-c6e7f470d390
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-819b-96f5-c6e7f470d390
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-819b-96f5-c6e7f470d390
+
+Trash plan:
+  3362c5a8-ad0a-819b-96f5-c6e7f470d390 → archived: true
+
+=== Utah ===
+Rows found: 2
+  - 3362c5a8-ad0a-8146-bb5c-f53da250a17b created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-81d6-ba3c-ee7070d9eedf created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-81d6-ba3c-ee7070d9eedf
+
+Trash plan:
+  33a2c5a8-ad0a-81d6-ba3c-ee7070d9eedf → archived: true
+
+=== Vermont ===
+Rows found: 2
+  - 3362c5a8-ad0a-814b-bce5-d7551e33505b created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-816f-bc66-d7fe6d74fed1 created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-816f-bc66-d7fe6d74fed1
+
+Trash plan:
+  33a2c5a8-ad0a-816f-bc66-d7fe6d74fed1 → archived: true
+
+=== Virginia ===
+Rows found: 3
+  - 3362c5a8-ad0a-8129-8bdf-f4be088d24f3 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-8126-ae96-cd190bc0642b created 2026-04-06 [intro:Y faq:N verified:Y status:Y elig:N court:N]   ← CANONICAL
+  - 33c2c5a8-ad0a-8139-8496-d3cb8981a395 created 2026-04-08 [intro:N faq:Y verified:N status:N elig:Y court:Y]
+Canonical pick: richness=3 tie, broken by Content Status=Complete
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   ← MERGE FROM 33c2c5a8-ad0a-8139-8496-d3cb8981a395
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    CONFLICT (strict policy)
+    3362c5a8-ad0a-8129-8bdf-f4be088d24f3: "Valid VA license. DMV-approved 8-hour course. Online not permitted for drivers under 20 or CDL holde…"
+    33c2c5a8-ad0a-8139-8496-d3cb8981a395: "Valid Virginia license; drivers with negative points or a court-ordered requirement; course valid on…"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    3362c5a8-ad0a-8129-8bdf-f4be088d24f3: "Virginia driver improvement clinic serves four distinct purposes (COU/DMV/INS/VOL enrollment codes).…"
+    33c2c5a8-ad0a-8139-8496-d3cb8981a395: "Virginia DMV-approved driver improvement courses can earn you +5 safe driver points and may satisfy …"
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-8129-8bdf-f4be088d24f3 (multiple dupes have identical value)
+  Average Price:               CONFLICT (strict policy)
+    3362c5a8-ad0a-8129-8bdf-f4be088d24f3: "25"
+    33c2c5a8-ad0a-8139-8496-d3cb8981a395: "29.95"
+  DMV URL:                     canonical wins (auto policy) — discarding 2 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-8129-8bdf-f4be088d24f3: "https://www.dmv.virginia.gov/"
+    [DISCARD WARN] 33c2c5a8-ad0a-8139-8496-d3cb8981a395: "https://www.dmv.virginia.gov/"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-8129-8bdf-f4be088d24f3 (multiple dupes have identical value)
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-8129-8bdf-f4be088d24f3 (auto policy, longest dup value)
+    [DISCARD WARN] 33c2c5a8-ad0a-8139-8496-d3cb8981a395: "Compare Virginia DMV-approved online driver improvement courses. Earn +5 safe driver points and lowe…"
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-8129-8bdf-f4be088d24f3 (auto policy, longest dup value)
+    [DISCARD WARN] 33c2c5a8-ad0a-8139-8496-d3cb8981a395: "Virginia has one of the most unique point systems in the country — completing a driver improvement c…"
+  Certificate Submission:      ← MERGE FROM 33c2c5a8-ad0a-8139-8496-d3cb8981a395 (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-8129-8bdf-f4be088d24f3: "Electronic"
+  Research Notes:              ← MERGE FROM 3362c5a8-ad0a-8129-8bdf-f4be088d24f3
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-8129-8bdf-f4be088d24f3 (multiple dupes have identical value)
+  Last Updated:                ← MERGE FROM 33c2c5a8-ad0a-8139-8496-d3cb8981a395
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-8129-8bdf-f4be088d24f3 (multiple dupes have identical value)
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-8129-8bdf-f4be088d24f3 (multiple dupes have identical value)
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-8129-8bdf-f4be088d24f3 (multiple dupes have identical value)
+
+Trash plan: SKIPPED — 3 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Average Price
+  3362c5a8-ad0a-8129-8bdf-f4be088d24f3 → untouched (resolve conflict manually)
+  33c2c5a8-ad0a-8139-8496-d3cb8981a395 → untouched (resolve conflict manually)
+
+=== Washington ===
+Rows found: 2
+  - 3362c5a8-ad0a-81dd-b48f-da0eaa4e8457 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-8145-baec-e0d31194feed created 2026-04-06 [intro:Y faq:Y verified:Y status:Y elig:N court:N]   ← CANONICAL
+Canonical pick: richness=4
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   canonical (no merge)
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    ← MERGE FROM 3362c5a8-ad0a-81dd-b48f-da0eaa4e8457
+  Court Acceptance Notes:      ← MERGE FROM 3362c5a8-ad0a-81dd-b48f-da0eaa4e8457
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-81dd-b48f-da0eaa4e8457
+  Average Price:               ← MERGE FROM 3362c5a8-ad0a-81dd-b48f-da0eaa4e8457
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-81dd-b48f-da0eaa4e8457
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-81dd-b48f-da0eaa4e8457
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-81dd-b48f-da0eaa4e8457
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-81dd-b48f-da0eaa4e8457
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-81dd-b48f-da0eaa4e8457
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-81dd-b48f-da0eaa4e8457
+
+Trash plan:
+  3362c5a8-ad0a-81dd-b48f-da0eaa4e8457 → archived: true
+
+=== West Virginia ===
+Rows found: 2
+  - 3362c5a8-ad0a-8131-ae8f-c0d14f31347a created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]   ← CANONICAL
+  - 33a2c5a8-ad0a-81c7-b14c-ce8ee6d6979d created 2026-04-06 [intro:N faq:N verified:N status:N elig:N court:N]
+Canonical pick: richness=2
+
+Merge plan:
+  Intro Paragraph:             <empty everywhere, no change>
+  State FAQ:                   <empty everywhere, no change>
+  Last Verified:               <empty everywhere, no change>
+  Content Status:              <empty everywhere, no change>
+  Eligibility Requirements:    canonical (no merge)
+  Court Acceptance Notes:      canonical (no merge)
+  Research Notes:              ← MERGE FROM 33a2c5a8-ad0a-81c7-b14c-ce8ee6d6979d
+
+Trash plan:
+  33a2c5a8-ad0a-81c7-b14c-ce8ee6d6979d → archived: true
+
+=== Wisconsin ===
+Rows found: 3
+  - 3362c5a8-ad0a-8103-806f-d377a132ec29 created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-817f-a153-fa5564313a51 created 2026-04-06 [intro:Y faq:N verified:Y status:Y elig:N court:N]   ← CANONICAL
+  - 33c2c5a8-ad0a-81a7-b30c-e0ebae06b7aa created 2026-04-08 [intro:N faq:Y verified:N status:N elig:Y court:Y]
+Canonical pick: richness=3 tie, broken by Content Status=Complete
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   ← MERGE FROM 33c2c5a8-ad0a-81a7-b30c-e0ebae06b7aa
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    CONFLICT (strict policy)
+    3362c5a8-ad0a-8103-806f-d377a132ec29: "Valid WI license, DOT-approved course, not more than 12 points on record"
+    33c2c5a8-ad0a-81a7-b30c-e0ebae06b7aa: "Valid Wisconsin license; course accepted for insurance discount purposes; ticket dismissal is not a …"
+  Court Acceptance Notes:      CONFLICT (strict policy)
+    3362c5a8-ad0a-8103-806f-d377a132ec29: "Wisconsin DOT-approved online traffic safety course accepted for point reduction. Ticket dismissal n…"
+    33c2c5a8-ad0a-81a7-b30c-e0ebae06b7aa: "Wisconsin defensive driving courses are accepted for insurance discounts but Wisconsin law does not …"
+  Minimum Hours:               CONFLICT (strict policy)
+    3362c5a8-ad0a-8103-806f-d377a132ec29: "4"
+    33c2c5a8-ad0a-81a7-b30c-e0ebae06b7aa: "6"
+  Average Price:               CONFLICT (strict policy)
+    3362c5a8-ad0a-8103-806f-d377a132ec29: "20"
+    33c2c5a8-ad0a-81a7-b30c-e0ebae06b7aa: "24.95"
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-8103-806f-d377a132ec29: "https://www.dot.wisconsin.gov/drivers/"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-8103-806f-d377a132ec29 (auto policy, longest dup value)
+    [DISCARD WARN] 33c2c5a8-ad0a-81a7-b30c-e0ebae06b7aa: "Best Online Defensive Driving in Wisconsin 2025 — Compared & Ranked"
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-8103-806f-d377a132ec29 (auto policy, longest dup value)
+    [DISCARD WARN] 33c2c5a8-ad0a-81a7-b30c-e0ebae06b7aa: "Compare Wisconsin-approved online defensive driving courses. Lower your insurance premiums. Prices f…"
+  Fun Fact:                    ← MERGE FROM 33c2c5a8-ad0a-81a7-b30c-e0ebae06b7aa (auto policy, longest dup value)
+    [DISCARD WARN] 3362c5a8-ad0a-8103-806f-d377a132ec29: "Wisconsin suspends licenses at 12 points in 12 months — making point reduction through defensive dri…"
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-8103-806f-d377a132ec29 (multiple dupes have identical value)
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-8103-806f-d377a132ec29 (multiple dupes have identical value)
+  Last Updated:                ← MERGE FROM 33c2c5a8-ad0a-81a7-b30c-e0ebae06b7aa
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-8103-806f-d377a132ec29
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-8103-806f-d377a132ec29 (multiple dupes have identical value)
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-8103-806f-d377a132ec29 (multiple dupes have identical value)
+
+Trash plan: SKIPPED — 4 conflict field(s): Eligibility Requirements, Court Acceptance Notes, Minimum Hours, Average Price
+  3362c5a8-ad0a-8103-806f-d377a132ec29 → untouched (resolve conflict manually)
+  33c2c5a8-ad0a-81a7-b30c-e0ebae06b7aa → untouched (resolve conflict manually)
+
+=== Wyoming ===
+Rows found: 2
+  - 3362c5a8-ad0a-8189-8154-cd11a142465a created 2026-04-02 [intro:N faq:N verified:N status:N elig:Y court:Y]
+  - 33a2c5a8-ad0a-81ad-9523-cf7c8e6b9080 created 2026-04-06 [intro:Y faq:Y verified:Y status:Y elig:N court:N]   ← CANONICAL
+Canonical pick: richness=4
+
+Merge plan:
+  Intro Paragraph:             canonical (no merge)
+  State FAQ:                   canonical (no merge)
+  Last Verified:               canonical (no merge)
+  Content Status:              canonical (no merge)
+  Eligibility Requirements:    ← MERGE FROM 3362c5a8-ad0a-8189-8154-cd11a142465a
+  Court Acceptance Notes:      ← MERGE FROM 3362c5a8-ad0a-8189-8154-cd11a142465a
+  Minimum Hours:               ← MERGE FROM 3362c5a8-ad0a-8189-8154-cd11a142465a
+  Average Price:               ← MERGE FROM 3362c5a8-ad0a-8189-8154-cd11a142465a
+  DMV URL:                     canonical wins (auto policy) — discarding 1 duplicate value(s)
+    [DISCARD WARN] 3362c5a8-ad0a-8189-8154-cd11a142465a: "https://www.dot.state.wy.us/home/driver_license_records.html"
+  SEO Title:                   ← MERGE FROM 3362c5a8-ad0a-8189-8154-cd11a142465a
+  SEO Description:             ← MERGE FROM 3362c5a8-ad0a-8189-8154-cd11a142465a
+  Fun Fact:                    ← MERGE FROM 3362c5a8-ad0a-8189-8154-cd11a142465a
+  Certificate Submission:      ← MERGE FROM 3362c5a8-ad0a-8189-8154-cd11a142465a
+  Top School in State:         ← MERGE FROM 3362c5a8-ad0a-8189-8154-cd11a142465a
+  Online Allowed:              ← MERGE FROM 3362c5a8-ad0a-8189-8154-cd11a142465a
+  Online Dismisses Ticket:     ← MERGE FROM 3362c5a8-ad0a-8189-8154-cd11a142465a
+  Online Removes Points:       ← MERGE FROM 3362c5a8-ad0a-8189-8154-cd11a142465a
+  Insurance Discount Available: ← MERGE FROM 3362c5a8-ad0a-8189-8154-cd11a142465a
+  Point System:                ← MERGE FROM 3362c5a8-ad0a-8189-8154-cd11a142465a
+  Status:                      ← MERGE FROM 3362c5a8-ad0a-8189-8154-cd11a142465a
+
+Trash plan:
+  3362c5a8-ad0a-8189-8154-cd11a142465a → archived: true
+
+========================================================================
+=== SUMMARY ===
+========================================================================
+
+States with rows:                  50
+States with >1 row (dupes):        50
+  - Clean (will trash):            33
+  - Will skip trash (conflicts):   17
+States with at least 1 merge:      29
+Rows that would be archived:       33
+
+States with strict-policy conflicts (trash skipped — manual resolution needed):
+  Alabama: Eligibility Requirements, Court Acceptance Notes, Average Price
+  Alaska: Eligibility Requirements, Court Acceptance Notes, Average Price
+  Arkansas: Eligibility Requirements, Court Acceptance Notes, Average Price
+  Georgia: Eligibility Requirements, Court Acceptance Notes, Average Price
+  Hawaii: Eligibility Requirements, Court Acceptance Notes, Average Price
+  Idaho: Eligibility Requirements, Court Acceptance Notes, Average Price
+  Louisiana: Eligibility Requirements, Court Acceptance Notes, Average Price
+  Michigan: Eligibility Requirements, Court Acceptance Notes, Minimum Hours, Average Price
+  Mississippi: Eligibility Requirements, Court Acceptance Notes, Average Price
+  Missouri: Eligibility Requirements, Court Acceptance Notes, Minimum Hours, Average Price
+  New Mexico: Eligibility Requirements, Court Acceptance Notes, Minimum Hours, Average Price
+  New York: Eligibility Requirements, Court Acceptance Notes, Average Price
+  Ohio: Eligibility Requirements, Court Acceptance Notes, Average Price
+  Oregon: Eligibility Requirements, Court Acceptance Notes, Minimum Hours, Average Price
+  Tennessee: Eligibility Requirements, Court Acceptance Notes, Average Price
+  Virginia: Eligibility Requirements, Court Acceptance Notes, Average Price
+  Wisconsin: Eligibility Requirements, Court Acceptance Notes, Minimum Hours, Average Price
+
+Fields that defaulted to STRICT (not explicitly bucketed in spec — promote to auto-canonical if you want them merged silently):
+  Approved School Count            (number) — strict-default; conflicts on 0 state(s)
+  Last Updated                     (date) — strict-default; conflicts on 0 state(s)
+  Online Allowed                   (checkbox) — strict-default; conflicts on 0 state(s)
+  Online Dismisses Ticket          (checkbox) — strict-default; conflicts on 0 state(s)
+  Online Removes Points            (checkbox) — strict-default; conflicts on 0 state(s)
+  Insurance Discount Available     (checkbox) — strict-default; conflicts on 0 state(s)
+  Point System                     (checkbox) — strict-default; conflicts on 0 state(s)
+  Status                           (select) — strict-default; conflicts on 0 state(s)
+
+FAQ-migration retry spot-check (the 9 states whose FAQ landed on the 04-08 row):
+  Michigan        → MERGE ✓ from 33c2c5a8-ad0a-81c4-beab-e59c5cba3e68
+  New York        → MERGE ✓ from 33c2c5a8-ad0a-819b-98f5-c05af40e9464
+  Virginia        → MERGE ✓ from 33c2c5a8-ad0a-8139-8496-d3cb8981a395
+  Georgia         → MERGE ✓ from 33c2c5a8-ad0a-81d2-8e76-d786f81d15ef
+  Wisconsin       → MERGE ✓ from 33c2c5a8-ad0a-81a7-b30c-e0ebae06b7aa
+  Mississippi     → MERGE ✓ from 33c2c5a8-ad0a-81c6-8e6f-ecbe8cfc2d9e
+  Tennessee       → MERGE ✓ from 33c2c5a8-ad0a-8130-a999-cfd692569f64
+  Louisiana       → MERGE ✓ from 33c2c5a8-ad0a-81af-96ad-f707c45ee308
+  Missouri        → MERGE ✓ from 33c2c5a8-ad0a-812e-9514-e268d8054df8
+Clean FAQ states (canonical already has FAQ, no merge needed): 11/11
+
+Per-state row count after consolidation (excluding conflict states):
+State              | Before | After | Action
+-------------------+--------+-------+-------
+Alabama            |      3 |     3 | CONFLICT
+Alaska             |      3 |     3 | CONFLICT
+Arizona            |      2 |     1 | merge+trash
+Arkansas           |      3 |     3 | CONFLICT
+California         |      2 |     1 | merge+trash
+Colorado           |      2 |     1 | merge+trash
+Connecticut        |      2 |     1 | merge+trash
+Delaware           |      2 |     1 | trash only
+Florida            |      2 |     1 | merge+trash
+Georgia            |      3 |     3 | CONFLICT
+Hawaii             |      3 |     3 | CONFLICT
+Idaho              |      3 |     3 | CONFLICT
+Illinois           |      2 |     1 | merge+trash
+Indiana            |      2 |     1 | merge+trash
+Iowa               |      2 |     1 | merge+trash
+Kansas             |      2 |     1 | merge+trash
+Kentucky           |      2 |     1 | trash only
+Louisiana          |      3 |     3 | CONFLICT
+Maine              |      2 |     1 | merge+trash
+Maryland           |      2 |     1 | trash only
+Massachusetts      |      2 |     1 | merge+trash
+Michigan           |      3 |     3 | CONFLICT
+Minnesota          |      2 |     1 | merge+trash
+Mississippi        |      3 |     3 | CONFLICT
+Missouri           |      3 |     3 | CONFLICT
+Montana            |      2 |     1 | merge+trash
+Nebraska           |      2 |     1 | merge+trash
+Nevada             |      2 |     1 | trash only
+New Hampshire      |      2 |     1 | merge+trash
+New Jersey         |      2 |     1 | merge+trash
+New Mexico         |      3 |     3 | CONFLICT
+New York           |      3 |     3 | CONFLICT
+North Carolina     |      2 |     1 | merge+trash
+North Dakota       |      2 |     1 | merge+trash
+Ohio               |      3 |     3 | CONFLICT
+Oklahoma           |      2 |     1 | merge+trash
+Oregon             |      3 |     3 | CONFLICT
+Pennsylvania       |      2 |     1 | merge+trash
+Rhode Island       |      2 |     1 | merge+trash
+South Carolina     |      2 |     1 | merge+trash
+South Dakota       |      2 |     1 | merge+trash
+Tennessee          |      3 |     3 | CONFLICT
+Texas              |      2 |     1 | merge+trash
+Utah               |      2 |     1 | merge+trash
+Vermont            |      2 |     1 | merge+trash
+Virginia           |      3 |     3 | CONFLICT
+Washington         |      2 |     1 | merge+trash
+West Virginia      |      2 |     1 | merge+trash
+Wisconsin          |      3 |     3 | CONFLICT
+Wyoming            |      2 |     1 | merge+trash
+
+Dry run complete. No writes performed.
+Re-run with --apply to merge content onto canonical and archive duplicates.
