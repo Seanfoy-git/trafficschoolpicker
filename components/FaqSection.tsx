@@ -3,35 +3,46 @@ import type { StateFaq } from "@/lib/notion-faqs";
 type Props = {
   faqs: StateFaq[];
   stateDisplayName: string;
+  // Emit FAQPage JSON-LD only when set is rich enough for rich-result eligibility.
+  // Defaults to 4 (matches the brief's threshold).
+  schemaMinEntries?: number;
 };
 
-export function FaqSection({ faqs, stateDisplayName }: Props) {
+export function FaqSection({ faqs, stateDisplayName, schemaMinEntries = 4 }: Props) {
   if (faqs.length === 0) return null;
 
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.answer,
-      },
-    })),
-  };
+  const emitSchema = faqs.length >= schemaMinEntries;
+  const schema = emitSchema
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+          },
+        })),
+      }
+    : null;
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-      />
+      {schema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      )}
 
       <h2 className="text-2xl font-bold text-slate-900 mb-6">
         {stateDisplayName} Traffic School FAQ
       </h2>
 
+      {/* Native <details> keeps answer text in the initial HTML — required so
+          Google's near-duplicate detector and FAQ schema both see the answers
+          without executing client JS. Do not replace with a JS-driven accordion. */}
       <div className="space-y-3">
         {faqs.map((faq, index) => (
           <details

@@ -14,7 +14,6 @@ import { getNotionStateFaqs } from "@/lib/notion-faqs";
 import { getStateBySlug, getAllStateSlugs } from "@/lib/state-utils";
 import { SchoolCard } from "@/components/SchoolCard";
 import { FaqSection } from "@/components/FaqSection";
-import { FAQJsonLd } from "@/components/SchoolFAQ";
 import { DirectoryTable } from "@/components/DirectoryTable";
 import { TrustBar } from "@/components/TrustBar";
 import Image from "next/image";
@@ -95,10 +94,15 @@ export default async function StatePage({ params }: Props) {
     getSchoolVariantsForState(stateMeta.code),
   ]);
 
-  // Use Notion FAQs if available, fall back to static
-  const faqs = notionFaqs.length > 0
-    ? notionFaqs
-    : getStateFAQs(stateMeta.code).map((f) => ({ question: f.question, answer: f.answer }));
+  // FAQ source priority: per-state JSON on the States DB (richest, state-specific)
+  // → standalone Notion FAQ DB (legacy) → hardcoded static fallback (generic).
+  // Falling all the way to static keeps the page from breaking on a fresh state.
+  const faqs =
+    stateInfo?.stateFaq?.length
+      ? stateInfo.stateFaq.map((f) => ({ question: f.q, answer: f.a }))
+      : notionFaqs.length > 0
+        ? notionFaqs
+        : getStateFAQs(stateMeta.code).map((f) => ({ question: f.question, answer: f.answer }));
 
   const seo = STATE_SEO[stateSlug];
   const onlineStatus = stateInfo?.onlineStatus ?? "Unknown";
@@ -109,8 +113,6 @@ export default async function StatePage({ params }: Props) {
 
   return (
     <>
-      <FAQJsonLd faqs={faqs} />
-
       {/* HERO */}
       <section className="bg-primary text-white py-12 md:py-16">
         <div className="max-w-5xl mx-auto px-4">
@@ -143,7 +145,20 @@ export default async function StatePage({ params }: Props) {
         </div>
       </section>
 
-      <TrustBar />
+      <TrustBar lastVerified={stateInfo?.lastVerified} />
+
+      {/* INTRO PARAGRAPH — state-specific lead-in for SEO uniqueness.
+          Empty string is a deliberate signal that this state isn't populated yet;
+          render nothing rather than a placeholder so we don't add boilerplate text. */}
+      {stateInfo?.introParagraph && (
+        <section className="py-8 bg-white border-b border-slate-100">
+          <div className="max-w-3xl mx-auto px-4">
+            <p className="text-base md:text-lg text-slate-700 leading-relaxed">
+              {stateInfo.introParagraph}
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* STATUS BANNERS */}
       {onlineStatus === "Online — insurance discount only" && (
@@ -350,18 +365,29 @@ export default async function StatePage({ params }: Props) {
         </div>
       </section>
 
-      {/* DIRECTORY TABLE — always show if data exists */}
-      {directory.length > 0 && (
-        <section className="py-12 bg-white">
-          <div className="max-w-6xl mx-auto px-4">
+      {/* DIRECTORY TABLE — render section on every state page so the layout is
+          consistent across states. Shows a placeholder if no rows exist yet. */}
+      <section className="py-12 bg-white">
+        <div className="max-w-6xl mx-auto px-4">
+          {directory.length > 0 ? (
             <DirectoryTable
               schools={directory}
               stateName={stateMeta.name}
               lastScraped={directory[0]?.lastScraped ?? null}
             />
-          </div>
-        </section>
-      )}
+          ) : (
+            <div>
+              <h2 className="text-xl font-bold text-slate-900">
+                DMV-licensed online traffic schools in {stateMeta.name}
+              </h2>
+              <p className="text-sm text-slate-500 mt-2">
+                Directory data coming soon. We&apos;re collecting the official
+                {" "}{stateMeta.name} DMV listing.
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
     </>
   );
 }

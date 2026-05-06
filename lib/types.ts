@@ -22,6 +22,10 @@ export type OnlineStatus =
   | 'In-person only'
   | 'Unknown';
 
+export type ContentStatus = 'Complete' | 'Partial' | 'Stub';
+
+export type StateFaqEntry = { q: string; a: string };
+
 export type StateInfo = {
   id: string;
   code: string;                  // "CA"
@@ -37,6 +41,11 @@ export type StateInfo = {
   certificateSubmission: string | null;
   minHours: number | null;
   status: string;                // "Research Complete" / "In Progress" / "Not Started"
+  // Per-state page-content fields (added for uniqueness uplift)
+  introParagraph: string;
+  stateFaq: StateFaqEntry[];     // parsed from JSON; empty array if missing/malformed
+  lastVerified: string | null;   // ISO date — drives the "Last verified" header chip
+  contentStatus: ContentStatus | null;  // null treated as Stub for sitemap inclusion
 };
 
 // ─── Traffic Schools DB (editorial + reviews) ───────────────

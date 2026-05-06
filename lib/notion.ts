@@ -8,6 +8,8 @@ import type {
   OnlineStatus,
   StateRequirement,
   SchoolStateVariant,
+  StateFaqEntry,
+  ContentStatus,
 } from "./types";
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
@@ -31,6 +33,14 @@ function getText(page: PageObjectResponse, field: string): string {
   if (prop.type === "url") return prop.url ?? "";
   if (prop.type === "phone_number") return prop.phone_number ?? "";
   return "";
+}
+
+// Concatenates every rich_text segment so long paragraphs and JSON blobs
+// aren't truncated at Notion's per-segment cap.
+function getFullRichText(page: PageObjectResponse, field: string): string {
+  const prop = (page.properties as any)[field];
+  if (prop?.type !== "rich_text") return "";
+  return (prop.rich_text ?? []).map((s: any) => s.plain_text ?? "").join("");
 }
 
 function getNumber(page: PageObjectResponse, field: string): number | null {
@@ -115,6 +125,74 @@ function deriveOnlineStatus(
   return "Unknown";
 }
 
+// Parses the State FAQ rich_text JSON blob.
+// Canonical schema is [{"q":"…","a":"…"}, …] but {"question":"…","answer":"…"}
+// is also accepted as an alias to avoid silent-fallthrough on a typo.
+// On non-empty input that yields zero entries we log a warning so failures
+// surface in Vercel logs instead of silently rendering the static fallback.
+function parseStateFaqJson(raw: string, stateCodeForLog?: string): StateFaqEntry[] {
+  if (!raw || !raw.trim()) return [];
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (err) {
+    console.warn(
+      `[State FAQ] JSON.parse failed for ${stateCodeForLog ?? "?"}: ${(err as Error).message} — falling back to legacy FAQs`
+    );
+    return [];
+  }
+  if (!Array.isArray(parsed)) {
+    console.warn(`[State FAQ] expected array for ${stateCodeForLog ?? "?"}, got ${typeof parsed} — falling back`);
+    return [];
+  }
+  const out: StateFaqEntry[] = [];
+  for (const entry of parsed) {
+    if (!entry || typeof entry !== "object") continue;
+    const e = entry as Record<string, unknown>;
+    const q = String(e.q ?? e.question ?? "").trim();
+    const a = String(e.a ?? e.answer ?? "").trim();
+    if (q && a) out.push({ q, a });
+  }
+  if (out.length === 0) {
+    console.warn(
+      `[State FAQ] non-empty blob for ${stateCodeForLog ?? "?"} parsed to 0 entries — check schema (expected [{"q":"…","a":"…"}, …])`
+    );
+  }
+  return out;
+}
+
+function isContentStatus(value: string | null): value is ContentStatus {
+  return value === "Complete" || value === "Partial" || value === "Stub";
+}
+
+function mapStateInfo(page: PageObjectResponse): StateInfo {
+  const onlineAllowed = getCheckbox(page, "Online Allowed");
+  const dismissesTicket = getCheckbox(page, "Online Dismisses Ticket");
+  const insuranceDiscount = getCheckbox(page, "Insurance Discount Available");
+  const contentStatusRaw = getSelect(page, "Content Status");
+
+  return {
+    id: page.id,
+    code: getText(page, "Abbreviation"),
+    name: getText(page, "State Name"),
+    onlineAllowed,
+    onlineDismissesTicket: dismissesTicket,
+    insuranceDiscountAvailable: insuranceDiscount,
+    onlineStatus: deriveOnlineStatus(onlineAllowed, dismissesTicket, insuranceDiscount),
+    dmvUrl: getText(page, "DMV URL"),
+    notes: getText(page, "Research Notes"),
+    eligibility: getText(page, "Eligibility Requirements"),
+    courtNotes: getText(page, "Court Acceptance Notes"),
+    certificateSubmission: getSelect(page, "Certificate Submission"),
+    minHours: getNumber(page, "Minimum Hours"),
+    status: getSelect(page, "Status") ?? "Not Started",
+    introParagraph: getFullRichText(page, "Intro Paragraph"),
+    stateFaq: parseStateFaqJson(getFullRichText(page, "State FAQ"), getText(page, "Abbreviation")),
+    lastVerified: getDate(page, "Last Verified"),
+    contentStatus: isContentStatus(contentStatusRaw) ? contentStatusRaw : null,
+  };
+}
+
 export async function getStateInfo(stateCode: string): Promise<StateInfo | null> {
   if (!process.env.NOTION_TOKEN || !STATES_DB) return null;
   try {
@@ -127,31 +205,28 @@ export async function getStateInfo(stateCode: string): Promise<StateInfo | null>
       page_size: 1,
     });
     if (!response.results.length) return null;
-    const page = response.results[0] as PageObjectResponse;
-
-    const onlineAllowed = getCheckbox(page, "Online Allowed");
-    const dismissesTicket = getCheckbox(page, "Online Dismisses Ticket");
-    const insuranceDiscount = getCheckbox(page, "Insurance Discount Available");
-
-    return {
-      id: page.id,
-      code: getText(page, "Abbreviation"),
-      name: getText(page, "State Name"),
-      onlineAllowed,
-      onlineDismissesTicket: dismissesTicket,
-      insuranceDiscountAvailable: insuranceDiscount,
-      onlineStatus: deriveOnlineStatus(onlineAllowed, dismissesTicket, insuranceDiscount),
-      dmvUrl: getText(page, "DMV URL"),
-      notes: getText(page, "Research Notes"),
-      eligibility: getText(page, "Eligibility Requirements"),
-      courtNotes: getText(page, "Court Acceptance Notes"),
-      certificateSubmission: getSelect(page, "Certificate Submission"),
-      minHours: getNumber(page, "Minimum Hours"),
-      status: getSelect(page, "Status") ?? "Not Started",
-    };
+    return mapStateInfo(response.results[0] as PageObjectResponse);
   } catch {
     return null;
   }
+}
+
+// Returns uppercase abbreviations of every state whose Content Status is Complete.
+// Used by the sitemap to avoid submitting templated/thin state pages to Google.
+export async function getCompletedStateCodes(): Promise<Set<string>> {
+  const set = new Set<string>();
+  if (!process.env.NOTION_TOKEN || !STATES_DB) return set;
+  try {
+    const pages = await queryAllPages(STATES_DB, {
+      property: "Content Status",
+      select: { equals: "Complete" },
+    });
+    for (const page of pages) {
+      const code = getText(page as PageObjectResponse, "Abbreviation").toUpperCase();
+      if (code) set.add(code);
+    }
+  } catch { /* DB or column may not exist yet — empty set is the safe default */ }
+  return set;
 }
 
 // ─── SCHOOLS (Traffic Schools DB) ───────────────────────────
