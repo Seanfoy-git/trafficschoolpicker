@@ -1,17 +1,28 @@
 import Link from "next/link";
+import { getLinkableStates } from "@/lib/notion";
 
-const popularStates = [
-  { name: "California", slug: "california" },
-  { name: "Texas", slug: "texas" },
-  { name: "Florida", slug: "florida" },
-  { name: "New York", slug: "new-york" },
-  { name: "Arizona", slug: "arizona" },
-  { name: "Georgia", slug: "georgia" },
-  { name: "Ohio", slug: "ohio" },
-  { name: "Illinois", slug: "illinois" },
+// Curated "popular" ordering for the compact column; filtered against the
+// linkable set below so a state never appears here unless it's eligible.
+const POPULAR_SLUGS = [
+  "california",
+  "texas",
+  "florida",
+  "new-york",
+  "arizona",
+  "georgia",
+  "ohio",
+  "illinois",
 ];
 
-export function Footer() {
+export async function Footer() {
+  // Sitewide source of truth for which states are linkable (Content Status
+  // Complete/Partial). cache() dedupes this with the page's own call within the
+  // same render, so the footer adds no extra Notion query per page.
+  const linkableStates = await getLinkableStates();
+  const popularStates = POPULAR_SLUGS.map((slug) =>
+    linkableStates.find((s) => s.slug === slug)
+  ).filter((s): s is (typeof linkableStates)[number] => Boolean(s));
+
   return (
     <footer className="bg-primary text-white mt-auto">
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -58,6 +69,11 @@ export function Footer() {
             <h4 className="font-semibold mb-3">Resources</h4>
             <ul className="space-y-1.5 text-sm text-slate-300">
               <li>
+                <Link href="/schools" className="hover:text-highlight transition-colors">
+                  All Traffic Schools
+                </Link>
+              </li>
+              <li>
                 <Link href="/about" className="hover:text-highlight transition-colors">
                   How We Rank Schools
                 </Link>
@@ -80,6 +96,27 @@ export function Footer() {
             </p>
           </div>
         </div>
+
+        {/* BROWSE BY STATE — sitewide footer band linking every linkable state
+            (Content Status Complete/Partial). A reliable, low-effort crawl
+            discovery path: real root-relative <a href> links on every page. */}
+        {linkableStates.length > 0 && (
+          <div className="border-t border-slate-700 mt-8 pt-6">
+            <h4 className="font-semibold mb-3">Browse traffic schools by state</h4>
+            <ul className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-slate-300">
+              {linkableStates.map((state) => (
+                <li key={state.slug}>
+                  <Link
+                    href={`/${state.slug}`}
+                    className="hover:text-highlight transition-colors"
+                  >
+                    {state.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div className="border-t border-slate-700 mt-8 pt-6 text-center text-xs text-slate-400">
           &copy; {new Date().getFullYear()} TrafficSchoolPicker.com. All rights

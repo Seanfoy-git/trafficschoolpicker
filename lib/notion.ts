@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { Client } from "@notionhq/client";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import type {
@@ -12,6 +13,7 @@ import type {
   ContentStatus,
 } from "./types";
 import { pickCanonicalRow } from "./state-canonical";
+import { STATE_LIST, type StateMeta } from "./state-utils";
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
@@ -216,9 +218,25 @@ export async function getStateInfo(stateCode: string): Promise<StateInfo | null>
   }
 }
 
-// Returns uppercase abbreviations of every state whose Content Status is Complete.
-// Used by the sitemap to avoid submitting templated/thin state pages to Google.
-export async function getCompletedStateCodes(): Promise<Set<string>> {
+// ─── LINKABLE STATES (single shared gate) ───────────────────
+//
+// ONE gate for the whole site: a state is eligible for the XML sitemap AND every
+// internal-link surface (homepage grid, NearbyStates, blog↔state cross-links,
+// footer "Browse by state") once — and only once — its Content Status is
+// Complete. We deliberately do NOT link or sitemap Partial/thin pages: the
+// bottleneck is crawl budget and site-level trust, not discovery, so linking a
+// thin page spends crawl budget on something that can't rank and feeds a
+// low-quality site assessment. Concentration beats coverage. A page joins the
+// link graph and the sitemap automatically the moment it flips to Complete — no
+// manual step.
+//
+// This is the single source of truth for the gate: the Content Status filter
+// lives here and nowhere else. The States DB still carries duplicate rows per
+// state from prior seed batches, but a Content Status filter only returns the
+// populated (Complete) row, so dedup is implicit. cache() dedupes the Notion
+// call across one render (e.g. a page and its footer both call this) to a single
+// query.
+export const getLinkableStateCodes = cache(async (): Promise<Set<string>> => {
   const set = new Set<string>();
   if (!process.env.NOTION_TOKEN || !STATES_DB) return set;
   try {
@@ -232,7 +250,14 @@ export async function getCompletedStateCodes(): Promise<Set<string>> {
     }
   } catch { /* DB or column may not exist yet — empty set is the safe default */ }
   return set;
-}
+});
+
+// Full StateMeta (slug/name/code) for every linkable state, alphabetical by name
+// (STATE_LIST order). The shared helper behind every internal-linking surface.
+export const getLinkableStates = cache(async (): Promise<StateMeta[]> => {
+  const codes = await getLinkableStateCodes();
+  return STATE_LIST.filter((s) => codes.has(s.code.toUpperCase()));
+});
 
 // ─── SCHOOLS (Traffic Schools DB) ───────────────────────────
 
@@ -434,7 +459,7 @@ export async function getSchoolPricingForState(
   if (schools.length === 0) return [];
 
   // If Pricing DB exists, query it for state-specific prices
-  let pricingMap = new Map<string, {
+  const pricingMap = new Map<string, {
     price: number | null;
     originalPrice: number | null;
     affiliateUrl: string;

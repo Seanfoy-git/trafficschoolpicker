@@ -7,6 +7,7 @@ import {
   getStateRequirements,
   getSchoolVariantsForState,
   resolveStateContent,
+  getLinkableStates,
 } from "@/lib/notion";
 import { STATE_SEO } from "@/lib/seo-config";
 import { getStateFAQs } from "@/lib/state-faqs";
@@ -16,6 +17,8 @@ import { SchoolCard } from "@/components/SchoolCard";
 import { FaqSection } from "@/components/FaqSection";
 import { DirectoryTable } from "@/components/DirectoryTable";
 import { TrustBar } from "@/components/TrustBar";
+import { NearbyStates } from "@/components/NearbyStates";
+import { RelatedPosts } from "@/components/RelatedPosts";
 import Image from "next/image";
 import {
   ShieldCheck,
@@ -85,13 +88,14 @@ export default async function StatePage({ params }: Props) {
   const stateMeta = getStateBySlug(stateSlug);
   if (!stateMeta) notFound();
 
-  const [schools, stateInfo, directory, notionFaqs, stateReqs, variants] = await Promise.all([
+  const [schools, stateInfo, directory, notionFaqs, stateReqs, variants, linkableStates] = await Promise.all([
     getSchoolPricingForState(stateMeta.code),
     getStateInfo(stateMeta.code),
     getDirectoryForState(stateMeta.name),
     getNotionStateFaqs(stateSlug),
     getStateRequirements(),
     getSchoolVariantsForState(stateMeta.code),
+    getLinkableStates(),
   ]);
 
   // FAQ source priority: per-state JSON on the States DB (richest, state-specific)
@@ -364,6 +368,14 @@ export default async function StatePage({ params }: Props) {
           <FaqSection faqs={faqs} stateDisplayName={stateMeta.name} />
         </div>
       </section>
+
+      {/* RELATED BLOG GUIDES — state → blog half of the bidirectional linking,
+          surfacing the most relevant posts so the blog hub gains inlinks. */}
+      <RelatedPosts stateCode={stateMeta.code} />
+
+      {/* NEARBY STATES — geographic cross-links (gated on getLinkableStates)
+          that push crawl equity from this page to neighboring state pages. */}
+      <NearbyStates stateCode={stateMeta.code} linkable={linkableStates} />
 
       {/* DIRECTORY TABLE — render section on every state page so the layout is
           consistent across states. Shows a placeholder if no rows exist yet. */}

@@ -4,8 +4,7 @@ import { StateSelector } from "@/components/StateSelector";
 import { TrustBar } from "@/components/TrustBar";
 import { SchoolCard } from "@/components/SchoolCard";
 import { SchoolFAQ, FAQJsonLd } from "@/components/SchoolFAQ";
-import { getAllSchools, getStateRequirements, resolveStateContent } from "@/lib/notion";
-import { STATE_LIST } from "@/lib/state-utils";
+import { getAllSchools, getStateRequirements, resolveStateContent, getLinkableStates } from "@/lib/notion";
 import Link from "next/link";
 import { ArrowRight, Search, BarChart3, MousePointerClick } from "lucide-react";
 
@@ -60,9 +59,10 @@ const homeFaqs = [
 ];
 
 export default async function HomePage() {
-  const [allSchools, stateReqs] = await Promise.all([
+  const [allSchools, stateReqs, linkableStates] = await Promise.all([
     getAllSchools(),
     getStateRequirements(),
+    getLinkableStates(),
   ]);
   const emptyVariants = new Map();
   const topSchools = allSchools.filter((s) => s.tier === 1).slice(0, 3);
@@ -176,25 +176,31 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* State Grid */}
-      <section className="py-16 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-8 text-center">
-            Find Traffic Schools by State
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {STATE_LIST.map((state) => (
-              <Link
-                key={state.slug}
-                href={`/${state.slug}`}
-                className="block px-4 py-3 bg-white rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:border-accent hover:text-accent transition-colors text-center"
-              >
-                {state.name}
-              </Link>
-            ))}
+      {/* State Grid — "All States" discovery grid. Only states eligible for
+          linking (Content Status Complete/Partial, via getLinkableStates) are
+          rendered, as real server-rendered <a href> links with descriptive
+          anchors, so Googlebot can reach every eligible state page from the
+          homepage. */}
+      {linkableStates.length > 0 && (
+        <section className="py-16 bg-slate-50">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-8 text-center">
+              Find Traffic Schools by State
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {linkableStates.map((state) => (
+                <Link
+                  key={state.slug}
+                  href={`/${state.slug}`}
+                  className="block px-4 py-3 bg-white rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:border-accent hover:text-accent transition-colors text-center"
+                >
+                  {`${state.name} traffic school`}
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* FAQ */}
       <section className="py-16 bg-white">
