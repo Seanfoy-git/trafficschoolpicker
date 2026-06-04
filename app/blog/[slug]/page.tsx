@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { getAllPosts, getPostBySlug } from "@/lib/blog";
 import { BLOG_SEO } from "@/lib/seo-config";
 import { BlogMdxComponents } from "@/components/BlogMdxComponents";
+import { RelatedStateGuides } from "@/components/RelatedStateGuides";
+import { getLinkableStates } from "@/lib/notion";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -51,6 +53,7 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post || !post.published) notFound();
 
   const seo = BLOG_SEO[slug];
+  const linkableStates = await getLinkableStates();
 
   // Dynamically import the MDX file
   let PostContent;
@@ -107,6 +110,11 @@ export default async function BlogPostPage({ params }: Props) {
         <article className="prose prose-slate prose-lg max-w-none prose-headings:text-slate-900 prose-a:text-accent prose-a:no-underline hover:prose-a:underline">
           <PostContent components={BlogMdxComponents} />
         </article>
+
+        {/* RELATED STATE GUIDES — blog → state half of the bidirectional
+            linking. Placed outside .prose so it isn't styled as article body.
+            Gated on getLinkableStates(). */}
+        <RelatedStateGuides postSlug={slug} linkable={linkableStates} />
 
         <div className="mt-12 pt-8 border-t border-slate-200">
           <p className="text-sm text-slate-500">

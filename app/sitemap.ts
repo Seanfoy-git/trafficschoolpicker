@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 import { STATE_SEO, BLOG_SEO } from "@/lib/seo-config";
 import { STATE_LIST } from "@/lib/state-utils";
-import { getCompletedStateCodes } from "@/lib/notion";
+import { getLinkableStateCodes } from "@/lib/notion";
 
 const BASE_URL = "https://www.trafficschoolpicker.com";
 
@@ -21,14 +21,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
   ];
 
-  // State pages — only include states whose Content Status = Complete in the
-  // States DB. Submitting templated/thin pages was the cause of the GSC
-  // "Discovered – currently not indexed" backlog; pulling them from the
-  // sitemap is the strongest positive signal we can send while content fills in.
-  // States still resolve at /<slug> for direct navigation and internal links.
-  const completed = await getCompletedStateCodes();
+  // State pages — driven by the same getLinkableStateCodes() gate as every
+  // internal-link surface (Content Status = Complete), so the sitemap and the
+  // link graph never diverge: a page is sitemapped iff it's linked. Submitting
+  // templated/thin pages was the cause of the GSC "Discovered – currently not
+  // indexed" backlog; gating on Complete is the strongest positive signal we can
+  // send while content fills in. States still resolve at /<slug> for direct
+  // navigation.
+  const linkable = await getLinkableStateCodes();
   const statePages: MetadataRoute.Sitemap = STATE_LIST
-    .filter((s) => completed.has(s.code.toUpperCase()))
+    .filter((s) => linkable.has(s.code.toUpperCase()))
     .map((s) => {
       const seo = STATE_SEO[s.slug];
       return {
