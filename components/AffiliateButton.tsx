@@ -34,11 +34,10 @@ export function AffiliateButton({
   const label = hasAffiliate ? "Enroll Now" : "Visit Website";
 
   function handleClick() {
+    // Vercel Web Analytics (Pro) allows 2 properties per custom event, so we
+    // send only the two that drive attribution: which school, on which state.
     track(hasAffiliate ? "affiliate_click" : "website_click", {
       school: school.slug,
-      schoolName: school.name,
-      variant,
-      trackingMethod: school.trackingMethod ?? "network",
       state: stateCode ?? "none",
     });
   }
