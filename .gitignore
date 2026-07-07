@@ -37,6 +37,9 @@ yarn-error.log*
 # click tracking data (not scraped school data)
 /data/clicks.json
 
+# generated audit output
+/data/affiliate-audit.md
+
 # vercel
 .vercel
 
