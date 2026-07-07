@@ -270,6 +270,7 @@ export default async function StatePage({ params }: Props) {
                   resolved={resolveStateContent(school, stateMeta.code, stateReqs, variants)}
                   rank={i + 1}
                   showProsAndCons
+                  stateCode={stateMeta.code}
                 />
               ))}
             </div>
