@@ -12,11 +12,13 @@ export function SchoolCard({
   resolved,
   rank,
   showProsAndCons = false,
+  stateCode,
 }: {
   school: School | SchoolWithPrice;
   resolved: ResolvedSchoolContent;
   rank?: number;
   showProsAndCons?: boolean;
+  stateCode?: string;
 }) {
   const originalPrice = "originalPrice" in school ? (school as SchoolWithPrice).originalPrice : null;
 
@@ -142,7 +144,7 @@ export function SchoolCard({
             )}
           </div>
 
-          <AffiliateButton school={school} />
+          <AffiliateButton school={school} stateCode={stateCode} />
 
           {school.trackingMethod === "coupon_code" && school.couponCode && (
             <CouponCode code={school.couponCode} />
