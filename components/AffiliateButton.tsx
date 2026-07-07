@@ -1,6 +1,7 @@
 "use client";
 
 import { ExternalLink } from "lucide-react";
+import { track } from "@vercel/analytics";
 import type { School, SchoolWithPrice } from "@/lib/types";
 import { buildAffiliateLink } from "@/lib/affiliate";
 
@@ -32,6 +33,16 @@ export function AffiliateButton({
 
   const label = hasAffiliate ? "Enroll Now" : "Visit Website";
 
+  function handleClick() {
+    track(hasAffiliate ? "affiliate_click" : "website_click", {
+      school: school.slug,
+      schoolName: school.name,
+      variant,
+      trackingMethod: school.trackingMethod ?? "network",
+      state: stateCode ?? "none",
+    });
+  }
+
   const baseClasses =
     "inline-flex items-center justify-center gap-2 font-semibold rounded-lg transition-colors";
   const variantClasses =
@@ -45,6 +56,7 @@ export function AffiliateButton({
       target={target}
       rel={hasAffiliate ? `noopener noreferrer ${rel}` : "noopener noreferrer"}
       className={`${baseClasses} ${variantClasses}`}
+      onClick={handleClick}
     >
       {label} <ExternalLink className="w-4 h-4" />
     </a>
