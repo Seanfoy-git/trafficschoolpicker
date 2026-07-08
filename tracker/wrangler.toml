@@ -1,0 +1,23 @@
+name = "tsp-tracker"
+main = "src/index.ts"
+compatibility_date = "2026-07-01"
+workers_dev = false
+
+# Serve on the track subdomain. The zone must be on this Cloudflare account (it is —
+# trafficschoolpicker.com already uses Cloudflare DNS). Add a proxied (orange-cloud)
+# DNS record for `track` first (see README), then this route binds the Worker to it.
+routes = [
+  { pattern = "track.trafficschoolpicker.com/*", zone_name = "trafficschoolpicker.com" }
+]
+
+[vars]
+SITE_URL = "https://www.trafficschoolpicker.com"
+
+# Run `wrangler kv namespace create MAP` / `... CLICKS` and paste the returned ids.
+[[kv_namespaces]]
+binding = "MAP"
+id = "PASTE_MAP_NAMESPACE_ID"
+
+[[kv_namespaces]]
+binding = "CLICKS"
+id = "PASTE_CLICKS_NAMESPACE_ID"

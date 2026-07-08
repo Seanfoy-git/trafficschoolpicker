@@ -16,9 +16,8 @@ export function AffiliateButton({
 }) {
   const stateUrl = "stateAffiliateUrl" in school ? school.stateAffiliateUrl : null;
   const networkUrl = stateUrl || school.affiliateUrl;
-  const hasAffiliate = Boolean(networkUrl);
 
-  const { href, rel, target } = buildAffiliateLink({
+  const { href, rel, target, tracked } = buildAffiliateLink({
     school: { slug: school.slug, name: school.name },
     affiliateProgram: {
       trackingMethod: school.trackingMethod,
@@ -31,12 +30,14 @@ export function AffiliateButton({
     sourcePageId: school.id,
   });
 
-  const label = hasAffiliate ? "Enroll Now" : "Visit Website";
+  // `tracked` reflects the resolved href: direct-tracker / network / coupon links
+  // are monetized ("Enroll Now" + sponsored rel); a bare-website fallback is not.
+  const label = tracked ? "Enroll Now" : "Visit Website";
 
   function handleClick() {
     // Vercel Web Analytics (Pro) allows 2 properties per custom event, so we
     // send only the two that drive attribution: which school, on which state.
-    track(hasAffiliate ? "affiliate_click" : "website_click", {
+    track(tracked ? "affiliate_click" : "website_click", {
       school: school.slug,
       state: stateCode ?? "none",
     });
@@ -53,7 +54,7 @@ export function AffiliateButton({
     <a
       href={href}
       target={target}
-      rel={hasAffiliate ? `noopener noreferrer ${rel}` : "noopener noreferrer"}
+      rel={tracked ? `noopener noreferrer ${rel}` : "noopener noreferrer"}
       className={`${baseClasses} ${variantClasses}`}
       onClick={handleClick}
     >

@@ -1,0 +1,17 @@
+{
+  "name": "tsp-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cloudflare Worker: affiliate click tracker + redirect for track.trafficschoolpicker.com",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "seed": "wrangler kv bulk put --binding=MAP seed/map.json",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260702.1",
+    "typescript": "^5.9.3",
+    "wrangler": "^4"
+  }
+}
