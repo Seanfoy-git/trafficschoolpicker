@@ -394,6 +394,13 @@ const MONETIZABLE_NETWORKS = ["CJ", "Impact", "ShareASale", "Direct", "Pending"]
 
 function isEligibleToShow(school: School): boolean {
   if (!school.showOnSite) return false;
+  // A school explicitly wired for direct tracking (Tracking Method = direct +
+  // Partner Slug) is monetizable by definition — it routes through our tracker.
+  // Honor that regardless of the Affiliate Network select, so a stray/incorrect
+  // network value can't silently hide a real tracked partner (e.g. iDriveSafely
+  // mislabeled Network=Aceable but configured direct/idrivesafely).
+  const isDirectPartner = school.trackingMethod === "direct" && Boolean(school.partnerSlug);
+  if (isDirectPartner) return true;
   if (!MONETIZABLE_NETWORKS.includes(school.affiliateNetwork ?? "")) return false;
   return true;
 }
