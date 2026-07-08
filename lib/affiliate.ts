@@ -21,6 +21,9 @@ export interface AffiliateLinkResult {
   rel: string;          // always 'sponsored nofollow'
   target: string;       // always '_blank'
   couponCode?: string;  // only set when trackingMethod = 'coupon_code'
+  tracked: boolean;     // true when href is a real monetized/tracked link (tracker,
+                        // network, or coupon) — false when it degraded to a bare
+                        // website/# fallback. Drives the button label + sponsored rel.
 }
 
 const REL = 'sponsored nofollow';
@@ -34,13 +37,13 @@ function logWarn(message: string) {
 
 function buildNetworkFallback(input: BuildAffiliateLinkInput, reason: string): AffiliateLinkResult {
   const { networkUrl, destinationUrl } = input.affiliateProgram;
-  if (networkUrl) return { href: networkUrl, rel: REL, target: TARGET };
+  if (networkUrl) return { href: networkUrl, rel: REL, target: TARGET, tracked: true };
   if (destinationUrl) {
     logWarn(`${reason} — no networkUrl, falling back to destinationUrl for ${input.school.slug}`);
-    return { href: destinationUrl, rel: REL, target: TARGET };
+    return { href: destinationUrl, rel: REL, target: TARGET, tracked: false };
   }
   logWarn(`${reason} — no networkUrl or destinationUrl for ${input.school.slug}; returning #`);
-  return { href: '#', rel: REL, target: TARGET };
+  return { href: '#', rel: REL, target: TARGET, tracked: false };
 }
 
 function buildDirectLink(
@@ -55,7 +58,7 @@ function buildDirectLink(
   if (stateCode && stateCode.trim()) url.searchParams.set('s', stateCode);
   if (sourcePageId && sourcePageId.trim()) url.searchParams.set('p', sourcePageId);
 
-  return { href: url.toString(), rel: REL, target: TARGET };
+  return { href: url.toString(), rel: REL, target: TARGET, tracked: true };
 }
 
 export function buildAffiliateLink(input: BuildAffiliateLinkInput): AffiliateLinkResult {
@@ -82,9 +85,9 @@ export function buildAffiliateLink(input: BuildAffiliateLinkInput): AffiliateLin
     const { destinationUrl, couponCode } = input.affiliateProgram;
     if (!destinationUrl) {
       logWarn(`coupon_code method but destinationUrl missing for ${input.school.slug}; returning #`);
-      return { href: '#', rel: REL, target: TARGET, couponCode };
+      return { href: '#', rel: REL, target: TARGET, couponCode, tracked: false };
     }
-    return { href: destinationUrl, rel: REL, target: TARGET, couponCode };
+    return { href: destinationUrl, rel: REL, target: TARGET, couponCode, tracked: true };
   }
 
   // Exhaustiveness guard — unknown method
