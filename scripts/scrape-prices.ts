@@ -2,8 +2,14 @@
  * DATA FLOW: School pricing pages → Playwright → Notion School Pricing DB
  *
  * Writes to the School Pricing DB (one row per school × state combination).
- * Creates new rows if they don't exist, updates existing rows.
- * The School relation field links each pricing row to the Traffic Schools DB.
+ *
+ * HARDENED (WS1): a scraped price is validated (scripts/lib/price-extract.ts)
+ * against a sane band AND the prior stored value before it can touch a live
+ * card. An implausible value is QUARANTINED — status "Needs Review", the Price
+ * is NOT overwritten, and Approved is left exactly as a human last set it.
+ * Blocked/Failed likewise never write Price or flip Approved. The run prints a
+ * review queue and exits non-zero when there are anomalies (systemic failure or
+ * anything quarantined) so the monthly job can't "succeed" silently over bad data.
  */
 
 import { config } from "dotenv";
@@ -11,6 +17,7 @@ config({ path: ".env.local" });
 import { chromium } from "playwright";
 import { makeNotionClient } from "./lib/notion-client";
 import { priceTargets } from "./config/price-sources";
+import { pickPrice, classify, type PriceDecision } from "./lib/price-extract";
 
 const notion = makeNotionClient();
 const SCHOOLS_DB = process.env.NOTION_SCHOOLS_DB!;
@@ -46,43 +53,30 @@ async function getSchoolIdMap(): Promise<Map<string, string>> {
   return map;
 }
 
-// ─── Notion: find existing pricing row ──────────────────────
+// ─── Notion: find existing pricing row (with its current price) ─────────────
 
-async function findPricingRow(
+async function getExistingRow(
   slug: string,
   stateCode: string
-): Promise<string | null> {
-  if (!PRICING_DB) return null;
+): Promise<{ id: string | null; priorPrice: number | null }> {
+  if (!PRICING_DB) return { id: null, priorPrice: null };
 
   try {
     const label = `${slug}-${stateCode}`;
     const response = await notion.databases.query({
       database_id: PRICING_DB,
-      filter: {
-        property: "Label",
-        title: { equals: label },
-      },
+      filter: { property: "Label", title: { equals: label } },
       page_size: 1,
     });
-    return response.results[0]?.id ?? null;
+    const row = response.results[0] as any;
+    if (!row) return { id: null, priorPrice: null };
+    return { id: row.id, priorPrice: row.properties?.["Price"]?.number ?? null };
   } catch {
-    return null;
+    return { id: null, priorPrice: null };
   }
 }
 
-// ─── Price extraction ───────────────────────────────────────
-
-function extractPrice(text: string): number | null {
-  const regex = /\$\s*(\d{1,3}(?:\.\d{1,2})?)/g;
-  const found: number[] = [];
-  let match;
-  while ((match = regex.exec(text)) !== null) {
-    const value = parseFloat(match[1]);
-    if (value >= 1 && value <= 200) found.push(value);
-  }
-  if (found.length === 0) return null;
-  return Math.min(...found);
-}
+// ─── Price scraping (extraction/validation lives in lib/price-extract) ──────
 
 async function scrapePriceFromPage(
   url: string,
@@ -105,14 +99,18 @@ async function scrapePriceFromPage(
     }
 
     let targetText = bodyText;
+    let fromSelector = false;
     if (selector) {
       try {
         const el = await browserPage.$(selector);
-        if (el) targetText = await el.innerText();
-      } catch { /* fall back */ }
+        if (el) {
+          targetText = await el.innerText();
+          fromSelector = true;
+        }
+      } catch { /* fall back to body text */ }
     }
 
-    return { price: extractPrice(targetText), blocked: false };
+    return { price: pickPrice(targetText, fromSelector), blocked: false };
   } catch {
     return { price: null, blocked: false };
   }
@@ -139,71 +137,64 @@ async function main() {
   await page.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
 
   const TODAY = new Date().toISOString().split("T")[0];
-  let created = 0, updated = 0, failed = 0, blocked = 0;
+  let ok = 0, review = 0, failed = 0, blocked = 0, errors = 0;
+  const reviewQueue: { label: string; prior: number | null; proposed: number | null; reason: string }[] = [];
 
   for (const target of priceTargets) {
     const schoolPageId = schoolIdMap.get(target.schoolSlug);
     if (!schoolPageId) continue;
 
-    let price: number | null = null;
-    let isBlocked = false;
+    const label = `${target.schoolSlug}-${target.state}`;
+    const existing = await getExistingRow(target.schoolSlug, target.state);
+
+    let decision: PriceDecision;
+    let candidate: number | null = null;
 
     if (target.method === "fixed") {
-      price = target.fixedPrice ?? null;
-      console.log(`  OK    ${target.schoolSlug}-${target.state}: $${price} (fixed)`);
+      // Hand-set price in config → trusted, bypasses the scrape gate.
+      candidate = target.fixedPrice ?? null;
+      decision = candidate != null
+        ? { status: "OK", writePrice: candidate, approve: true, reason: "fixed (config)" }
+        : { status: "Failed", writePrice: null, approve: false, reason: "fixed target missing fixedPrice" };
     } else {
-      console.log(`  ...   ${target.schoolSlug}-${target.state}: ${target.url}`);
       const result = await scrapePriceFromPage(target.url, target.selector, page);
-      price = result.price;
-      isBlocked = result.blocked;
-
-      if (isBlocked) {
-        console.log(`  BLOCK ${target.schoolSlug}-${target.state}`);
-        blocked++;
-      } else if (!price) {
-        console.log(`  FAIL  ${target.schoolSlug}-${target.state}`);
-        failed++;
-      } else {
-        console.log(`  OK    ${target.schoolSlug}-${target.state}: $${price}`);
-      }
+      candidate = result.price;
+      decision = classify(candidate, existing.priorPrice, result.blocked);
     }
 
-    // Write to School Pricing DB
-    const label = `${target.schoolSlug}-${target.state}`;
-    const status = isBlocked ? "Blocked" : !price ? "Failed" : "OK";
+    const priorStr = existing.priorPrice ?? "—";
+    const gotStr = candidate != null ? `$${candidate}` : "—";
+    console.log(`  ${decision.status.padEnd(12)} ${label}: got ${gotStr} prior ${priorStr} — ${decision.reason}`);
 
+    if (decision.status === "OK") ok++;
+    else if (decision.status === "Needs Review") {
+      review++;
+      reviewQueue.push({ label, prior: existing.priorPrice, proposed: candidate, reason: decision.reason });
+    } else if (decision.status === "Blocked") blocked++;
+    else failed++;
+
+    // Build the write. Price is written ONLY when validated; Approved is set
+    // ONLY for a validated OK price — never flipped for Needs Review/Blocked/Failed,
+    // so a live, human-approved card is never silently clobbered.
     const properties: any = {
       Label: { title: [{ text: { content: label } }] },
       School: { relation: [{ id: schoolPageId }] },
       "State Code": { rich_text: [{ text: { content: target.state } }] },
-      "Price Scrape Status": { select: { name: status } },
+      "Price Scrape Status": { select: { name: decision.status } },
       "Last Scraped": { date: { start: TODAY } },
-      Approved: { checkbox: true },
     };
-
-    if (price !== null) {
-      properties.Price = { number: price };
-    }
-    if (target.notes) {
-      properties["Price Note"] = {
-        rich_text: [{ text: { content: target.notes } }],
-      };
-    }
+    if (decision.writePrice != null) properties.Price = { number: decision.writePrice };
+    if (decision.approve) properties.Approved = { checkbox: true };
+    if (target.notes) properties["Price Note"] = { rich_text: [{ text: { content: target.notes } }] };
 
     try {
-      const existingId = await findPricingRow(target.schoolSlug, target.state);
-
-      if (existingId) {
-        await notion.pages.update({ page_id: existingId, properties });
-        updated++;
+      if (existing.id) {
+        await notion.pages.update({ page_id: existing.id, properties });
       } else {
-        await notion.pages.create({
-          parent: { database_id: PRICING_DB },
-          properties,
-        });
-        created++;
+        await notion.pages.create({ parent: { database_id: PRICING_DB }, properties });
       }
     } catch (err) {
+      errors++;
       console.error(`  ERR   ${label}: ${(err as Error).message}`);
     }
 
@@ -212,13 +203,35 @@ async function main() {
 
   await browser.close();
 
+  const total = ok + review + failed + blocked;
   console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  console.log("Price Scrape Complete");
+  console.log("Price Scrape Summary");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  console.log(`  Created: ${created} new pricing rows`);
-  console.log(`  Updated: ${updated} existing rows`);
-  console.log(`  Failed:  ${failed}`);
-  console.log(`  Blocked: ${blocked}`);
+  console.log(`  OK (written):  ${ok}`);
+  console.log(`  Needs Review:  ${review}  (quarantined — live price left untouched)`);
+  console.log(`  Failed:        ${failed}`);
+  console.log(`  Blocked:       ${blocked}`);
+  console.log(`  Write errors:  ${errors}`);
+
+  if (reviewQueue.length) {
+    console.log("\n  REVIEW QUEUE — nothing was written for these:");
+    for (const r of reviewQueue) {
+      console.log(`    • ${r.label}: prior=${r.prior ?? "—"} proposed=${r.proposed ?? "—"} — ${r.reason}`);
+    }
+    console.log(`::warning::price-scrape: ${reviewQueue.length} price(s) need review; live values left untouched`);
+  }
+
+  const failureRate = total ? (failed + blocked) / total : 0;
+  if (failureRate > 0.4) {
+    console.log(
+      `::error::price-scrape: ${Math.round(failureRate * 100)}% of targets failed/blocked — likely systemic (site change or IP block)`
+    );
+    process.exit(1);
+  }
+  // Surface quarantined anomalies as a non-zero exit so the monthly run can't
+  // "succeed" silently. The workflow step uses continue-on-error so this stays
+  // visible (red step) without blocking the deploy.
+  if (reviewQueue.length || errors) process.exit(1);
 }
 
 /* eslint-enable @typescript-eslint/no-explicit-any */

@@ -50,6 +50,11 @@ jobs:
         run: npm run scrape:reviews
 
       - name: Scrape school prices → Notion
+        # The scraper exits non-zero when prices are quarantined (Needs Review)
+        # or a systemic failure is detected, so this step is visibly red instead
+        # of silently succeeding over bad data. continue-on-error keeps the deploy
+        # flowing — quarantined prices are never written, just awaiting review.
+        continue-on-error: true
         run: npm run scrape:prices
 
       - name: Enrich new schools via Google Places API

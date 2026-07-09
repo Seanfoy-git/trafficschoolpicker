@@ -11,14 +11,9 @@ export type PriceTarget = {
 
 export const priceTargets: PriceTarget[] = [
   // ─── iDriveSafely ───────────────────────────────────
-  {
-    schoolSlug: "idrivesafely",
-    state: "CA",
-    url: "https://www.idrivesafely.com/traffic-school/california/",
-    method: "dom",
-    selector: null,
-    notes: "Currently $29 sale (reg $39). Check sale banner.",
-  },
+  // CA + FL targets removed: those states aren't in iDriveSafely's coverage
+  // (no monetizable course there), so scraping them only re-creates junk
+  // Pricing rows. WS2 will gate this properly off the offers list.
   {
     schoolSlug: "idrivesafely",
     state: "TX",
@@ -26,14 +21,6 @@ export const priceTargets: PriceTarget[] = [
     method: "dom",
     selector: null,
     notes: "TX defensive driving price",
-  },
-  {
-    schoolSlug: "idrivesafely",
-    state: "FL",
-    url: "https://www.idrivesafely.com/traffic-school/florida/",
-    method: "dom",
-    selector: null,
-    notes: "FL price varies — often $6-$19 depending on course type",
   },
   {
     schoolSlug: "idrivesafely",
