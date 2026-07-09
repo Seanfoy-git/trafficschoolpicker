@@ -9,10 +9,10 @@
 import { config } from "dotenv";
 config({ path: ".env.local" });
 import { chromium } from "playwright";
-import { Client } from "@notionhq/client";
+import { makeNotionClient } from "./lib/notion-client";
 import { priceTargets } from "./config/price-sources";
 
-const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const notion = makeNotionClient();
 const SCHOOLS_DB = process.env.NOTION_SCHOOLS_DB!;
 const PRICING_DB = process.env.NOTION_PRICING_DB!;
 

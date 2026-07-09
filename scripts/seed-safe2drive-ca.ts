@@ -8,9 +8,9 @@
 import { config } from "dotenv";
 config({ path: ".env.local" });
 
-import { Client } from "@notionhq/client";
+import { makeNotionClient } from "./lib/notion-client";
 
-const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const notion = makeNotionClient();
 const DB_ID = process.env.NOTION_SCHOOL_VARIANTS_DB!;
 
 if (!process.env.NOTION_TOKEN || !DB_ID) {

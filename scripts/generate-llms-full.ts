@@ -5,12 +5,12 @@
 
 import { config } from "dotenv";
 config({ path: ".env.local" });
-import { Client } from "@notionhq/client";
+import { makeNotionClient } from "./lib/notion-client";
 import { writeFileSync } from "fs";
 import { join } from "path";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 
-const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const notion = makeNotionClient();
 const FAQ_DB_ID = process.env.NOTION_FAQ_DB_ID;
 const BASE_URL = "https://www.trafficschoolpicker.com";
 

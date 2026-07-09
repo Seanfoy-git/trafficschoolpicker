@@ -14,7 +14,7 @@
  * Never touches Intro Paragraph, Last Verified, or Content Status.
  */
 
-import { Client } from "@notionhq/client";
+import { makeNotionClient } from "./lib/notion-client";
 import * as fs from "fs";
 import { STATE_LIST } from "../lib/state-utils";
 
@@ -47,7 +47,7 @@ if (!FAQ_DB || !STATES_DB) {
   process.exit(1);
 }
 
-const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const notion = makeNotionClient();
 
 // ─────────────────────────────────────────────────────────────────
 // Helpers
