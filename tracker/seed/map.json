@@ -1,5 +1,6 @@
 [
   { "key": "idrivesafely:NY", "value": "https://go.idrivesafely.com/aff_c?offer_id=25&aff_id=6858" },
   { "key": "idrivesafely:GA", "value": "https://go.idrivesafely.com/aff_c?offer_id=21&aff_id=6858" },
-  { "key": "idrivesafely:_default", "value": "https://go.idrivesafely.com/aff_c?offer_id=19&aff_id=6858" }
+  { "key": "idrivesafely:_default", "value": "https://go.idrivesafely.com/aff_c?offer_id=19&aff_id=6858" },
+  { "key": "asi:_default", "value": "https://americansafetyinstitute.com/" }
 ]
