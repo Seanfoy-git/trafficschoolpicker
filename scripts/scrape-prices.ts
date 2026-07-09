@@ -22,6 +22,9 @@ import { pickPrice, classify, type PriceDecision } from "./lib/price-extract";
 const notion = makeNotionClient();
 const SCHOOLS_DB = process.env.NOTION_SCHOOLS_DB!;
 const PRICING_DB = process.env.NOTION_PRICING_DB!;
+// --report: scrape + classify + print, but make ZERO Notion writes. Nothing
+// reaches a live card; used to review the sweep before any price is applied.
+const REPORT = process.argv.includes("--report");
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -130,7 +133,9 @@ async function main() {
     return;
   }
 
-  console.log(`Found ${schoolIdMap.size} schools. Processing ${priceTargets.length} price targets...\n`);
+  console.log(
+    `${REPORT ? "MODE: REPORT (no Notion writes)\n\n" : ""}Found ${schoolIdMap.size} schools. Processing ${priceTargets.length} price targets...\n`
+  );
 
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
@@ -139,6 +144,7 @@ async function main() {
   const TODAY = new Date().toISOString().split("T")[0];
   let ok = 0, review = 0, failed = 0, blocked = 0, errors = 0;
   const reviewQueue: { label: string; prior: number | null; proposed: number | null; reason: string }[] = [];
+  const okQueue: { label: string; prior: number | null; proposed: number | null }[] = [];
 
   for (const target of priceTargets) {
     const schoolPageId = schoolIdMap.get(target.schoolSlug);
@@ -166,8 +172,10 @@ async function main() {
     const gotStr = candidate != null ? `$${candidate}` : "—";
     console.log(`  ${decision.status.padEnd(12)} ${label}: got ${gotStr} prior ${priorStr} — ${decision.reason}`);
 
-    if (decision.status === "OK") ok++;
-    else if (decision.status === "Needs Review") {
+    if (decision.status === "OK") {
+      ok++;
+      okQueue.push({ label, prior: existing.priorPrice, proposed: decision.writePrice });
+    } else if (decision.status === "Needs Review") {
       review++;
       reviewQueue.push({ label, prior: existing.priorPrice, proposed: candidate, reason: decision.reason });
     } else if (decision.status === "Blocked") blocked++;
@@ -187,15 +195,17 @@ async function main() {
     if (decision.approve) properties.Approved = { checkbox: true };
     if (target.notes) properties["Price Note"] = { rich_text: [{ text: { content: target.notes } }] };
 
-    try {
-      if (existing.id) {
-        await notion.pages.update({ page_id: existing.id, properties });
-      } else {
-        await notion.pages.create({ parent: { database_id: PRICING_DB }, properties });
+    if (!REPORT) {
+      try {
+        if (existing.id) {
+          await notion.pages.update({ page_id: existing.id, properties });
+        } else {
+          await notion.pages.create({ parent: { database_id: PRICING_DB }, properties });
+        }
+      } catch (err) {
+        errors++;
+        console.error(`  ERR   ${label}: ${(err as Error).message}`);
       }
-    } catch (err) {
-      errors++;
-      console.error(`  ERR   ${label}: ${(err as Error).message}`);
     }
 
     await new Promise((r) => setTimeout(r, target.method === "fixed" ? 350 : 2500));
@@ -207,20 +217,37 @@ async function main() {
   console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   console.log("Price Scrape Summary");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  console.log(`  OK (written):  ${ok}`);
+  console.log(`  OK (${REPORT ? "would write" : "written"}):  ${ok}`);
   console.log(`  Needs Review:  ${review}  (quarantined — live price left untouched)`);
   console.log(`  Failed:        ${failed}`);
   console.log(`  Blocked:       ${blocked}`);
-  console.log(`  Write errors:  ${errors}`);
+  if (!REPORT) console.log(`  Write errors:  ${errors}`);
+
+  if (REPORT && okQueue.length) {
+    console.log("\n  WOULD-WRITE (clean extraction) — for approval:");
+    for (const r of okQueue) {
+      console.log(`    • ${r.label}: prior=${r.prior ?? "—"} → new=${r.proposed ?? "—"}`);
+    }
+  }
 
   if (reviewQueue.length) {
-    console.log("\n  REVIEW QUEUE — nothing was written for these:");
+    console.log("\n  REVIEW QUEUE — nothing written (needs human approval):");
     for (const r of reviewQueue) {
       console.log(`    • ${r.label}: prior=${r.prior ?? "—"} proposed=${r.proposed ?? "—"} — ${r.reason}`);
     }
-    console.log(`::warning::price-scrape: ${reviewQueue.length} price(s) need review; live values left untouched`);
   }
 
+  // In report mode we never mutate Notion and never fail the process — it's a
+  // read-only preview. The non-zero-exit anomaly signalling only applies to a
+  // real (writing) run.
+  if (REPORT) {
+    console.log("\nREPORT ONLY — no Notion writes were made.");
+    return;
+  }
+
+  if (reviewQueue.length) {
+    console.log(`::warning::price-scrape: ${reviewQueue.length} price(s) need review; live values left untouched`);
+  }
   const failureRate = total ? (failed + blocked) / total : 0;
   if (failureRate > 0.4) {
     console.log(
