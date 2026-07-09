@@ -16,8 +16,8 @@ SITE_URL = "https://www.trafficschoolpicker.com"
 # Run `wrangler kv namespace create MAP` / `... CLICKS` and paste the returned ids.
 [[kv_namespaces]]
 binding = "MAP"
-id = "PASTE_MAP_NAMESPACE_ID"
+id = "8bad8febb81d4f84865a7da9eaef191e"
 
 [[kv_namespaces]]
 binding = "CLICKS"
-id = "PASTE_CLICKS_NAMESPACE_ID"
+id = "5a3c01ebbc5f4a129a1da48adbdbcc6a"
