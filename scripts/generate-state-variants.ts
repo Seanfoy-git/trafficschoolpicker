@@ -14,9 +14,9 @@ import { config } from "dotenv";
 config({ path: ".env.local" });
 
 import Anthropic from "@anthropic-ai/sdk";
-import { Client } from "@notionhq/client";
+import { makeNotionClient } from "./lib/notion-client";
 
-const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const notion = makeNotionClient();
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const DB = {

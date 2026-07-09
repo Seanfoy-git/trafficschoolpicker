@@ -13,12 +13,12 @@
 import { config } from "dotenv";
 config({ path: ".env.local" });
 import { chromium } from "playwright";
-import { Client } from "@notionhq/client";
+import { makeNotionClient } from "./lib/notion-client";
 import Anthropic from "@anthropic-ai/sdk";
 import gplay from "google-play-scraper";
 import { logIssue, flushIssues } from "./lib/issues";
 
-const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const notion = makeNotionClient();
 const SCHOOLS_DB = process.env.NOTION_SCHOOLS_DB!;
 const PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
 const anthropic = new Anthropic();

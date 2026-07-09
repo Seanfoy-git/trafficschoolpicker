@@ -17,7 +17,7 @@
  *   npx tsx scripts/dedupe-state-rows.ts --apply    # writes + trashes
  */
 
-import { Client } from "@notionhq/client";
+import { makeNotionClient } from "./lib/notion-client";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import * as fs from "fs";
 import { STATE_LIST } from "../lib/state-utils";
@@ -35,7 +35,7 @@ if (!STATES_DB || !process.env.NOTION_TOKEN) {
   console.error("Missing NOTION_STATES_DB or NOTION_TOKEN in .env.local");
   process.exit(1);
 }
-const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const notion = makeNotionClient();
 
 // ─────────────────────────────────────────────────────────────────
 // Field definitions

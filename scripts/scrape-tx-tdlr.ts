@@ -19,9 +19,9 @@
 
 import { config } from "dotenv";
 config({ path: ".env.local" });
-import { Client } from "@notionhq/client";
+import { makeNotionClient } from "./lib/notion-client";
 
-const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const notion = makeNotionClient();
 const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB!;
 
 const CSV_URL =

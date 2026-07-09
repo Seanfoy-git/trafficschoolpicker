@@ -6,10 +6,10 @@
 
 import { config } from "dotenv";
 config({ path: ".env.local" });
-import { Client } from "@notionhq/client";
+import { makeNotionClient } from "./notion-client";
 import { logIssue } from "./issues";
 
-const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const notion = makeNotionClient();
 const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB!;
 
 /* eslint-disable @typescript-eslint/no-explicit-any */

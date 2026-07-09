@@ -15,9 +15,9 @@
  * If NOTION_ISSUES_DB is not set, issues are logged to console only.
  */
 
-import { Client } from "@notionhq/client";
+import { makeNotionClient } from "./notion-client";
 
-const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const notion = makeNotionClient();
 const ISSUES_DB = process.env.NOTION_ISSUES_DB;
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
