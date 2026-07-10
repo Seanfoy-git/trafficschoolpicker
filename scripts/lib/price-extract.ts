@@ -66,7 +66,7 @@ export function pickPrice(text: string, fromSelector: boolean): number | null {
   return median(cands.map((c) => c.v));
 }
 
-export type ScrapeStatus = "OK" | "Needs Review" | "Failed" | "Blocked";
+export type ScrapeStatus = "OK" | "Needs Review" | "Failed" | "Blocked" | "Dead URL";
 export interface PriceDecision {
   status: ScrapeStatus;
   writePrice: number | null; // number → write to Notion Price; null → leave live value untouched

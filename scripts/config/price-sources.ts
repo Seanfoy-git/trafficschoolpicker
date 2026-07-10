@@ -59,6 +59,10 @@ export const priceTargets: PriceTarget[] = [
 
   // ─── DriversEd.com ──────────────────────────────────
   {
+    // NOTE: all three driversed URLs below currently return HTTP 404 (site
+    // restructured its URL scheme) — the scraper flags them as "Dead URL".
+    // They need updating to DriversEd's current pricing pages; low priority
+    // while DriversEd has no monetizable affiliate link (WS3).
     schoolSlug: "driversed",
     state: "CA",
     url: "https://www.driversed.com/traffic-school/california/",
