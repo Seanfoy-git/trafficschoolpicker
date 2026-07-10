@@ -21,6 +21,11 @@ export const MAX_DEVIATION = 0.35;
 
 const PRICE_RE = /\$\s*(\d{1,3}(?:\.\d{1,2})?)/g;
 const PRICE_KEYWORDS = /(price|enroll|only|course|checkout|total|tuition|\bfee\b|\bpay\b)/i;
+// The stable, comparable price. Traffic-school sites run perpetual fake-urgency
+// "Regular $34.95 / Sale Price $5.94 — offer ends 12:00" banners; the sale figure
+// is an unstable loss-leader (this is where the recurring $5.94 junk came from).
+// Prefer the regular/list price when the page advertises one.
+const REGULAR_ANCHOR = /(regular(?:ly)?|list price|reg\.?\s*price|\bwas\b|originally)\s*:?\s*$/i;
 // Words that typically sit IMMEDIATELY before the real price ("only $29",
 // "just $19.95", "price: $24.95", "for $29") — a much stronger signal than
 // mere proximity, and not triggered by "Save $5" / "Add-on $3" decoys.
@@ -53,6 +58,10 @@ export function pickPrice(text: string, fromSelector: boolean): number | null {
   const cands = candidates(text);
   if (cands.length === 0) return null;
   if (fromSelector) return median(cands.map((c) => c.v)); // selector text is already narrow
+
+  // 0) Highest priority: a "Regular/List $X" figure beats a "Sale Price $Y" decoy.
+  const regular = cands.filter((c) => REGULAR_ANCHOR.test(text.slice(Math.max(0, c.idx - 15), c.idx)));
+  if (regular.length) return median(regular.map((c) => c.v));
 
   // 1) Prefer figures directly anchored by a price word ("only $29", "for $19.95").
   const anchored = cands.filter((c) => PRICE_ANCHOR.test(text.slice(Math.max(0, c.idx - 20), c.idx)));
