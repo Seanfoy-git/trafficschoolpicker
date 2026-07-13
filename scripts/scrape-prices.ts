@@ -22,6 +22,9 @@ import { pickPrice, classify, type PriceDecision } from "./lib/price-extract";
 const notion = makeNotionClient();
 const SCHOOLS_DB = process.env.NOTION_SCHOOLS_DB!;
 const PRICING_DB = process.env.NOTION_PRICING_DB!;
+// --report: scrape + classify + print, but make ZERO Notion writes. Nothing
+// reaches a live card; used to review the sweep before any price is applied.
+const REPORT = process.argv.includes("--report");
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -82,9 +85,13 @@ async function scrapePriceFromPage(
   url: string,
   selector: string | null | undefined,
   browserPage: import("playwright").Page
-): Promise<{ price: number | null; blocked: boolean }> {
+): Promise<{ price: number | null; blocked: boolean; dead: boolean; httpStatus: number }> {
   try {
-    await browserPage.goto(url, { waitUntil: "domcontentloaded", timeout: 20000 });
+    const resp = await browserPage.goto(url, { waitUntil: "domcontentloaded", timeout: 20000 });
+    const httpStatus = resp?.status() ?? 0;
+    // Dead target (404/410/5xx): the page no longer exists — a selector can't
+    // help. Surface it distinctly instead of a vague "Failed / no price parsed".
+    if (httpStatus >= 400) return { price: null, blocked: false, dead: true, httpStatus };
     await browserPage.waitForTimeout(2000);
 
     const title = await browserPage.title();
@@ -95,7 +102,7 @@ async function scrapePriceFromPage(
       "verify you are human", "403", "forbidden",
     ];
     if (blockSignals.some((s) => bodyText.toLowerCase().includes(s) || title.toLowerCase().includes(s))) {
-      return { price: null, blocked: true };
+      return { price: null, blocked: true, dead: false, httpStatus };
     }
 
     let targetText = bodyText;
@@ -110,9 +117,9 @@ async function scrapePriceFromPage(
       } catch { /* fall back to body text */ }
     }
 
-    return { price: pickPrice(targetText, fromSelector), blocked: false };
+    return { price: pickPrice(targetText, fromSelector), blocked: false, dead: false, httpStatus };
   } catch {
-    return { price: null, blocked: false };
+    return { price: null, blocked: false, dead: false, httpStatus: 0 };
   }
 }
 
@@ -130,15 +137,18 @@ async function main() {
     return;
   }
 
-  console.log(`Found ${schoolIdMap.size} schools. Processing ${priceTargets.length} price targets...\n`);
+  console.log(
+    `${REPORT ? "MODE: REPORT (no Notion writes)\n\n" : ""}Found ${schoolIdMap.size} schools. Processing ${priceTargets.length} price targets...\n`
+  );
 
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
   await page.setExtraHTTPHeaders({ "Accept-Language": "en-US,en;q=0.9" });
 
   const TODAY = new Date().toISOString().split("T")[0];
-  let ok = 0, review = 0, failed = 0, blocked = 0, errors = 0;
+  let ok = 0, review = 0, failed = 0, blocked = 0, dead = 0, errors = 0;
   const reviewQueue: { label: string; prior: number | null; proposed: number | null; reason: string }[] = [];
+  const okQueue: { label: string; prior: number | null; proposed: number | null }[] = [];
 
   for (const target of priceTargets) {
     const schoolPageId = schoolIdMap.get(target.schoolSlug);
@@ -159,18 +169,23 @@ async function main() {
     } else {
       const result = await scrapePriceFromPage(target.url, target.selector, page);
       candidate = result.price;
-      decision = classify(candidate, existing.priorPrice, result.blocked);
+      decision = result.dead
+        ? { status: "Dead URL", writePrice: null, approve: false, reason: `HTTP ${result.httpStatus} — target URL is dead, update price-sources.ts` }
+        : classify(candidate, existing.priorPrice, result.blocked);
     }
 
     const priorStr = existing.priorPrice ?? "—";
     const gotStr = candidate != null ? `$${candidate}` : "—";
     console.log(`  ${decision.status.padEnd(12)} ${label}: got ${gotStr} prior ${priorStr} — ${decision.reason}`);
 
-    if (decision.status === "OK") ok++;
-    else if (decision.status === "Needs Review") {
+    if (decision.status === "OK") {
+      ok++;
+      okQueue.push({ label, prior: existing.priorPrice, proposed: decision.writePrice });
+    } else if (decision.status === "Needs Review") {
       review++;
       reviewQueue.push({ label, prior: existing.priorPrice, proposed: candidate, reason: decision.reason });
     } else if (decision.status === "Blocked") blocked++;
+    else if (decision.status === "Dead URL") dead++;
     else failed++;
 
     // Build the write. Price is written ONLY when validated; Approved is set
@@ -187,15 +202,17 @@ async function main() {
     if (decision.approve) properties.Approved = { checkbox: true };
     if (target.notes) properties["Price Note"] = { rich_text: [{ text: { content: target.notes } }] };
 
-    try {
-      if (existing.id) {
-        await notion.pages.update({ page_id: existing.id, properties });
-      } else {
-        await notion.pages.create({ parent: { database_id: PRICING_DB }, properties });
+    if (!REPORT) {
+      try {
+        if (existing.id) {
+          await notion.pages.update({ page_id: existing.id, properties });
+        } else {
+          await notion.pages.create({ parent: { database_id: PRICING_DB }, properties });
+        }
+      } catch (err) {
+        errors++;
+        console.error(`  ERR   ${label}: ${(err as Error).message}`);
       }
-    } catch (err) {
-      errors++;
-      console.error(`  ERR   ${label}: ${(err as Error).message}`);
     }
 
     await new Promise((r) => setTimeout(r, target.method === "fixed" ? 350 : 2500));
@@ -203,25 +220,43 @@ async function main() {
 
   await browser.close();
 
-  const total = ok + review + failed + blocked;
+  const total = ok + review + failed + blocked + dead;
   console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   console.log("Price Scrape Summary");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  console.log(`  OK (written):  ${ok}`);
+  console.log(`  OK (${REPORT ? "would write" : "written"}):  ${ok}`);
   console.log(`  Needs Review:  ${review}  (quarantined — live price left untouched)`);
   console.log(`  Failed:        ${failed}`);
   console.log(`  Blocked:       ${blocked}`);
-  console.log(`  Write errors:  ${errors}`);
+  console.log(`  Dead URL:      ${dead}  (404/5xx — fix the URL in price-sources.ts)`);
+  if (!REPORT) console.log(`  Write errors:  ${errors}`);
+
+  if (REPORT && okQueue.length) {
+    console.log("\n  WOULD-WRITE (clean extraction) — for approval:");
+    for (const r of okQueue) {
+      console.log(`    • ${r.label}: prior=${r.prior ?? "—"} → new=${r.proposed ?? "—"}`);
+    }
+  }
 
   if (reviewQueue.length) {
-    console.log("\n  REVIEW QUEUE — nothing was written for these:");
+    console.log("\n  REVIEW QUEUE — nothing written (needs human approval):");
     for (const r of reviewQueue) {
       console.log(`    • ${r.label}: prior=${r.prior ?? "—"} proposed=${r.proposed ?? "—"} — ${r.reason}`);
     }
-    console.log(`::warning::price-scrape: ${reviewQueue.length} price(s) need review; live values left untouched`);
   }
 
-  const failureRate = total ? (failed + blocked) / total : 0;
+  // In report mode we never mutate Notion and never fail the process — it's a
+  // read-only preview. The non-zero-exit anomaly signalling only applies to a
+  // real (writing) run.
+  if (REPORT) {
+    console.log("\nREPORT ONLY — no Notion writes were made.");
+    return;
+  }
+
+  if (reviewQueue.length) {
+    console.log(`::warning::price-scrape: ${reviewQueue.length} price(s) need review; live values left untouched`);
+  }
+  const failureRate = total ? (failed + blocked + dead) / total : 0;
   if (failureRate > 0.4) {
     console.log(
       `::error::price-scrape: ${Math.round(failureRate * 100)}% of targets failed/blocked — likely systemic (site change or IP block)`

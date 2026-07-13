@@ -51,14 +51,23 @@ export const priceTargets: PriceTarget[] = [
   {
     schoolSlug: "aceable",
     state: "FL",
-    url: "https://www.aceable.com/traffic-school/florida/",
+    // FL BDI = Aceable's "Florida Driver Improvement Course". The old
+    // /traffic-school/florida/ URL is 404, and /drivers-ed/florida/ is teen
+    // drivers-ed (wrong product). This is the correct BDI page. It shows a
+    // fake-urgency "Regular $34.95 / Sale Price $5.94" banner — the extractor
+    // now prefers the Regular figure.
+    url: "https://www.aceable.com/defensive-driving/florida/",
     method: "dom",
     selector: null,
-    notes: "FL BDI pricing",
+    notes: "FL Driver Improvement (BDI). Regular ~$34.95; ignore the sale-countdown $5.94.",
   },
 
   // ─── DriversEd.com ──────────────────────────────────
   {
+    // NOTE: all three driversed URLs below currently return HTTP 404 (site
+    // restructured its URL scheme) — the scraper flags them as "Dead URL".
+    // They need updating to DriversEd's current pricing pages; low priority
+    // while DriversEd has no monetizable affiliate link (WS3).
     schoolSlug: "driversed",
     state: "CA",
     url: "https://www.driversed.com/traffic-school/california/",

@@ -31,6 +31,13 @@ function main() {
   }
   check("no dollar figures → null", pickPrice("no prices here", false) === null);
 
+  console.log("pickPrice prefers Regular over a fake-urgency Sale Price (the $5.94 junk source)");
+  {
+    const body = "Instant certificate available Regular $34.95 Sale Price $5.94 OFFER ENDS 12:00";
+    const p = pickPrice(body, false);
+    check("Regular $34.95 wins, not Sale $5.94", p === 34.95, `got ${p}`);
+  }
+
   console.log("classify — the safety gate");
   // The exact June failure: iDriveSafely CA prior $29, scrape yields $5 (junk) → quarantine.
   {
