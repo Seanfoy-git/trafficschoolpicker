@@ -1,15 +1,19 @@
 /**
- * DATA FLOW: School pricing pages → Playwright → Notion School Pricing DB
+ * DATA FLOW: Scraper Rules DB → target pages → Playwright → Notion Pricing DB.
  *
- * Writes to the School Pricing DB (one row per school × state combination).
+ * WS2 (course-type gating): targets come from the Scraper Rules DB (one Verified
+ * row per school × state × course-type: exact Target URL, Course Type + Variant,
+ * a hand-Verified Price anchor, a per-rule Expected Min/Max band, Extract Hint).
+ * price-sources.ts is a typed FALLBACK used only if the Rules DB is unreachable,
+ * so a Notion outage can't leave the cron with zero targets.
  *
- * HARDENED (WS1): a scraped price is validated (scripts/lib/price-extract.ts)
- * against a sane band AND the prior stored value before it can touch a live
- * card. An implausible value is QUARANTINED — status "Needs Review", the Price
- * is NOT overwritten, and Approved is left exactly as a human last set it.
- * Blocked/Failed likewise never write Price or flip Approved. The run prints a
- * review queue and exits non-zero when there are anomalies (systemic failure or
- * anything quarantined) so the monthly job can't "succeed" silently over bad data.
+ * HARDENED (WS1): a scrape is validated by the rule's band AND its Verified Price
+ * anchor. Out-of-band or drifting-from-verified → QUARANTINED ("Needs Review",
+ * nothing written) and flagged to RE-VERIFY — a human-verified price is never
+ * clobbered. A confirming scrape writes the VERIFIED value (not the parse) so the
+ * anchor stays exact. Blocked/Failed/Dead never write. Unmapped monetized cards
+ * (a live card with no rule) surface as "needs a rule". The run exits non-zero on
+ * anomalies so the monthly job can't "succeed" silently over bad data.
  */
 
 import { config } from "dotenv";
@@ -17,7 +21,8 @@ config({ path: ".env.local" });
 import { chromium } from "playwright";
 import { makeNotionClient } from "./lib/notion-client";
 import { priceTargets } from "./config/price-sources";
-import { pickPrice, classify, type PriceDecision } from "./lib/price-extract";
+import { fetchVerifiedRules, type ScraperRule } from "./config/scraper-rules";
+import { pickPrice, classify, classifyAgainstRule, type PriceDecision } from "./lib/price-extract";
 
 const notion = makeNotionClient();
 const SCHOOLS_DB = process.env.NOTION_SCHOOLS_DB!;
@@ -51,9 +56,49 @@ async function getSchoolIdMap(): Promise<Map<string, string>> {
         .toLowerCase()
         .replace(/\s+/g, "-")
         .replace(/[^a-z0-9-]/g, "");
-    if (slug) map.set(slug, page.id);
+    if (slug) map.set(slug.toLowerCase(), page.id);
+    // Also key by Partner Slug — Scraper Rules rows use it (e.g. "idrivesafely",
+    // whose derived Slug would be "i-drive-safely").
+    const partner = (page.properties["Partner Slug"]?.rich_text?.[0]?.plain_text ?? "").toLowerCase();
+    if (partner) map.set(partner, page.id);
   }
   return map;
+}
+
+// ─── Notion: monetized cards (for the "needs a rule" report) ────────────────
+// A live monetized card = Active + Show On Site + monetizable network + a real
+// working link (direct+partnerSlug, or a non-placeholder affiliate URL).
+async function getMonetizedCards(): Promise<{ slug: string; name: string; states: string[]; coversAll: boolean }[]> {
+  const MONETIZABLE = ["CJ", "Impact", "ShareASale", "Direct", "Pending"];
+  const res = await notion.databases.query({
+    database_id: SCHOOLS_DB,
+    filter: { and: [
+      { property: "Status", select: { equals: "Active" } },
+      { property: "Show On Site", checkbox: { equals: true } },
+    ] },
+  });
+  const cards: { slug: string; name: string; states: string[]; coversAll: boolean }[] = [];
+  for (const page of res.results as any[]) {
+    const p = page.properties;
+    const network = p["Affiliate Network"]?.select?.name ?? "";
+    if (!MONETIZABLE.includes(network)) continue;
+    const trackingMethod = p["Tracking Method"]?.select?.name ?? "";
+    const partnerSlug = (p["Partner Slug"]?.rich_text?.[0]?.plain_text ?? "").toLowerCase();
+    const affiliateUrl = p["Affiliate URL"]?.url ?? p["Affiliate URL"]?.rich_text?.[0]?.plain_text ?? "";
+    // A real working link: direct tracking with a partner slug, OR an affiliate
+    // URL that isn't a sign-up/inquiry placeholder (e.g. affiliate_inquiry_*).
+    const hasLink =
+      (trackingMethod === "direct" && !!partnerSlug) ||
+      (!!affiliateUrl && !/affiliate_inquiry/i.test(affiliateUrl));
+    if (!hasLink) continue;
+    const slug = partnerSlug || (p["Slug"]?.rich_text?.[0]?.plain_text ?? "").toLowerCase();
+    const name = p["School Name"]?.title?.[0]?.plain_text ?? "";
+    const codesRaw = p["State Codes"]?.rich_text?.[0]?.plain_text ?? "";
+    const coversAll = /(^|,)\s*all\s*(,|$)/i.test(codesRaw);
+    const states = coversAll ? [] : codesRaw.split(",").map((s: string) => s.trim().toUpperCase()).filter(Boolean);
+    if (slug) cards.push({ slug, name, states, coversAll });
+  }
+  return cards;
 }
 
 // ─── Notion: find existing pricing row (with its current price) ─────────────
@@ -137,8 +182,22 @@ async function main() {
     return;
   }
 
+  // Targets from the Scraper Rules DB (Verified rows); fall back to the static
+  // price-sources.ts list if the DB is unset/unreachable (Notion-outage safety).
+  const rules = await fetchVerifiedRules(notion);
+  const usingRules = rules.length > 0;
+
+  type RunTarget = {
+    schoolSlug: string; state: string; url: string;
+    method: "dom" | "fixed"; fixedPrice?: number; selector?: string | null;
+    rule?: ScraperRule; note?: string;
+  };
+  const targets: RunTarget[] = usingRules
+    ? rules.map((r) => ({ schoolSlug: r.schoolSlug, state: r.state, url: r.url, method: "dom", rule: r, note: r.ruleName }))
+    : priceTargets.map((t) => ({ schoolSlug: t.schoolSlug, state: t.state, url: t.url, method: t.method, fixedPrice: t.fixedPrice, selector: t.selector, note: t.notes }));
+
   console.log(
-    `${REPORT ? "MODE: REPORT (no Notion writes)\n\n" : ""}Found ${schoolIdMap.size} schools. Processing ${priceTargets.length} price targets...\n`
+    `${REPORT ? "MODE: REPORT (no Notion writes)\n\n" : ""}Source: ${usingRules ? `Scraper Rules DB (${rules.length} Verified rules)` : "⚠ price-sources.ts FALLBACK (Rules DB unreachable)"}. Processing ${targets.length} targets...\n`
   );
 
   const browser = await chromium.launch({ headless: true });
@@ -147,75 +206,74 @@ async function main() {
 
   const TODAY = new Date().toISOString().split("T")[0];
   let ok = 0, review = 0, failed = 0, blocked = 0, dead = 0, errors = 0;
-  const reviewQueue: { label: string; prior: number | null; proposed: number | null; reason: string }[] = [];
-  const okQueue: { label: string; prior: number | null; proposed: number | null }[] = [];
+  const reviewQueue: { label: string; anchor: number | null; proposed: number | null; reason: string }[] = [];
+  const okQueue: { label: string; anchor: number | null; proposed: number | null }[] = [];
 
-  for (const target of priceTargets) {
-    const schoolPageId = schoolIdMap.get(target.schoolSlug);
-    if (!schoolPageId) continue;
-
-    const label = `${target.schoolSlug}-${target.state}`;
-    const existing = await getExistingRow(target.schoolSlug, target.state);
+  for (const t of targets) {
+    const schoolPageId = schoolIdMap.get(t.schoolSlug.toLowerCase());
+    const label = `${t.schoolSlug}-${t.state}`;
+    const existing = await getExistingRow(t.schoolSlug, t.state);
+    // The gate baselines on the rule's Verified Price (the human anchor), or the
+    // prior stored price when running from the fallback list.
+    const anchor = t.rule?.verifiedPrice ?? existing.priorPrice;
 
     let decision: PriceDecision;
     let candidate: number | null = null;
 
-    if (target.method === "fixed") {
-      // Hand-set price in config → trusted, bypasses the scrape gate.
-      candidate = target.fixedPrice ?? null;
+    if (t.method === "fixed") {
+      candidate = t.fixedPrice ?? null;
       decision = candidate != null
         ? { status: "OK", writePrice: candidate, approve: true, reason: "fixed (config)" }
         : { status: "Failed", writePrice: null, approve: false, reason: "fixed target missing fixedPrice" };
     } else {
-      const result = await scrapePriceFromPage(target.url, target.selector, page);
+      const result = await scrapePriceFromPage(t.url, t.selector, page);
       candidate = result.price;
-      decision = result.dead
-        ? { status: "Dead URL", writePrice: null, approve: false, reason: `HTTP ${result.httpStatus} — target URL is dead, update price-sources.ts` }
-        : classify(candidate, existing.priorPrice, result.blocked);
+      decision = t.rule
+        ? classifyAgainstRule(candidate, t.rule, result.blocked, result.dead)
+        : result.dead
+          ? { status: "Dead URL", writePrice: null, approve: false, reason: `HTTP ${result.httpStatus} — target URL is dead` }
+          : classify(candidate, existing.priorPrice, result.blocked);
     }
 
-    const priorStr = existing.priorPrice ?? "—";
-    const gotStr = candidate != null ? `$${candidate}` : "—";
-    console.log(`  ${decision.status.padEnd(12)} ${label}: got ${gotStr} prior ${priorStr} — ${decision.reason}`);
+    const ctx = t.rule ? ` [${t.rule.courseType}/${t.rule.variant}]` : "";
+    const anchorStr = t.rule ? `verified $${t.rule.verifiedPrice ?? "—"}` : `prior $${existing.priorPrice ?? "—"}`;
+    console.log(`  ${decision.status.padEnd(12)} ${label}${ctx}: got ${candidate != null ? `$${candidate}` : "—"} ${anchorStr} — ${decision.reason}`);
 
-    if (decision.status === "OK") {
-      ok++;
-      okQueue.push({ label, prior: existing.priorPrice, proposed: decision.writePrice });
-    } else if (decision.status === "Needs Review") {
-      review++;
-      reviewQueue.push({ label, prior: existing.priorPrice, proposed: candidate, reason: decision.reason });
-    } else if (decision.status === "Blocked") blocked++;
+    if (decision.status === "OK") { ok++; okQueue.push({ label, anchor, proposed: decision.writePrice }); }
+    else if (decision.status === "Needs Review") { review++; reviewQueue.push({ label, anchor, proposed: candidate, reason: decision.reason }); }
+    else if (decision.status === "Blocked") blocked++;
     else if (decision.status === "Dead URL") dead++;
     else failed++;
 
-    // Build the write. Price is written ONLY when validated; Approved is set
-    // ONLY for a validated OK price — never flipped for Needs Review/Blocked/Failed,
-    // so a live, human-approved card is never silently clobbered.
+    // Write ONLY a validated price; Approved set ONLY for a validated OK — never
+    // flipped for Needs Review/Blocked/Failed/Dead, so a verified card is never
+    // silently clobbered.
     const properties: any = {
       Label: { title: [{ text: { content: label } }] },
-      School: { relation: [{ id: schoolPageId }] },
-      "State Code": { rich_text: [{ text: { content: target.state } }] },
+      "State Code": { rich_text: [{ text: { content: t.state } }] },
       "Price Scrape Status": { select: { name: decision.status } },
       "Last Scraped": { date: { start: TODAY } },
     };
+    if (schoolPageId) properties.School = { relation: [{ id: schoolPageId }] };
     if (decision.writePrice != null) properties.Price = { number: decision.writePrice };
     if (decision.approve) properties.Approved = { checkbox: true };
-    if (target.notes) properties["Price Note"] = { rich_text: [{ text: { content: target.notes } }] };
+    if (t.note) properties["Price Note"] = { rich_text: [{ text: { content: t.note } }] };
 
     if (!REPORT) {
-      try {
-        if (existing.id) {
-          await notion.pages.update({ page_id: existing.id, properties });
-        } else {
-          await notion.pages.create({ parent: { database_id: PRICING_DB }, properties });
+      if (!existing.id && !schoolPageId) {
+        console.warn(`  WARN  ${label}: no pricing row and no school match for slug "${t.schoolSlug}" — skipping create`);
+      } else {
+        try {
+          if (existing.id) await notion.pages.update({ page_id: existing.id, properties });
+          else await notion.pages.create({ parent: { database_id: PRICING_DB }, properties });
+        } catch (err) {
+          errors++;
+          console.error(`  ERR   ${label}: ${(err as Error).message}`);
         }
-      } catch (err) {
-        errors++;
-        console.error(`  ERR   ${label}: ${(err as Error).message}`);
       }
     }
 
-    await new Promise((r) => setTimeout(r, target.method === "fixed" ? 350 : 2500));
+    await new Promise((r) => setTimeout(r, t.method === "fixed" ? 350 : 2500));
   }
 
   await browser.close();
@@ -232,16 +290,39 @@ async function main() {
   if (!REPORT) console.log(`  Write errors:  ${errors}`);
 
   if (REPORT && okQueue.length) {
-    console.log("\n  WOULD-WRITE (clean extraction) — for approval:");
+    console.log("\n  CONFIRMED (matches verified / in band):");
     for (const r of okQueue) {
-      console.log(`    • ${r.label}: prior=${r.prior ?? "—"} → new=${r.proposed ?? "—"}`);
+      console.log(`    • ${r.label}: anchor=${r.anchor ?? "—"} → write=${r.proposed ?? "—"}`);
     }
   }
 
   if (reviewQueue.length) {
-    console.log("\n  REVIEW QUEUE — nothing written (needs human approval):");
+    console.log("\n  REVIEW QUEUE — nothing written (re-verify):");
     for (const r of reviewQueue) {
-      console.log(`    • ${r.label}: prior=${r.prior ?? "—"} proposed=${r.proposed ?? "—"} — ${r.reason}`);
+      console.log(`    • ${r.label}: anchor=${r.anchor ?? "—"} proposed=${r.proposed ?? "—"} — ${r.reason}`);
+    }
+  }
+
+  // Unmapped: any live monetized card with no Scraper Rules row → "needs a rule"
+  // (never a silent fall-through). Only meaningful when running from the Rules DB.
+  if (usingRules) {
+    const ruleKey = new Set(rules.map((r) => `${r.schoolSlug}:${r.state}`));
+    const cards = await getMonetizedCards();
+    const gaps: string[] = [];
+    for (const c of cards) {
+      if (c.coversAll) {
+        const have = rules.filter((r) => r.schoolSlug === c.slug).length;
+        gaps.push(`${c.name} (${c.slug}): covers ALL states, ${have} rule(s) — needs a rule per monetized state`);
+      } else {
+        const missing = c.states.filter((s) => !ruleKey.has(`${c.slug}:${s}`));
+        if (missing.length) gaps.push(`${c.name} (${c.slug}): no rule for ${missing.join(", ")}`);
+      }
+    }
+    if (gaps.length) {
+      console.log("\n  ⚠ UNMAPPED monetized cards — need a Scraper Rules row:");
+      gaps.forEach((g) => console.log(`    • ${g}`));
+    } else {
+      console.log("\n  ✅ Every monetized card has a Scraper Rules row.");
     }
   }
 

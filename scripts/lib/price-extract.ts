@@ -118,3 +118,63 @@ export function classify(candidate: number | null, prior: number | null, blocked
     };
   return { status: "OK", writePrice: candidate, approve: true, reason: `first-time $${candidate}` };
 }
+
+// Drift from a HAND-VERIFIED anchor beyond this → re-verify (tighter than the
+// generic MAX_DEVIATION: a verified Regular price shouldn't move much, and this
+// is what catches wrong-variant grabs, e.g. handsfree $44 vs standard $34 = 29%).
+export const VERIFIED_DRIFT = 0.2;
+
+export interface RuleBand {
+  verifiedPrice: number | null;
+  expectedMin: number | null;
+  expectedMax: number | null;
+}
+
+/**
+ * Rule-driven classification for a Scraper Rules DB target. Gates on the rule's
+ * own Expected Min/Max band and its hand-Verified Price anchor — a scrape that
+ * drifts from the verified value is quarantined for RE-VERIFICATION rather than
+ * clobbering the human-verified price.
+ */
+export function classifyAgainstRule(
+  candidate: number | null,
+  rule: RuleBand,
+  blocked: boolean,
+  dead: boolean
+): PriceDecision {
+  if (dead) return { status: "Dead URL", writePrice: null, approve: false, reason: "target URL is dead" };
+  if (blocked) return { status: "Blocked", writePrice: null, approve: false, reason: "page blocked (captcha/403)" };
+  if (candidate === null) return { status: "Failed", writePrice: null, approve: false, reason: "no price parsed" };
+
+  const min = rule.expectedMin ?? HARD_MIN;
+  const max = rule.expectedMax ?? HARD_MAX;
+  if (candidate < min || candidate > max)
+    return {
+      status: "Needs Review",
+      writePrice: null,
+      approve: false,
+      reason: `$${candidate} outside rule band [$${min}–$${max}]`,
+    };
+
+  if (rule.verifiedPrice != null && rule.verifiedPrice > 0) {
+    const drift = Math.abs(candidate - rule.verifiedPrice) / rule.verifiedPrice;
+    if (drift > VERIFIED_DRIFT)
+      return {
+        status: "Needs Review",
+        writePrice: null,
+        approve: false,
+        reason: `${Math.round(drift * 100)}% drift vs verified $${rule.verifiedPrice} → $${candidate} — RE-VERIFY (variant/price change?)`,
+      };
+    // Confirms the verified anchor. Write the VERIFIED value, not the scrape, so
+    // the hand-checked number stays exact and can't drift from parse noise.
+    return {
+      status: "OK",
+      writePrice: rule.verifiedPrice,
+      approve: true,
+      reason: `confirms verified $${rule.verifiedPrice} (scrape $${candidate}, ±${Math.round(drift * 100)}%)`,
+    };
+  }
+
+  // Verified rule with no anchor yet: in-band is the only gate.
+  return { status: "OK", writePrice: candidate, approve: true, reason: `in band [$${min}–$${max}], no verified anchor` };
+}
