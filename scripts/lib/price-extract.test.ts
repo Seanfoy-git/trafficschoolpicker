@@ -2,7 +2,7 @@
  * Tests for the price extraction + validation gate (WS1).
  *   npx tsx scripts/lib/price-extract.test.ts
  */
-import { pickPrice, classify, median } from "./price-extract";
+import { pickPrice, classify, median, classifyAgainstRule } from "./price-extract";
 
 let failures = 0;
 function check(name: string, cond: boolean, detail = "") {
@@ -72,6 +72,30 @@ function main() {
   {
     const d = classify(2, null, false);
     check("below hard band → Needs Review", d.status === "Needs Review");
+  }
+
+  console.log("classifyAgainstRule — rule band + verified anchor");
+  const txRule = { verifiedPrice: 34, expectedMin: 20, expectedMax: 70 }; // Aceable TX Standard
+  {
+    // The handsfree-variant trap: $44 is IN band [20,70] but 29% from verified $34.
+    const d = classifyAgainstRule(44, txRule, false, false);
+    check("handsfree $44 vs verified $34 → Needs Review (re-verify)", d.status === "Needs Review" && d.writePrice === null);
+  }
+  {
+    // A confirming scrape writes the VERIFIED value, not the scraped one.
+    const d = classifyAgainstRule(35, txRule, false, false);
+    check("scrape $35 confirms → OK, writes verified $34", d.status === "OK" && d.writePrice === 34 && d.approve);
+  }
+  {
+    // Sale-decoy $5.94 is below the FL rule band [20,60] → quarantined.
+    const flRule = { verifiedPrice: 34.95, expectedMin: 20, expectedMax: 60 };
+    const d = classifyAgainstRule(5.94, flRule, false, false);
+    check("sale decoy $5.94 outside FL band → Needs Review", d.status === "Needs Review" && d.writePrice === null);
+  }
+  {
+    check("dead → Dead URL", classifyAgainstRule(null, txRule, false, true).status === "Dead URL");
+    check("blocked → Blocked", classifyAgainstRule(null, txRule, true, false).status === "Blocked");
+    check("no parse → Failed", classifyAgainstRule(null, txRule, false, false).status === "Failed");
   }
 
   console.log("");
