@@ -289,7 +289,13 @@ async function main() {
   console.log("Price Scrape Summary");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   console.log(`  OK (${REPORT ? "would write" : "written"}):  ${ok}`);
-  console.log(`  Needs Review:  ${review}  (quarantined — live price left untouched)`);
+  // With rules, the card price is always the Verified anchor: a drifted scrape
+  // re-pins Pricing to verified and only flags the row — it doesn't write the
+  // drifted value. Non-rule (fallback) runs genuinely write nothing on review.
+  const reviewNote = usingRules
+    ? "(re-pinned to verified; flagged for re-verify — card unchanged)"
+    : "(quarantined — live price left untouched)";
+  console.log(`  Needs Review:  ${review}  ${reviewNote}`);
   console.log(`  Failed:        ${failed}`);
   console.log(`  Blocked:       ${blocked}`);
   console.log(`  Dead URL:      ${dead}  (404/5xx — fix the URL in price-sources.ts)`);
@@ -303,7 +309,9 @@ async function main() {
   }
 
   if (reviewQueue.length) {
-    console.log("\n  REVIEW QUEUE — nothing written (re-verify):");
+    console.log(usingRules
+      ? "\n  REVIEW QUEUE — Pricing re-pinned to verified, flagged for RE-VERIFY (scrape drifted):"
+      : "\n  REVIEW QUEUE — nothing written (re-verify):");
     for (const r of reviewQueue) {
       console.log(`    • ${r.label}: anchor=${r.anchor ?? "—"} proposed=${r.proposed ?? "—"} — ${r.reason}`);
     }
