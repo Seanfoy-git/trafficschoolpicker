@@ -245,9 +245,15 @@ async function main() {
     else if (decision.status === "Dead URL") dead++;
     else failed++;
 
-    // Write ONLY a validated price; Approved set ONLY for a validated OK — never
-    // flipped for Needs Review/Blocked/Failed/Dead, so a verified card is never
-    // silently clobbered.
+    // For a rule with a Verified Price, that value IS the card price — keep
+    // Pricing pinned to it EVERY run (Approved), even on drift; the scrape only
+    // sets the STATUS (drift → Needs Review, to re-verify). So editing a Verified
+    // Price flows to the card immediately and a bad scrape can never move it.
+    // Non-rule targets keep the classify() behavior (write only a validated value).
+    const pinVerified = t.rule?.verifiedPrice != null;
+    const priceToWrite = pinVerified ? t.rule!.verifiedPrice : decision.writePrice;
+    const approveWrite = pinVerified ? true : decision.approve;
+
     const properties: any = {
       Label: { title: [{ text: { content: label } }] },
       "State Code": { rich_text: [{ text: { content: t.state } }] },
@@ -255,8 +261,8 @@ async function main() {
       "Last Scraped": { date: { start: TODAY } },
     };
     if (schoolPageId) properties.School = { relation: [{ id: schoolPageId }] };
-    if (decision.writePrice != null) properties.Price = { number: decision.writePrice };
-    if (decision.approve) properties.Approved = { checkbox: true };
+    if (priceToWrite != null) properties.Price = { number: priceToWrite };
+    if (approveWrite) properties.Approved = { checkbox: true };
     if (t.note) properties["Price Note"] = { rich_text: [{ text: { content: t.note } }] };
 
     if (!REPORT) {

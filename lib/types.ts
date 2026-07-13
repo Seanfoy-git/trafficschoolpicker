@@ -112,6 +112,9 @@ export type SchoolPricing = {
 
 export type SchoolWithPrice = School & {
   price: number | null;          // state-specific price (overrides school default)
+  pricingPrice: number | null;   // RAW Pricing-DB value (no generic fallback); the
+                                 // verified price flows here and now outranks the
+                                 // Schools "Price XX" column in the render waterfall
   originalPrice: number | null;
   stateAffiliateUrl: string | null;  // overrides school.affiliateUrl if set
   priceNote: string | null;

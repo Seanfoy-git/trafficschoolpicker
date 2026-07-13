@@ -434,7 +434,7 @@ export async function getSchoolPricingForState(
   if (schools.length === 0) return [];
 
   // If Pricing DB exists, query it for state-specific prices
-  let pricingMap = new Map<string, {
+  const pricingMap = new Map<string, {
     price: number | null;
     originalPrice: number | null;
     affiliateUrl: string;
@@ -484,6 +484,7 @@ export async function getSchoolPricingForState(
     results.push({
       ...school,
       price: pricing?.price ?? school.genericPrice ?? null,
+      pricingPrice: pricing?.price ?? null, // raw Pricing-DB value only (no generic fallback)
       originalPrice: pricing?.originalPrice ?? null,
       stateAffiliateUrl: pricing?.affiliateUrl || null,
       priceNote: pricing?.priceNote || null,
@@ -653,11 +654,15 @@ export function resolveStateContent(
   const variant = stateCode ? variants.get(`${school.slug}:${stateCode}`) : undefined;
   const state = stateCode ? stateReqs.get(stateCode) : undefined;
 
-  // Price waterfall: variant override → per-state column → SchoolWithPrice.price → genericPrice → null
+  // Price waterfall (WS2 collapse): variant override → RAW Pricing-DB value (the
+  // verified price, synced from the Scraper Rules DB) → per-state Schools column
+  // (legacy fallback) → generic → null. Pricing now outranks the column so the
+  // verified price is the displayed price; the column stays as a harmless fallback
+  // for legacy/non-ruled cards (it is never read when a Pricing value exists).
   const price =
     variant?.priceOverride ??
+    ("pricingPrice" in school ? (school as SchoolWithPrice).pricingPrice : null) ??
     (stateCode ? school.statePrices[stateCode] : undefined) ??
-    ("price" in school ? (school as SchoolWithPrice).price : null) ??
     school.genericPrice ??
     null;
 
