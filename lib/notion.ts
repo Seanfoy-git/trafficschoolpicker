@@ -115,6 +115,34 @@ async function queryAllPages(
   return results;
 }
 
+// Notion API error codes that are transient (retry), vs. a hard failure (throw).
+const TRANSIENT_NOTION_CODES = new Set([
+  "rate_limited",
+  "internal_server_error",
+  "service_unavailable",
+  "gateway_timeout",
+  "conflict_error",
+]);
+
+// Runs a Notion op with exponential backoff on transient errors, then rethrows.
+// Use for critical page-content queries so a brief blip is retried and a genuine
+// outage surfaces as a thrown error — never a silent empty result. See the note
+// on getStateInfo for why swallowing these to null is dangerous.
+async function withNotionRetry<T>(op: () => Promise<T>, attempts = 5): Promise<T> {
+  let lastErr: unknown;
+  for (let i = 1; i <= attempts; i++) {
+    try {
+      return await op();
+    } catch (err) {
+      lastErr = err;
+      const code = (err as { code?: string })?.code;
+      if (i === attempts || !(code && TRANSIENT_NOTION_CODES.has(code))) throw err;
+      await new Promise((r) => setTimeout(r, 500 * 2 ** (i - 1))); // 0.5s,1s,2s,4s
+    }
+  }
+  throw lastErr; // unreachable — loop either returns or throws
+}
+
 // ─── STATES DB ──────────────────────────────────────────────
 
 function deriveOnlineStatus(
@@ -199,24 +227,29 @@ function mapStateInfo(page: PageObjectResponse): StateInfo {
 
 export async function getStateInfo(stateCode: string): Promise<StateInfo | null> {
   if (!process.env.NOTION_TOKEN || !STATES_DB) return null;
-  try {
-    // Pulls all rows matching the abbreviation. The States DB has duplicate
-    // rows per state from prior seed batches; pickCanonicalRow scores them
-    // by editorial richness so we never accidentally render the empty
-    // 04-02 seed row. See lib/state-canonical.ts for the heuristic.
-    const response = await notion.databases.query({
+
+  // Deliberately NOT wrapped in a catch that returns null. A null stateInfo
+  // renders a content-less "status not confirmed" stub, so swallowing a transient
+  // Notion error here silently ships a Complete state as an empty page — this
+  // blanked Washington DC when a build-time query got rate-limited. Retry the
+  // transient failure, then let it propagate: a failed build keeps the last-good
+  // deploy live, far better than publishing a blank page. `null` now means only
+  // "the query succeeded but no canonical row exists" — a genuine not-found.
+  //
+  // Pulls all rows matching the abbreviation. The States DB has duplicate rows
+  // per state from prior seed batches; pickCanonicalRow scores them by editorial
+  // richness so we never render the empty 04-02 seed row. See lib/state-canonical.ts.
+  const response = await withNotionRetry(() =>
+    notion.databases.query({
       database_id: STATES_DB,
       filter: {
         property: "Abbreviation",
         rich_text: { equals: stateCode.toUpperCase() },
       },
-    });
-    const canonical = pickCanonicalRow(response.results as PageObjectResponse[]);
-    if (!canonical) return null;
-    return mapStateInfo(canonical);
-  } catch {
-    return null;
-  }
+    })
+  );
+  const canonical = pickCanonicalRow(response.results as PageObjectResponse[]);
+  return canonical ? mapStateInfo(canonical) : null;
 }
 
 // ─── LINKABLE STATES (single shared gate) ───────────────────
