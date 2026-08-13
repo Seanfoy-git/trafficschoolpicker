@@ -165,6 +165,22 @@ export default async function StatePage({ params }: Props) {
         </section>
       )}
 
+      {/* TRUE COST OF A TICKET — state-specific explainer on the real financial
+          impact (fine + insurance hike + surcharges), between the intro lead-in
+          and the school comparison. Renders only when the field is populated. */}
+      {stateInfo?.trueCostOfATicket && (
+        <section className="py-8 bg-white border-b border-slate-100">
+          <div className="max-w-3xl mx-auto px-4">
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">
+              The True Cost of a Ticket in {stateMeta.name}
+            </h2>
+            <p className="text-base md:text-lg text-slate-700 leading-relaxed whitespace-pre-line">
+              {stateInfo.trueCostOfATicket}
+            </p>
+          </div>
+        </section>
+      )}
+
       {/* STATUS BANNERS */}
       {onlineStatus === "Online — insurance discount only" && (
         <section className="py-6 bg-amber-50 border-b border-amber-200">

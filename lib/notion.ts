@@ -190,6 +190,7 @@ function mapStateInfo(page: PageObjectResponse): StateInfo {
     minHours: getNumber(page, "Minimum Hours"),
     status: getSelect(page, "Status") ?? "Not Started",
     introParagraph: getFullRichText(page, "Intro Paragraph"),
+    trueCostOfATicket: getFullRichText(page, "True Cost of a Ticket").trim() || null,
     stateFaq: parseStateFaqJson(getFullRichText(page, "State FAQ"), getText(page, "Abbreviation")),
     lastVerified: getDate(page, "Last Verified"),
     contentStatus: isContentStatus(contentStatusRaw) ? contentStatusRaw : null,

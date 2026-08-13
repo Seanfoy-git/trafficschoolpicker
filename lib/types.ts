@@ -43,6 +43,7 @@ export type StateInfo = {
   status: string;                // "Research Complete" / "In Progress" / "Not Started"
   // Per-state page-content fields (added for uniqueness uplift)
   introParagraph: string;
+  trueCostOfATicket: string | null;  // "True Cost of a Ticket" prose; null when unset
   stateFaq: StateFaqEntry[];     // parsed from JSON; empty array if missing/malformed
   lastVerified: string | null;   // ISO date — drives the "Last verified" header chip
   contentStatus: ContentStatus | null;  // null treated as Stub for sitemap inclusion
