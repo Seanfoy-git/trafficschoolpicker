@@ -143,6 +143,36 @@ async function withNotionRetry<T>(op: () => Promise<T>, attempts = 5): Promise<T
   throw lastErr; // unreachable — loop either returns or throws
 }
 
+// Fetch a table once per build worker and share it across every page render in
+// that process. React cache() only dedupes within a SINGLE render, so without
+// this each of the 51 state pages re-queried every table — on the order of ~700
+// Notion requests per build, enough to trip the API rate limit. This collapses
+// that to one fetch per table per worker.
+//
+// The process-level memo applies ONLY during `next build` (NEXT_PHASE is set to
+// 'phase-production-build' before app modules load — see next/dist/build). At
+// runtime it falls back to React cache() (per-render dedup) so ISR revalidation
+// and dynamic routes like /admin always read fresh Notion data. And unlike
+// unstable_cache, nothing persists across builds, so every deploy still reflects
+// fresh Notion content (the "edit in Notion → redeploy" flow). The build memo is
+// cleared on rejection so a transient failure can be retried by the next caller
+// rather than poisoning the whole build.
+function memoize<T>(fn: () => Promise<T>): () => Promise<T> {
+  if (process.env.NEXT_PHASE !== "phase-production-build") {
+    return cache(fn);
+  }
+  let inflight: Promise<T> | null = null;
+  return () => {
+    if (!inflight) {
+      inflight = fn().catch((err) => {
+        inflight = null;
+        throw err;
+      });
+    }
+    return inflight;
+  };
+}
+
 // ─── STATES DB ──────────────────────────────────────────────
 
 function deriveOnlineStatus(
@@ -225,31 +255,44 @@ function mapStateInfo(page: PageObjectResponse): StateInfo {
   };
 }
 
+// One fetch of the entire States DB per build, resolved to the canonical
+// StateInfo for each state code. The States DB still holds duplicate seed rows
+// per state, so we group by abbreviation and run pickCanonicalRow per group —
+// scoring by editorial richness so we never render the empty 04-02 seed row.
+// See lib/state-canonical.ts.
+//
+// Deliberately NOT wrapped in a catch that returns an empty map: a missing
+// StateInfo renders a content-less "status not confirmed" stub, so swallowing a
+// transient Notion error would silently ship Complete states as blank pages
+// (this is what blanked Washington DC when a build-time query got rate-limited).
+// withNotionRetry retries transient failures, then lets them propagate — a failed
+// build keeps the last-good deploy live, far better than publishing blank pages.
+const getAllStateInfos = memoize(async (): Promise<Map<string, StateInfo>> => {
+  const map = new Map<string, StateInfo>();
+  if (!process.env.NOTION_TOKEN || !STATES_DB) return map;
+
+  const pages = await withNotionRetry(() => queryAllPages(STATES_DB));
+  const byCode = new Map<string, PageObjectResponse[]>();
+  for (const page of pages) {
+    const code = getText(page, "Abbreviation").toUpperCase();
+    if (!code) continue;
+    const group = byCode.get(code);
+    if (group) group.push(page);
+    else byCode.set(code, [page]);
+  }
+  for (const [code, rows] of byCode) {
+    const canonical = pickCanonicalRow(rows);
+    if (canonical) map.set(code, mapStateInfo(canonical));
+  }
+  return map;
+});
+
 export async function getStateInfo(stateCode: string): Promise<StateInfo | null> {
   if (!process.env.NOTION_TOKEN || !STATES_DB) return null;
-
-  // Deliberately NOT wrapped in a catch that returns null. A null stateInfo
-  // renders a content-less "status not confirmed" stub, so swallowing a transient
-  // Notion error here silently ships a Complete state as an empty page — this
-  // blanked Washington DC when a build-time query got rate-limited. Retry the
-  // transient failure, then let it propagate: a failed build keeps the last-good
-  // deploy live, far better than publishing a blank page. `null` now means only
-  // "the query succeeded but no canonical row exists" — a genuine not-found.
-  //
-  // Pulls all rows matching the abbreviation. The States DB has duplicate rows
-  // per state from prior seed batches; pickCanonicalRow scores them by editorial
-  // richness so we never render the empty 04-02 seed row. See lib/state-canonical.ts.
-  const response = await withNotionRetry(() =>
-    notion.databases.query({
-      database_id: STATES_DB,
-      filter: {
-        property: "Abbreviation",
-        rich_text: { equals: stateCode.toUpperCase() },
-      },
-    })
-  );
-  const canonical = pickCanonicalRow(response.results as PageObjectResponse[]);
-  return canonical ? mapStateInfo(canonical) : null;
+  const all = await getAllStateInfos();
+  // null now means only "no canonical row for this code" — a genuine not-found,
+  // never a swallowed fetch error (getAllStateInfos throws on persistent failure).
+  return all.get(stateCode.toUpperCase()) ?? null;
 }
 
 // ─── LINKABLE STATES (single shared gate) ───────────────────
@@ -271,18 +314,14 @@ export async function getStateInfo(stateCode: string): Promise<StateInfo | null>
 // call across one render (e.g. a page and its footer both call this) to a single
 // query.
 export const getLinkableStateCodes = cache(async (): Promise<Set<string>> => {
+  // Derived from the shared getAllStateInfos fetch (canonical row per code), so
+  // it adds no Notion request. A code is linkable once its canonical row is
+  // Content Status = Complete — the same row the page actually renders.
   const set = new Set<string>();
-  if (!process.env.NOTION_TOKEN || !STATES_DB) return set;
-  try {
-    const pages = await queryAllPages(STATES_DB, {
-      property: "Content Status",
-      select: { equals: "Complete" },
-    });
-    for (const page of pages) {
-      const code = getText(page as PageObjectResponse, "Abbreviation").toUpperCase();
-      if (code) set.add(code);
-    }
-  } catch { /* DB or column may not exist yet — empty set is the safe default */ }
+  const all = await getAllStateInfos();
+  for (const [code, info] of all) {
+    if (info.contentStatus === "Complete") set.add(code);
+  }
   return set;
 });
 
@@ -457,24 +496,26 @@ function isEligibleToShow(school: School): boolean {
   return true;
 }
 
-export async function getAllSchools(): Promise<School[]> {
+export const getAllSchools = memoize(async (): Promise<School[]> => {
   if (!process.env.NOTION_TOKEN || !SCHOOLS_DB) return [];
   try {
-    const response = await notion.databases.query({
-      database_id: SCHOOLS_DB,
-      filter: {
-        and: [
-          { property: "Status", select: { equals: "Active" } },
-          { property: "Show On Site", checkbox: { equals: true } },
-        ],
-      },
-      sorts: [{ property: "Rating", direction: "descending" }],
-    });
+    const response = await withNotionRetry(() =>
+      notion.databases.query({
+        database_id: SCHOOLS_DB,
+        filter: {
+          and: [
+            { property: "Status", select: { equals: "Active" } },
+            { property: "Show On Site", checkbox: { equals: true } },
+          ],
+        },
+        sorts: [{ property: "Rating", direction: "descending" }],
+      })
+    );
     return (response.results as PageObjectResponse[]).map(mapSchool).filter(isEligibleToShow);
   } catch {
     return [];
   }
-}
+});
 
 export async function getSchoolBySlug(slug: string): Promise<School | null> {
   const all = await getAllSchools();
@@ -483,40 +524,34 @@ export async function getSchoolBySlug(slug: string): Promise<School | null> {
 
 // ─── SCHOOL PRICING DB ──────────────────────────────────────
 
-export async function getSchoolPricingForState(
-  stateCode: string
-): Promise<SchoolWithPrice[]> {
-  if (!process.env.NOTION_TOKEN || !SCHOOLS_DB) return [];
+type PricingInfo = {
+  price: number | null;
+  originalPrice: number | null;
+  affiliateUrl: string;
+  priceNote: string;
+  approved: boolean;
+};
 
-  // Get all active schools first (single API call)
-  const schools = await getAllSchools();
-  if (schools.length === 0) return [];
-
-  // If Pricing DB exists, query it for state-specific prices
-  const pricingMap = new Map<string, {
-    price: number | null;
-    originalPrice: number | null;
-    affiliateUrl: string;
-    priceNote: string;
-    approved: boolean;
-  }>();
-
-  if (PRICING_DB) {
+// One fetch of every approved pricing row per build, grouped by state code then
+// school id. Replaces the per-state Pricing query (51 → 1).
+const getAllPricingByState = memoize(
+  async (): Promise<Map<string, Map<string, PricingInfo>>> => {
+    const byState = new Map<string, Map<string, PricingInfo>>();
+    if (!process.env.NOTION_TOKEN || !PRICING_DB) return byState;
     try {
-      const pricingPages = await queryAllPages(PRICING_DB, {
-        and: [
-          { property: "State Code", rich_text: { equals: stateCode.toUpperCase() } },
-          { property: "Approved", checkbox: { equals: true } },
-        ],
-      });
-
-      for (const pp of pricingPages) {
-        // Get the school ID from the relation
-        const schoolIds = getRelationIds(pp, "School");
-        const schoolId = schoolIds[0];
-        if (!schoolId) continue;
-
-        pricingMap.set(schoolId, {
+      const pages = await withNotionRetry(() =>
+        queryAllPages(PRICING_DB, { property: "Approved", checkbox: { equals: true } })
+      );
+      for (const pp of pages) {
+        const code = getText(pp, "State Code").toUpperCase();
+        const schoolId = getRelationIds(pp, "School")[0];
+        if (!code || !schoolId) continue;
+        let forState = byState.get(code);
+        if (!forState) {
+          forState = new Map<string, PricingInfo>();
+          byState.set(code, forState);
+        }
+        forState.set(schoolId, {
           price: getNumber(pp, "Price"),
           originalPrice: getNumber(pp, "Original Price"),
           affiliateUrl: getText(pp, "Affiliate URL"),
@@ -525,17 +560,30 @@ export async function getSchoolPricingForState(
         });
       }
     } catch {
-      // Pricing DB may not exist yet — fall back to schools without prices
+      // Pricing DB may not exist yet — states resolve without price overrides.
     }
+    return byState;
   }
+);
+
+export async function getSchoolPricingForState(
+  stateCode: string
+): Promise<SchoolWithPrice[]> {
+  if (!process.env.NOTION_TOKEN || !SCHOOLS_DB) return [];
+
+  const schools = await getAllSchools();
+  if (schools.length === 0) return [];
+
+  const code = stateCode.toUpperCase();
+  const pricingMap =
+    (await getAllPricingByState()).get(code) ?? new Map<string, PricingInfo>();
 
   // Merge schools with their state-specific pricing
   const results: SchoolWithPrice[] = [];
   for (const school of schools) {
     // Check if school serves this state
     const servesState =
-      school.stateCodes.includes("all") ||
-      school.stateCodes.includes(stateCode.toUpperCase());
+      school.stateCodes.includes("all") || school.stateCodes.includes(code);
     if (!servesState) continue;
 
     const pricing = pricingMap.get(school.id);
@@ -583,13 +631,13 @@ function mapDirectorySchool(page: PageObjectResponse): DirectorySchool {
 // logs at WARN before we can catch it), so every state with no directory rows
 // spammed a validation_error at build time. A state name is data, not a schema
 // option, so it should never gate the query.
-const getAllDirectorySchools = cache(async (): Promise<DirectorySchool[]> => {
+const getAllDirectorySchools = memoize(async (): Promise<DirectorySchool[]> => {
   if (!process.env.NOTION_TOKEN || !DIRECTORY_DB) return [];
   try {
-    const pages = await queryAllPages(
-      DIRECTORY_DB,
-      undefined,
-      [{ property: "School Name", direction: "ascending" }]
+    const pages = await withNotionRetry(() =>
+      queryAllPages(DIRECTORY_DB, undefined, [
+        { property: "School Name", direction: "ascending" },
+      ])
     );
     return pages.map(mapDirectorySchool);
   } catch {
@@ -658,18 +706,20 @@ function mapStateRequirement(page: PageObjectResponse): StateRequirement {
   };
 }
 
-export async function getStateRequirements(): Promise<Map<string, StateRequirement>> {
-  const map = new Map<string, StateRequirement>();
-  if (!process.env.NOTION_TOKEN || !STATE_REQUIREMENTS_DB) return map;
-  try {
-    const pages = await queryAllPages(STATE_REQUIREMENTS_DB);
-    for (const page of pages) {
-      const req = mapStateRequirement(page);
-      if (req.stateCode) map.set(req.stateCode, req);
-    }
-  } catch { /* DB may not exist yet */ }
-  return map;
-}
+export const getStateRequirements = memoize(
+  async (): Promise<Map<string, StateRequirement>> => {
+    const map = new Map<string, StateRequirement>();
+    if (!process.env.NOTION_TOKEN || !STATE_REQUIREMENTS_DB) return map;
+    try {
+      const pages = await withNotionRetry(() => queryAllPages(STATE_REQUIREMENTS_DB));
+      for (const page of pages) {
+        const req = mapStateRequirement(page);
+        if (req.stateCode) map.set(req.stateCode, req);
+      }
+    } catch { /* DB may not exist yet */ }
+    return map;
+  }
+);
 
 // ─── SCHOOL STATE VARIANTS DB ───────────────────────────────
 
@@ -699,10 +749,10 @@ function mapSchoolVariant(page: PageObjectResponse): SchoolStateVariant {
 // per-state `State Code` select-equals filter, which 400s (SDK-logged at WARN)
 // for every state whose code isn't among the DB's select options — i.e. any
 // state with no variant rows yet. Same class of fix as getAllDirectorySchools.
-const getAllSchoolVariants = cache(async (): Promise<SchoolStateVariant[]> => {
+const getAllSchoolVariants = memoize(async (): Promise<SchoolStateVariant[]> => {
   if (!process.env.NOTION_TOKEN || !SCHOOL_VARIANTS_DB) return [];
   try {
-    const pages = await queryAllPages(SCHOOL_VARIANTS_DB);
+    const pages = await withNotionRetry(() => queryAllPages(SCHOOL_VARIANTS_DB));
     return pages.map(mapSchoolVariant);
   } catch {
     return []; // DB may not exist yet
