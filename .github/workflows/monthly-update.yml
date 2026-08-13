@@ -45,6 +45,13 @@ jobs:
         run: npx playwright install chromium --with-deps
 
       - name: Scrape state DMV sources → Notion Directory
+        # Individual DMV sites go down intermittently (ECONNREFUSED/timeouts).
+        # scrape:dmv now runs each state independently (";" not "&&") so one bad
+        # site doesn't skip the rest, and continue-on-error keeps the run flowing
+        # to reviews/prices/deploy — the directory is a slow-changing trust list,
+        # not worth blocking the whole refresh. Per-scraper failures are logged to
+        # the Issues DB.
+        continue-on-error: true
         run: npm run scrape:dmv
 
       - name: Scrape Trustpilot ratings → Notion Schools

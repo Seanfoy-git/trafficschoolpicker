@@ -19,7 +19,7 @@
     "scrape:az": "npx tsx scripts/scrape-az-courts.ts",
     "scrape:va": "npx tsx scripts/scrape-va-dmv.ts",
     "scrape:pdf": "npx tsx scripts/scrape-pdf-states.ts",
-    "scrape:dmv": "npm run scrape:ca && npm run scrape:tx && npm run scrape:fl && npm run scrape:oh && npm run scrape:ga && npm run scrape:ny && npm run scrape:az && npm run scrape:va && npm run scrape:states && npm run scrape:pdf",
+    "scrape:dmv": "npm run scrape:ca ; npm run scrape:tx ; npm run scrape:fl ; npm run scrape:oh ; npm run scrape:ga ; npm run scrape:ny ; npm run scrape:az ; npm run scrape:va ; npm run scrape:states ; npm run scrape:pdf",
     "scrape:reviews": "npx tsx scripts/scrape-reviews.ts",
     "scrape:prices": "npx tsx scripts/scrape-prices.ts",
     "enrich:places": "npx tsx scripts/enrich-places.ts",
