@@ -543,20 +543,31 @@ function mapDirectorySchool(page: PageObjectResponse): DirectorySchool {
   };
 }
 
-export async function getDirectoryForState(
-  stateName: string
-): Promise<DirectorySchool[]> {
+// Full Directory scan, cached per render. Filtering by state name in memory
+// avoids a per-state `State` select-equals filter: Notion rejects a select
+// filter whose value isn't an existing option (HTTP 400 — which the Notion SDK
+// logs at WARN before we can catch it), so every state with no directory rows
+// spammed a validation_error at build time. A state name is data, not a schema
+// option, so it should never gate the query.
+const getAllDirectorySchools = cache(async (): Promise<DirectorySchool[]> => {
   if (!process.env.NOTION_TOKEN || !DIRECTORY_DB) return [];
   try {
     const pages = await queryAllPages(
       DIRECTORY_DB,
-      { property: "State", select: { equals: stateName } },
+      undefined,
       [{ property: "School Name", direction: "ascending" }]
     );
     return pages.map(mapDirectorySchool);
   } catch {
     return [];
   }
+});
+
+export async function getDirectoryForState(
+  stateName: string
+): Promise<DirectorySchool[]> {
+  const all = await getAllDirectorySchools();
+  return all.filter((d) => d.state === stateName);
 }
 
 // ─── PROS/CONS HELPER ───────────────────────────────────────
@@ -650,21 +661,30 @@ function mapSchoolVariant(page: PageObjectResponse): SchoolStateVariant {
   };
 }
 
+// Full Variants scan, cached per render. Filtering by state in memory avoids a
+// per-state `State Code` select-equals filter, which 400s (SDK-logged at WARN)
+// for every state whose code isn't among the DB's select options — i.e. any
+// state with no variant rows yet. Same class of fix as getAllDirectorySchools.
+const getAllSchoolVariants = cache(async (): Promise<SchoolStateVariant[]> => {
+  if (!process.env.NOTION_TOKEN || !SCHOOL_VARIANTS_DB) return [];
+  try {
+    const pages = await queryAllPages(SCHOOL_VARIANTS_DB);
+    return pages.map(mapSchoolVariant);
+  } catch {
+    return []; // DB may not exist yet
+  }
+});
+
 export async function getSchoolVariantsForState(
   stateCode: string
 ): Promise<Map<string, SchoolStateVariant>> {
+  const code = stateCode.toUpperCase();
   const map = new Map<string, SchoolStateVariant>();
-  if (!process.env.NOTION_TOKEN || !SCHOOL_VARIANTS_DB) return map;
-  try {
-    const pages = await queryAllPages(SCHOOL_VARIANTS_DB, {
-      property: "State Code",
-      select: { equals: stateCode.toUpperCase() },
-    });
-    for (const page of pages) {
-      const variant = mapSchoolVariant(page);
+  for (const variant of await getAllSchoolVariants()) {
+    if (variant.stateCode.toUpperCase() === code) {
       map.set(variant.name, variant); // keyed by "slug:STATE"
     }
-  } catch { /* DB may not exist yet */ }
+  }
   return map;
 }
 

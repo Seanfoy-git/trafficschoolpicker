@@ -39,9 +39,8 @@ const STATE_VIDEOS: Record<string, string> = {
   "georgia": "VtNRogHhy_A",
   "ohio": "IlMoa1atiBY",
   "arizona": "udlHdWl1cdM",
-  // "new-jersey": video 8Qtg9viSfbY was removed/unavailable on YouTube (oEmbed
-  // 404) and rendered a broken "Video unavailable" embed — pulled until a
-  // replacement is published. Re-add with the new ID when available.
+  // Replaces the prior 8Qtg9viSfbY, which YouTube had removed (oEmbed 404).
+  "new-jersey": "Fa9M1EKNMV8",
 };
 
 export const revalidate = 86400;
