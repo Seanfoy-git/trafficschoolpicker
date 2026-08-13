@@ -79,6 +79,13 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
     primaryKeyword: "Washington traffic safety school online",
     canonicalPath: "/washington",
   },
+  "washington-dc": {
+    title: "Traffic School in Washington DC (2026)",
+    description: "Washington DC has no online traffic school for ticket dismissal. Learn how DC handles traffic tickets, points, and your real options.",
+    h1: "Traffic School in Washington DC: What You Need to Know (2026)",
+    primaryKeyword: "Washington DC traffic school",
+    canonicalPath: "/washington-dc",
+  },
   colorado: {
     title: "Best Online Traffic School Colorado (2026)",
     description: "Compare court-approved online traffic school courses in Colorado. Mask your ticket from your public record. Lowest prices.",

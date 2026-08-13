@@ -54,6 +54,9 @@ export const STATE_LIST: StateMeta[] = [
   { name: "Vermont", slug: "vermont", code: "VT" },
   { name: "Virginia", slug: "virginia", code: "VA" },
   { name: "Washington", slug: "washington", code: "WA" },
+  // District of Columbia — a federal district, not a state, but it has its own
+  // DMV, traffic-ticket rules, and a Complete content row, so it gets a page.
+  { name: "Washington DC", slug: "washington-dc", code: "DC" },
   { name: "West Virginia", slug: "west-virginia", code: "WV" },
   { name: "Wisconsin", slug: "wisconsin", code: "WI" },
   { name: "Wyoming", slug: "wyoming", code: "WY" },
