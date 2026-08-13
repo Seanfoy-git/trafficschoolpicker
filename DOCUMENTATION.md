@@ -1,6 +1,6 @@
 # trafficschoolpicker.com — System Documentation
 
-> **Last updated**: 2026-05-01
+> **Last updated**: 2026-08-13
 > **Live site**: https://www.trafficschoolpicker.com
 > **Repo**: https://github.com/Seanfoy-git/trafficschoolpicker
 
@@ -102,9 +102,15 @@ every 24h gives instant page loads and fresh data without per-request latency.
 
 Sean (editorial owner) maintains content directly in Notion. The alternative
 was Postgres + an admin panel, which is meaningfully more code for a one-person
-editorial team. The tradeoff: Notion API is slow (~500ms per query) so we batch
-fetches in `Promise.all` and cache via ISR, and joins happen in application
-code rather than SQL.
+editorial team. The tradeoff: Notion API is slow (~500ms/query) and has a ~3
+req/sec public-API rate limit, so joins happen in application code rather than
+SQL, and every table is fetched **once per build** and shared across all pages
+via the `memoize` helper in `lib/notion.ts` (see §15). This matters — the build
+statically renders 51 state pages + reviews + blog, and a naive per-page query
+pattern generated ~700 Notion requests per build and tripped the rate limit.
+Batching cut that to ~12. We chose to optimize the query layer rather than
+migrate off Notion, which would have cost the non-technical editing workflow
+that is Notion's whole value here.
 
 ---
 
@@ -113,7 +119,7 @@ code rather than SQL.
 ```
 .
 ├── app/                          # Next.js App Router pages
-│   ├── [state]/page.tsx          # Dynamic state page (50 routes)
+│   ├── [state]/page.tsx          # Dynamic state page (51 routes: 50 states + DC)
 │   ├── reviews/[school-slug]/    # School detail pages
 │   ├── blog/[slug]/              # MDX blog posts
 │   ├── schools/page.tsx          # Full schools directory
@@ -132,6 +138,9 @@ code rather than SQL.
 │   ├── CouponCode.tsx            # Coupon-code chip with copy-to-clipboard
 │   ├── MultiRating.tsx           # Multi-platform rating badges + ReviewSynthesis
 │   ├── DirectoryTable.tsx        # DMV-scraped school listing per state
+│   ├── NearbyStates.tsx          # Geographic cross-links (crawl discovery)
+│   ├── RelatedPosts.tsx          # State → blog cross-links
+│   ├── RelatedStateGuides.tsx    # Blog → state cross-links
 │   ├── FaqSection.tsx            # FAQ accordion (also emits JSON-LD)
 │   ├── BlogMdxComponents.tsx     # MDX renderer overrides
 │   ├── ComparisonTable.tsx, RatingStars.tsx, Badge.tsx, etc.
@@ -143,10 +152,13 @@ code rather than SQL.
 │   ├── notion.ts                 # Single data layer for all Notion DBs
 │   ├── types.ts                  # All TypeScript types
 │   ├── affiliate.ts              # buildAffiliateLink (tracking method branches)
-│   ├── seo-config.ts             # Per-page SEO metadata (50 states + 9 posts)
-│   ├── state-utils.ts            # Slug / code / name utilities
+│   ├── seo-config.ts             # Per-page SEO metadata (51 states + 9 posts)
+│   ├── state-utils.ts            # STATE_LIST (51: 50 states + DC), slug/code/name utils
+│   ├── state-canonical.ts        # pickCanonicalRow — dedup States DB rows
+│   ├── state-adjacency.ts        # Geographic neighbor map (NearbyStates)
+│   ├── internal-links.ts         # Internal-link helpers (crawl discovery)
 │   ├── state-faqs.ts             # Static fallback FAQs per state
-│   ├── notion-faqs.ts            # Notion FAQ DB query
+│   ├── notion-faqs.ts            # Legacy Notion FAQ DB query (fallback, being retired)
 │   └── blog.ts                   # MDX frontmatter reader
 │
 ├── content/
@@ -168,10 +180,10 @@ code rather than SQL.
 │   └── config/                   # State source registry + price source config
 │
 ├── public/
-│   ├── flags/*.png               # 50 US state flags
+│   ├── flags/*.png               # 51 flags (50 states + washington-dc.png)
 │   ├── icon.svg, logo.svg
 │   ├── llms.txt                  # AI discoverability (manual)
-│   └── llms-full.txt             # Auto-generated from Notion FAQs
+│   └── llms-full.txt             # Auto-generated from the States DB (Intro + FAQ JSON)
 │
 ├── .github/workflows/
 │   └── monthly-update.yml        # Monthly scrape + redeploy
@@ -254,13 +266,26 @@ Volume: ~2,200 schools across 22 states.
 ### 4.4 States DB
 Env: `NOTION_STATES_DB`
 
-One row per state (25 covered, expanding). Holds operational facts:
+One canonical row per state. **51 rows, all Content Status = Complete** — the 50
+US states plus **Washington DC** (Abbreviation `DC`, slug `washington-dc`; a
+federal district, but it has its own DMV and traffic-ticket rules so it gets a
+page). Holds operational facts *and* the per-state page content:
+
 - **State Name**, **Abbreviation**
-- **Online Allowed**, **Online Dismisses Ticket**, **Insurance Discount Available** — three checkboxes that combine into the rendered `OnlineStatus`
+- **Online Allowed**, **Online Dismisses Ticket**, **Insurance Discount Available** — three checkboxes that combine into the rendered `OnlineStatus` (DC/MA/OR are `Online Allowed = false` → "In-person only")
 - **Eligibility Requirements**, **Court Acceptance Notes**, **Certificate Submission**, **Minimum Hours**
 - **DMV URL**, **Research Notes**, **Fun Fact**
+- **Intro Paragraph** (rich text) — state-specific SEO lead-in, rendered above the comparison
+- **True Cost of a Ticket** (rich text) — prose block rendered between the intro and the school comparison (`StateInfo.trueCostOfATicket`, null when unset)
+- **State FAQ** (rich text) — a JSON array `[{"q":"…","a":"…"}, …]`; the **primary** per-state FAQ source (see §4.7). Long values span multiple 2000-char rich-text segments and are concatenated on read.
+- **Content Status** (select) — `Complete` | `Partial` | `Stub`. The single gate for sitemap + internal links (see §14).
+- **Last Verified** (date) — drives the "Last verified {Month} {Year}" TrustBar chip
 
-Used for the "State Rules & Requirements" section on each state page.
+Used for the state hero, intro, True Cost, "State Rules & Requirements", and FAQ
+sections. **Duplicate-row history**: prior seed batches left multiple rows per
+state; `pickCanonicalRow` (lib/state-canonical.ts) scores rows by editorial
+richness so we never render an empty seed row. The DB has since been consolidated
+to one canonical row per state, but the canonical selection stays as a guard.
 
 ### 4.5 State Requirements DB
 Env: `NOTION_STATE_REQUIREMENTS_DB`
@@ -298,12 +323,16 @@ will remain stable.
 Volume: 98 variants (10 schools × 11 states, plus the seeded `safe2drive:CA`
 locked row).
 
-### 4.7 State FAQs DB
+### 4.7 State FAQs DB (legacy — being retired)
 Env: `NOTION_FAQ_DB_ID`
 
-Per-state FAQ content with a Status (`Verified` is required for rendering).
-~250 verified facts across 50 states. Surfaces on each state page in the FAQ
-section, also feeds `public/llms-full.txt`.
+The original per-state FAQ store (one row per Q/A, Status `Verified` to render).
+**Superseded** by the **State FAQ JSON** field on the States DB (§4.4), which is
+now the primary FAQ source and the sole source for `public/llms-full.txt`. This
+DB survives only as a runtime fallback in `getNotionStateFaqs`
+(lib/notion-faqs.ts) and is slated for removal once every state is confirmed
+migrated. The FAQ source priority on the state page is: **States DB State FAQ
+JSON → this legacy DB → hardcoded static fallback** (lib/state-faqs.ts).
 
 ### 4.8 Issues DB
 Env: `NOTION_ISSUES_DB` (optional)
@@ -526,7 +555,7 @@ To switch to coupon-code:
 | Route | File | Purpose | ISR |
 |---|---|---|---|
 | `/` | [app/page.tsx](app/page.tsx) | Homepage with top 3 Tier 1 schools | 24h |
-| `/[state]` | [app/[state]/page.tsx](app/[state]/page.tsx) | 50 dynamic state pages | 24h |
+| `/[state]` | [app/[state]/page.tsx](app/[state]/page.tsx) | 51 dynamic state pages (50 states + DC) | 24h |
 | `/schools` | [app/schools/page.tsx](app/schools/page.tsx) | Full schools directory (sortable, filterable) | 24h |
 | `/reviews/[school-slug]` | [app/reviews/[school-slug]/page.tsx](app/reviews/[school-slug]/page.tsx) | School detail / review pages | 24h |
 | `/blog` | [app/blog/page.tsx](app/blog/page.tsx) | Blog index | 24h |
@@ -540,24 +569,30 @@ To switch to coupon-code:
 
 The most complex page. Flow:
 
-1. `generateStaticParams()` returns all 50 state slugs (from `lib/state-utils.ts`)
+1. `generateStaticParams()` returns all 51 state slugs (from `STATE_LIST` in `lib/state-utils.ts`)
 2. `generateMetadata()` reads from `STATE_SEO` map, falls back to a generic title
-3. Page fetches **6 things in parallel** (`Promise.all`):
-   - Schools with state-specific pricing (filtered by state code in app code)
-   - State info (online status, eligibility, court notes)
-   - Directory schools (DMV-scraped, per state)
-   - Notion FAQs (verified entries for this state)
+3. Page fetches **7 things in parallel** (`Promise.all`):
+   - Schools with state-specific pricing (filtered by state code in app code, from the shared pricing fetch)
+   - State info (online status, intro, True Cost, eligibility, court notes, FAQ JSON)
+   - Directory schools (DMV-scraped; the full directory is fetched once and filtered in memory)
+   - Notion FAQs (legacy fallback — see §4.7)
    - State Requirements (all states, used by resolver)
-   - School State Variants (filtered by state code in Notion query)
-4. Branches on `onlineStatus`:
-   - **`Online — ticket dismissal`**: full Tier 1 grid + state info + FAQs + directory
-   - **`Online — insurance discount only`**: amber banner + reduced grid
-   - **`In-person only`**: no schools, just a "find local" CTA
-   - **`Unknown`**: research-in-progress notice
-5. Georgia-specific callout banner (DDS quirks)
-6. Hero with state flag (desktop only — `hidden md:block`)
-7. YouTube video embed if `STATE_VIDEOS[stateSlug]` is configured
-8. Each school card receives `resolved` prop (computed by `resolveStateContent`)
+   - School State Variants (the full set is fetched once and filtered in memory — was a per-state select query that 400'd for states with no variant rows)
+   - Linkable states (`getLinkableStates`, powers NearbyStates)
+4. Render order (top to bottom):
+   - Hero with state flag (desktop only — `hidden md:block`)
+   - TrustBar ("Last verified …")
+   - **Intro Paragraph** (if set)
+   - **True Cost of a Ticket** section — H2 + prose, between the intro and the comparison (if set)
+   - Status banners, keyed on `onlineStatus`:
+     - **`Online — ticket dismissal`**: full Tier 1 grid + state info + FAQs + directory
+     - **`Online — insurance discount only`**: amber banner + reduced grid
+     - **`In-person only`**: no schools, just a "find local" CTA (DC, MA, OR)
+     - **`Unknown`**: research-in-progress notice
+   - Georgia-specific callout banner (DDS quirks)
+   - YouTube video embed if `STATE_VIDEOS[stateSlug]` is configured
+   - Tier 1 comparison cards — each gets a `resolved` prop (`resolveStateContent`)
+   - State Rules & Requirements, FAQ, **RelatedPosts** (→ blog), **NearbyStates** (→ neighbors), directory
 
 ### Schools directory (`/schools`)
 
@@ -852,16 +887,30 @@ into the map.
 
 ### `lib/seo-config.ts`
 
-Centralised metadata: `STATE_SEO` (50 entries), `BLOG_SEO` (9 posts),
-`HOME_SEO`. Each entry has title (≤60 chars), description (≤155 chars), h1,
-primaryKeyword, canonicalPath. `validateSeoConfig()` warns in dev on overlong
-strings.
+Centralised metadata: `STATE_SEO` (51 entries incl. `washington-dc`), `BLOG_SEO`
+(9 posts), `HOME_SEO`. Each entry has title (≤60 chars), description (≤155
+chars), h1, primaryKeyword, canonicalPath. `validateSeoConfig()` warns in dev on
+overlong strings. A state page renders fine without a `STATE_SEO` entry (generic
+fallback), so this map is enhancement, not a requirement.
+
+### Internal linking (crawl discovery)
+
+A unified internal-link graph pushes crawl equity between pages so Google
+discovers and indexes them. All surfaces gate on the **same** function —
+`getLinkableStateCodes()` (a state is linkable once its canonical row is Content
+Status = `Complete`) — so the sitemap and the link graph never diverge:
+- `NearbyStates` — geographic neighbors (`lib/state-adjacency.ts`; DC ↔ MD/VA)
+- `RelatedPosts` / `RelatedStateGuides` — bidirectional state ↔ blog links
+- Footer "Browse by state" + homepage grid
 
 ### Sitemap (`app/sitemap.ts`)
 
-Generates entries for: homepage, /schools, /about, /blog, all 50 state pages,
-all 9 blog posts. Priorities: home 1.0, state pages 0.9, /schools 0.9, blog
-0.7-0.8, about 0.5.
+Generates entries for: homepage, /schools, /about, /blog, every **Complete**
+state page (gated on `getLinkableStateCodes()` — currently all 51), and all 9
+blog posts. Gating on `Complete` was the fix for a Google Search Console
+"Discovered – currently not indexed" backlog from submitting thin/templated
+pages. Priorities: home 1.0, state pages 0.9, /schools 0.9, blog 0.7-0.8,
+about 0.5.
 
 ### JSON-LD
 
@@ -872,7 +921,7 @@ all 9 blog posts. Priorities: home 1.0, state pages 0.9, /schools 0.9, blog
 ### LLM discoverability
 
 - `public/llms.txt` — static, hand-curated (50 states + 9 posts + 6 reviews + 12 key facts)
-- `public/llms-full.txt` — auto-generated by `scripts/generate-llms-full.ts` at prebuild from Notion FAQ DB. Currently 51 entries × ~250 verified facts.
+- `public/llms-full.txt` — auto-generated by `scripts/generate-llms-full.ts` at prebuild from the **States DB** (Intro Paragraph + State FAQ JSON), one section per Complete state with its real page slug. All 51 states. (Previously read the legacy FAQ DB and emitted `/CA`-style code URLs; re-sourced when the FAQs moved to the States DB.)
 
 This is run by the `prebuild` npm hook so every Vercel build gets fresh content.
 
@@ -892,6 +941,35 @@ Google Tag (gtag) loaded in `app/layout.tsx` via `next/script` with
 - Production branch: `main`
 - Build command: `npm run build` (which runs `prebuild` → `generate-llms` first)
 - ISR pages revalidate every 86400s (24h); deploys force a rebuild
+
+### Notion at build time — `memoize` + fail-fast (`lib/notion.ts`)
+
+The build statically renders 51 state pages + reviews + blog, all reading Notion.
+Two rules keep that safe against Notion's ~3 req/sec rate limit:
+
+- **Fetch each table once per build.** React `cache()` only dedupes within a
+  *single* render, so a naive per-page pattern re-queried every table for all 51
+  pages (~700 requests/build) and tripped the rate limit. The `memoize` helper
+  wraps each `getAll*` fetch: during `next build` (detected via
+  `NEXT_PHASE === 'phase-production-build'`) it's a process-level memo shared
+  across all pages (~12 requests/build); at runtime it falls back to React
+  `cache()` so ISR revalidation and `/admin` read fresh data. Nothing persists
+  across builds, so every deploy still reflects fresh Notion content. **Never add
+  a per-page/per-state Notion query to a render path — add fields to a `getAll*`
+  fetch and filter in memory.**
+- **Fail loud, never blank.** `getStateInfo` (and other heavy fetches) run
+  through `withNotionRetry` — exponential backoff on transient codes
+  (`rate_limited`, 5xx), then rethrow. It does **not** swallow errors to `null`,
+  because a null `stateInfo` renders a content-less "status not confirmed" stub;
+  a rate-limited build once shipped Washington DC as a blank page that way. Now a
+  persistent failure **fails the build**, so Vercel keeps the last-good deploy
+  live instead of publishing blank pages. `null` means only "no canonical row".
+
+A healthy build makes ~12 Notion requests and logs zero `rate_limited`. If a
+build starts failing on `rate_limited`, the token's budget is exhausted (usually
+from running many builds/queries in a short window) — let it rest, don't retry in
+a tight loop. See the `notion-query-batching` memory for the full rationale
+(optimize the query layer; do **not** migrate off Notion).
 
 ### Cloudflare DNS
 
@@ -1163,6 +1241,41 @@ parallel quickly trips the limit and produces 429 errors. Sequential keeps
 us well under the ceiling and the total runtime is acceptable (~5 min for
 the full DMV pass).
 
+### Why we optimized the Notion query layer instead of migrating off Notion
+
+The build kept tripping Notion's rate limit — but that was never a Notion
+*capacity* ceiling, it was a ~50× over-query bug: React `cache()` only dedupes
+within one render, so all 51 state pages independently re-queried every table
+(~700 requests/build). Migrating to Postgres would have "fixed" it while throwing
+away the whole reason Notion is here (non-technical editing) and adding ~3000 LOC
+of CMS. Instead we batched fetches to once-per-build (`memoize`, §15): ~700 → ~12
+requests, rate-limiting becomes a non-issue, and the editing workflow is intact.
+Migration is only worth revisiting if the site's shape fundamentally changes
+(thousands of pages, write-heavy, or real-time reads) — none of which is on the
+horizon at 51 states of monthly-changing editorial content.
+
+### Why `getStateInfo` fails the build instead of returning `null`
+
+A `null` `stateInfo` renders a content-less "status not confirmed" stub. The old
+`try/catch → return null` meant one transient rate-limited query at build time
+silently shipped a Complete state as a blank page (this happened to DC). Shipping
+a blank page is worse than not shipping: a *failed* build makes Vercel keep the
+last-good deploy live. So `getStateInfo` now retries transient errors and then
+throws; `null` is reserved for the genuine "no canonical row" case. Enrichment
+fetches (requirements, directory, variants, legacy FAQs) still degrade gracefully
+to empty — they reduce a page, they don't blank it.
+
+### Why Washington DC is the 51st "state"
+
+DC is a federal district, not a state, but it has its own DMV, its own
+traffic-ticket rules, and a page's worth of search demand. It's a full row in the
+States DB (`Abbreviation = DC`, slug `washington-dc`) and an entry in
+`STATE_LIST`, so it flows through routing, the sitemap, internal links, and the
+flag/SEO conventions like any state. It's `Online Allowed = false` (no online
+ticket-dismissal program), so it renders the "In-person only" treatment — the
+same as Massachusetts and Oregon. The site therefore has **51** state pages, not
+50; when touching state counts, remember DC.
+
 ---
 
 ## 20. Known issues and future work
@@ -1185,9 +1298,11 @@ the full DMV pass).
 
 ### Future work
 
-- **Build the direct tracker** (`track.trafficschoolpicker.com`) — the
-  `buildAffiliateLink` direct branch is plumbed but the receiving end isn't
-  live yet. See the companion brief.
+- **Direct tracker** (`track.trafficschoolpicker.com`) — the Cloudflare Worker
+  now exists in `tracker/` (KV-backed redirect on `/c/{slug}`, with
+  `wrangler.toml` + seed map), and `buildAffiliateLink`'s direct branch targets
+  it. Confirm the Worker is deployed and serving before switching any school to
+  `Tracking Method = direct` (the branch fails safe to the network URL if not).
 - **`/schools` directory enhancements** — facets for "no final exam",
   "money-back guarantee", "mobile app", etc.
 - **Automated AZ-style fact-correction guard** — build-time check that

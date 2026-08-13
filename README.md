@@ -1,6 +1,6 @@
 # TrafficSchoolPicker
 
-Traffic school comparison site built with Next.js 14, Tailwind CSS, and Notion as the data backend.
+Traffic school comparison site built with Next.js 16 (App Router), Tailwind CSS v4, and Notion as the data backend. Covers all 50 states plus Washington DC (51 state pages).
 
 ## Setup
 
@@ -23,7 +23,7 @@ All school data lives in Notion. There is no custom admin panel to build — Not
 ### To add a new school
 1. Add a row to Traffic Schools in Notion
 2. Fill in all fields, especially: Slug, Tier, State Codes, Show On Site
-3. State Codes format: `all` for all 50 states, or `CA,TX,FL` for specific states
+3. State Codes format: `all` for all 50 states, or `CA,TX,FL` for specific states (`DC` is a valid code — Washington DC has its own page)
 4. Check "Show On Site" to make it visible
 5. Trigger redeploy
 
