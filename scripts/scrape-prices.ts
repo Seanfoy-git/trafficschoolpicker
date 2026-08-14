@@ -137,7 +137,13 @@ async function scrapePriceFromPage(
     // Dead target (404/410/5xx): the page no longer exists — a selector can't
     // help. Surface it distinctly instead of a vague "Failed / no price parsed".
     if (httpStatus >= 400) return { price: null, text: "", priceNodes: [], blocked: false, dead: true, httpStatus };
-    await browserPage.waitForTimeout(2000);
+    // Let JS-rendered price widgets hydrate before reading the DOM. iDriveSafely
+    // (and similar SPA storefronts) render the live sale price client-side after
+    // load — with only a 2s wait the "$24" simply wasn't in the DOM yet. Wait for
+    // the network to settle, then a short buffer; both are best-effort (a page
+    // that never idles still proceeds after the buffer).
+    await browserPage.waitForLoadState("networkidle", { timeout: 8000 }).catch(() => {});
+    await browserPage.waitForTimeout(2500);
 
     const title = await browserPage.title();
     const bodyText = await browserPage.evaluate(() => document.body.innerText);
