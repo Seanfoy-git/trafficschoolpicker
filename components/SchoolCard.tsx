@@ -22,6 +22,7 @@ export function SchoolCard({
 }) {
   const originalPrice = "originalPrice" in school ? (school as SchoolWithPrice).originalPrice : null;
   const hasActiveOffer = "hasActiveOffer" in school && (school as SchoolWithPrice).hasActiveOffer;
+  const salePrice = "salePrice" in school ? (school as SchoolWithPrice).salePrice : null;
 
   return (
     <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
@@ -128,16 +129,31 @@ export function SchoolCard({
         <div className="flex flex-col items-end gap-3 sm:min-w-[160px]">
           <div className="text-right">
             {resolved.price !== null ? (
-              <>
-                {originalPrice && (
+              hasActiveOffer && salePrice !== null && salePrice < resolved.price ? (
+                // Live deal: struck regular + current sale + savings.
+                <>
                   <span className="text-sm text-slate-400 line-through">
-                    ${originalPrice.toFixed(2)}
+                    ${resolved.price.toFixed(2)}
                   </span>
-                )}
-                <div className="text-2xl font-bold text-slate-900">
-                  {resolved.priceDisplay}
-                </div>
-              </>
+                  <div className="text-2xl font-bold text-slate-900">
+                    ${salePrice.toFixed(2)}
+                  </div>
+                  <span className="text-xs font-semibold text-green-700">
+                    Save {Math.round((1 - salePrice / resolved.price) * 100)}%
+                  </span>
+                </>
+              ) : (
+                <>
+                  {originalPrice && (
+                    <span className="text-sm text-slate-400 line-through">
+                      ${originalPrice.toFixed(2)}
+                    </span>
+                  )}
+                  <div className="text-2xl font-bold text-slate-900">
+                    {resolved.priceDisplay}
+                  </div>
+                </>
+              )
             ) : (
               <a
                 href={school.website}

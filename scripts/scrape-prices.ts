@@ -337,6 +337,11 @@ async function main() {
     // best-effort and not yet displayed, so a wrong-tier grab is harmless for now.
     if (didScrape && offer.hasOffer) {
       properties["Active Offer"] = { checkbox: true };
+      // Re-confirm the offer's freshness each run. The site treats a scraper-set
+      // offer as live only while "Offer Seen" is recent (TTL), so an ended offer
+      // the scraper stops confirming drops on its own — no unreliable "no-offer"
+      // detection, and manually-set offers (no Offer Seen date) are honored forever.
+      properties["Offer Seen"] = { date: { start: TODAY } };
       if (offer.sale != null) properties["Sale Price"] = { number: offer.sale };
       if (offer.label) properties["Offer Label"] = { rich_text: [{ text: { content: offer.label } }] };
     }

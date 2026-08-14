@@ -121,6 +121,8 @@ export type SchoolWithPrice = School & {
   priceNote: string | null;
   hasActiveOffer: boolean;           // a live promo is running (Pricing DB "Active Offer");
                                      // floats the card to the top of the state list
+  salePrice: number | null;          // current promo price to display struck-against the
+                                     // regular; non-null only while hasActiveOffer is true
 };
 
 // ─── State Requirements DB ──────────────────────────────────

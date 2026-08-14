@@ -561,7 +561,20 @@ type PricingInfo = {
   priceNote: string;
   approved: boolean;
   hasActiveOffer: boolean;
+  salePrice: number | null;
+  offerSeen: string | null;   // ISO date the scraper last confirmed the offer (null = manual)
 };
+
+// A scraper-set offer is only live while it keeps being re-confirmed: once "Offer
+// Seen" is older than this, the offer drops on its own (no unreliable "no-offer"
+// detection). Manual offers (no Offer Seen date) are honored indefinitely.
+const OFFER_TTL_DAYS = 3;
+function offerIsFresh(offerSeen: string | null): boolean {
+  if (!offerSeen) return true; // manual flag — honored until a human clears it
+  const seen = new Date(offerSeen).getTime();
+  if (Number.isNaN(seen)) return true;
+  return Date.now() - seen <= OFFER_TTL_DAYS * 86_400_000;
+}
 
 // One fetch of every approved pricing row per build, grouped by state code then
 // school id. Replaces the per-state Pricing query (51 → 1).
@@ -589,6 +602,8 @@ const getAllPricingByState = memoize(
           priceNote: getText(pp, "Price Note"),
           approved: true,
           hasActiveOffer: getCheckbox(pp, "Active Offer"),
+          salePrice: getNumber(pp, "Sale Price"),
+          offerSeen: getDate(pp, "Offer Seen"),
         });
       }
     } catch {
@@ -619,6 +634,10 @@ export async function getSchoolPricingForState(
     if (!servesState) continue;
 
     const pricing = pricingMap.get(school.id);
+    // Effective offer: checkbox on AND fresh (manual flag, or scraper-confirmed
+    // within the TTL). Sale price is surfaced only while the offer is live, so a
+    // stale sale can never render.
+    const offerLive = (pricing?.hasActiveOffer ?? false) && offerIsFresh(pricing?.offerSeen ?? null);
 
     results.push({
       ...school,
@@ -627,7 +646,8 @@ export async function getSchoolPricingForState(
       originalPrice: pricing?.originalPrice ?? null,
       stateAffiliateUrl: pricing?.affiliateUrl || null,
       priceNote: pricing?.priceNote || null,
-      hasActiveOffer: pricing?.hasActiveOffer ?? false,
+      hasActiveOffer: offerLive,
+      salePrice: offerLive ? (pricing?.salePrice ?? null) : null,
     });
   }
 

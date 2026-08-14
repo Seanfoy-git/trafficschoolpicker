@@ -117,15 +117,35 @@ export function detectOffer(
   // tier), then take the best cheaper live figure above a 40%-of-regular floor —
   // which skips stacked-code deepest prices (an extra "$5 off" code) and state
   // fees ($8 NY processing).
-  const struck = priceNodes.filter((n) => n.struck).map((n) => n.value);
-  const live = priceNodes.filter((n) => !n.struck).map((n) => n.value);
-  if (struck.length) {
-    const ref =
-      regular != null
-        ? struck.reduce((b, s) => (Math.abs(s - regular) < Math.abs(b - regular) ? s : b), struck[0])
-        : Math.min(...struck);
-    const cheaper = live.filter((v) => v < ref * 0.98 && v >= ref * 0.4);
-    if (cheaper.length) sale = Math.max(...cheaper); // the headline sale, not the deepest stacked price
+  // priceNodes arrive in DOM order. On a multi-tier page the standard card renders
+  // its "~~$49~~ $29" together, so pair the sale to the struck regular by DOM
+  // ADJACENCY, not a global max/min (which grabbed the Handsfree tier's $39 on
+  // aceable-TX). Reference the struck node nearest our verified regular (its own
+  // tier); the sale is the nearest cheaper live node — preferring the one right
+  // after it — within a 40%-of-regular floor (skips $5-off codes and state fees).
+  if (priceNodes.some((n) => n.struck)) {
+    let refIdx = -1;
+    priceNodes.forEach((n, i) => {
+      if (!n.struck) return;
+      if (refIdx < 0) { refIdx = i; return; }
+      const cur = priceNodes[refIdx].value;
+      const better = regular != null
+        ? Math.abs(n.value - regular) < Math.abs(cur - regular)
+        : n.value < cur;
+      if (better) refIdx = i;
+    });
+    if (refIdx >= 0) {
+      const ref = priceNodes[refIdx].value;
+      let best = -1;
+      priceNodes.forEach((n, i) => {
+        if (n.struck || !(n.value < ref * 0.98 && n.value >= ref * 0.4)) return;
+        if (best < 0) { best = i; return; }
+        const scoreNew = Math.abs(i - refIdx) - (i > refIdx ? 0.5 : 0);       // ties → node after the struck price
+        const scoreOld = Math.abs(best - refIdx) - (best > refIdx ? 0.5 : 0);
+        if (scoreNew < scoreOld) best = i;
+      });
+      if (best >= 0) sale = priceNodes[best].value;
+    }
   }
 
   // Fallback (single-price pages with no strikethrough): a sale-anchored figure
