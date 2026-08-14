@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllSchools, getSchoolBySlug } from "@/lib/notion";
+import { ORGANIZATION_ID } from "@/lib/structured-data";
 import { RatingStars } from "@/components/RatingStars";
 import { MultiRating, ReviewSynthesis } from "@/components/MultiRating";
 import { Badge } from "@/components/Badge";
@@ -68,10 +69,7 @@ export default async function ReviewPage({ params }: Props) {
         bestRating: 5,
       },
     }),
-    author: {
-      "@type": "Organization",
-      name: "TrafficSchoolPicker",
-    },
+    author: { "@id": ORGANIZATION_ID },
   };
 
   return (

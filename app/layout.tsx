@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { validateSeoConfig } from "@/lib/seo-config";
+import { ORG_WEBSITE_GRAPH } from "@/lib/structured-data";
 import "./globals.css";
 
 validateSeoConfig();
@@ -61,6 +62,13 @@ gtag('config', 'AW-18090793804');`}
         </Script>
       </head>
       <body className="min-h-full flex flex-col bg-white text-slate-800">
+        {/* Sitewide Organization + WebSite entity graph — the single Organization
+            definition; blog/review schema reference it by @id. Server-rendered on
+            every page (same JSON-LD pattern as FaqSection). */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_WEBSITE_GRAPH) }}
+        />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

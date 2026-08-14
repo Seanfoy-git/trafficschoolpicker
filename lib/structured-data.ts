@@ -12,6 +12,62 @@ import type { SchoolWithPrice, ResolvedSchoolContent } from "@/lib/types";
 
 const SITE = "https://www.trafficschoolpicker.com";
 
+// ─── Sitewide entity graph (Organization + WebSite) ─────────────────────────
+
+/** Stable @id of the single site-wide Organization node — reference this from
+ *  other schema (blog publisher, review author) rather than redefining it. */
+export const ORGANIZATION_ID = `${SITE}/#organization`;
+const WEBSITE_ID = `${SITE}/#website`;
+
+interface OrganizationSchema {
+  "@type": "Organization";
+  "@id": string;
+  name: string;
+  url: string;
+  description: string;
+  logo: { "@type": "ImageObject"; url: string };
+  sameAs: string[];
+}
+
+interface WebSiteSchema {
+  "@type": "WebSite";
+  "@id": string;
+  name: string;
+  url: string;
+  publisher: { "@id": string };
+}
+
+interface EntityGraph {
+  "@context": "https://schema.org";
+  "@graph": [OrganizationSchema, WebSiteSchema];
+}
+
+/** The one Organization definition site-wide, plus the WebSite that publishes it.
+ *  Rendered once in the root layout on every page; everything else references
+ *  ORGANIZATION_ID by @id. No SearchAction — there is no on-site search endpoint. */
+export const ORG_WEBSITE_GRAPH: EntityGraph = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": ORGANIZATION_ID,
+      name: "TrafficSchoolPicker",
+      url: SITE,
+      description:
+        "Independent comparison site for court-approved online traffic schools across all 50 US states. Ranks schools by price, reviews, and court acceptance; does not sell courses directly.",
+      logo: { "@type": "ImageObject", url: `${SITE}/logo.png` },
+      sameAs: ["https://www.youtube.com/@trafficschoolpicker"],
+    },
+    {
+      "@type": "WebSite",
+      "@id": WEBSITE_ID,
+      name: "TrafficSchoolPicker",
+      url: SITE,
+      publisher: { "@id": ORGANIZATION_ID },
+    },
+  ],
+};
+
 // ─── Minimal typed schema.org shapes (only the fields we emit) ───────────────
 
 interface OfferSchema {

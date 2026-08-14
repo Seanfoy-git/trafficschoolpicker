@@ -5,6 +5,7 @@ import { BLOG_SEO } from "@/lib/seo-config";
 import { BlogMdxComponents } from "@/components/BlogMdxComponents";
 import { RelatedStateGuides } from "@/components/RelatedStateGuides";
 import { getLinkableStates } from "@/lib/notion";
+import { ORGANIZATION_ID } from "@/lib/structured-data";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -71,11 +72,7 @@ export default async function BlogPostPage({ params }: Props) {
     description: post.description,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
-    publisher: {
-      "@type": "Organization",
-      name: "TrafficSchoolPicker",
-      url: "https://www.trafficschoolpicker.com",
-    },
+    publisher: { "@id": ORGANIZATION_ID },
   };
 
   return (
