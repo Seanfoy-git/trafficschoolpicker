@@ -119,6 +119,8 @@ export type SchoolWithPrice = School & {
   originalPrice: number | null;
   stateAffiliateUrl: string | null;  // overrides school.affiliateUrl if set
   priceNote: string | null;
+  hasActiveOffer: boolean;           // a live promo is running (Pricing DB "Active Offer");
+                                     // floats the card to the top of the state list
 };
 
 // ─── State Requirements DB ──────────────────────────────────

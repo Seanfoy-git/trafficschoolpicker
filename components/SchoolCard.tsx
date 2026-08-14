@@ -4,7 +4,7 @@ import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
 import { AffiliateButton } from "./AffiliateButton";
 import { CouponCode } from "./CouponCode";
-import { Clock, CheckCircle, Smartphone, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Clock, CheckCircle, Smartphone, ThumbsUp, ThumbsDown, Tag } from "lucide-react";
 import Link from "next/link";
 
 export function SchoolCard({
@@ -21,6 +21,7 @@ export function SchoolCard({
   stateCode?: string;
 }) {
   const originalPrice = "originalPrice" in school ? (school as SchoolWithPrice).originalPrice : null;
+  const hasActiveOffer = "hasActiveOffer" in school && (school as SchoolWithPrice).hasActiveOffer;
 
   return (
     <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
@@ -34,6 +35,11 @@ export function SchoolCard({
             )}
             <h3 className="text-lg font-bold text-slate-900">{school.name}</h3>
             {school.badge && <Badge type={school.badge} />}
+            {hasActiveOffer && (
+              <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2 py-0.5">
+                <Tag className="w-3 h-3" /> Limited-time offer
+              </span>
+            )}
           </div>
 
           {school.ratings.length > 0 || school.bbb ? (

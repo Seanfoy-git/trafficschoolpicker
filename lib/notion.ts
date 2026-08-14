@@ -544,6 +544,7 @@ type PricingInfo = {
   affiliateUrl: string;
   priceNote: string;
   approved: boolean;
+  hasActiveOffer: boolean;
 };
 
 // One fetch of every approved pricing row per build, grouped by state code then
@@ -571,6 +572,7 @@ const getAllPricingByState = memoize(
           affiliateUrl: getText(pp, "Affiliate URL"),
           priceNote: getText(pp, "Price Note"),
           approved: true,
+          hasActiveOffer: getCheckbox(pp, "Active Offer"),
         });
       }
     } catch {
@@ -609,12 +611,16 @@ export async function getSchoolPricingForState(
       originalPrice: pricing?.originalPrice ?? null,
       stateAffiliateUrl: pricing?.affiliateUrl || null,
       priceNote: pricing?.priceNote || null,
+      hasActiveOffer: pricing?.hasActiveOffer ?? false,
     });
   }
 
-  // Sort: Tier 1 first, then by price (nulls at end)
+  // Sort: Tier 1 first, then any school with a live offer floats up (a neutral
+  // "current deal" signal — not partner-specific — consistent with our published
+  // "lower prices/promotions rank higher" methodology), then by price (nulls last).
   return results.sort((a, b) => {
     if (a.tier !== b.tier) return a.tier - b.tier;
+    if (a.hasActiveOffer !== b.hasActiveOffer) return a.hasActiveOffer ? -1 : 1;
     if (a.price === null && b.price === null) return 0;
     if (a.price === null) return 1;
     if (b.price === null) return -1;
