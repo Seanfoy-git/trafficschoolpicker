@@ -206,6 +206,19 @@ export function buildComparisonItemList(
   };
 }
 
+/**
+ * Lowest visible price across the comparison cards — the same per-card price the
+ * ItemList Offers use (sale when a live offer undercuts, else regular), so a
+ * "from $X" summary elsewhere on the page can never drift from the cards. `null`
+ * when no card shows a price.
+ */
+export function lowestDisplayedPrice(schools: SchemaSchool[]): number | null {
+  const prices = schools
+    .map(({ school, resolved }) => displayedPrice(school, resolved))
+    .filter((p): p is number => p !== null);
+  return prices.length ? Math.min(...prices) : null;
+}
+
 // ─── VideoObject (embedded state explainer videos) ──────────────────────────
 
 /** A state's embedded explainer video — the real YouTube id + its metadata. */

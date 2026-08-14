@@ -10,7 +10,7 @@ import {
   getLinkableStates,
   getAllSchools,
 } from "@/lib/notion";
-import { buildComparisonItemList, buildVideoObject, buildBreadcrumbList, type VideoEntry } from "@/lib/structured-data";
+import { buildComparisonItemList, buildVideoObject, buildBreadcrumbList, lowestDisplayedPrice, type VideoEntry } from "@/lib/structured-data";
 import { STATE_SEO } from "@/lib/seo-config";
 import { getStateFAQs } from "@/lib/state-faqs";
 import { getNotionStateFaqs } from "@/lib/notion-faqs";
@@ -19,6 +19,7 @@ import { SchoolCard } from "@/components/SchoolCard";
 import { FaqSection } from "@/components/FaqSection";
 import { DirectoryTable } from "@/components/DirectoryTable";
 import { TrustBar } from "@/components/TrustBar";
+import { StateKeyFacts } from "@/components/StateKeyFacts";
 import { NearbyStates } from "@/components/NearbyStates";
 import { RelatedPosts } from "@/components/RelatedPosts";
 import Image from "next/image";
@@ -165,6 +166,11 @@ export default async function StatePage({ params }: Props) {
     { name: stateMeta.name, path: `/${stateSlug}` },
   ]);
 
+  // Lowest visible card price for the Key Facts "Typical cost" — only when the
+  // comparison grid actually renders, so we never show a price for a state whose
+  // cards aren't shown. Reuses the exact per-card/Offer price so it can't drift.
+  const lowestPrice = showComparison ? lowestDisplayedPrice(tier1Resolved) : null;
+
   return (
     <>
       <script
@@ -205,6 +211,16 @@ export default async function StatePage({ params }: Props) {
       </section>
 
       <TrustBar lastVerified={stateInfo?.lastVerified} />
+
+      {/* KEY FACTS — scannable at-a-glance summary; the first substantive content
+          on the page (targets featured snippets / AI Overviews / LLM extraction).
+          The deeper "State Rules & Requirements" section stays lower down. */}
+      <StateKeyFacts
+        stateName={stateMeta.name}
+        stateInfo={stateInfo}
+        lowestPrice={lowestPrice}
+        year={year}
+      />
 
       {/* INTRO PARAGRAPH — state-specific lead-in for SEO uniqueness.
           Empty string is a deliberate signal that this state isn't populated yet;
