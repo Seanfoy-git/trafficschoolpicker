@@ -25,8 +25,8 @@ export default function DisclaimerPage() {
               An independent comparison site
             </h2>
             <p>
-              TrafficSchoolPicker.com (the &quot;Site&quot;) is an independent
-              comparison and review service. We are not a traffic school, driving
+              TrafficSchoolPicker.com (the &quot;Site&quot;), operated by
+              PellucidMedia LLC, is an independent comparison and review service. We are not a traffic school, driving
               school, law firm, court, insurer, or government or regulatory agency,
               and we are not affiliated with, endorsed by, or acting on behalf of
               any of them. Course providers named on the Site are the trademarks of

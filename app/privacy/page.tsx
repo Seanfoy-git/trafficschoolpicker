@@ -21,8 +21,9 @@ export default function PrivacyPage() {
         <div className="space-y-8 text-slate-600 leading-relaxed">
           <div>
             <p>
-              This Privacy Policy explains how TrafficSchoolPicker.com (the
-              &quot;Site&quot;) handles information when you visit. We keep this
+              This Privacy Policy explains how PellucidMedia LLC (&quot;we,&quot;
+              &quot;us&quot;), which operates TrafficSchoolPicker.com (the
+              &quot;Site&quot;), handles information when you visit. We keep this
               simple: the Site does not require an account, and we do not ask you to
               provide personal details to browse or compare schools.
             </p>

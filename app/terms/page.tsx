@@ -26,8 +26,9 @@ export default function TermsPage() {
             </h2>
             <p>
               These Terms of Use (&quot;Terms&quot;) govern your access to and use of
-              TrafficSchoolPicker.com and its content (the &quot;Site&quot;). By using
-              the Site, you agree to these Terms and to our{" "}
+              TrafficSchoolPicker.com and its content (the &quot;Site&quot;), operated
+              by PellucidMedia LLC (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;).
+              By using the Site, you agree to these Terms and to our{" "}
               <Link href="/privacy" className="text-accent hover:underline">
                 Privacy Policy
               </Link>{" "}
@@ -91,7 +92,7 @@ export default function TermsPage() {
             </h2>
             <p>
               The Site&apos;s original content, design, and compilation are owned by
-              TrafficSchoolPicker.com and protected by applicable laws. Product
+              PellucidMedia LLC and protected by applicable laws. Product
               names, logos, and trademarks belong to their respective owners and are
               used for identification and comparison only.
             </p>
@@ -149,9 +150,11 @@ export default function TermsPage() {
               9. Governing law
             </h2>
             <p>
-              These Terms are governed by the laws of the United States and the state
-              in which TrafficSchoolPicker.com is operated, without regard to
-              conflict-of-laws principles.
+              These Terms are governed by the laws of the State of California and
+              applicable U.S. federal law, without regard to conflict-of-laws
+              principles. You agree that the state and federal courts located in
+              California have exclusive jurisdiction over any dispute arising from
+              these Terms or your use of the Site.
             </p>
           </div>
 

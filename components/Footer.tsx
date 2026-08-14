@@ -144,8 +144,8 @@ export async function Footer() {
         )}
 
         <div className="border-t border-slate-700 mt-8 pt-6 text-center text-xs text-slate-400">
-          &copy; {new Date().getFullYear()} TrafficSchoolPicker.com. All rights
-          reserved. | Affiliate disclosure: we earn commissions from partner
+          &copy; {new Date().getFullYear()} PellucidMedia LLC · TrafficSchoolPicker.com.
+          All rights reserved. | Affiliate disclosure: we earn commissions from partner
           links. | Prices &amp; offers subject to change — verify on the provider&apos;s site.
         </div>
       </div>
