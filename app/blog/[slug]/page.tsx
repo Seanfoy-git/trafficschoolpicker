@@ -5,7 +5,7 @@ import { BLOG_SEO } from "@/lib/seo-config";
 import { BlogMdxComponents } from "@/components/BlogMdxComponents";
 import { RelatedStateGuides } from "@/components/RelatedStateGuides";
 import { getLinkableStates } from "@/lib/notion";
-import { ORGANIZATION_ID } from "@/lib/structured-data";
+import { ORGANIZATION_ID, buildBreadcrumbList } from "@/lib/structured-data";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -75,12 +75,23 @@ export default async function BlogPostPage({ params }: Props) {
     publisher: { "@id": ORGANIZATION_ID },
   };
 
+  // Breadcrumb: Home › Blog › {Post}. /blog is a real index route.
+  const breadcrumbSchema = buildBreadcrumbList([
+    { name: "Home", path: "/" },
+    { name: "Blog", path: "/blog" },
+    { name: post.title, path: `/blog/${slug}` },
+  ]);
+
   return (
     <section className="py-12 md:py-16">
       <div className="max-w-3xl mx-auto px-4">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
 
         <Link

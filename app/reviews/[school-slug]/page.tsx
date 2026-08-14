@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllSchools, getSchoolBySlug } from "@/lib/notion";
-import { ORGANIZATION_ID } from "@/lib/structured-data";
+import { ORGANIZATION_ID, buildBreadcrumbList } from "@/lib/structured-data";
 import { RatingStars } from "@/components/RatingStars";
 import { MultiRating, ReviewSynthesis } from "@/components/MultiRating";
 import { Badge } from "@/components/Badge";
@@ -72,11 +72,22 @@ export default async function ReviewPage({ params }: Props) {
     author: { "@id": ORGANIZATION_ID },
   };
 
+  // Breadcrumb: Home › {School}. There is NO /reviews index route (it 404s), so
+  // the trail skips a "Reviews" crumb rather than point at a dead URL.
+  const breadcrumbSchema = buildBreadcrumbList([
+    { name: "Home", path: "/" },
+    { name: school.name, path: `/reviews/${school.slug}` },
+  ]);
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       {/* Review Header */}

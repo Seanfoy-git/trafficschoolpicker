@@ -247,3 +247,42 @@ export function buildVideoObject(video: VideoEntry, description: string, pageUrl
     url: pageUrl,
   };
 }
+
+// ─── BreadcrumbList (navigation trail) ──────────────────────────────────────
+
+/** One breadcrumb: a visible label + a root-relative path (e.g. "/", "/blog"). */
+export interface Crumb {
+  name: string;
+  path: string;
+}
+
+interface BreadcrumbItemSchema {
+  "@type": "ListItem";
+  position: number;
+  name: string;
+  item: string;
+}
+
+interface BreadcrumbListSchema {
+  "@context": "https://schema.org";
+  "@type": "BreadcrumbList";
+  itemListElement: BreadcrumbItemSchema[];
+}
+
+/**
+ * BreadcrumbList JSON-LD from an ordered list of crumbs (root → current). Every
+ * `item` is resolved to an absolute URL; each `path` must point at a real route
+ * (never a 404) — the caller is responsible for only passing crumbs that resolve.
+ */
+export function buildBreadcrumbList(crumbs: Crumb[]): BreadcrumbListSchema {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: crumbs.map((c, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: c.name,
+      item: `${SITE}${c.path}`,
+    })),
+  };
+}

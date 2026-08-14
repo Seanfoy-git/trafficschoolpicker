@@ -10,7 +10,7 @@ import {
   getLinkableStates,
   getAllSchools,
 } from "@/lib/notion";
-import { buildComparisonItemList, buildVideoObject, type VideoEntry } from "@/lib/structured-data";
+import { buildComparisonItemList, buildVideoObject, buildBreadcrumbList, type VideoEntry } from "@/lib/structured-data";
 import { STATE_SEO } from "@/lib/seo-config";
 import { getStateFAQs } from "@/lib/state-faqs";
 import { getNotionStateFaqs } from "@/lib/notion-faqs";
@@ -158,8 +158,20 @@ export default async function StatePage({ params }: Props) {
       )
     : null;
 
+  // Breadcrumb: Home › {State}. The state page always exists at /{slug}, so both
+  // crumbs resolve.
+  const breadcrumbSchema = buildBreadcrumbList([
+    { name: "Home", path: "/" },
+    { name: stateMeta.name, path: `/${stateSlug}` },
+  ]);
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* HERO */}
       <section className="bg-primary text-white py-12 md:py-16">
         <div className="max-w-5xl mx-auto px-4">
