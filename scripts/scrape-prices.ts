@@ -280,13 +280,18 @@ async function main() {
     if (priceToWrite != null) properties.Price = { number: priceToWrite };
     if (approveWrite) properties.Approved = { checkbox: true };
     if (t.note) properties["Price Note"] = { rich_text: [{ text: { content: t.note } }] };
-    // Offer fields set/cleared only when we actually scraped the page this run.
-    if (didScrape) {
-      properties["Active Offer"] = { checkbox: offer.hasOffer };
-      properties["Sale Price"] = offer.sale != null ? { number: offer.sale } : { number: null };
-      properties["Offer Label"] = offer.label
-        ? { rich_text: [{ text: { content: offer.label } }] }
-        : { rich_text: [] };
+    // SET-only, on purpose. We write offer fields ONLY when we positively detect
+    // an offer this run — we do NOT clear on a non-detection. Offer extraction is
+    // imperfect on these adversarial pages (a report run missed iDriveSafely's
+    // "Now $X / struck regular" style, which uses no "%-off" words), and a false
+    // negative must never wipe a real, possibly manually-set offer. Ended offers
+    // are removed by the manual toggle or the monthly pass until detection — and a
+    // TTL auto-expire — land (see the offer-intelligence brief). Sale Price is
+    // best-effort and not yet displayed, so a wrong-tier grab is harmless for now.
+    if (didScrape && offer.hasOffer) {
+      properties["Active Offer"] = { checkbox: true };
+      if (offer.sale != null) properties["Sale Price"] = { number: offer.sale };
+      if (offer.label) properties["Offer Label"] = { rich_text: [{ text: { content: offer.label } }] };
     }
 
     if (!REPORT) {
