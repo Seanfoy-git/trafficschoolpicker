@@ -84,7 +84,6 @@ export function pickPrice(text: string, fromSelector: boolean): number | null {
 // claim one on a plausible sale (a real discount, not a $5 processing fee) or an
 // unambiguous "% off" banner. The regular anchor is passed in (the verified/
 // displayed price), NOT re-derived, so the sale is judged against the truth.
-const SALE_ANCHOR = /(sale|now|today|deal|special|instant|checkout)\s*(price)?\s*:?\s*$/i;
 const OFFER_LABEL_RE = /(\d{1,3}\s*%\s*off|save\s*\$?\d{1,3}|\$\s*\d{1,3}\s*off|limited[-\s]?time|flash sale|\bsale\b)/i;
 
 export interface OfferInfo {
@@ -160,18 +159,11 @@ export function detectOffer(
     }
   }
 
-  // Fallback (single-price pages with no strikethrough): a sale-anchored figure
-  // below the verified regular in the page text.
-  if (sale == null && regular != null && regular > 0) {
-    const saleCands = candidates(text)
-      .filter((c) => c.v < regular * 0.98 && c.v >= regular * 0.4)
-      .filter(
-        (c) =>
-          SALE_ANCHOR.test(text.slice(Math.max(0, c.idx - 12), c.idx)) ||
-          PRICE_ANCHOR.test(text.slice(Math.max(0, c.idx - 20), c.idx))
-      );
-    if (saleCands.length) sale = Math.min(...saleCands.map((c) => c.v));
-  }
+  // No innerText-anchored fallback: JSON-LD and DOM strikethrough are the only
+  // trustworthy sale signals. Fuzzy text-proximity matching mis-grabbed a
+  // wrong-tier figure (idrivesafely-TX "$49") and, being SET-only, could clobber
+  // a correct manual price. Pages with neither JSON-LD nor a struck price get no
+  // scraper-set sale and safely fall back to their manual value.
 
   // Claim an offer on solid evidence: a sale below regular (from strikethrough or
   // an anchored figure), OR an explicit discount label ("% off" / "save $").
