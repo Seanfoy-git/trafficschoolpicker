@@ -22,7 +22,7 @@ import { chromium } from "playwright";
 import { makeNotionClient } from "./lib/notion-client";
 import { priceTargets } from "./config/price-sources";
 import { fetchVerifiedRules, type ScraperRule } from "./config/scraper-rules";
-import { pickPrice, classify, classifyAgainstRule, type PriceDecision } from "./lib/price-extract";
+import { pickPrice, detectOffer, classify, classifyAgainstRule, NO_OFFER, type PriceDecision, type OfferInfo } from "./lib/price-extract";
 
 const notion = makeNotionClient();
 const SCHOOLS_DB = process.env.NOTION_SCHOOLS_DB!;
@@ -130,13 +130,13 @@ async function scrapePriceFromPage(
   url: string,
   selector: string | null | undefined,
   browserPage: import("playwright").Page
-): Promise<{ price: number | null; blocked: boolean; dead: boolean; httpStatus: number }> {
+): Promise<{ price: number | null; text: string; blocked: boolean; dead: boolean; httpStatus: number }> {
   try {
     const resp = await browserPage.goto(url, { waitUntil: "domcontentloaded", timeout: 20000 });
     const httpStatus = resp?.status() ?? 0;
     // Dead target (404/410/5xx): the page no longer exists — a selector can't
     // help. Surface it distinctly instead of a vague "Failed / no price parsed".
-    if (httpStatus >= 400) return { price: null, blocked: false, dead: true, httpStatus };
+    if (httpStatus >= 400) return { price: null, text: "", blocked: false, dead: true, httpStatus };
     await browserPage.waitForTimeout(2000);
 
     const title = await browserPage.title();
@@ -147,7 +147,7 @@ async function scrapePriceFromPage(
       "verify you are human", "403", "forbidden",
     ];
     if (blockSignals.some((s) => bodyText.toLowerCase().includes(s) || title.toLowerCase().includes(s))) {
-      return { price: null, blocked: true, dead: false, httpStatus };
+      return { price: null, text: "", blocked: true, dead: false, httpStatus };
     }
 
     let targetText = bodyText;
@@ -162,9 +162,12 @@ async function scrapePriceFromPage(
       } catch { /* fall back to body text */ }
     }
 
-    return { price: pickPrice(targetText, fromSelector), blocked: false, dead: false, httpStatus };
+    // Return the full body text too — offer detection scans the whole page (the
+    // promo banner is often outside the price selector), judged against the
+    // verified regular back in main().
+    return { price: pickPrice(targetText, fromSelector), text: bodyText, blocked: false, dead: false, httpStatus };
   } catch {
-    return { price: null, blocked: false, dead: false, httpStatus: 0 };
+    return { price: null, text: "", blocked: false, dead: false, httpStatus: 0 };
   }
 }
 
@@ -219,6 +222,7 @@ async function main() {
 
     let decision: PriceDecision;
     let candidate: number | null = null;
+    let scrapeText = "";
 
     if (t.method === "fixed") {
       candidate = t.fixedPrice ?? null;
@@ -228,6 +232,7 @@ async function main() {
     } else {
       const result = await scrapePriceFromPage(t.url, t.selector, page);
       candidate = result.price;
+      scrapeText = result.text;
       decision = t.rule
         ? classifyAgainstRule(candidate, t.rule, result.blocked, result.dead)
         : result.dead
@@ -254,6 +259,17 @@ async function main() {
     const priceToWrite = pinVerified ? t.rule!.verifiedPrice : decision.writePrice;
     const approveWrite = pinVerified ? true : decision.approve;
 
+    // Offer detection (daily promo pass). Trust it only when we actually saw the
+    // page this run (a DOM scrape that produced OK / Needs Review) — a blocked,
+    // dead, or failed fetch must NOT clear a real, possibly manually-set offer.
+    // The sale is judged against the regular we DISPLAY (verified/pinned), not the
+    // raw scrape, so a wrong-tier grab can't fake a discount.
+    const didScrape = t.method === "dom" && (decision.status === "OK" || decision.status === "Needs Review");
+    const offer: OfferInfo = didScrape ? detectOffer(scrapeText, priceToWrite ?? candidate) : NO_OFFER;
+    if (didScrape) {
+      console.log(`               offer: ${offer.hasOffer ? `YES${offer.sale != null ? ` $${offer.sale}` : ""}${offer.label ? ` (${offer.label})` : ""}` : "none"}`);
+    }
+
     const properties: any = {
       Label: { title: [{ text: { content: label } }] },
       "State Code": { rich_text: [{ text: { content: t.state } }] },
@@ -264,6 +280,14 @@ async function main() {
     if (priceToWrite != null) properties.Price = { number: priceToWrite };
     if (approveWrite) properties.Approved = { checkbox: true };
     if (t.note) properties["Price Note"] = { rich_text: [{ text: { content: t.note } }] };
+    // Offer fields set/cleared only when we actually scraped the page this run.
+    if (didScrape) {
+      properties["Active Offer"] = { checkbox: offer.hasOffer };
+      properties["Sale Price"] = offer.sale != null ? { number: offer.sale } : { number: null };
+      properties["Offer Label"] = offer.label
+        ? { rich_text: [{ text: { content: offer.label } }] }
+        : { rich_text: [] };
+    }
 
     if (!REPORT) {
       if (!existing.id && !schoolPageId) {

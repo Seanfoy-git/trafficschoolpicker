@@ -1,0 +1,58 @@
+name: Daily Offer Refresh
+
+# Light daily pass: only the monetizable price pages (~15 school×state targets),
+# to catch live promos before they expire (Aceable/iDriveSafely countdowns run in
+# hours, not weeks). The heavy pass — DMV directories + reviews + regular-price
+# re-verify — stays monthly in monthly-update.yml. This is what turns the site
+# from a price list into a deal tracker.
+on:
+  schedule:
+    - cron: "0 13 * * *" # daily 13:00 UTC
+  workflow_dispatch:
+    inputs:
+      report:
+        description: "Report only — scrape + log, make ZERO Notion writes"
+        type: boolean
+        default: false
+
+jobs:
+  offers:
+    runs-on: ubuntu-latest
+    env:
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_SCHOOLS_DB: ${{ secrets.NOTION_SCHOOLS_DB }}
+      NOTION_PRICING_DB: ${{ secrets.NOTION_PRICING_DB }}
+      NOTION_SCRAPER_RULES_DB: ${{ secrets.NOTION_SCRAPER_RULES_DB }}
+      NOTION_ISSUES_DB: ${{ secrets.NOTION_ISSUES_DB }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install chromium --with-deps
+
+      - name: Scrape current prices + live offers → Notion
+        # continue-on-error: a quarantined price (Needs Review) or one flaky target
+        # site must not block the publish. Live prices are never clobbered (WS1), and
+        # Active Offer / Sale Price are only set or cleared for targets we actually
+        # scraped this run — a blocked/dead fetch leaves an existing offer intact.
+        continue-on-error: true
+        run: npm run scrape:prices ${{ (github.event.inputs.report == 'true') && '-- --report' || '' }}
+
+      - name: Publish (fresh prices + offers → site)
+        if: ${{ github.event.inputs.report != 'true' }}
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -n "$VERCEL_DEPLOY_HOOK" ]; then
+            curl -X POST "$VERCEL_DEPLOY_HOOK"
+            echo "Vercel redeploy triggered"
+          else
+            echo "No deploy hook configured — skipping"
+          fi

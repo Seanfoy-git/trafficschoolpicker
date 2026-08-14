@@ -75,6 +75,52 @@ export function pickPrice(text: string, fromSelector: boolean): number | null {
   return median(cands.map((c) => c.v));
 }
 
+// ─── Offer detection (daily promo pass) ─────────────────────
+//
+// Separate from pickPrice (which returns the stable REGULAR anchor): this looks
+// for a live promo — a sale price BELOW the regular, plus a human-readable label
+// ("15% OFF", "$5 off"). Deliberately conservative: a false "offer" floats a
+// card to the top of a state list with a "Limited-time offer" tag, so we only
+// claim one on a plausible sale (a real discount, not a $5 processing fee) or an
+// unambiguous "% off" banner. The regular anchor is passed in (the verified/
+// displayed price), NOT re-derived, so the sale is judged against the truth.
+const SALE_ANCHOR = /(sale|now|today|deal|special|instant|checkout)\s*(price)?\s*:?\s*$/i;
+const OFFER_LABEL_RE = /(\d{1,3}\s*%\s*off|save\s*\$?\d{1,3}|\$\s*\d{1,3}\s*off|limited[-\s]?time|flash sale|\bsale\b)/i;
+
+export interface OfferInfo {
+  sale: number | null;   // current promo price, if a plausible one below regular was found
+  label: string | null;  // e.g. "15% OFF" — null if no clear promo language
+  hasOffer: boolean;     // a live promo is running (drives Active Offer + the card tag)
+}
+
+export function detectOffer(text: string, regular: number | null): OfferInfo {
+  const labelMatch = text.match(OFFER_LABEL_RE);
+  const label = labelMatch ? labelMatch[0].replace(/\s+/g, " ").toUpperCase().trim() : null;
+
+  let sale: number | null = null;
+  if (regular != null && regular > 0) {
+    // A sale is a candidate that (a) is a real discount below the regular, (b) is
+    // not so low it's a fee/coupon decoy, and (c) sits next to sale/price context.
+    const saleCands = candidates(text)
+      .filter((c) => c.v < regular * 0.98 && c.v >= regular * 0.3)
+      .filter(
+        (c) =>
+          SALE_ANCHOR.test(text.slice(Math.max(0, c.idx - 12), c.idx)) ||
+          PRICE_ANCHOR.test(text.slice(Math.max(0, c.idx - 20), c.idx))
+      );
+    if (saleCands.length) sale = Math.min(...saleCands.map((c) => c.v)); // the promoted (lowest) figure
+  }
+
+  // Only claim an offer on solid evidence: a real sale below regular, OR an
+  // explicit discount label ("% off" / "save $"). A bare "sale" word alone with
+  // no sale price and no percentage is treated as marketing noise, not an offer.
+  const strongLabel = label != null && /(%|save|\boff\b)/i.test(label);
+  const hasOffer = (sale != null && regular != null && sale < regular) || strongLabel;
+  return { sale, label, hasOffer };
+}
+
+export const NO_OFFER: OfferInfo = { sale: null, label: null, hasOffer: false };
+
 export type ScrapeStatus = "OK" | "Needs Review" | "Failed" | "Blocked" | "Dead URL";
 export interface PriceDecision {
   status: ScrapeStatus;
