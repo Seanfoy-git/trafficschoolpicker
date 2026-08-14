@@ -195,19 +195,24 @@ async function scrapePriceFromPage(
     // it (e.g. iDriveSafely's client-rendered "$24" that text scraping never saw).
     const jsonLdPrices: number[] = await browserPage.evaluate(() => {
       const out: number[] = [];
-      const walk = (o: unknown) => {
-        if (!o || typeof o !== "object") return;
+      // Iterative walk on purpose: a named nested function here makes tsx/esbuild
+      // inject a `__name` helper that is undefined in the page context, so the
+      // evaluate throws. A stack keeps it a plain function with no helpers.
+      const stack: unknown[] = [];
+      document.querySelectorAll('script[type="application/ld+json"]').forEach((s) => {
+        try { stack.push(JSON.parse(s.textContent || "")); } catch { /* ignore malformed ld+json */ }
+      });
+      while (stack.length) {
+        const o = stack.pop();
+        if (!o || typeof o !== "object") continue;
         const rec = o as Record<string, unknown>;
         const raw = rec.price ?? rec.lowPrice;
         if (raw != null && (rec["@type"] === "Offer" || rec["@type"] === "AggregateOffer" || "priceCurrency" in rec)) {
           const n = parseFloat(String(raw));
           if (!Number.isNaN(n) && n >= 3 && n <= 200) out.push(n);
         }
-        for (const k in rec) walk(rec[k]);
-      };
-      document.querySelectorAll('script[type="application/ld+json"]').forEach((s) => {
-        try { walk(JSON.parse(s.textContent || "")); } catch { /* ignore malformed ld+json */ }
-      });
+        for (const k in rec) stack.push(rec[k]);
+      }
       return out;
     });
 
@@ -360,13 +365,16 @@ async function main() {
     // best-effort and not yet displayed, so a wrong-tier grab is harmless for now.
     if (didScrape && offer.hasOffer) {
       properties["Active Offer"] = { checkbox: true };
-      // Re-confirm the offer's freshness each run. The site treats a scraper-set
-      // offer as live only while "Offer Seen" is recent (TTL), so an ended offer
-      // the scraper stops confirming drops on its own — no unreliable "no-offer"
-      // detection, and manually-set offers (no Offer Seen date) are honored forever.
-      properties["Offer Seen"] = { date: { start: TODAY } };
-      if (offer.sale != null) properties["Sale Price"] = { number: offer.sale };
       if (offer.label) properties["Offer Label"] = { rich_text: [{ text: { content: offer.label } }] };
+      // Stamp Offer Seen — which starts the TTL — ONLY when we captured a real sale
+      // price. A captured sale is strong evidence; a label-only detection just sets
+      // the tag and leaves Offer Seen alone, so the scraper can't quietly take over
+      // (or later TTL-expire) a manually-managed offer it can't read a sale for
+      // (e.g. idrivesafely-TX, which has no JSON-LD). Manual offers stay honored.
+      if (offer.sale != null) {
+        properties["Sale Price"] = { number: offer.sale };
+        properties["Offer Seen"] = { date: { start: TODAY } };
+      }
     }
 
     if (!REPORT) {
