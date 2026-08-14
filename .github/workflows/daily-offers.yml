@@ -18,6 +18,9 @@ on:
 jobs:
   offers:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write # notifier step opens/closes the "Prices to review" issue
     env:
       NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
       NOTION_SCHOOLS_DB: ${{ secrets.NOTION_SCHOOLS_DB }}
@@ -55,4 +58,42 @@ jobs:
             echo "Vercel redeploy triggered"
           else
             echo "No deploy hook configured — skipping"
+          fi
+
+      # Turn the scrape-review.json artifact into ONE self-maintaining GitHub issue.
+      # It mirrors the current run: non-empty review[] opens/updates the issue,
+      # empty auto-closes it. Runs even if the scrape step tripped continue-on-error.
+      - name: Notify — open/close "Prices to review" issue
+        if: ${{ always() && github.event.inputs.report != 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          FILE=scrape-review.json
+          if [ ! -f "$FILE" ]; then echo "no review artifact (scrape did not finish) — skipping"; exit 0; fi
+          gh label create price-review --color FBCA04 --description "Daily price scrape needs a human" --force >/dev/null 2>&1 || true
+          COUNT=$(jq '.review | length' "$FILE")
+          NUM=$(gh issue list --label price-review --state open --json number --jq '.[0].number // empty')
+          if [ "$COUNT" -eq 0 ]; then
+            if [ -n "$NUM" ]; then
+              gh issue close "$NUM" --comment "✅ All price targets back in band ($(jq -r .date "$FILE")). Auto-closed by the daily run."
+              echo "closed #$NUM"
+            else
+              echo "clean — nothing open"
+            fi
+            exit 0
+          fi
+          BODY=$(jq -r '
+            "The daily price scrape found **\(.review | length)** target(s) whose live price disagrees with the Scraper Rules DB. Live prices were left untouched.\n\n"
+            + (.review | map("- **\(.label)** — scraped $\(.proposed // "—") vs verified $\(.anchor // "—"): \(.reason)") | join("\n"))
+            + "\n\n---\n**To clear a line:** open its row in the **Scraper Rules DB** and either (a) update **Verified Price** + Expected Min/Max to the real new price, or (b) tick **Price Locked** if the verified price still stands (offers keep updating; the band check stops). Do **not** just close this issue — if the mismatch remains, the next run reopens it.\n\n_Regenerated daily at 13:00 UTC. Last run: \(.date)._"
+          ' "$FILE")
+          TITLE="🔎 Prices to review ($COUNT)"
+          if [ -n "$NUM" ]; then
+            gh issue edit "$NUM" --title "$TITLE" --body "$BODY"
+            gh issue reopen "$NUM" >/dev/null 2>&1 || true
+            echo "updated #$NUM"
+          else
+            gh issue create --title "$TITLE" --body "$BODY" --label price-review >/dev/null
+            echo "created"
           fi

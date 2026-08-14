@@ -18,6 +18,7 @@
 
 import { config } from "dotenv";
 config({ path: ".env.local" });
+import { writeFileSync } from "node:fs";
 import { chromium } from "playwright";
 import { makeNotionClient } from "./lib/notion-client";
 import { priceTargets } from "./config/price-sources";
@@ -310,6 +311,19 @@ async function main() {
           : classify(candidate, existing.priorPrice, result.blocked);
     }
 
+    // Price Locked: the Verified Price is authoritative and this page is known to
+    // be awkward to scrape (multi-tier), so a price band-miss is expected, not
+    // news — suppress the review flag (offers still run below, verified price
+    // still pins). NEVER mask a fetch failure: Blocked/Dead/Failed still surface,
+    // because a dead page means offers can't update either.
+    if (t.rule?.priceLocked && decision.status === "Needs Review") {
+      decision = {
+        ...decision,
+        status: "OK",
+        reason: `price-locked (verified $${t.rule.verifiedPrice ?? "—"}); band check suppressed`,
+      };
+    }
+
     const ctx = t.rule ? ` [${t.rule.courseType}/${t.rule.variant}]` : "";
     const anchorStr = t.rule ? `verified $${t.rule.verifiedPrice ?? "—"}` : `prior $${existing.priorPrice ?? "—"}`;
     console.log(`  ${decision.status.padEnd(12)} ${label}${ctx}: got ${candidate != null ? `$${candidate}` : "—"} ${anchorStr} — ${decision.reason}`);
@@ -423,10 +437,10 @@ async function main() {
 
   // Unmapped: any live monetized card with no Scraper Rules row → "needs a rule"
   // (never a silent fall-through). Only meaningful when running from the Rules DB.
+  const gaps: string[] = [];
   if (usingRules) {
     const ruleKey = new Set(rules.map((r) => `${r.schoolSlug}:${r.state}`));
     const cards = await getMonetizedCards();
-    const gaps: string[] = [];
     for (const c of cards) {
       if (c.coversAll) {
         const have = rules.filter((r) => r.schoolSlug === c.slug).length;
@@ -451,6 +465,23 @@ async function main() {
     console.log("\nREPORT ONLY — no Notion writes were made.");
     return;
   }
+
+  // Machine-readable artifact for the notifier step (daily-offers.yml opens/edits/
+  // closes one GitHub issue from this). Written every real run — an empty review[]
+  // is the signal to auto-close the issue.
+  writeFileSync(
+    "scrape-review.json",
+    JSON.stringify(
+      {
+        date: TODAY,
+        review: reviewQueue.map((r) => ({ label: r.label, anchor: r.anchor, proposed: r.proposed, reason: r.reason })),
+        unmapped: gaps,
+        counts: { ok, review, failed, blocked, dead, errors },
+      },
+      null,
+      2
+    )
+  );
 
   if (reviewQueue.length) {
     console.log(`::warning::price-scrape: ${reviewQueue.length} price(s) need review; live values left untouched`);

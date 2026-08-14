@@ -24,6 +24,10 @@ export interface ScraperRule {
   expectedMin: number | null; // per-rule sanity band
   expectedMax: number | null;
   extractHint: string; // human guidance surfaced on quarantine
+  // Verified Price is authoritative and the page is known-awkward to scrape (e.g.
+  // multi-tier). When set, a price band-miss is suppressed (no "Needs Review", no
+  // GitHub nag) — offers still run and fetch failures still surface.
+  priceLocked: boolean;
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -31,6 +35,7 @@ const rt = (p: any) => p?.rich_text?.map((t: any) => t.plain_text).join("") ?? "
 const title = (p: any) => p?.title?.map((t: any) => t.plain_text).join("") ?? "";
 const sel = (p: any) => p?.select?.name ?? "";
 const num = (p: any) => (typeof p?.number === "number" ? p.number : null);
+const cb = (p: any) => p?.checkbox ?? false;
 
 function mapRule(row: any): ScraperRule {
   const p = row.properties;
@@ -47,6 +52,7 @@ function mapRule(row: any): ScraperRule {
     expectedMin: num(p["Expected Min"]),
     expectedMax: num(p["Expected Max"]),
     extractHint: rt(p["Extract Hint"]),
+    priceLocked: cb(p["Price Locked"]),
   };
 }
 
