@@ -339,6 +339,22 @@ export const getLinkableStateCodes = cache(async (): Promise<Set<string>> => {
   return set;
 });
 
+// Per-code content-freshness date (the canonical row's "Last Verified") for the
+// sitemap's <lastmod>. Reuses the shared getAllStateInfos fetch, so it adds no
+// Notion request. Value is a "YYYY-MM-DD" string, or null when a state has no
+// Last Verified date set. Using the real editorial date — not build time — is
+// what keeps Google trusting our lastmod signal.
+export const getStateVerificationMap = cache(
+  async (): Promise<Map<string, string | null>> => {
+    const map = new Map<string, string | null>();
+    const all = await getAllStateInfos();
+    for (const [code, info] of all) {
+      map.set(code, info.lastVerified ?? null);
+    }
+    return map;
+  }
+);
+
 // Full StateMeta (slug/name/code) for every linkable state, alphabetical by name
 // (STATE_LIST order). The shared helper behind every internal-linking surface.
 export const getLinkableStates = cache(async (): Promise<StateMeta[]> => {
