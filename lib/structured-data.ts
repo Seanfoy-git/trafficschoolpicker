@@ -1,0 +1,151 @@
+import type { SchoolWithPrice, ResolvedSchoolContent } from "@/lib/types";
+
+/**
+ * Product/Offer/AggregateRating/ItemList JSON-LD for the state comparison grids.
+ *
+ * The output MUST mirror what the SchoolCard visibly renders — same price (sale
+ * when a live offer undercuts the regular, else the regular) and only genuine
+ * ratings the page already shows. Never fabricate a price, rating, or count: a
+ * field that isn't displayed is omitted, not invented. See components/SchoolCard.tsx
+ * for the render logic this tracks.
+ */
+
+const SITE = "https://www.trafficschoolpicker.com";
+
+// ─── Minimal typed schema.org shapes (only the fields we emit) ───────────────
+
+interface OfferSchema {
+  "@type": "Offer";
+  price: string;
+  priceCurrency: "USD";
+  availability: "https://schema.org/InStock";
+  url: string;
+}
+
+interface AggregateRatingSchema {
+  "@type": "AggregateRating";
+  ratingValue: string;
+  reviewCount: string;
+}
+
+interface BrandSchema {
+  "@type": "Brand";
+  name: string;
+}
+
+interface ProductSchema {
+  "@type": "Product";
+  name: string;
+  url: string;
+  brand: BrandSchema;
+  offers?: OfferSchema;
+  aggregateRating?: AggregateRatingSchema;
+}
+
+interface ListItemSchema {
+  "@type": "ListItem";
+  position: number;
+  item: ProductSchema;
+}
+
+export interface ItemListSchema {
+  "@context": "https://schema.org";
+  "@type": "ItemList";
+  name: string;
+  itemListElement: ListItemSchema[];
+}
+
+/** A tier-1 school paired with its per-state resolved content. */
+export interface SchemaSchool {
+  school: SchoolWithPrice;
+  resolved: ResolvedSchoolContent;
+}
+
+/**
+ * The price the card actually renders for this school in this state: the sale
+ * price only when a live offer undercuts the regular (mirrors SchoolCard's
+ * `hasActiveOffer && salePrice < resolved.price` branch), otherwise the regular
+ * price. `null` when the card shows "Check website" (no price) — the caller omits
+ * the Offer in that case rather than markup a price that isn't visible.
+ */
+function displayedPrice(school: SchoolWithPrice, resolved: ResolvedSchoolContent): number | null {
+  if (resolved.price === null) return null;
+  if (school.hasActiveOffer && school.salePrice !== null && school.salePrice < resolved.price) {
+    return school.salePrice;
+  }
+  return resolved.price;
+}
+
+/** Canonical URL for a Product item: the review page when one exists, else the state page. */
+function productUrl(slug: string, stateSlug: string, reviewSlugs: ReadonlySet<string>): string {
+  return reviewSlugs.has(slug) ? `${SITE}/reviews/${slug}` : `${SITE}/${stateSlug}`;
+}
+
+function buildProduct(
+  { school, resolved }: SchemaSchool,
+  stateName: string,
+  stateSlug: string,
+  reviewSlugs: ReadonlySet<string>
+): ProductSchema {
+  const url = productUrl(school.slug, stateSlug, reviewSlugs);
+
+  const product: ProductSchema = {
+    "@type": "Product",
+    name: `${school.name} — ${stateName} Traffic School`,
+    url,
+    brand: { "@type": "Brand", name: school.name },
+  };
+
+  // Offer — only when the card shows a price (matches it exactly, to the cent).
+  const price = displayedPrice(school, resolved);
+  if (price !== null) {
+    product.offers = {
+      "@type": "Offer",
+      price: price.toFixed(2),
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+      url,
+    };
+  }
+
+  // AggregateRating — only from genuine data the page displays; both must be > 0.
+  // If either is missing the whole node is omitted (never a placeholder rating).
+  if (
+    school.rating !== null &&
+    school.rating > 0 &&
+    school.reviewCount !== null &&
+    school.reviewCount > 0
+  ) {
+    product.aggregateRating = {
+      "@type": "AggregateRating",
+      ratingValue: String(school.rating),
+      reviewCount: String(school.reviewCount),
+    };
+  }
+
+  return product;
+}
+
+/**
+ * Build the ItemList of Products for a state's tier-1 comparison grid. `schools`
+ * must be in display order — `position` is the rank (i + 1). Emit only when the
+ * comparison cards render (online state with tier-1 schools); the caller gates this.
+ */
+export function buildComparisonItemList(
+  schools: SchemaSchool[],
+  stateName: string,
+  stateSlug: string,
+  reviewSlugs: ReadonlySet<string>,
+  year: number
+): ItemListSchema {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `Best Online Traffic Schools in ${stateName} (${year})`,
+    itemListElement: schools.map((s, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: buildProduct(s, stateName, stateSlug, reviewSlugs),
+    })),
+  };
+}

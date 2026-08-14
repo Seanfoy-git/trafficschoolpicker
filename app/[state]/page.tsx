@@ -8,7 +8,9 @@ import {
   getSchoolVariantsForState,
   resolveStateContent,
   getLinkableStates,
+  getAllSchools,
 } from "@/lib/notion";
+import { buildComparisonItemList } from "@/lib/structured-data";
 import { STATE_SEO } from "@/lib/seo-config";
 import { getStateFAQs } from "@/lib/state-faqs";
 import { getNotionStateFaqs } from "@/lib/notion-faqs";
@@ -115,6 +117,31 @@ export default async function StatePage({ params }: Props) {
   const tier1 = schools.filter((s) => s.tier === 1);
   const year = new Date().getFullYear();
   const h1 = seo?.h1 ?? `Online Traffic Schools in ${stateMeta.name} (${year})`;
+
+  // The comparison grid (and its Product/ItemList schema) render only for online
+  // states that actually have tier-1 schools — the single gate shared below.
+  const showComparison =
+    (onlineStatus === "Online — ticket dismissal" ||
+      onlineStatus === "Online — insurance discount only") &&
+    tier1.length > 0;
+
+  // Resolve each tier-1 school's per-state content once and share it between the
+  // cards and the JSON-LD, so the schema price can never drift from the card price.
+  const tier1Resolved = tier1.map((school) => ({
+    school,
+    resolved: resolveStateContent(school, stateMeta.code, stateReqs, variants),
+  }));
+
+  // Slugs that have a /reviews/<slug> page. getAllSchools is build-memoized and
+  // was already resolved by getSchoolPricingForState above, so this is a cache
+  // hit — not an extra Notion query — and drives the Product url fallback.
+  const reviewSlugs = showComparison
+    ? new Set((await getAllSchools()).map((s) => s.slug))
+    : new Set<string>();
+
+  const comparisonSchema = showComparison
+    ? buildComparisonItemList(tier1Resolved, stateMeta.name, stateSlug, reviewSlugs, year)
+    : null;
 
   return (
     <>
@@ -278,17 +305,27 @@ export default async function StatePage({ params }: Props) {
         </section>
       )}
 
+      {/* Product/Offer/AggregateRating/ItemList JSON-LD for the comparison grid —
+          server-rendered into the initial HTML, gated on the same condition as the
+          cards so prices/ratings in the markup always match what's visible. The
+          existing FAQPage schema (FaqSection) is separate and untouched. */}
+      {comparisonSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(comparisonSchema) }}
+        />
+      )}
+
       {/* TIER 1 COMPARISON CARDS — only for online states */}
-      {(onlineStatus === "Online — ticket dismissal" || onlineStatus === "Online — insurance discount only") &&
-        tier1.length > 0 && (
+      {showComparison && (
         <section className="py-12 bg-white">
           <div className="max-w-5xl mx-auto px-4">
             <div className="space-y-4">
-              {tier1.map((school, i) => (
+              {tier1Resolved.map(({ school, resolved }, i) => (
                 <SchoolCard
                   key={school.id}
                   school={school}
-                  resolved={resolveStateContent(school, stateMeta.code, stateReqs, variants)}
+                  resolved={resolved}
                   rank={i + 1}
                   showProsAndCons
                   stateCode={stateMeta.code}
