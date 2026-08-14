@@ -205,3 +205,45 @@ export function buildComparisonItemList(
     })),
   };
 }
+
+// ─── VideoObject (embedded state explainer videos) ──────────────────────────
+
+/** A state's embedded explainer video — the real YouTube id + its metadata. */
+export interface VideoEntry {
+  id: string;
+  uploadDate: string; // ISO 8601 date
+  duration: string; // ISO 8601 duration, e.g. "PT3M16S"
+  title: string;
+}
+
+interface VideoObjectSchema {
+  "@context": "https://schema.org";
+  "@type": "VideoObject";
+  name: string;
+  description: string;
+  thumbnailUrl: string;
+  uploadDate: string;
+  duration: string;
+  embedUrl: string;
+  url: string;
+}
+
+/**
+ * VideoObject JSON-LD for an embedded state video. Emitted on the state page that
+ * hosts the video (its dedicated section with an H2 is the "watch page" Google
+ * requires). `description` must be non-empty — the caller passes the state's
+ * intro paragraph or a factual fallback; `pageUrl` is the watch page it lives on.
+ */
+export function buildVideoObject(video: VideoEntry, description: string, pageUrl: string): VideoObjectSchema {
+  return {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: video.title,
+    description,
+    thumbnailUrl: `https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`,
+    uploadDate: video.uploadDate,
+    duration: video.duration,
+    embedUrl: `https://www.youtube.com/embed/${video.id}`,
+    url: pageUrl,
+  };
+}

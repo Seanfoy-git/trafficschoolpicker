@@ -10,7 +10,7 @@ import {
   getLinkableStates,
   getAllSchools,
 } from "@/lib/notion";
-import { buildComparisonItemList } from "@/lib/structured-data";
+import { buildComparisonItemList, buildVideoObject, type VideoEntry } from "@/lib/structured-data";
 import { STATE_SEO } from "@/lib/seo-config";
 import { getStateFAQs } from "@/lib/state-faqs";
 import { getNotionStateFaqs } from "@/lib/notion-faqs";
@@ -32,17 +32,18 @@ import {
   Info,
 } from "lucide-react";
 
-// YouTube video IDs for state explainer videos — add new states as videos are published
-const STATE_VIDEOS: Record<string, string> = {
-  "texas": "jAH-kz9dhF0",
-  "california": "kx_B0jgBjW4",
-  "florida": "1zM7hwLvWPc",
-  "new-york": "-eYzNko2dmQ",
-  "georgia": "VtNRogHhy_A",
-  "ohio": "IlMoa1atiBY",
-  "arizona": "udlHdWl1cdM",
+// Embedded state explainer videos — YouTube id plus the metadata VideoObject
+// JSON-LD needs (real values). Add new states as videos are published.
+const STATE_VIDEOS: Record<string, VideoEntry> = {
+  "california":  { id: "kx_B0jgBjW4", uploadDate: "2026-04-16", duration: "PT3M16S", title: "How to Do California Traffic School Online and Keep Points Off Your Record" },
+  "texas":       { id: "jAH-kz9dhF0", uploadDate: "2026-04-16", duration: "PT2M38S", title: "Texas Defensive Driving 2026 — How to Get Your Ticket Dismissed" },
+  "florida":     { id: "1zM7hwLvWPc", uploadDate: "2026-04-16", duration: "PT2M42S", title: "Florida Traffic Ticket? Here's How to Keep Points Off Your License (2026)" },
+  "new-york":    { id: "-eYzNko2dmQ", uploadDate: "2026-04-16", duration: "PT2M11S", title: "New York Speeding Ticket? Reduce Your Points & Insurance With PIRP (2026)" },
+  "georgia":     { id: "VtNRogHhy_A", uploadDate: "2026-04-16", duration: "PT2M17S", title: "Georgia Speeding Ticket? The Super Speeder Law & How to Remove 7 Points (2026)" },
+  "ohio":        { id: "IlMoa1atiBY", uploadDate: "2026-04-16", duration: "PT2M43S", title: "Ohio Traffic Ticket? Call Your Court First — Here's Why It Matters (2026)" },
+  "arizona":     { id: "udlHdWl1cdM", uploadDate: "2026-04-22", duration: "PT2M29S", title: "Arizona Defensive Driving Course 2026 — How to Dismiss a Ticket Online" },
   // Replaces the prior 8Qtg9viSfbY, which YouTube had removed (oEmbed 404).
-  "new-jersey": "Fa9M1EKNMV8",
+  "new-jersey":  { id: "Fa9M1EKNMV8", uploadDate: "2026-04-22", duration: "PT2M55S", title: "New Jersey Defensive Driving Course 2026 — What It Actually Does (And What It Doesn't)" },
 };
 
 export const revalidate = 86400;
@@ -141,6 +142,20 @@ export default async function StatePage({ params }: Props) {
 
   const comparisonSchema = showComparison
     ? buildComparisonItemList(tier1Resolved, stateMeta.name, stateSlug, reviewSlugs, year)
+    : null;
+
+  // VideoObject for the embedded explainer — emitted only when this state has a
+  // video (same condition as the video section below). Description uses the
+  // genuine on-page intro paragraph, falling back to a factual one-liner so it's
+  // never empty (a VideoObject requirement).
+  const video = STATE_VIDEOS[stateSlug] ?? null;
+  const videoSchema = video
+    ? buildVideoObject(
+        video,
+        stateInfo?.introParagraph?.trim() ||
+          `A short explainer on ${stateMeta.name} traffic school: how the online course works and what it does for your ticket or license points.`,
+        `https://www.trafficschoolpicker.com/${stateSlug}`
+      )
     : null;
 
   return (
@@ -285,9 +300,17 @@ export default async function StatePage({ params }: Props) {
         </section>
       )}
 
-      {/* STATE VIDEO EXPLAINER */}
-      {STATE_VIDEOS[stateSlug] && (
+      {/* STATE VIDEO EXPLAINER — its own section + H2 is the "watch page" the
+          VideoObject schema below points at (fixes the Search Console "Video
+          isn't on a watch page" flag). */}
+      {video && (
         <section className="py-10 bg-white">
+          {videoSchema && (
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(videoSchema) }}
+            />
+          )}
           <div className="max-w-3xl mx-auto px-4">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">
               {stateMeta.name} Traffic School — Video Guide
@@ -295,7 +318,7 @@ export default async function StatePage({ params }: Props) {
             <div className="relative w-full overflow-hidden rounded-xl shadow-md" style={{ paddingBottom: "56.25%" }}>
               <iframe
                 className="absolute inset-0 w-full h-full"
-                src={`https://www.youtube.com/embed/${STATE_VIDEOS[stateSlug]}?modestbranding=1&rel=0&origin=https://www.trafficschoolpicker.com`}
+                src={`https://www.youtube.com/embed/${video.id}?modestbranding=1&rel=0&origin=https://www.trafficschoolpicker.com`}
                 title={`${stateMeta.name} traffic school explainer`}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
