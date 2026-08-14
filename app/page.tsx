@@ -4,7 +4,7 @@ import { StateSelector } from "@/components/StateSelector";
 import { TrustBar } from "@/components/TrustBar";
 import { SchoolCard } from "@/components/SchoolCard";
 import { SchoolFAQ, FAQJsonLd } from "@/components/SchoolFAQ";
-import { getAllSchools, getStateRequirements, resolveStateContent, getLinkableStates } from "@/lib/notion";
+import { getAllSchools, getStateRequirements, resolveStateContent, getLinkableStates, getLatestStateVerification } from "@/lib/notion";
 import Link from "next/link";
 import { ArrowRight, Search, BarChart3, MousePointerClick } from "lucide-react";
 
@@ -59,10 +59,11 @@ const homeFaqs = [
 ];
 
 export default async function HomePage() {
-  const [allSchools, stateReqs, linkableStates] = await Promise.all([
+  const [allSchools, stateReqs, linkableStates, latestVerified] = await Promise.all([
     getAllSchools(),
     getStateRequirements(),
     getLinkableStates(),
+    getLatestStateVerification(),
   ]);
   const emptyVariants = new Map();
   const topSchools = allSchools.filter((s) => s.tier === 1).slice(0, 3);
@@ -85,7 +86,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <TrustBar />
+      <TrustBar lastVerified={latestVerified} />
 
       {/* How It Works */}
       <section className="py-16 bg-white">

@@ -36,8 +36,7 @@ export function DirectoryTable({
             {stateName}
           </h2>
           <p className="text-sm text-slate-500 mt-1">
-            Source: Official {stateName} DMV records &middot; Last verified{" "}
-            {lastScraped ?? "April 2026"}
+            Source: Official {stateName} DMV records{lastScraped ? ` · Last verified ${lastScraped}` : ""}
           </p>
         </div>
         <div className="relative">

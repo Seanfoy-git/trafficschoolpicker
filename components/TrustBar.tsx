@@ -5,11 +5,19 @@ const MONTHS = [
   "July", "August", "September", "October", "November", "December",
 ];
 
+// Fallback when no verified date is supplied: the build month, so it can never
+// go stale to a hardcoded past date (this is what left the homepage stuck on
+// "April 2026"). Evaluated at build/revalidation for these SSG pages.
+function currentMonthLabel(): string {
+  const now = new Date();
+  return `Updated ${MONTHS[now.getUTCMonth()]} ${now.getUTCFullYear()}`;
+}
+
 function formatVerifiedLabel(iso: string | null | undefined): string {
-  if (!iso) return "Updated April 2026";
+  if (!iso) return currentMonthLabel();
   // ISO date strings parse in UTC; we only render month/year so timezone is irrelevant.
   const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "Updated April 2026";
+  if (Number.isNaN(d.getTime())) return currentMonthLabel();
   return `Last verified ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
 }
 

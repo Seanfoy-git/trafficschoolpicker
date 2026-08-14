@@ -295,6 +295,20 @@ export async function getStateInfo(stateCode: string): Promise<StateInfo | null>
   return all.get(stateCode.toUpperCase()) ?? null;
 }
 
+// Most-recent "Last Verified" across all states — the site-wide freshness signal
+// for the homepage TrustBar (which has no single state to read). Reads the shared
+// getAllStateInfos fetch, so it costs no extra Notion request. ISO date strings
+// (YYYY-MM-DD) compare lexicographically, so string max = latest date.
+export async function getLatestStateVerification(): Promise<string | null> {
+  let latest: string | null = null;
+  for (const info of (await getAllStateInfos()).values()) {
+    if (info.lastVerified && (!latest || info.lastVerified > latest)) {
+      latest = info.lastVerified;
+    }
+  }
+  return latest;
+}
+
 // ─── LINKABLE STATES (single shared gate) ───────────────────
 //
 // ONE gate for the whole site: a state is eligible for the XML sitemap AND every
