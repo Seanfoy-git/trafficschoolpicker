@@ -89,10 +89,18 @@ export async function Footer() {
           <div>
             <h4 className="font-semibold mb-3">Legal</h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              TrafficSchoolPicker.com is an independent comparison site. We may
-              earn commissions from partners when you click affiliate links. This
-              does not affect our rankings or reviews. All information is for
-              general guidance — verify requirements with your local court.
+              TrafficSchoolPicker.com is an independent comparison site — not a
+              traffic school, law firm, court, or government agency — and nothing
+              here is legal advice. Prices and promotional offers are gathered
+              periodically, may change or expire without notice, and can differ
+              from a provider&apos;s checkout; always confirm the current price and
+              terms on the provider&apos;s own website before purchasing. Whether an
+              online course is accepted, dismisses your ticket, or removes points
+              depends on your state and the specific court handling your case —
+              verify with the court listed on your citation before enrolling. We
+              do not guarantee any outcome. We may earn a commission when you enroll
+              through our links, at no extra cost to you; this never affects our
+              rankings or reviews.
             </p>
           </div>
         </div>
@@ -120,7 +128,8 @@ export async function Footer() {
 
         <div className="border-t border-slate-700 mt-8 pt-6 text-center text-xs text-slate-400">
           &copy; {new Date().getFullYear()} TrafficSchoolPicker.com. All rights
-          reserved. | Affiliate Disclosure: We earn commissions from partner links.
+          reserved. | Affiliate disclosure: we earn commissions from partner
+          links. | Prices &amp; offers subject to change — verify on the provider&apos;s site.
         </div>
       </div>
     </footer>
