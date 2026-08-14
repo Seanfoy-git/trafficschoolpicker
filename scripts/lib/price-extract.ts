@@ -103,12 +103,24 @@ export interface PriceNode {
 export function detectOffer(
   text: string,
   regular: number | null,
-  priceNodes: PriceNode[] = []
+  priceNodes: PriceNode[] = [],
+  jsonLdPrices: number[] = []
 ): OfferInfo {
   const labelMatch = text.match(OFFER_LABEL_RE);
   const label = labelMatch ? labelMatch[0].replace(/\s+/g, " ").toUpperCase().trim() : null;
 
   let sale: number | null = null;
+
+  // Primary source: JSON-LD Offer/AggregateOffer price is the reliable CURRENT
+  // price — structured data present for SEO on these storefronts. The base course
+  // is the cheapest tier, so the minimum offer price is its current price; if that
+  // sits below the verified regular, it's the live sale. This surfaced iDriveSafely's
+  // client-rendered "$24" (invisible to DOM text scraping) and fixed the aceable-TX
+  // multi-tier mis-grab (min of [39, 29] = the standard $29) with no DOM heuristics.
+  if (jsonLdPrices.length && regular != null && regular > 0) {
+    const current = Math.min(...jsonLdPrices);
+    if (current < regular * 0.98 && current >= regular * 0.3) sale = current;
+  }
 
   // Strongest, most site-agnostic signal: a struck-through "was/regular" price
   // sitting above a cheaper live price = a genuine sale. This is how iDriveSafely's
@@ -123,7 +135,7 @@ export function detectOffer(
   // aceable-TX). Reference the struck node nearest our verified regular (its own
   // tier); the sale is the nearest cheaper live node — preferring the one right
   // after it — within a 40%-of-regular floor (skips $5-off codes and state fees).
-  if (priceNodes.some((n) => n.struck)) {
+  if (sale == null && priceNodes.some((n) => n.struck)) {
     let refIdx = -1;
     priceNodes.forEach((n, i) => {
       if (!n.struck) return;

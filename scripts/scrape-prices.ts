@@ -130,13 +130,13 @@ async function scrapePriceFromPage(
   url: string,
   selector: string | null | undefined,
   browserPage: import("playwright").Page
-): Promise<{ price: number | null; text: string; priceNodes: PriceNode[]; blocked: boolean; dead: boolean; httpStatus: number }> {
+): Promise<{ price: number | null; text: string; priceNodes: PriceNode[]; jsonLdPrices: number[]; blocked: boolean; dead: boolean; httpStatus: number }> {
   try {
     const resp = await browserPage.goto(url, { waitUntil: "domcontentloaded", timeout: 20000 });
     const httpStatus = resp?.status() ?? 0;
     // Dead target (404/410/5xx): the page no longer exists — a selector can't
     // help. Surface it distinctly instead of a vague "Failed / no price parsed".
-    if (httpStatus >= 400) return { price: null, text: "", priceNodes: [], blocked: false, dead: true, httpStatus };
+    if (httpStatus >= 400) return { price: null, text: "", priceNodes: [], jsonLdPrices: [], blocked: false, dead: true, httpStatus };
     // Let JS-rendered price widgets hydrate before reading the DOM. iDriveSafely
     // (and similar SPA storefronts) render the live sale price client-side after
     // load — with only a 2s wait the "$24" simply wasn't in the DOM yet. Wait for
@@ -153,7 +153,7 @@ async function scrapePriceFromPage(
       "verify you are human", "403", "forbidden",
     ];
     if (blockSignals.some((s) => bodyText.toLowerCase().includes(s) || title.toLowerCase().includes(s))) {
-      return { price: null, text: "", priceNodes: [], blocked: true, dead: false, httpStatus };
+      return { price: null, text: "", priceNodes: [], jsonLdPrices: [], blocked: true, dead: false, httpStatus };
     }
 
     // DOM-level strikethrough detection. innerText drops the line-through, but a
@@ -190,6 +190,28 @@ async function scrapePriceFromPage(
       return out;
     });
 
+    // Structured-data prices: JSON-LD Offer/AggregateOffer is the reliable CURRENT
+    // price — present for SEO on these storefronts even when the rendered DOM hides
+    // it (e.g. iDriveSafely's client-rendered "$24" that text scraping never saw).
+    const jsonLdPrices: number[] = await browserPage.evaluate(() => {
+      const out: number[] = [];
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const walk = (o: any) => {
+        if (!o || typeof o !== "object") return;
+        const raw = o.price ?? o.lowPrice;
+        if (raw != null && (o["@type"] === "Offer" || o["@type"] === "AggregateOffer" || "priceCurrency" in o)) {
+          const n = parseFloat(String(raw));
+          if (!Number.isNaN(n) && n >= 3 && n <= 200) out.push(n);
+        }
+        for (const k in o) walk((o as any)[k]);
+      };
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+      document.querySelectorAll('script[type="application/ld+json"]').forEach((s) => {
+        try { walk(JSON.parse(s.textContent || "")); } catch { /* ignore malformed ld+json */ }
+      });
+      return out;
+    });
+
     let targetText = bodyText;
     let fromSelector = false;
     if (selector) {
@@ -205,9 +227,9 @@ async function scrapePriceFromPage(
     // Return the full body text too — offer detection scans the whole page (the
     // promo banner is often outside the price selector), judged against the
     // verified regular back in main().
-    return { price: pickPrice(targetText, fromSelector), text: bodyText, priceNodes, blocked: false, dead: false, httpStatus };
+    return { price: pickPrice(targetText, fromSelector), text: bodyText, priceNodes, jsonLdPrices, blocked: false, dead: false, httpStatus };
   } catch {
-    return { price: null, text: "", priceNodes: [], blocked: false, dead: false, httpStatus: 0 };
+    return { price: null, text: "", priceNodes: [], jsonLdPrices: [], blocked: false, dead: false, httpStatus: 0 };
   }
 }
 
@@ -264,6 +286,7 @@ async function main() {
     let candidate: number | null = null;
     let scrapeText = "";
     let scrapeNodes: PriceNode[] = [];
+    let scrapeLd: number[] = [];
 
     if (t.method === "fixed") {
       candidate = t.fixedPrice ?? null;
@@ -275,6 +298,7 @@ async function main() {
       candidate = result.price;
       scrapeText = result.text;
       scrapeNodes = result.priceNodes;
+      scrapeLd = result.jsonLdPrices;
       decision = t.rule
         ? classifyAgainstRule(candidate, t.rule, result.blocked, result.dead)
         : result.dead
@@ -307,13 +331,13 @@ async function main() {
     // The sale is judged against the regular we DISPLAY (verified/pinned), not the
     // raw scrape, so a wrong-tier grab can't fake a discount.
     const didScrape = t.method === "dom" && (decision.status === "OK" || decision.status === "Needs Review");
-    const offer: OfferInfo = didScrape ? detectOffer(scrapeText, priceToWrite ?? candidate, scrapeNodes) : NO_OFFER;
+    const offer: OfferInfo = didScrape ? detectOffer(scrapeText, priceToWrite ?? candidate, scrapeNodes, scrapeLd) : NO_OFFER;
     if (didScrape) {
       console.log(`               offer: ${offer.hasOffer ? `YES${offer.sale != null ? ` $${offer.sale}` : ""}${offer.label ? ` (${offer.label})` : ""}` : "none"}`);
       if (REPORT) {
         const struck = [...new Set(scrapeNodes.filter((n) => n.struck).map((n) => n.value))];
         const live = [...new Set(scrapeNodes.filter((n) => !n.struck).map((n) => n.value))];
-        console.log(`               nodes: struck=[${struck.join(", ")}]  live=[${live.join(", ")}]`);
+        console.log(`               nodes: struck=[${struck.join(", ")}]  live=[${live.join(", ")}]  json-ld=[${[...new Set(scrapeLd)].join(", ")}]`);
       }
     }
 
