@@ -195,17 +195,16 @@ async function scrapePriceFromPage(
     // it (e.g. iDriveSafely's client-rendered "$24" that text scraping never saw).
     const jsonLdPrices: number[] = await browserPage.evaluate(() => {
       const out: number[] = [];
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const walk = (o: any) => {
+      const walk = (o: unknown) => {
         if (!o || typeof o !== "object") return;
-        const raw = o.price ?? o.lowPrice;
-        if (raw != null && (o["@type"] === "Offer" || o["@type"] === "AggregateOffer" || "priceCurrency" in o)) {
+        const rec = o as Record<string, unknown>;
+        const raw = rec.price ?? rec.lowPrice;
+        if (raw != null && (rec["@type"] === "Offer" || rec["@type"] === "AggregateOffer" || "priceCurrency" in rec)) {
           const n = parseFloat(String(raw));
           if (!Number.isNaN(n) && n >= 3 && n <= 200) out.push(n);
         }
-        for (const k in o) walk((o as any)[k]);
+        for (const k in rec) walk(rec[k]);
       };
-      /* eslint-enable @typescript-eslint/no-explicit-any */
       document.querySelectorAll('script[type="application/ld+json"]').forEach((s) => {
         try { walk(JSON.parse(s.textContent || "")); } catch { /* ignore malformed ld+json */ }
       });
