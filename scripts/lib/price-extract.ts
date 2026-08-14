@@ -93,29 +93,58 @@ export interface OfferInfo {
   hasOffer: boolean;     // a live promo is running (drives Active Offer + the card tag)
 }
 
-export function detectOffer(text: string, regular: number | null): OfferInfo {
+// A $-price occurrence on the page + whether it renders struck-through. The
+// scraper collects these from the live DOM (innerText loses the strikethrough).
+export interface PriceNode {
+  value: number;
+  struck: boolean;
+}
+
+export function detectOffer(
+  text: string,
+  regular: number | null,
+  priceNodes: PriceNode[] = []
+): OfferInfo {
   const labelMatch = text.match(OFFER_LABEL_RE);
   const label = labelMatch ? labelMatch[0].replace(/\s+/g, " ").toUpperCase().trim() : null;
 
   let sale: number | null = null;
-  if (regular != null && regular > 0) {
-    // A sale is a candidate that (a) is a real discount below the regular, (b) is
-    // not so low it's a fee/coupon decoy, and (c) sits next to sale/price context.
+
+  // Strongest, most site-agnostic signal: a struck-through "was/regular" price
+  // sitting above a cheaper live price = a genuine sale. This is how iDriveSafely's
+  // "Now $24 / ~~$59~~" reads — it has no "%-off" words, so innerText alone missed
+  // it. Reference the struck price nearest our verified regular (i.e. its own
+  // tier), then take the best cheaper live figure above a 40%-of-regular floor —
+  // which skips stacked-code deepest prices (an extra "$5 off" code) and state
+  // fees ($8 NY processing).
+  const struck = priceNodes.filter((n) => n.struck).map((n) => n.value);
+  const live = priceNodes.filter((n) => !n.struck).map((n) => n.value);
+  if (struck.length) {
+    const ref =
+      regular != null
+        ? struck.reduce((b, s) => (Math.abs(s - regular) < Math.abs(b - regular) ? s : b), struck[0])
+        : Math.min(...struck);
+    const cheaper = live.filter((v) => v < ref * 0.98 && v >= ref * 0.4);
+    if (cheaper.length) sale = Math.max(...cheaper); // the headline sale, not the deepest stacked price
+  }
+
+  // Fallback (single-price pages with no strikethrough): a sale-anchored figure
+  // below the verified regular in the page text.
+  if (sale == null && regular != null && regular > 0) {
     const saleCands = candidates(text)
-      .filter((c) => c.v < regular * 0.98 && c.v >= regular * 0.3)
+      .filter((c) => c.v < regular * 0.98 && c.v >= regular * 0.4)
       .filter(
         (c) =>
           SALE_ANCHOR.test(text.slice(Math.max(0, c.idx - 12), c.idx)) ||
           PRICE_ANCHOR.test(text.slice(Math.max(0, c.idx - 20), c.idx))
       );
-    if (saleCands.length) sale = Math.min(...saleCands.map((c) => c.v)); // the promoted (lowest) figure
+    if (saleCands.length) sale = Math.min(...saleCands.map((c) => c.v));
   }
 
-  // Only claim an offer on solid evidence: a real sale below regular, OR an
-  // explicit discount label ("% off" / "save $"). A bare "sale" word alone with
-  // no sale price and no percentage is treated as marketing noise, not an offer.
+  // Claim an offer on solid evidence: a sale below regular (from strikethrough or
+  // an anchored figure), OR an explicit discount label ("% off" / "save $").
   const strongLabel = label != null && /(%|save|\boff\b)/i.test(label);
-  const hasOffer = (sale != null && regular != null && sale < regular) || strongLabel;
+  const hasOffer = sale != null || strongLabel;
   return { sale, label, hasOffer };
 }
 

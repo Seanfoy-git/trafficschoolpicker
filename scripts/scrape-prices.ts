@@ -22,7 +22,7 @@ import { chromium } from "playwright";
 import { makeNotionClient } from "./lib/notion-client";
 import { priceTargets } from "./config/price-sources";
 import { fetchVerifiedRules, type ScraperRule } from "./config/scraper-rules";
-import { pickPrice, detectOffer, classify, classifyAgainstRule, NO_OFFER, type PriceDecision, type OfferInfo } from "./lib/price-extract";
+import { pickPrice, detectOffer, classify, classifyAgainstRule, NO_OFFER, type PriceDecision, type OfferInfo, type PriceNode } from "./lib/price-extract";
 
 const notion = makeNotionClient();
 const SCHOOLS_DB = process.env.NOTION_SCHOOLS_DB!;
@@ -130,13 +130,13 @@ async function scrapePriceFromPage(
   url: string,
   selector: string | null | undefined,
   browserPage: import("playwright").Page
-): Promise<{ price: number | null; text: string; blocked: boolean; dead: boolean; httpStatus: number }> {
+): Promise<{ price: number | null; text: string; priceNodes: PriceNode[]; blocked: boolean; dead: boolean; httpStatus: number }> {
   try {
     const resp = await browserPage.goto(url, { waitUntil: "domcontentloaded", timeout: 20000 });
     const httpStatus = resp?.status() ?? 0;
     // Dead target (404/410/5xx): the page no longer exists — a selector can't
     // help. Surface it distinctly instead of a vague "Failed / no price parsed".
-    if (httpStatus >= 400) return { price: null, text: "", blocked: false, dead: true, httpStatus };
+    if (httpStatus >= 400) return { price: null, text: "", priceNodes: [], blocked: false, dead: true, httpStatus };
     await browserPage.waitForTimeout(2000);
 
     const title = await browserPage.title();
@@ -147,8 +147,42 @@ async function scrapePriceFromPage(
       "verify you are human", "403", "forbidden",
     ];
     if (blockSignals.some((s) => bodyText.toLowerCase().includes(s) || title.toLowerCase().includes(s))) {
-      return { price: null, text: "", blocked: true, dead: false, httpStatus };
+      return { price: null, text: "", priceNodes: [], blocked: true, dead: false, httpStatus };
     }
+
+    // DOM-level strikethrough detection. innerText drops the line-through, but a
+    // struck "was" price above a lower live price is the strongest, most
+    // site-agnostic offer signal (see detectOffer). Walk text nodes, pull each
+    // $-figure, and mark it struck if any ancestor is <s>/<del>/<strike> or
+    // computes text-decoration: line-through.
+    const priceNodes: PriceNode[] = await browserPage.evaluate(() => {
+      const priceRe = /\$\s*(\d{1,3}(?:\.\d{1,2})?)/g;
+      const out: { value: number; struck: boolean }[] = [];
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      let node: Node | null;
+      while ((node = walker.nextNode())) {
+        const nodeText = node.nodeValue || "";
+        let m: RegExpExecArray | null;
+        priceRe.lastIndex = 0;
+        while ((m = priceRe.exec(nodeText)) !== null) {
+          const value = parseFloat(m[1]);
+          if (value < 3 || value > 150) continue;
+          let struck = false;
+          let el: HTMLElement | null = node.parentElement;
+          let depth = 0;
+          while (el && depth < 6) {
+            const tag = el.tagName.toLowerCase();
+            if (tag === "s" || tag === "del" || tag === "strike") { struck = true; break; }
+            const cs = getComputedStyle(el);
+            if ((cs.textDecorationLine || cs.textDecoration || "").includes("line-through")) { struck = true; break; }
+            el = el.parentElement;
+            depth++;
+          }
+          out.push({ value, struck });
+        }
+      }
+      return out;
+    });
 
     let targetText = bodyText;
     let fromSelector = false;
@@ -165,9 +199,9 @@ async function scrapePriceFromPage(
     // Return the full body text too — offer detection scans the whole page (the
     // promo banner is often outside the price selector), judged against the
     // verified regular back in main().
-    return { price: pickPrice(targetText, fromSelector), text: bodyText, blocked: false, dead: false, httpStatus };
+    return { price: pickPrice(targetText, fromSelector), text: bodyText, priceNodes, blocked: false, dead: false, httpStatus };
   } catch {
-    return { price: null, text: "", blocked: false, dead: false, httpStatus: 0 };
+    return { price: null, text: "", priceNodes: [], blocked: false, dead: false, httpStatus: 0 };
   }
 }
 
@@ -223,6 +257,7 @@ async function main() {
     let decision: PriceDecision;
     let candidate: number | null = null;
     let scrapeText = "";
+    let scrapeNodes: PriceNode[] = [];
 
     if (t.method === "fixed") {
       candidate = t.fixedPrice ?? null;
@@ -233,6 +268,7 @@ async function main() {
       const result = await scrapePriceFromPage(t.url, t.selector, page);
       candidate = result.price;
       scrapeText = result.text;
+      scrapeNodes = result.priceNodes;
       decision = t.rule
         ? classifyAgainstRule(candidate, t.rule, result.blocked, result.dead)
         : result.dead
@@ -265,7 +301,7 @@ async function main() {
     // The sale is judged against the regular we DISPLAY (verified/pinned), not the
     // raw scrape, so a wrong-tier grab can't fake a discount.
     const didScrape = t.method === "dom" && (decision.status === "OK" || decision.status === "Needs Review");
-    const offer: OfferInfo = didScrape ? detectOffer(scrapeText, priceToWrite ?? candidate) : NO_OFFER;
+    const offer: OfferInfo = didScrape ? detectOffer(scrapeText, priceToWrite ?? candidate, scrapeNodes) : NO_OFFER;
     if (didScrape) {
       console.log(`               offer: ${offer.hasOffer ? `YES${offer.sale != null ? ` $${offer.sale}` : ""}${offer.label ? ` (${offer.label})` : ""}` : "none"}`);
     }
