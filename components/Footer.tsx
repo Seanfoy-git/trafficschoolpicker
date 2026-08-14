@@ -102,6 +102,23 @@ export async function Footer() {
               through our links, at no extra cost to you; this never affects our
               rankings or reviews.
             </p>
+            <ul className="mt-3 space-y-1.5 text-xs">
+              <li>
+                <Link href="/disclaimer" className="text-slate-400 hover:text-highlight transition-colors">
+                  Disclaimer
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="text-slate-400 hover:text-highlight transition-colors">
+                  Terms of Use
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className="text-slate-400 hover:text-highlight transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
 

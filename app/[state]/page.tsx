@@ -296,8 +296,10 @@ export default async function StatePage({ params }: Props) {
               ))}
             </div>
             <p className="mt-6 text-xs text-slate-500 leading-relaxed">
-              We independently research and review all schools. We may earn a
-              commission if you enroll via our links at no extra cost to you.
+              We independently research and review all schools. Prices are checked
+              periodically and may change or differ at checkout — confirm the
+              current price on the school&apos;s site. We may earn a commission if you
+              enroll via our links, at no extra cost to you.
             </p>
           </div>
         </section>

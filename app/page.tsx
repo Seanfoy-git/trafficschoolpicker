@@ -39,7 +39,7 @@ const homeFaqs = [
   {
     question: "Is online traffic school accepted by courts?",
     answer:
-      "Yes — all schools listed on TrafficSchoolPicker are court-approved and accepted by the relevant state DMV or court system. We only list schools that have been officially licensed or approved by state regulatory agencies.",
+      "The schools we list are licensed or approved by state regulatory agencies (the DMV or its equivalent). Whether a specific court accepts an online course for ticket dismissal can still vary by county and by case, so always confirm with the court listed on your citation before you enroll.",
   },
   {
     question: "How much does traffic school cost?",
