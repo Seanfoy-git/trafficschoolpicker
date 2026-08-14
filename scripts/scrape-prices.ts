@@ -304,6 +304,11 @@ async function main() {
     const offer: OfferInfo = didScrape ? detectOffer(scrapeText, priceToWrite ?? candidate, scrapeNodes) : NO_OFFER;
     if (didScrape) {
       console.log(`               offer: ${offer.hasOffer ? `YES${offer.sale != null ? ` $${offer.sale}` : ""}${offer.label ? ` (${offer.label})` : ""}` : "none"}`);
+      if (REPORT) {
+        const struck = [...new Set(scrapeNodes.filter((n) => n.struck).map((n) => n.value))];
+        const live = [...new Set(scrapeNodes.filter((n) => !n.struck).map((n) => n.value))];
+        console.log(`               nodes: struck=[${struck.join(", ")}]  live=[${live.join(", ")}]`);
+      }
     }
 
     const properties: any = {
