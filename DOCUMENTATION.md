@@ -618,6 +618,16 @@ Server component fetches all schools that pass the gate; client component
 provides sort (name/rating/reviews/price/hours) and filter (by state, by name
 search). This is the home for Tier 2 schools — they are not on state pages.
 
+### Reviews hub (`/reviews`)
+
+`app/reviews/page.tsx` — a review-focused landing page (linked from the
+"Reviews" nav item and footer). One card per `getAllSchools()` school
+(best-reviewed first) with its rating, an editorial snippet, and a "Read the full
+review" CTA. Deliberately distinct from `/schools` (a sortable comparison
+directory) so the two don't overlap. This hub is what makes `/reviews` resolve —
+before it existed, bare `/reviews` 404'd and the review-page breadcrumb had to
+skip its "Reviews" crumb.
+
 ### School detail page (`/reviews/[school-slug]`)
 
 `generateStaticParams` builds one route per school. Renders ratings,
@@ -665,7 +675,7 @@ above-the-fold direct answers. 9 long-form posts; index page sorts by date.
 
 | Component | Notes |
 |---|---|
-| `Header` | Logo, nav (All Schools / How We Rank / Blog), state selector. |
+| `Header` | Logo, nav (All Schools / Reviews / How We Rank / Blog), state selector. |
 | `Footer` | Links, affiliate disclosure, copyright. |
 | `TrustBar` | "Trusted by N drivers" strip under heroes. |
 | `StateSelector` | Dropdown — drives the state-page navigation. |
@@ -960,13 +970,14 @@ Status = `Complete`) — so the sitemap and the link graph never diverge:
 
 ### Sitemap (`app/sitemap.ts`)
 
-Generates entries for: homepage, /schools, /about, /blog, every **Complete**
-state page (gated on `getLinkableStateCodes()` — currently all 51), all 9
-blog posts, and **every Show-On-Site school review page** (`/reviews/<slug>`,
-one per `getAllSchools()` school). Gating state pages on `Complete` was the fix
-for a Google Search Console "Discovered – currently not indexed" backlog from
-submitting thin/templated pages. Priorities: home 1.0, state pages 0.9,
-/schools 0.9, blog 0.7-0.8, review pages 0.6, about 0.5. Every entry carries a
+Generates entries for: homepage, /schools, /about, /blog, the **/reviews hub**,
+every **Complete** state page (gated on `getLinkableStateCodes()` — currently all
+51), all 9 blog posts, and **every Show-On-Site school review page**
+(`/reviews/<slug>`, one per `getAllSchools()` school). Gating state pages on
+`Complete` was the fix for a Google Search Console "Discovered – currently not
+indexed" backlog from submitting thin/templated pages. Priorities: home 1.0,
+state pages 0.9, /schools 0.9, blog 0.7-0.8, /reviews hub 0.7, review pages 0.6,
+about 0.5. Every entry carries a
 **real content `lastModified`** — each state's "Last Verified", each post's
 `updatedAt`, each school's `lastVerified` — never build time (a build-time
 lastmod trains Google to ignore the signal).
@@ -990,8 +1001,7 @@ Schema builders live in one typed module, [lib/structured-data.ts](lib/structure
   `reviewCount` (never fabricated). Gated on the same condition as the cards.
 - **`VideoObject`** on the ~8 state pages with an embedded video (see §13).
 - **`BreadcrumbList`** on state (`Home › State`), blog (`Home › Blog › Post`),
-  and review (`Home › School` — no "Reviews" crumb, because `/reviews` has no
-  index route and must not point at a 404) pages.
+  review (`Home › Reviews › School`), and the reviews hub (`Home › Reviews`).
 - **`FAQPage`** on every state page (via `FaqSection`).
 - **`Review`** on each `/reviews/[slug]` page.
 - **`Article`** on each blog post.
