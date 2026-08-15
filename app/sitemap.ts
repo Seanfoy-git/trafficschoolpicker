@@ -5,6 +5,7 @@ import {
   getLinkableStateCodes,
   getStateVerificationMap,
   getLatestStateVerification,
+  getAllSchools,
 } from "@/lib/notion";
 import { getAllPosts } from "@/lib/blog";
 
@@ -22,10 +23,11 @@ const STATIC_LASTMOD = "2026-08-01";
 export const revalidate = 86400;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [linkable, stateVerified, latestVerified] = await Promise.all([
+  const [linkable, stateVerified, latestVerified, schools] = await Promise.all([
     getLinkableStateCodes(),
     getStateVerificationMap(),
     getLatestStateVerification(),
+    getAllSchools(),
   ]);
   const posts = getAllPosts();
 
@@ -85,5 +87,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   );
 
-  return [...staticPages, ...statePages, ...blogPages];
+  // Review pages — one per school. getAllSchools is already filtered to
+  // Show On Site = true + eligible, so the sitemap set matches the pages that
+  // actually render at /reviews/<slug>. lastmod is each school's real
+  // "Last Verified" date, never build time (same discipline as state/blog).
+  const reviewPages: MetadataRoute.Sitemap = schools.map((s) => ({
+    url: `${BASE_URL}/reviews/${s.slug}`,
+    lastModified: s.lastVerified ?? STATIC_LASTMOD,
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticPages, ...statePages, ...blogPages, ...reviewPages];
 }
