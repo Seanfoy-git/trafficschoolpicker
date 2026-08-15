@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { StateSelector } from "./StateSelector";
+import { MobileNav } from "./MobileNav";
 
 export function Header() {
   return (
-    <header className="bg-primary text-white">
+    <header className="relative bg-primary text-white">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5 hover:opacity-90">
           {/* Logo icon — teal circle with grad cap + chevron */}
@@ -37,6 +38,9 @@ export function Header() {
           </Link>
           <StateSelector size="sm" />
         </nav>
+
+        {/* Mobile: hamburger + dropdown (desktop nav above is hidden below md) */}
+        <MobileNav />
       </div>
     </header>
   );
