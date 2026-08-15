@@ -381,6 +381,14 @@ export const HOME_SEO: PageSeoConfig = {
 // ─── Blog Posts ───────────────────────────────────────────────
 
 export const BLOG_SEO: Record<string, PageSeoConfig> = {
+  "true-cost-of-a-traffic-ticket": {
+    title: "The True Cost of a Traffic Ticket by State (2026)",
+    description:
+      "A speeding ticket's real cost is the 3-year insurance surcharge, not the fine. Our 51-state analysis of all-in costs and where traffic school saves most.",
+    h1: "The True Cost of a Traffic Ticket in Every State (2026)",
+    primaryKeyword: "true cost of a traffic ticket",
+    canonicalPath: "/blog/true-cost-of-a-traffic-ticket",
+  },
   "how-to-dismiss-traffic-ticket-online": {
     title: "How to Dismiss a Traffic Ticket Online (2026)",
     description: "Step-by-step guide to dismissing your traffic ticket through online traffic school. Eligibility, enrollment, and certificate submission.",
