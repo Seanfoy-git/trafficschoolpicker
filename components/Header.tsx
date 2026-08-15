@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { StateSelector } from "./StateSelector";
-import Image from "next/image";
 
 export function Header() {
   return (
@@ -26,6 +25,9 @@ export function Header() {
         <nav className="hidden md:flex items-center gap-6 text-sm">
           <Link href="/schools" className="hover:text-highlight transition-colors">
             All Schools
+          </Link>
+          <Link href="/reviews" className="hover:text-highlight transition-colors">
+            Reviews
           </Link>
           <Link href="/about" className="hover:text-highlight transition-colors">
             How We Rank

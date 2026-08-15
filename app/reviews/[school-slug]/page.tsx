@@ -77,10 +77,11 @@ export default async function ReviewPage({ params }: Props) {
     author: { "@id": ORGANIZATION_ID },
   };
 
-  // Breadcrumb: Home › {School}. There is NO /reviews index route (it 404s), so
-  // the trail skips a "Reviews" crumb rather than point at a dead URL.
+  // Breadcrumb: Home › Reviews › {School}. The /reviews hub is a real index route,
+  // so the trail includes the Reviews crumb.
   const breadcrumbSchema = buildBreadcrumbList([
     { name: "Home", path: "/" },
+    { name: "Reviews", path: "/reviews" },
     { name: school.name, path: `/reviews/${school.slug}` },
   ]);
 
