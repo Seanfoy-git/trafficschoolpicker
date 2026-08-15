@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllSchools, getSchoolBySlug } from "@/lib/notion";
+import { getAllSchools, getSchoolBySlug, getSchoolReviewBody } from "@/lib/notion";
 import { ORGANIZATION_ID, buildBreadcrumbList } from "@/lib/structured-data";
+import { ReviewBody } from "@/components/ReviewBody";
 import { RatingStars } from "@/components/RatingStars";
 import { MultiRating, ReviewSynthesis } from "@/components/MultiRating";
 import { Badge } from "@/components/Badge";
@@ -54,6 +55,10 @@ export default async function ReviewPage({ params }: Props) {
 
   const allSchools = await getAllSchools();
   const competitors = allSchools.filter((s) => s.id !== school.id).slice(0, 3);
+
+  // Long-form written review from the school's Notion page body (blocks). Fetched
+  // at build/ISR; empty for schools whose body isn't written yet (no section).
+  const reviewBody = await getSchoolReviewBody(school.id);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -183,6 +188,15 @@ export default async function ReviewPage({ params }: Props) {
               )}
             </div>
           </section>
+
+          {/* Our Full Review — long-form narrative from the Notion page body.
+              Rendered only when written; sits between the quick summary and pricing. */}
+          {reviewBody.length > 0 && (
+            <section>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Our Full Review</h2>
+              <ReviewBody blocks={reviewBody} />
+            </section>
+          )}
 
           {/* Pricing */}
           <section>

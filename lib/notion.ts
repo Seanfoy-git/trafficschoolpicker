@@ -11,6 +11,9 @@ import type {
   SchoolStateVariant,
   StateFaqEntry,
   ContentStatus,
+  ReviewBlock,
+  ReviewBlockType,
+  ReviewRichText,
 } from "./types";
 import { pickCanonicalRow } from "./state-canonical";
 import { STATE_LIST, type StateMeta } from "./state-utils";
@@ -551,6 +554,53 @@ export async function getSchoolBySlug(slug: string): Promise<School | null> {
   const all = await getAllSchools();
   return all.find((s) => s.slug === slug) ?? null;
 }
+
+// ─── SCHOOL REVIEW BODY (Notion page block children) ────────
+
+const REVIEW_BLOCK_TYPES = new Set<ReviewBlockType>([
+  "paragraph",
+  "heading_2",
+  "heading_3",
+  "bulleted_list_item",
+  "numbered_list_item",
+]);
+
+function mapReviewRichText(rich: any[] | undefined): ReviewRichText[] {
+  return (rich ?? []).map((r: any) => ({
+    text: r.plain_text ?? "",
+    bold: r.annotations?.bold ?? false,
+    italic: r.annotations?.italic ?? false,
+    href: r.href ?? null,
+  }));
+}
+
+// The long-form written review lives in the School's Notion page BODY (blocks),
+// not in a property — so it needs blocks.children.list, paginated. The School's
+// `id` is the page id. This is a legitimate per-page fetch (one request per
+// review page, ~10 total) — not the batched-table pattern, because Notion has no
+// bulk "page bodies" query. cache() dedupes within a render; ISR/build keep it
+// cheap. Only the block types we render are kept; empty/spacer blocks dropped.
+// Returns [] for a page with no renderable body (school renders no review section).
+export const getSchoolReviewBody = cache(async (pageId: string): Promise<ReviewBlock[]> => {
+  if (!process.env.NOTION_TOKEN) return [];
+  const blocks: ReviewBlock[] = [];
+  let cursor: string | undefined;
+  do {
+    const res = await withNotionRetry(() =>
+      notion.blocks.children.list({ block_id: pageId, start_cursor: cursor, page_size: 100 })
+    );
+    for (const block of res.results as any[]) {
+      const type = block.type as string;
+      if (!REVIEW_BLOCK_TYPES.has(type as ReviewBlockType)) continue;
+      const richText = mapReviewRichText(block[type]?.rich_text);
+      // Skip blank blocks (e.g. Notion spacer paragraphs) so we don't emit empty <p>.
+      if (richText.every((r) => r.text.trim() === "")) continue;
+      blocks.push({ type: type as ReviewBlockType, richText });
+    }
+    cursor = res.has_more ? (res.next_cursor ?? undefined) : undefined;
+  } while (cursor);
+  return blocks;
+});
 
 // ─── SCHOOL PRICING DB ──────────────────────────────────────
 

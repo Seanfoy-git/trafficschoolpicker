@@ -216,3 +216,26 @@ export type DirectorySchool = {
   source: string;                // "CA DMV"
   lastScraped: string | null;
 };
+
+// ─── Review page body (Notion page block content) ───────────
+
+// One formatted text run within a block, reduced to the marks we render.
+export type ReviewRichText = {
+  text: string;
+  bold: boolean;
+  italic: boolean;
+  href: string | null;
+};
+
+export type ReviewBlockType =
+  | 'paragraph'
+  | 'heading_2'
+  | 'heading_3'
+  | 'bulleted_list_item'
+  | 'numbered_list_item';
+
+// A single rendered block from a school's Notion page body.
+export type ReviewBlock = {
+  type: ReviewBlockType;
+  richText: ReviewRichText[];
+};
