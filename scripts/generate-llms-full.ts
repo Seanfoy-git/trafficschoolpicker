@@ -16,6 +16,10 @@ import { writeFileSync } from "fs";
 import { join } from "path";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { STATE_LIST } from "../lib/state-utils";
+// Type-only imports are erased at compile time, so they don't trigger lib/notion's
+// module-load (its Client reads the token then). The runtime helpers are pulled in
+// via dynamic import inside main(), AFTER config() has loaded .env.local.
+import type { School, ReviewBlock, ReviewRichText } from "../lib/types";
 
 const notion = makeNotionClient();
 const STATES_DB = process.env.NOTION_STATES_DB;
@@ -39,6 +43,70 @@ type StateContent = { intro: string; faqs: { q: string; a: string }[] };
 
 function writeOut(body: string) {
   writeFileSync(join(process.cwd(), "public", "llms-full.txt"), body);
+}
+
+// ─── School review helpers ──────────────────────────────────
+
+// A single representative price for the one-line summary: the school's generic
+// price, else the cheapest per-state price. null when neither is set.
+function representativePrice(s: School): number | null {
+  if (s.genericPrice != null) return s.genericPrice;
+  const vals = Object.values(s.statePrices).filter((v): v is number => typeof v === "number");
+  return vals.length ? Math.min(...vals) : null;
+}
+
+// Whole dollars render bare ($29), cents to two places ($23.20) — never "$23.2".
+function formatPrice(n: number): string {
+  return Number.isInteger(n) ? `${n}` : n.toFixed(2);
+}
+
+// One-line fact summary — only the parts that are present (never a placeholder).
+function schoolFacts(s: School): string {
+  const parts: string[] = [];
+  if (s.rating != null) {
+    let r = `Rating ${s.rating}/5`;
+    if (s.reviewCount != null) {
+      r += ` (${s.reviewCount.toLocaleString()} reviews${s.reviewSource ? ` on ${s.reviewSource}` : ""})`;
+    }
+    parts.push(r);
+  }
+  const price = representativePrice(s);
+  if (price != null) parts.push(`from $${formatPrice(price)}`);
+  if (s.stateCodes.includes("all")) parts.push("Available nationwide");
+  else if (s.stateCodes.length) parts.push(`Covers ${s.stateCodes.length} states (${s.stateCodes.join(", ")})`);
+  if (s.courtAcceptance) parts.push(s.courtAcceptance);
+  if (s.completionHours != null) parts.push(`${s.completionHours}h course`);
+  return parts.length ? `**Facts:** ${parts.join(" · ")}` : "";
+}
+
+// Render one block's rich-text runs to inline markdown (bold/italic/link).
+function runsToMarkdown(runs: ReviewRichText[]): string {
+  return runs
+    .map((r) => {
+      let t = r.text;
+      if (r.bold) t = `**${t}**`;
+      if (r.italic) t = `*${t}*`;
+      if (r.href) t = `[${t}](${r.href})`;
+      return t;
+    })
+    .join("");
+}
+
+// Render the review body blocks to plain markdown: paragraphs as text, headings
+// as ###, list items as -/N. (numbering resets after any non-list block).
+function blocksToMarkdown(blocks: ReviewBlock[]): string {
+  const out: string[] = [];
+  let numbered = 0;
+  blocks.forEach((b, i) => {
+    const md = runsToMarkdown(b.richText);
+    if (b.type === "heading_2" || b.type === "heading_3") out.push(`### ${md}`);
+    else if (b.type === "bulleted_list_item") out.push(`- ${md}`);
+    else if (b.type === "numbered_list_item") {
+      numbered = blocks[i - 1]?.type === "numbered_list_item" ? numbered + 1 : 1;
+      out.push(`${numbered}. ${md}`);
+    } else out.push(md);
+  });
+  return out.join("\n\n");
 }
 
 async function main() {
@@ -120,8 +188,50 @@ async function main() {
     emitted++;
   }
 
+  // ── School reviews ──
+  // The long-form written reviews live in each School's Notion page body; emit
+  // them so they become citable LLM content. Reuse the app's getters via dynamic
+  // import (config() has already loaded .env.local, so lib/notion's Client sees
+  // the token). getAllSchools is already Show-On-Site + eligible. Any failure here
+  // propagates to main().catch → the committed llms-full.txt is left in place.
+  const { getAllSchools, getSchoolReviewBody } = await import("../lib/notion");
+  const schools = [...(await getAllSchools())].sort(
+    (a, b) => a.tier - b.tier || a.name.localeCompare(b.name)
+  );
+
+  let schoolsEmitted = 0;
+  if (schools.length) {
+    lines.push("# TrafficSchoolPicker.com — School Reviews");
+    lines.push("");
+    lines.push("> Independent, long-form reviews of each online traffic school we cover.");
+    lines.push("> Source: TrafficSchoolPicker editorial reviews.");
+    lines.push("");
+
+    for (const school of schools) {
+      const body = await getSchoolReviewBody(school.id);
+      lines.push(`## ${school.name} Review`);
+      lines.push("");
+      lines.push(`**URL:** ${BASE_URL}/reviews/${school.slug}`);
+      lines.push("");
+      const facts = schoolFacts(school);
+      if (facts) {
+        lines.push(facts);
+        lines.push("");
+      }
+      if (body.length) {
+        lines.push(blocksToMarkdown(body));
+        lines.push("");
+      }
+      lines.push("---");
+      lines.push("");
+      schoolsEmitted++;
+    }
+  }
+
   writeOut(lines.join("\n"));
-  console.log(`Written llms-full.txt with ${emitted} states from the States DB`);
+  console.log(
+    `Written llms-full.txt with ${emitted} states and ${schoolsEmitted} school reviews`
+  );
 }
 
 // Non-fatal: a Notion hiccup at build time should not fail the deploy — the
