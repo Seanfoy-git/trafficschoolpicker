@@ -1,6 +1,6 @@
 # trafficschoolpicker.com — System Documentation
 
-> **Last updated**: 2026-08-13
+> **Last updated**: 2026-08-14
 > **Live site**: https://www.trafficschoolpicker.com
 > **Repo**: https://github.com/Seanfoy-git/trafficschoolpicker
 
@@ -16,7 +16,7 @@ important when deciding how to extend or modify it.
 1. [What this site is](#1-what-this-site-is)
 2. [Tech stack](#2-tech-stack)
 3. [Repository structure](#3-repository-structure)
-4. [Data architecture — the eight Notion databases](#4-data-architecture--the-eight-notion-databases)
+4. [Data architecture — the Notion databases](#4-data-architecture--the-notion-databases)
 5. [Three-layer state-aware rendering](#5-three-layer-state-aware-rendering)
 6. [The affiliate gate and tracking method system](#6-the-affiliate-gate-and-tracking-method-system)
 7. [Frontend pages and routing](#7-frontend-pages-and-routing)
@@ -28,7 +28,7 @@ important when deciding how to extend or modify it.
 13. [Video embeds](#13-video-embeds)
 14. [SEO and AI discoverability](#14-seo-and-ai-discoverability)
 15. [Build and deploy](#15-build-and-deploy)
-16. [GitHub Actions monthly refresh](#16-github-actions-monthly-refresh)
+16. [GitHub Actions (scheduled refresh)](#16-github-actions-scheduled-refresh)
 17. [Environment variables](#17-environment-variables)
 18. [Maintenance playbook](#18-maintenance-playbook)
 19. [Design and operating decisions](#19-design-and-operating-decisions)
@@ -152,6 +152,7 @@ that is Notion's whole value here.
 │   ├── notion.ts                 # Single data layer for all Notion DBs
 │   ├── types.ts                  # All TypeScript types
 │   ├── affiliate.ts              # buildAffiliateLink (tracking method branches)
+│   ├── structured-data.ts        # Typed JSON-LD builders (Org, Product/ItemList, Video, Breadcrumb) — §14
 │   ├── seo-config.ts             # Per-page SEO metadata (51 states + 9 posts)
 │   ├── state-utils.ts            # STATE_LIST (51: 50 states + DC), slug/code/name utils
 │   ├── state-canonical.ts        # pickCanonicalRow — dedup States DB rows
@@ -198,11 +199,12 @@ that is Notion's whole value here.
 
 ---
 
-## 4. Data architecture — the eight Notion databases
+## 4. Data architecture — the Notion databases
 
-The site has **eight Notion databases**, each with a clear single
-responsibility. Database IDs are stored in env vars; the frontend reads
-them at module-init time (see [lib/notion.ts](lib/notion.ts)).
+Eight content databases (4.1–4.8) feed the frontend, plus one scraper-ops
+database (4.9, Scraper Rules) that drives the price/offer pipeline. Each has a
+clear single responsibility. Database IDs are stored in env vars; the frontend
+reads them at module-init time (see [lib/notion.ts](lib/notion.ts)).
 
 ### 4.1 Traffic Schools DB
 Env: `NOTION_SCHOOLS_DB`
@@ -247,6 +249,8 @@ where price differs from the global default. Each row has:
 - **Affiliate URL** (state-specific override of network URL)
 - **Price Note** (e.g. "$24.95 with code")
 - **Approved** (checkbox) — gate
+- **Active Offer** (checkbox), **Sale Price** (number), **Offer Seen** (date) — live-promo fields set by the daily offer pass (§9.3). A scraper-set sale auto-expires after a TTL keyed on `Offer Seen`; a manual offer (no `Offer Seen`) is honored indefinitely.
+- **Price Scrape Status** (select) — `OK` / `Needs Review` / `Blocked` / `Dead URL`, set by the scraper's quarantine logic.
 
 The price waterfall in the resolver is:
 `variant.priceOverride → pricing DB → school.statePrices[STATE] → school.genericPrice → null`
@@ -341,6 +345,18 @@ Scraper failure tracking. The scraping infrastructure logs to this DB instead
 of failing silently or breaking the build. Each issue has Title, Source,
 Severity, School relation, Details, Occurrences, First Seen, Last Seen.
 Recurring issues bump Occurrences rather than creating duplicates.
+
+### 4.9 Scraper Rules DB
+Env: `NOTION_SCRAPER_RULES_DB`
+
+Course-type-gated source of truth for the price/offer scraper (§9.3) — one
+hand-curated row per school × state × course-type. Fields: Rule Name, School
+Slug, State Code, Course Type, Variant, Target URL, Price Basis, **Verified
+Price** (the anchor that actually renders), **Expected Min/Max** (per-rule sanity
+band), Extract Hint, **Status** (only `Verified` rows are scraped), and **Price
+Locked** (checkbox — suppress the band-check for multi-tier pages while offers
+still run). The scraper falls back to the static `price-sources.ts` list if this
+DB is unset, so a Notion outage can't leave it with zero targets.
 
 ### Data flow summary
 
@@ -582,6 +598,7 @@ The most complex page. Flow:
 4. Render order (top to bottom):
    - Hero with state flag (desktop only — `hidden md:block`)
    - TrustBar ("Last verified …")
+   - **Key Facts** (`StateKeyFacts`) — a scannable `<dl>` summary (online availability, ticket dismissal, course length, typical cost, eligibility, certificate submission) targeting featured snippets / AI Overviews. First substantive content; rows render only when their value is present, and adapt to `onlineStatus`. "Typical cost" reuses `lowestDisplayedPrice` so it matches the cards.
    - **Intro Paragraph** (if set)
    - **True Cost of a Ticket** section — H2 + prose, between the intro and the comparison (if set)
    - Status banners, keyed on `onlineStatus`:
@@ -605,14 +622,25 @@ search). This is the home for Tier 2 schools — they are not on state pages.
 
 `generateStaticParams` builds one route per school. Renders ratings,
 synthesized review highlights, pros/cons (school defaults, not state-specific),
-a feature comparison table against 3 competitors, and a sidebar CTA. Includes
-JSON-LD `Review` schema.
+and — between the quick summary and pricing — an **"Our Full Review"** section:
+the long-form written review stored in the school's **Notion page body**
+(blocks), fetched via `getSchoolReviewBody(school.id)` and rendered by
+`ReviewBody` (paragraphs → `<p>`, headings → `<h3>`, list runs grouped into
+`<ul>`/`<ol>`, with bold/italic/link marks). The section renders only when the
+body is non-empty — a school with no written body simply omits it. Also a feature
+comparison table against 3 competitors and a sidebar CTA. Includes JSON-LD
+`Review` + `BreadcrumbList` schema.
 
 ### Blog
 
 MDX with frontmatter (`title`, `description`, `date`, `published`, `category`).
-Each post can use a `<QuickAnswer>` component for above-the-fold direct answers.
-9 long-form posts; index page sorts by date.
+The MDX pipeline (`next.config.ts` → `createMDX`) wires plugins **as string
+names** (Turbopack serializes the config to Rust and can't take imported
+functions): `remark-frontmatter` (so the YAML block isn't rendered as body
+content — gray-matter still reads it for metadata), `remark-gfm` (pipe tables +
+strikethrough — `BlogMdxComponents` styles `<table>`/`<th>`/`<td>`), and
+`rehype-slug` (heading ids). Each post can use a `<QuickAnswer>` component for
+above-the-fold direct answers. 9 long-form posts; index page sorts by date.
 
 ---
 
@@ -622,7 +650,9 @@ Each post can use a `<QuickAnswer>` component for above-the-fold direct answers.
 
 | Component | Notes |
 |---|---|
-| `SchoolCard` | Tier 1 card. Reads from `resolved`. Renders one-liner, pros/cons, best-for, price, AffiliateButton, optional CouponCode, link to `/reviews/[slug]`. |
+| `SchoolCard` | Tier 1 card. Reads from `resolved`. Renders one-liner, pros/cons, best-for, price (struck regular + sale + "Save X%" when a live offer undercuts), AffiliateButton, optional CouponCode, link to `/reviews/[slug]`. |
+| `StateKeyFacts` | Scannable `<dl>` "Key Facts" summary at the top of a state page (snippet/AI-Overview target). Rows render only when present; adapts to `onlineStatus`; returns `null` when empty. |
+| `ReviewBody` | Renders a school's long-form review (Notion page blocks) as prose on `/reviews/[slug]` — paragraphs, `<h3>`, grouped lists, bold/italic/link marks. |
 | `SchoolsDirectoryTable` | `/schools` table. Client. Sortable, filterable. |
 | `DirectoryTable` | DMV-scraped school list per state. |
 | `MultiRating` + `ReviewSynthesis` | Multi-platform rating badges (Trustpilot, Google, App Store, Play Store, BBB). Color-coded by platform. ReviewSynthesis renders the "What reviewers say" good/bad block on detail pages only. |
@@ -706,13 +736,35 @@ based on a ≥0.1 delta.
 
 ### 9.3 Price scraper — `scripts/scrape-prices.ts`
 
-Reads [scripts/config/price-sources.ts](scripts/config/price-sources.ts) — a
-list of `{schoolSlug, stateCode, method: 'dom' | 'fixed', url, selector}`.
-Writes to the **School Pricing DB** keyed by `{slug}-{stateCode}`. Updates
-existing rows in place via the School relation.
+Targets come from the **Scraper Rules DB** (`Status = Verified` rows — one per
+school × state × course-type, with a hand-Verified Price anchor and an Expected
+Min/Max band), falling back to the typed [scripts/config/price-sources.ts](scripts/config/price-sources.ts)
+list if that DB is unset. Writes to the **School Pricing DB** keyed by
+`{slug}-{stateCode}`, updating rows in place. JS-heavy storefronts that fail DOM
+scraping use `method: 'fixed'`.
 
-DriversEd.com and other JS-heavy storefronts often fail DOM scraping; those
-are set with `method: 'fixed'` and updated manually.
+**Quarantine (WS1/WS2):** a scrape is only written if it agrees with the rule —
+out-of-band or drifting-from-verified values are **quarantined** (`Needs Review`,
+the live price left untouched), never allowed to clobber a human-verified price.
+The Verified Price is what renders; a bad scrape can only change the *status*.
+
+**Live offers (daily promo pass):** the scraper also detects promotions and sets
+`Active Offer` / `Sale Price` / `Offer Seen` on the Pricing row. The reliable
+current price comes from the page's **JSON-LD** (`Offer`/`AggregateOffer` `price`,
+`min` = base tier), with DOM strikethrough as a fallback; it's judged against the
+price we *display*, so a wrong-tier grab can't fake a discount. Writes are
+SET-only (never clears a live/manual offer). Site-side, a scraper-set sale
+auto-expires after a TTL (`OFFER_TTL_DAYS`, keyed on `Offer Seen`); a manual
+offer (no `Offer Seen`) is honored indefinitely.
+
+**`Price Locked`** (Scraper Rules DB checkbox): for multi-tier pages whose price
+scrape reliably grabs the wrong tier, this suppresses the band-check
+(the Verified Price is authoritative → no more `Needs Review`) while offer
+detection still runs. Currently set on `aceable-TX` and `idrivesafely-TX`.
+
+**Cadence:** the heavy pass (DMV + reviews + regular-price re-verify) is monthly
+(§16); a **daily** pass runs just the price/offer targets. See §16 for the
+self-closing GitHub issue that surfaces `Needs Review` items.
 
 ### 9.4 Google Places enrichment — `scripts/enrich-places.ts`
 
@@ -863,23 +915,26 @@ correction.
 ## 13. Video embeds
 
 [app/[state]/page.tsx](app/[state]/page.tsx) has a `STATE_VIDEOS` map at the
-top of the file:
+top of the file. Each entry carries the YouTube id **plus the metadata the
+`VideoObject` JSON-LD needs** (all real values — never fabricated):
 
 ```typescript
-const STATE_VIDEOS: Record<string, string> = {
-  "texas": "jAH-kz9dhF0",
-  "california": "kx_B0jgBjW4",
-  "florida": "1zM7hwLvWPc",
+const STATE_VIDEOS: Record<string, { id: string; uploadDate: string; duration: string; title: string }> = {
+  "california": { id: "kx_B0jgBjW4", uploadDate: "2026-04-16", duration: "PT3M16S", title: "How to Do California Traffic School Online…" },
   // ...
 };
 ```
 
-When a state has an entry, the page renders a 16:9 responsive iframe with
-modest branding and `rel=0` (related videos restricted to the channel).
-Embedded between the trust bar and Tier 1 cards for above-fold visibility.
+When a state has an entry, the page renders a 16:9 responsive iframe (modest
+branding, `rel=0`) in its own section with an H2, embedded between the trust bar
+and Tier 1 cards. That section also emits a **`VideoObject`** (name, description
+from the state's intro paragraph with a factual fallback, `thumbnailUrl` =
+`i.ytimg.com/vi/{id}/hqdefault.jpg`, `uploadDate`, ISO-8601 `duration`,
+`embedUrl`, and the watch-page `url`) — the dedicated section + H2 is what makes
+the page a "watch page" for Google's video index.
 
-Adding a new state video is a one-line change: paste the `youtu.be/XXXX` ID
-into the map.
+Adding a new state video: add one entry with the id + real upload date, duration
+(ISO 8601, e.g. `PT2M38S`), and title. See §18.
 
 ---
 
@@ -906,22 +961,45 @@ Status = `Complete`) — so the sitemap and the link graph never diverge:
 ### Sitemap (`app/sitemap.ts`)
 
 Generates entries for: homepage, /schools, /about, /blog, every **Complete**
-state page (gated on `getLinkableStateCodes()` — currently all 51), and all 9
-blog posts. Gating on `Complete` was the fix for a Google Search Console
-"Discovered – currently not indexed" backlog from submitting thin/templated
-pages. Priorities: home 1.0, state pages 0.9, /schools 0.9, blog 0.7-0.8,
-about 0.5.
+state page (gated on `getLinkableStateCodes()` — currently all 51), all 9
+blog posts, and **every Show-On-Site school review page** (`/reviews/<slug>`,
+one per `getAllSchools()` school). Gating state pages on `Complete` was the fix
+for a Google Search Console "Discovered – currently not indexed" backlog from
+submitting thin/templated pages. Priorities: home 1.0, state pages 0.9,
+/schools 0.9, blog 0.7-0.8, review pages 0.6, about 0.5. Every entry carries a
+**real content `lastModified`** — each state's "Last Verified", each post's
+`updatedAt`, each school's `lastVerified` — never build time (a build-time
+lastmod trains Google to ignore the signal).
 
 ### JSON-LD
 
-- `FAQPage` on every state page (via `FAQJsonLd` component)
-- `Review` on each `/reviews/[slug]` page
-- `Article` on each blog post
+Schema builders live in one typed module, [lib/structured-data.ts](lib/structured-data.ts)
+(no `any`), and are emitted server-side (in the initial HTML) following the
+`<script type="application/ld+json">` pattern in `FaqSection`:
+
+- **`Organization` + `WebSite` entity graph** — defined **once** in
+  `app/layout.tsx` (an `@graph`, `@id` `…/#organization`), rendered on every
+  page. `logo` → `public/logo.png` (512×512). Blog `publisher` and review
+  `author` reference it by `@id` rather than redefining it — exactly one
+  Organization node site-wide. No `SearchAction` (there is no on-site search).
+- **`Product` / `Offer` / `AggregateRating` / `ItemList`** on state pages — an
+  ordered `ItemList` of the Tier-1 comparison cards. The `Offer` price equals the
+  price the card actually shows (sale when a live offer undercuts, else regular —
+  reuses the same `displayedPrice`/`lowestDisplayedPrice` logic as the cards, so
+  it can't drift); `AggregateRating` is emitted only from genuine `rating` +
+  `reviewCount` (never fabricated). Gated on the same condition as the cards.
+- **`VideoObject`** on the ~8 state pages with an embedded video (see §13).
+- **`BreadcrumbList`** on state (`Home › State`), blog (`Home › Blog › Post`),
+  and review (`Home › School` — no "Reviews" crumb, because `/reviews` has no
+  index route and must not point at a 404) pages.
+- **`FAQPage`** on every state page (via `FaqSection`).
+- **`Review`** on each `/reviews/[slug]` page.
+- **`Article`** on each blog post.
 
 ### LLM discoverability
 
 - `public/llms.txt` — static, hand-curated (50 states + 9 posts + 6 reviews + 12 key facts)
-- `public/llms-full.txt` — auto-generated by `scripts/generate-llms-full.ts` at prebuild from the **States DB** (Intro Paragraph + State FAQ JSON), one section per Complete state with its real page slug. All 51 states. (Previously read the legacy FAQ DB and emitted `/CA`-style code URLs; re-sourced when the FAQs moved to the States DB.)
+- `public/llms-full.txt` — auto-generated by `scripts/generate-llms-full.ts` at prebuild. Two sections: (1) one per Complete state, from the **States DB** (Intro Paragraph + State FAQ JSON) with its real page slug (all 51 states); (2) **one per Show-On-Site school review** — `## {Name} Review`, the `/reviews/<slug>` URL, a one-line fact summary (rating/reviews/source, price, states covered, court acceptance, hours), then the full review body rendered to markdown (reuses `getAllSchools` + `getSchoolReviewBody`). Fail-safe: the file is written once at the end, so any Notion hiccup leaves the committed `llms-full.txt` in place.
 
 This is run by the `prebuild` npm hook so every Vercel build gets fresh content.
 
@@ -985,11 +1063,25 @@ data refresh, and available as a manual trigger from `/admin`.
 
 ---
 
-## 16. GitHub Actions monthly refresh
+## 16. GitHub Actions (scheduled refresh)
 
-[.github/workflows/monthly-update.yml](.github/workflows/monthly-update.yml)
+Two workflows:
 
-### Schedule
+- [.github/workflows/monthly-update.yml](.github/workflows/monthly-update.yml) — the full heavy refresh (below).
+- [.github/workflows/daily-offers.yml](.github/workflows/daily-offers.yml) — a light **daily** pass (`0 13 * * *`) that runs only `scrape:prices` (current prices + live offers) then fires `VERCEL_DEPLOY_HOOK` to publish. `workflow_dispatch` takes a `report` boolean (read-only, zero Notion writes). The scrape step is `continue-on-error` so a flaky target never blocks the publish.
+
+### Daily price-review issue (self-closing)
+
+The daily scrape writes `scrape-review.json`; a notifier step opens/edits **one**
+GitHub issue ("🔎 Prices to review", label `price-review`) listing each
+`Needs Review` target, and **auto-closes it** when the review queue is empty. The
+issue mirrors each run — closing it by hand without fixing the mismatch just
+reopens it next run, so **silence means all-clear**. To clear a target, edit its
+**Scraper Rules DB** row: update Verified Price + band (real price change) or tick
+**Price Locked** (verified price stands; see §9.3). Needs `issues: write`
+permission (uses the built-in `GITHUB_TOKEN`).
+
+### Monthly full refresh — schedule
 
 `0 9 1 * *` — first of every month at 09:00 UTC. Plus `workflow_dispatch`
 for manual triggers.
@@ -1012,7 +1104,8 @@ for manual triggers.
 `NOTION_TOKEN`, `NOTION_SCHOOLS_DB`, `NOTION_DIRECTORY_DB`, `NOTION_STATES_DB`,
 `NOTION_PRICING_DB`, `NOTION_FAQ_DB_ID`, `NOTION_STATE_REQUIREMENTS_DB`,
 `NOTION_SCHOOL_VARIANTS_DB`, `GOOGLE_PLACES_API_KEY`. Optional:
-`NOTION_ISSUES_DB`, `VERCEL_DEPLOY_HOOK`.
+`NOTION_ISSUES_DB`, `VERCEL_DEPLOY_HOOK`. The daily workflow also uses
+`NOTION_SCRAPER_RULES_DB` (price targets — see §9.3).
 
 ---
 
@@ -1049,8 +1142,26 @@ API returns `404 object_not_found`.
 
 ### Add a new state video
 
-Edit `STATE_VIDEOS` in [app/[state]/page.tsx](app/[state]/page.tsx). One-line
-change. Commit and push. Vercel auto-deploys within ~3 minutes.
+Add one entry to `STATE_VIDEOS` in [app/[state]/page.tsx](app/[state]/page.tsx)
+with the YouTube `id`, real `uploadDate`, ISO-8601 `duration` (e.g. `PT2M38S`),
+and `title` — these feed the `VideoObject` JSON-LD (§13), so use real values,
+never guesses. Commit and push; Vercel auto-deploys in ~3 minutes.
+
+### Handle a "Prices to review" issue
+
+The daily workflow opens one GitHub issue when a scrape disagrees with the
+Scraper Rules DB (§16). Per flagged target, edit its **Scraper Rules DB** row:
+either update **Verified Price** + Expected Min/Max to the real new price, or tick
+**Price Locked** if the verified price still stands (multi-tier page). Don't just
+close the issue — the next run reopens it if the mismatch remains; it auto-closes
+once every target is back in band.
+
+### Write a school's full review
+
+The long-form review on `/reviews/<slug>` comes from the **body of that school's
+Notion page** (paragraphs, headings, lists, a bold "Bottom line." line). Write it
+in Notion; the "Our Full Review" section (and the `llms-full.txt` entry) appear on
+the next build — no code change. A school with an empty body renders no section.
 
 ### Promote a school from Tier 2 to Tier 1
 
@@ -1295,6 +1406,11 @@ same as Massachusetts and Oregon. The site therefore has **51** state pages, not
 - **RI PDF parser**: only extracts 1 school. Regex needs improvement.
 - **Aceable FL** and **TicketSchool CA** price scraping: both fail; manual
   fallback in place.
+- **Video "watch page" (GSC)**: state pages now emit `VideoObject` in a
+  dedicated section, but the video is one section on a comparison page, not the
+  page's main content — so Google may not fully clear the "Video isn't on a watch
+  page" flag. It's an enhancement (video rich results), not a ranking penalty. A
+  true fix would be dedicated `/watch/<state>` pages (see Future work).
 
 ### Future work
 
