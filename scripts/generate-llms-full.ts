@@ -228,9 +228,29 @@ async function main() {
     }
   }
 
+  // ── True Cost of a Traffic Ticket (fixed 2026 study) ──
+  // A static block (no Notion data) so the per-state cost figures become citable
+  // LLM facts. Appended last so the file ends with the study section.
+  lines.push(
+    "## The True Cost of a Traffic Ticket (2026 study)",
+    "",
+    "> TrafficSchoolPicker analysis of all 51 US jurisdictions. All-in cost of a first speeding ticket",
+    "> = fine + estimated 3-year insurance surcharge. Full write-up:",
+    "> https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket",
+    "",
+    "- Nationally, one speeding ticket costs about $435 more per year in insurance (~$1,300 over 3 years). The average 24-25% rate increase dwarfs the ~$130 average 10-over fine.",
+    "- Most expensive states, all-in: Michigan $8,742, California $5,619, Hawaii $5,227, Texas $5,047, New Jersey $4,965, Delaware $4,582, Louisiana $4,512, Rhode Island $4,481, Nevada $4,228, Florida $4,170.",
+    "- Cheapest states, all-in: Vermont $1,305, Montana $1,486, Pennsylvania $1,494, Nebraska $1,528, Ohio $1,684, Utah $1,792, Virginia $1,818, Maryland $1,869, New Hampshire $2,024, Maine $2,100.",
+    "- Biggest traffic-school net savings: Michigan ~$8,600, California ~$5,300, Hawaii ~$5,050, Texas ~$4,650, Louisiana ~$4,300, Nevada ~$3,950, Florida ~$3,900, Tennessee ~$2,950, Arizona ~$2,950, Oklahoma ~$2,350.",
+    "- Texas example: a driving-safety-course dismissal (~$182 all-in incl. court fee + driving record) prevents ~$4,800 in 3-year surcharges, ~26x return. Mechanism is dismissal, not a discount.",
+    "- Course mechanisms differ by state: masking (CA, VC §1808.7), dismissal (TX, Art. 45A.352), adjudication withheld (FL, §318.14), base-rate discount (NY PIRP, insurers still see the ticket), one-time point masking (MI BDIC). PA/MA/NJ/KS offer little for a first ticket.",
+    "- Sources: FinanceBuzz (fines), CarInsurance.com/Quadrant (surcharges), U.S. News, NHTSA. Rankings are source-dependent (esp. Hawaii).",
+    ""
+  );
+
   writeOut(lines.join("\n"));
   console.log(
-    `Written llms-full.txt with ${emitted} states and ${schoolsEmitted} school reviews`
+    `Written llms-full.txt with ${emitted} states, ${schoolsEmitted} school reviews, and the True Cost study`
   );
 }
 
