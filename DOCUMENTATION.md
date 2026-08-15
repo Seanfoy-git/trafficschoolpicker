@@ -88,7 +88,7 @@ rendered anywhere on the site.
 | PDF parsing | `pdf-parse@1.1.1` | OK / MN / WY / RI directory PDFs |
 | Google Places | Places API (New) | School website enrichment + ratings |
 | App store data | iTunes Lookup API + `google-play-scraper` | Mobile app ratings |
-| Blog | MDX via `@next/mdx` | 9 long-form posts in `content/blog/` |
+| Blog | MDX via `@next/mdx` | 10 long-form posts in `content/blog/` |
 | Analytics | Google Tag (gtag.js, `AW-18090793804`) | Loaded `afterInteractive` from layout |
 | Verification | Impact site verification meta tag | For Impact affiliate network |
 
@@ -153,7 +153,7 @@ that is Notion's whole value here.
 │   ├── types.ts                  # All TypeScript types
 │   ├── affiliate.ts              # buildAffiliateLink (tracking method branches)
 │   ├── structured-data.ts        # Typed JSON-LD builders (Org, Product/ItemList, Video, Breadcrumb) — §14
-│   ├── seo-config.ts             # Per-page SEO metadata (51 states + 9 posts)
+│   ├── seo-config.ts             # Per-page SEO metadata (51 states + 10 posts)
 │   ├── state-utils.ts            # STATE_LIST (51: 50 states + DC), slug/code/name utils
 │   ├── state-canonical.ts        # pickCanonicalRow — dedup States DB rows
 │   ├── state-adjacency.ts        # Geographic neighbor map (NearbyStates)
@@ -163,7 +163,7 @@ that is Notion's whole value here.
 │   └── blog.ts                   # MDX frontmatter reader
 │
 ├── content/
-│   └── blog/*.mdx                # 9 blog posts with MDX + QuickAnswer
+│   └── blog/*.mdx                # 10 blog posts with MDX + QuickAnswer
 │
 ├── scripts/
 │   ├── lib/                      # Shared scraper utils + issue tracking
@@ -575,7 +575,7 @@ To switch to coupon-code:
 | `/schools` | [app/schools/page.tsx](app/schools/page.tsx) | Full schools directory (sortable, filterable) | 24h |
 | `/reviews/[school-slug]` | [app/reviews/[school-slug]/page.tsx](app/reviews/[school-slug]/page.tsx) | School detail / review pages | 24h |
 | `/blog` | [app/blog/page.tsx](app/blog/page.tsx) | Blog index | 24h |
-| `/blog/[slug]` | [app/blog/[slug]/page.tsx](app/blog/[slug]/page.tsx) | MDX blog posts (9 posts) | 24h |
+| `/blog/[slug]` | [app/blog/[slug]/page.tsx](app/blog/[slug]/page.tsx) | MDX blog posts (10 posts) | 24h |
 | `/about` | [app/about/page.tsx](app/about/page.tsx) | Methodology + affiliate disclosure | static |
 | `/admin` | [app/admin/page.tsx](app/admin/page.tsx) | Internal dashboard (env checks, school counts) | dynamic |
 | `/api/click` | route handler | Click tracking endpoint | dynamic |
@@ -650,7 +650,7 @@ functions): `remark-frontmatter` (so the YAML block isn't rendered as body
 content — gray-matter still reads it for metadata), `remark-gfm` (pipe tables +
 strikethrough — `BlogMdxComponents` styles `<table>`/`<th>`/`<td>`), and
 `rehype-slug` (heading ids). Each post can use a `<QuickAnswer>` component for
-above-the-fold direct answers. 9 long-form posts; index page sorts by date.
+above-the-fold direct answers. 10 long-form posts; index page sorts by date.
 
 ---
 
@@ -953,7 +953,7 @@ Adding a new state video: add one entry with the id + real upload date, duration
 ### `lib/seo-config.ts`
 
 Centralised metadata: `STATE_SEO` (51 entries incl. `washington-dc`), `BLOG_SEO`
-(9 posts), `HOME_SEO`. Each entry has title (≤60 chars), description (≤155
+(10 posts), `HOME_SEO`. Each entry has title (≤60 chars), description (≤155
 chars), h1, primaryKeyword, canonicalPath. `validateSeoConfig()` warns in dev on
 overlong strings. A state page renders fine without a `STATE_SEO` entry (generic
 fallback), so this map is enhancement, not a requirement.
@@ -972,7 +972,7 @@ Status = `Complete`) — so the sitemap and the link graph never diverge:
 
 Generates entries for: homepage, /schools, /about, /blog, the **/reviews hub**,
 every **Complete** state page (gated on `getLinkableStateCodes()` — currently all
-51), all 9 blog posts, and **every Show-On-Site school review page**
+51), all 10 blog posts, and **every Show-On-Site school review page**
 (`/reviews/<slug>`, one per `getAllSchools()` school). Gating state pages on
 `Complete` was the fix for a Google Search Console "Discovered – currently not
 indexed" backlog from submitting thin/templated pages. Priorities: home 1.0,
