@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllSchools, getSchoolBySlug, getSchoolReviewBody } from "@/lib/notion";
-import { ORGANIZATION_ID, buildBreadcrumbList } from "@/lib/structured-data";
+import { ORGANIZATION_ID, buildBreadcrumbList, schoolImageUrl } from "@/lib/structured-data";
 import { ReviewBody } from "@/components/ReviewBody";
 import { RatingStars } from "@/components/RatingStars";
 import { MultiRating, ReviewSynthesis } from "@/components/MultiRating";
@@ -44,6 +44,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${school.name} Review — TrafficSchoolPicker`,
       description: `Is ${school.name} worth it? Read our in-depth review with pricing, features, and student feedback.`,
+      url: `https://www.trafficschoolpicker.com/reviews/${school.slug}`,
+      siteName: "TrafficSchoolPicker",
+      type: "article",
+      images: [schoolImageUrl(school.slug)],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${school.name} Review — TrafficSchoolPicker`,
+      images: [schoolImageUrl(school.slug)],
     },
   };
 }

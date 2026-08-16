@@ -92,6 +92,8 @@ interface BrandSchema {
 interface ProductSchema {
   "@type": "Product";
   name: string;
+  image: string[];
+  description: string;
   url: string;
   brand: BrandSchema;
   offers?: OfferSchema;
@@ -137,6 +139,41 @@ function productUrl(slug: string, stateSlug: string, reviewSlugs: ReadonlySet<st
   return reviewSlugs.has(slug) ? `${SITE}/reviews/${slug}` : `${SITE}/${stateSlug}`;
 }
 
+/** Absolute URL of a school's branded card image (public/images/schools/<slug>.png). */
+export function schoolImageUrl(slug: string): string {
+  return `${SITE}/images/schools/${slug}.png`;
+}
+
+/**
+ * A unique, factual one-liner per (school, state) describing the COURSE — never
+ * its score. Deliberately excludes rating/reviewCount: those are Trustpilot-
+ * sourced, and restating them here is the same provenance problem as the
+ * aggregateRating node (handled separately). Uses only facts the page already
+ * VISIBLY asserts — displayed price, the state's mandated hours (Key Facts), its
+ * approval body (card + Key Facts), and mobile app (card) — never a claim that
+ * isn't on the page (e.g. certificate handling, which is not displayed). State
+ * name + price keep it unique per state (no duplicate strings across pages).
+ */
+function buildProductDescription(
+  school: SchoolWithPrice,
+  resolved: ResolvedSchoolContent,
+  stateName: string,
+  price: number | null
+): string {
+  const specs: string[] = [];
+  if (resolved.mandatedHours) specs.push(`${resolved.mandatedHours}-hour`);
+  specs.push(
+    resolved.approvalBodyShort && resolved.approvalBodyShort !== "State Approved"
+      ? `${resolved.approvalBodyShort}-approved`
+      : "state-approved"
+  );
+  let lead = `${school.name}'s ${specs.join(" ")} online traffic school course for ${stateName}`;
+  if (price !== null) lead += `, $${price.toFixed(2)}`;
+  if (school.mobileApp) lead += `, with a mobile app`;
+
+  return `${lead}. Read our independent review and compare ${stateName}-approved online courses.`;
+}
+
 function buildProduct(
   { school, resolved }: SchemaSchool,
   stateName: string,
@@ -144,16 +181,24 @@ function buildProduct(
   reviewSlugs: ReadonlySet<string>
 ): ProductSchema {
   const url = productUrl(school.slug, stateSlug, reviewSlugs);
+  const price = displayedPrice(school, resolved);
 
   const product: ProductSchema = {
     "@type": "Product",
     name: `${school.name} — ${stateName} Traffic School`,
+    // Array form: Google accepts repeated image values; the card genuinely
+    // represents the school being marked up (name + rating + branding).
+    image: [schoolImageUrl(school.slug)],
+    description: buildProductDescription(school, resolved, stateName, price),
     url,
     brand: { "@type": "Brand", name: school.name },
   };
 
+  // NOTE: deliberately NO hasMerchantReturnPolicy / shippingDetails — those are
+  // merchant-listing-only fields for pages that SELL the product. TSP links out
+  // to affiliates; nobody checks out here, so asserting them would be false.
+
   // Offer — only when the card shows a price (matches it exactly, to the cent).
-  const price = displayedPrice(school, resolved);
   if (price !== null) {
     product.offers = {
       "@type": "Offer",

@@ -34,17 +34,21 @@ import {
 } from "lucide-react";
 
 // Embedded state explainer videos — YouTube id plus the metadata VideoObject
-// JSON-LD needs (real values). Add new states as videos are published.
+// JSON-LD needs. uploadDate is each video's REAL publish datetime (full ISO 8601
+// with timezone), taken verbatim from YouTube's own record (watch-page
+// microformat / Data API snippet.publishedAt) — a date-only or shared value fails
+// Google's video validation and can get the result dropped. Per video, never a
+// shared constant.
 const STATE_VIDEOS: Record<string, VideoEntry> = {
-  "california":  { id: "kx_B0jgBjW4", uploadDate: "2026-04-16", duration: "PT3M16S", title: "How to Do California Traffic School Online and Keep Points Off Your Record" },
-  "texas":       { id: "jAH-kz9dhF0", uploadDate: "2026-04-16", duration: "PT2M38S", title: "Texas Defensive Driving 2026 — How to Get Your Ticket Dismissed" },
-  "florida":     { id: "1zM7hwLvWPc", uploadDate: "2026-04-16", duration: "PT2M42S", title: "Florida Traffic Ticket? Here's How to Keep Points Off Your License (2026)" },
-  "new-york":    { id: "-eYzNko2dmQ", uploadDate: "2026-04-16", duration: "PT2M11S", title: "New York Speeding Ticket? Reduce Your Points & Insurance With PIRP (2026)" },
-  "georgia":     { id: "VtNRogHhy_A", uploadDate: "2026-04-16", duration: "PT2M17S", title: "Georgia Speeding Ticket? The Super Speeder Law & How to Remove 7 Points (2026)" },
-  "ohio":        { id: "IlMoa1atiBY", uploadDate: "2026-04-16", duration: "PT2M43S", title: "Ohio Traffic Ticket? Call Your Court First — Here's Why It Matters (2026)" },
-  "arizona":     { id: "udlHdWl1cdM", uploadDate: "2026-04-22", duration: "PT2M29S", title: "Arizona Defensive Driving Course 2026 — How to Dismiss a Ticket Online" },
+  "california":  { id: "kx_B0jgBjW4", uploadDate: "2026-04-16T11:58:39-07:00", duration: "PT3M16S", title: "How to Do California Traffic School Online and Keep Points Off Your Record" },
+  "texas":       { id: "jAH-kz9dhF0", uploadDate: "2026-04-16T12:05:35-07:00", duration: "PT2M38S", title: "Texas Defensive Driving 2026 — How to Get Your Ticket Dismissed" },
+  "florida":     { id: "1zM7hwLvWPc", uploadDate: "2026-04-16T11:47:53-07:00", duration: "PT2M42S", title: "Florida Traffic Ticket? Here's How to Keep Points Off Your License (2026)" },
+  "new-york":    { id: "-eYzNko2dmQ", uploadDate: "2026-04-16T11:53:47-07:00", duration: "PT2M11S", title: "New York Speeding Ticket? Reduce Your Points & Insurance With PIRP (2026)" },
+  "georgia":     { id: "VtNRogHhy_A", uploadDate: "2026-04-16T11:39:12-07:00", duration: "PT2M17S", title: "Georgia Speeding Ticket? The Super Speeder Law & How to Remove 7 Points (2026)" },
+  "ohio":        { id: "IlMoa1atiBY", uploadDate: "2026-04-16T16:16:21-07:00", duration: "PT2M43S", title: "Ohio Traffic Ticket? Call Your Court First — Here's Why It Matters (2026)" },
+  "arizona":     { id: "udlHdWl1cdM", uploadDate: "2026-04-22T16:30:14-07:00", duration: "PT2M29S", title: "Arizona Defensive Driving Course 2026 — How to Dismiss a Ticket Online" },
   // Replaces the prior 8Qtg9viSfbY, which YouTube had removed (oEmbed 404).
-  "new-jersey":  { id: "Fa9M1EKNMV8", uploadDate: "2026-04-22", duration: "PT2M55S", title: "New Jersey Defensive Driving Course 2026 — What It Actually Does (And What It Doesn't)" },
+  "new-jersey":  { id: "Fa9M1EKNMV8", uploadDate: "2026-04-22T17:13:57-07:00", duration: "PT2M55S", title: "New Jersey Defensive Driving Course 2026 — What It Actually Does (And What It Doesn't)" },
 };
 
 export const revalidate = 86400;
@@ -60,12 +64,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const stateMeta = getStateBySlug(stateSlug);
   if (!stateMeta) return {};
 
+  // Per-state OG card (public/images/states/<slug>.png) — real 1200x630 asset.
+  const ogImage = `https://www.trafficschoolpicker.com/images/states/${stateMeta.slug}.png`;
+
   const seo = STATE_SEO[stateSlug];
   if (!seo) {
     return {
       title: `Online Traffic School in ${stateMeta.name} (2026)`,
       description: `Compare court-approved online traffic schools in ${stateMeta.name}. Find the lowest price and enroll today.`,
       alternates: { canonical: `https://www.trafficschoolpicker.com/${stateMeta.slug}` },
+      openGraph: {
+        title: `Online Traffic School in ${stateMeta.name} (2026)`,
+        url: `https://www.trafficschoolpicker.com/${stateMeta.slug}`,
+        siteName: "TrafficSchoolPicker",
+        type: "website",
+        images: [ogImage],
+      },
+      twitter: { card: "summary_large_image", images: [ogImage] },
     };
   }
 
@@ -79,11 +94,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `https://www.trafficschoolpicker.com${seo.canonicalPath}`,
       siteName: "TrafficSchoolPicker",
       type: "website",
+      images: [ogImage],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: seo.title,
       description: seo.description,
+      images: [ogImage],
     },
   };
 }
