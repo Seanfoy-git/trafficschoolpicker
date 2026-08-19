@@ -891,15 +891,21 @@ export function resolveStateContent(
 
   // Price waterfall (WS2 collapse): variant override → RAW Pricing-DB value (the
   // verified price, synced from the Scraper Rules DB) → per-state Schools column
-  // (legacy fallback) → generic → null. Pricing now outranks the column so the
-  // verified price is the displayed price; the column stays as a harmless fallback
-  // for legacy/non-ruled cards (it is never read when a Pricing value exists).
-  const price =
+  // (legacy fallback). Each of these is a genuine PER-STATE price.
+  const stateVerifiedPrice =
     variant?.priceOverride ??
     ("pricingPrice" in school ? (school as SchoolWithPrice).pricingPrice : null) ??
     (stateCode ? school.statePrices[stateCode] : undefined) ??
-    school.genericPrice ??
     null;
+
+  // Generic fallback, but ONLY for schools that don't price per state. A school
+  // that DOES vary by state (any per-state column price, e.g. I Drive Safely,
+  // whose real state prices run $19–$49) must not display its flat generic as if
+  // it were the state price — show "Check website" instead. That also drops it
+  // from the Product ItemList (no fabricated Offer). Flat-price schools
+  // (no per-state prices anywhere) keep their generic price as intended.
+  const variesByState = Object.keys(school.statePrices).length > 0;
+  const price = stateVerifiedPrice ?? (variesByState ? null : (school.genericPrice ?? null));
 
   // Has Final Exam: variant override → state requirement → true (conservative default)
   const hasFinalExam =

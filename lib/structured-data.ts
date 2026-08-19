@@ -239,11 +239,17 @@ export function buildComparisonItemList(
   reviewSlugs: ReadonlySet<string>,
   year: number
 ): ItemListSchema {
+  // Omit any school with no displayed price ("Check website") from the ItemList
+  // entirely, rather than emit a Product node with no Offer. A node with neither
+  // offers nor aggregateRating has no rich-result eligibility anyway, and shipping
+  // an Offer with an unverified per-state price would be false markup (§4). The
+  // card + affiliate link still render on the page; it just isn't marked up.
+  const priced = schools.filter((s) => s.resolved.price !== null);
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: `Best Online Traffic Schools in ${stateName} (${year})`,
-    itemListElement: schools.map((s, i) => ({
+    itemListElement: priced.map((s, i) => ({
       "@type": "ListItem",
       position: i + 1,
       item: buildProduct(s, stateName, stateSlug, reviewSlugs),
