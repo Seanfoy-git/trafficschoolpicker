@@ -11,25 +11,11 @@ export type PriceTarget = {
 
 export const priceTargets: PriceTarget[] = [
   // ─── iDriveSafely ───────────────────────────────────
-  // CA + FL targets removed: those states aren't in iDriveSafely's coverage
-  // (no monetizable course there), so scraping them only re-creates junk
-  // Pricing rows. WS2 will gate this properly off the offers list.
-  {
-    schoolSlug: "idrivesafely",
-    state: "TX",
-    url: "https://www.idrivesafely.com/defensive-driving/texas/",
-    method: "dom",
-    selector: null,
-    notes: "TX defensive driving price",
-  },
-  {
-    schoolSlug: "idrivesafely",
-    state: "NY",
-    url: "https://www.idrivesafely.com/defensive-driving/new-york/pirp/",
-    method: "dom",
-    selector: null,
-    notes: "NY PIRP pricing",
-  },
+  // IDS pricing is owned by scripts/sync-ids-prices.ts, which reads IDS's OWN
+  // pricing API (authoritative current + regular per state). DOM-scraping IDS
+  // only ever grabbed the struck REGULAR (the current price is rendered client-
+  // side), so its targets/rules were RETIRED to stop it overwriting the API
+  // values. Do NOT re-add IDS here or to the Scraper Rules DB.
 
   // ─── Aceable ────────────────────────────────────────
   {
