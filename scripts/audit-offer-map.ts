@@ -11,12 +11,13 @@
  */
 import { config } from "dotenv";
 config({ path: ".env.local" });
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { STATE_LIST } from "../lib/state-utils";
 
 const NET = process.env.TUNE_NETWORK_ID;
 const KEY = process.env.TUNE_API_KEY;
+const CI = process.argv.includes("--ci"); // write offer-audit.json + exit 1 on problems
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Offer = { id: string; name: string; status: string; payout: string | null };
@@ -102,5 +103,10 @@ async function main() {
   // Distinct payouts (sanity on the flat 30% CPS claim).
   const payouts = new Set([...offers.values()].map((o) => o.payout).filter(Boolean));
   console.log(`Distinct default_payout values across all offers: ${[...payouts].slice(0, 8).join(", ")}`);
+
+  if (CI) {
+    writeFileSync(join(process.cwd(), "offer-audit.json"), JSON.stringify({ ok, problems, leaked }, null, 2));
+    if (problems.length || leaked.length) process.exit(1);
+  }
 }
 main().catch((e) => { console.error(e.message); process.exit(1); });

@@ -1,0 +1,80 @@
+name: Offer Map Audit
+
+# Daily guard that the tracker offer map still matches the LIVE Tune catalogue —
+# a paused/renamed/removed offer, or drift between the committed map and the API,
+# surfaces as a self-closing GitHub issue instead of silently sending clicks to a
+# dead offer. Deliberately DECOUPLED from the site build (never blocks a deploy):
+# the money path stays independent of the frontend, by design.
+
+on:
+  schedule:
+    - cron: "0 14 * * *" # daily 14:00 UTC (after the daily-offers price pass)
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    env:
+      TUNE_API_KEY: ${{ secrets.TUNE_API_KEY }}
+      TUNE_NETWORK_ID: ${{ secrets.TUNE_NETWORK_ID }}
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_SCHOOLS_DB: ${{ secrets.NOTION_SCHOOLS_DB }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - run: npm ci
+
+      # Both write a JSON result and exit 1 on drift; continue-on-error so we
+      # always reach the notifier and can report what drifted.
+      - name: Audit map vs live offers
+        continue-on-error: true
+        run: npx tsx scripts/audit-offer-map.ts --ci
+
+      - name: Regenerate map from API and diff
+        continue-on-error: true
+        run: npx tsx scripts/sync-offer-map.ts --ci
+
+      - name: Open/close the drift issue
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          [ -f offer-audit.json ] || echo '{"ok":0,"problems":["audit did not run"],"leaked":[]}' > offer-audit.json
+          [ -f offer-map-diff.json ] || echo '{"changed":[],"added":[],"removed":[]}' > offer-map-diff.json
+          problems=$(jq -r '.problems | length' offer-audit.json)
+          leaked=$(jq -r '.leaked | length' offer-audit.json)
+          drift=$(jq -r '(.changed|length)+(.added|length)+(.removed|length)' offer-map-diff.json)
+          total=$((problems + leaked + drift))
+          gh label create offer-map-drift --color B60205 --description "Tracker offer map diverged from live Tune" --force >/dev/null 2>&1 || true
+          NUM=$(gh issue list --label offer-map-drift --state open --json number --jq '.[0].number // empty')
+          if [ "$total" -eq 0 ]; then
+            if [ -n "$NUM" ]; then
+              gh issue close "$NUM" --comment "✅ Offer map matches the live Tune catalogue ($(date -u +%Y-%m-%d)). Auto-closed."
+              echo "closed #$NUM"
+            else
+              echo "clean — nothing open"
+            fi
+            exit 0
+          fi
+          BODY=$(jq -rn --slurpfile a offer-audit.json --slurpfile d offer-map-diff.json '
+            "The tracker offer map has diverged from the live Tune catalogue.\n\n"
+            + (if ($a[0].problems|length)>0 then "**Audit problems (offer dead/paused/wrong-state):**\n" + ($a[0].problems|map("- "+.)|join("\n")) + "\n\n" else "" end)
+            + (if ($a[0].leaked|length)>0 then "**Excluded offers present (472/24/19/324):** " + ($a[0].leaked|join(", ")) + "\n\n" else "" end)
+            + (if (($d[0].changed + $d[0].added + $d[0].removed)|length)>0 then "**Map drift vs live catalogue:**\n" + (($d[0].changed|map("~ "+.)) + ($d[0].added|map("+ "+.)) + ($d[0].removed|map("- "+.)) | join("\n")) + "\n\n" else "" end)
+            + "---\n**To fix:** review, then `npx tsx scripts/sync-offer-map.ts` (dry-run) -> `--write` -> `cd tracker && npm run seed --remote`. Regenerated daily; auto-closes when the map matches again."
+          ')
+          TITLE="🔗 Offer map drift ($total)"
+          if [ -n "$NUM" ]; then
+            gh issue edit "$NUM" --title "$TITLE" --body "$BODY"
+            gh issue reopen "$NUM" >/dev/null 2>&1 || true
+            echo "updated #$NUM"
+          else
+            gh issue create --title "$TITLE" --body "$BODY" --label offer-map-drift >/dev/null
+            echo "created"
+          fi

@@ -26,6 +26,7 @@ const NET = process.env.TUNE_NETWORK_ID;
 const KEY = process.env.TUNE_API_KEY;
 const AFF_ID = "6858";
 const WRITE = process.argv.includes("--write");
+const CI = process.argv.includes("--ci"); // write offer-map-diff.json + exit 1 on any drift
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Offer = { id: string; name: string; preview_url: string };
@@ -161,6 +162,16 @@ async function main() {
   console.log(`removed (${removed.length}):`); removed.forEach(([k, v]) => console.log(`  - ${k}: offer ${oid(v)}`));
   if (!changed.length && !added.length && !removed.length) console.log("  (identical — API generation reproduces the committed map ✓)");
 
+  if (CI) {
+    const diff = {
+      changed: changed.map(([k, v]) => `${k}: ${oid(curMap.get(k))} -> ${oid(v)}`),
+      added: added.map(([k, v]) => `${k}: offer ${oid(v)}`),
+      removed: removed.map(([k, v]) => `${k}: offer ${oid(v)}`),
+    };
+    writeFileSync(join(process.cwd(), "offer-map-diff.json"), JSON.stringify(diff, null, 2));
+    if (changed.length || added.length || removed.length) process.exit(1);
+    return;
+  }
   if (WRITE) {
     writeFileSync(join(process.cwd(), "tracker", "seed", "map.json"), JSON.stringify(entries, null, 2) + "\n");
     console.log("\nWROTE tracker/seed/map.json — review, then `cd tracker && npm run seed` to push to KV.");
