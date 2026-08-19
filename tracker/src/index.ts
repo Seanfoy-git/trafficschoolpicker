@@ -54,6 +54,17 @@ const handler = {
     const fellBackToSite = dest === null; // no mapping at all for this partner
     const destination = dest || site;
 
+    // Surface coverage gaps loudly (Observability logs). A miss means a card is
+    // rendering for a (slug, state) with no offer — either a partner default we
+    // don't want silently swallowing clicks, or (preferred) a bounce back to the
+    // site. Either way it's a gap to close, not a silent redirect.
+    if (!mapped) {
+      console.warn(
+        `[tracker] offer-map MISS: slug=${slug} state=${state || "(none)"} → ` +
+          `${fellBackToSite ? "site fallback (no partner mapping)" : "partner _default"}`
+      );
+    }
+
     // Attach HasOffers subids for network-side reporting + first-party reconciliation.
     // When we fell all the way back to our own site (no offer at all), redirect
     // bare — subids only make sense on a network destination.

@@ -1,6 +1,198 @@
 [
-  { "key": "idrivesafely:NY", "value": "https://go.idrivesafely.com/aff_c?offer_id=25&aff_id=6858" },
-  { "key": "idrivesafely:GA", "value": "https://go.idrivesafely.com/aff_c?offer_id=21&aff_id=6858" },
-  { "key": "idrivesafely:_default", "value": "https://go.idrivesafely.com/aff_c?offer_id=19&aff_id=6858" },
-  { "key": "asi:_default", "value": "https://americansafetyinstitute.com/" }
+  {
+    "key": "aceable:CA",
+    "value": "https://aceable.go2cloud.org/aff_c?offer_id=8&aff_id=6858"
+  },
+  {
+    "key": "aceable:TX",
+    "value": "https://aceable.go2cloud.org/aff_c?offer_id=15&aff_id=6858"
+  },
+  {
+    "key": "aceable:FL",
+    "value": "https://aceable.go2cloud.org/aff_c?offer_id=81&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:NY",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=25&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:GA",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=21&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:IN",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=75&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:NV",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=350&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:NM",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=370&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:NC",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=23&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:PA",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=27&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:SC",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=74&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:TX",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=327&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:AL",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=412&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:AK",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=413&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:AR",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=414&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:CO",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=397&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:CT",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=415&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:DE",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=416&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:DC",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=436&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:HI",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=417&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:ID",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=399&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:IA",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=418&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:KS",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=419&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:LA",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=420&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:MD",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=421&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:MA",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=73&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:MI",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=409&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:MN",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=422&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:MS",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=423&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:MO",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=410&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:MT",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=424&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:NE",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=425&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:NH",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=405&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:NJ",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=426&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:ND",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=427&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:OH",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=26&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:OK",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=428&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:OR",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=406&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:RI",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=429&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:SD",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=430&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:TN",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=407&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:UT",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=431&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:VT",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=432&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:VA",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=411&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:WA",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=433&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:WV",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=434&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:WI",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=408&aff_id=6858"
+  },
+  {
+    "key": "idrivesafely:WY",
+    "value": "https://go.idrivesafely.com/aff_c?offer_id=435&aff_id=6858"
+  },
+  {
+    "key": "asi:_default",
+    "value": "https://americansafetyinstitute.com/"
+  }
 ]
