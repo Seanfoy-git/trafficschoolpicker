@@ -52,10 +52,15 @@ Map lookup key: **`{slug}:{STATE}`**, falling back to **`{slug}:_default`**.
 
 ```bash
 wrangler kv key put --binding=MAP "idrivesafely:TX" \
-  "https://go.idrivesafely.com/aff_c?offer_id=30&aff_id=6858"
+  "https://go.idrivesafely.com/aff_c?offer_id=30&aff_id=6858" --remote
 ```
 
 Or edit `seed/map.json` and re-run `npm run seed` (bulk upsert).
+
+> **`--remote` is required.** Wrangler 4.x defaults every `kv` command to a
+> LOCAL miniflare store; without `--remote` you edit nothing in production and it
+> still prints `Success!`. `npm run seed` now includes `--remote`; use
+> `npm run seed:local` for local `wrangler dev`.
 
 ## First-time deploy
 
