@@ -1,0 +1,89 @@
+name: IDS Price Sync
+
+# Daily refresh of I Drive Safely per-state prices from IDS's OWN pricing API
+# (scripts/sync-ids-prices.ts — authoritative current + regular per state). This
+# REPLACES DOM-scraping IDS, which only ever read the struck regular. Auto states
+# just stay current; a NEW multi-course state, a vanished course pin, or a pinned
+# price move surfaces as a self-closing issue (a human picks the course / pin).
+# Publishes immediately via the Vercel deploy hook when anything changed.
+
+on:
+  schedule:
+    - cron: "0 15 * * *" # daily 15:00 UTC (after daily-offers 13:00 + offer-map-audit 14:00)
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    env:
+      TUNE_API_KEY: ${{ secrets.TUNE_API_KEY }}
+      TUNE_NETWORK_ID: ${{ secrets.TUNE_NETWORK_ID }}
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_SCHOOLS_DB: ${{ secrets.NOTION_SCHOOLS_DB }}
+      NOTION_PRICING_DB: ${{ secrets.NOTION_PRICING_DB }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - run: npm ci
+      - name: Install Chromium
+        run: npx playwright install chromium --with-deps
+
+      # Writes the Pricing DB and emits ids-price-sync.json. continue-on-error so a
+      # partial failure still reaches the notifier.
+      - name: Sync IDS prices
+        continue-on-error: true
+        run: npx tsx scripts/sync-ids-prices.ts --write --ci
+
+      - name: Publish (trigger rebuild) if anything changed
+        if: always()
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          set -euo pipefail
+          [ -f ids-price-sync.json ] || { echo "no summary — skip"; exit 0; }
+          changed=$(jq -r '(.created // 0) + (.updated // 0)' ids-price-sync.json)
+          if [ "${changed:-0}" -gt 0 ] && [ -n "${VERCEL_DEPLOY_HOOK:-}" ]; then
+            curl -s -X POST "$VERCEL_DEPLOY_HOOK" >/dev/null && echo "triggered rebuild ($changed rows changed)"
+          else
+            echo "no change (${changed:-0}) or no hook — skip rebuild"
+          fi
+
+      - name: Open/close the price-attention issue
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          [ -f ids-price-sync.json ] || echo '{"needsAttention":true,"flagged":["sync did not run"],"drifts":[],"created":0,"updated":0}' > ids-price-sync.json
+          need=$(jq -r 'if .needsAttention then 1 else 0 end' ids-price-sync.json)
+          gh label create ids-price-drift --color B60205 --description "IDS price sync needs a human decision" --force >/dev/null 2>&1 || true
+          NUM=$(gh issue list --label ids-price-drift --state open --json number --jq '.[0].number // empty')
+          if [ "$need" -eq 0 ]; then
+            if [ -n "$NUM" ]; then
+              gh issue close "$NUM" --comment "✅ IDS prices synced cleanly ($(date -u +%Y-%m-%d)). Auto-closed."
+              echo "closed #$NUM"
+            else
+              echo "clean — nothing open"
+            fi
+            exit 0
+          fi
+          BODY=$(jq -rn --slurpfile s ids-price-sync.json '
+            "The daily IDS price sync needs a human decision.\n\n"
+            + (if ($s[0].flagged|length)>0 then "**Flagged (NOT written — pick a course / add a pin):**\n" + ($s[0].flagged|map("- "+.)|join("\n")) + "\n\n" else "" end)
+            + (if ($s[0].drifts|length)>0 then "**Pinned course price moved (applied — confirm still the right course):**\n" + ($s[0].drifts|map("- "+.)|join("\n")) + "\n\n" else "" end)
+            + "---\n**To fix a flagged state:** add/adjust its `PIN` (courseId) in `scripts/lib/ids-pricing.ts`, then `npx tsx scripts/sync-ids-prices.ts` (dry-run) -> `--write`. Regenerated daily; auto-closes when the next run is clean."
+          ')
+          TITLE="💲 IDS price sync needs attention"
+          if [ -n "$NUM" ]; then
+            gh issue edit "$NUM" --title "$TITLE" --body "$BODY"
+            gh issue reopen "$NUM" >/dev/null 2>&1 || true
+            echo "updated #$NUM"
+          else
+            gh issue create --title "$TITLE" --body "$BODY" --label ids-price-drift >/dev/null
+            echo "created"
+          fi
