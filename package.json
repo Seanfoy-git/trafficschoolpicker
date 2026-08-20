@@ -23,6 +23,7 @@
     "scrape:reviews": "npx tsx scripts/scrape-reviews.ts",
     "scrape:prices": "npx tsx scripts/scrape-prices.ts",
     "sync:xgrit-prices": "npx tsx scripts/sync-xgrit-prices.ts",
+    "sync:jsonld-prices": "npx tsx scripts/sync-jsonld-prices.ts",
     "discover:ids-prices": "npx tsx scripts/discover-ids-prices.ts",
     "enrich:places": "npx tsx scripts/enrich-places.ts",
     "scrape:all": "npm run scrape:dmv && npm run scrape:reviews && npm run scrape:prices && npm run enrich:places",
