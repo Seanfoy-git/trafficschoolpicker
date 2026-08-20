@@ -22,7 +22,7 @@
     "scrape:dmv": "npm run scrape:ca ; npm run scrape:tx ; npm run scrape:fl ; npm run scrape:oh ; npm run scrape:ga ; npm run scrape:ny ; npm run scrape:az ; npm run scrape:va ; npm run scrape:states ; npm run scrape:pdf",
     "scrape:reviews": "npx tsx scripts/scrape-reviews.ts",
     "scrape:prices": "npx tsx scripts/scrape-prices.ts",
-    "sync:ids-prices": "npx tsx scripts/sync-ids-prices.ts",
+    "sync:xgrit-prices": "npx tsx scripts/sync-xgrit-prices.ts",
     "discover:ids-prices": "npx tsx scripts/discover-ids-prices.ts",
     "enrich:places": "npx tsx scripts/enrich-places.ts",
     "scrape:all": "npm run scrape:dmv && npm run scrape:reviews && npm run scrape:prices && npm run enrich:places",

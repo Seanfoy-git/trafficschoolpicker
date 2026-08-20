@@ -23,7 +23,7 @@ async function main() {
     console.log(VALIDATE ? "state | resolved | status | known | result" : "state | current | regular | status | note");
     for (const code of codes) {
       const products = await fetchStatePrices(pg, targets.get(code)!);
-      const r = resolvePrice(code, products);
+      const r = resolvePrice("idrivesafely", code, products);
       rows.push({ code, url: targets.get(code), ...r });
       if (VALIDATE) {
         const known = KNOWN[code];
