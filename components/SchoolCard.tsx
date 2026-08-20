@@ -3,6 +3,7 @@ import { MultiRating } from "./MultiRating";
 import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
 import { AffiliateButton } from "./AffiliateButton";
+import { trackerUrl } from "@/lib/affiliate";
 import { CouponCode } from "./CouponCode";
 import { Clock, CheckCircle, Smartphone, ThumbsUp, ThumbsDown, Tag } from "lucide-react";
 import Link from "next/link";
@@ -156,7 +157,7 @@ export function SchoolCard({
               )
             ) : (
               <a
-                href={school.website}
+                href={trackerUrl(school.slug, { stateCode, sourcePageId: school.id }) ?? school.website}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
                 className="text-sm text-slate-500 hover:underline"

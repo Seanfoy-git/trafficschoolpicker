@@ -7,6 +7,7 @@ import { RatingStars } from "@/components/RatingStars";
 import { MultiRating, ReviewSynthesis } from "@/components/MultiRating";
 import { Badge } from "@/components/Badge";
 import { AffiliateButton } from "@/components/AffiliateButton";
+import { trackerUrl } from "@/lib/affiliate";
 import {
   Clock,
   CheckCircle,
@@ -317,9 +318,9 @@ export default async function ReviewPage({ params }: Props) {
               {school.website && (
                 <li>
                   <a
-                    href={school.website}
+                    href={trackerUrl(school.slug, { sourcePageId: school.id, src: "review" }) ?? school.website}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener noreferrer nofollow"
                     className="flex items-center gap-2 text-accent hover:underline"
                   >
                     <ExternalLink className="w-4 h-4" /> Official website
