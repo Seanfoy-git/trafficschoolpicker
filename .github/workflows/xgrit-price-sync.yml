@@ -1,11 +1,11 @@
-name: IDS Price Sync
+name: xgrit Price Sync
 
-# Daily refresh of I Drive Safely per-state prices from IDS's OWN pricing API
-# (scripts/sync-ids-prices.ts — authoritative current + regular per state). This
-# REPLACES DOM-scraping IDS, which only ever read the struck regular. Auto states
-# just stay current; a NEW multi-course state, a vanished course pin, or a pinned
-# price move surfaces as a self-closing issue (a human picks the course / pin).
-# Publishes immediately via the Vercel deploy hook when anything changed.
+# Daily refresh of the xgrit family's per-state prices (I Drive Safely + Aceable —
+# same pricing backend, same Tune account) from each brand's OWN pricing API
+# (scripts/sync-xgrit-prices.ts). This REPLACES DOM-scraping these brands, which
+# only ever read the struck regular. Auto states stay current; a NEW multi-course
+# state, a vanished course pin, or a pinned price move surfaces as a self-closing
+# issue (a human picks the course / pin). Publishes via the deploy hook on change.
 
 on:
   schedule:
@@ -33,11 +33,11 @@ jobs:
       - name: Install Chromium
         run: npx playwright install chromium --with-deps
 
-      # Writes the Pricing DB and emits ids-price-sync.json. continue-on-error so a
+      # Writes the Pricing DB and emits xgrit-price-sync.json. continue-on-error so a
       # partial failure still reaches the notifier.
-      - name: Sync IDS prices
+      - name: Sync xgrit-family prices
         continue-on-error: true
-        run: npx tsx scripts/sync-ids-prices.ts --write --ci
+        run: npx tsx scripts/sync-xgrit-prices.ts --write --ci
 
       - name: Publish (trigger rebuild) if anything changed
         if: always()
@@ -45,8 +45,8 @@ jobs:
           VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
         run: |
           set -euo pipefail
-          [ -f ids-price-sync.json ] || { echo "no summary — skip"; exit 0; }
-          changed=$(jq -r '(.created // 0) + (.updated // 0)' ids-price-sync.json)
+          [ -f xgrit-price-sync.json ] || { echo "no summary — skip"; exit 0; }
+          changed=$(jq -r '(.created // 0) + (.updated // 0)' xgrit-price-sync.json)
           if [ "${changed:-0}" -gt 0 ] && [ -n "${VERCEL_DEPLOY_HOOK:-}" ]; then
             curl -s -X POST "$VERCEL_DEPLOY_HOOK" >/dev/null && echo "triggered rebuild ($changed rows changed)"
           else
@@ -59,31 +59,31 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          [ -f ids-price-sync.json ] || echo '{"needsAttention":true,"flagged":["sync did not run"],"drifts":[],"created":0,"updated":0}' > ids-price-sync.json
-          need=$(jq -r 'if .needsAttention then 1 else 0 end' ids-price-sync.json)
-          gh label create ids-price-drift --color B60205 --description "IDS price sync needs a human decision" --force >/dev/null 2>&1 || true
-          NUM=$(gh issue list --label ids-price-drift --state open --json number --jq '.[0].number // empty')
+          [ -f xgrit-price-sync.json ] || echo '{"needsAttention":true,"flagged":["sync did not run"],"drifts":[],"created":0,"updated":0}' > xgrit-price-sync.json
+          need=$(jq -r 'if .needsAttention then 1 else 0 end' xgrit-price-sync.json)
+          gh label create xgrit-price-drift --color B60205 --description "xgrit price sync needs a human decision" --force >/dev/null 2>&1 || true
+          NUM=$(gh issue list --label xgrit-price-drift --state open --json number --jq '.[0].number // empty')
           if [ "$need" -eq 0 ]; then
             if [ -n "$NUM" ]; then
-              gh issue close "$NUM" --comment "✅ IDS prices synced cleanly ($(date -u +%Y-%m-%d)). Auto-closed."
+              gh issue close "$NUM" --comment "✅ xgrit-family prices synced cleanly ($(date -u +%Y-%m-%d)). Auto-closed."
               echo "closed #$NUM"
             else
               echo "clean — nothing open"
             fi
             exit 0
           fi
-          BODY=$(jq -rn --slurpfile s ids-price-sync.json '
-            "The daily IDS price sync needs a human decision.\n\n"
+          BODY=$(jq -rn --slurpfile s xgrit-price-sync.json '
+            "The daily xgrit-family price sync needs a human decision.\n\n"
             + (if ($s[0].flagged|length)>0 then "**Flagged (NOT written — pick a course / add a pin):**\n" + ($s[0].flagged|map("- "+.)|join("\n")) + "\n\n" else "" end)
             + (if ($s[0].drifts|length)>0 then "**Pinned course price moved (applied — confirm still the right course):**\n" + ($s[0].drifts|map("- "+.)|join("\n")) + "\n\n" else "" end)
-            + "---\n**To fix a flagged state:** add/adjust its `PIN` (courseId) in `scripts/lib/ids-pricing.ts`, then `npx tsx scripts/sync-ids-prices.ts` (dry-run) -> `--write`. Regenerated daily; auto-closes when the next run is clean."
+            + "---\n**To fix a flagged state:** add/adjust its `PINS[brand][state]` (courseId) in `scripts/lib/ids-pricing.ts`, then `npx tsx scripts/sync-xgrit-prices.ts` (dry-run) -> `--write`. Regenerated daily; auto-closes when the next run is clean."
           ')
-          TITLE="💲 IDS price sync needs attention"
+          TITLE="💲 xgrit price sync needs attention"
           if [ -n "$NUM" ]; then
             gh issue edit "$NUM" --title "$TITLE" --body "$BODY"
             gh issue reopen "$NUM" >/dev/null 2>&1 || true
             echo "updated #$NUM"
           else
-            gh issue create --title "$TITLE" --body "$BODY" --label ids-price-drift >/dev/null
+            gh issue create --title "$TITLE" --body "$BODY" --label xgrit-price-drift >/dev/null
             echo "created"
           fi
