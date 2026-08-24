@@ -239,3 +239,30 @@ export type ReviewBlock = {
   type: ReviewBlockType;
   richText: ReviewRichText[];
 };
+
+// ─── STATE QUESTION PAGES (/{state}/{question-slug}) ─────────
+
+// One Complete row from the Question Pages DB (metadata; body fetched separately).
+export type QuestionPage = {
+  id: string;              // Notion page id (also the body-block source)
+  title: string;
+  stateCode: string;
+  stateSlug: string;
+  questionSlug: string;
+  h1: string;
+  titleTag: string;
+  metaDescription: string;
+  lastVerified: string | null; // ISO date
+  sources: string;             // raw Sources property text (primary URLs)
+};
+
+export type QuestionKeyFact = { label: string; value: string };
+
+// The parsed page body, split by the `## Key Facts` / `## Body` / `## Sources`
+// heading_2 markers. `hasQA` gates whether an FAQPage node is emitted.
+export type QuestionBody = {
+  keyFacts: QuestionKeyFact[];
+  body: ReviewBlock[];
+  sources: ReviewBlock[];
+  hasQA: boolean;
+};

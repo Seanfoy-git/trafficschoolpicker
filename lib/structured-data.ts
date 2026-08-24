@@ -350,3 +350,75 @@ export function buildBreadcrumbList(crumbs: Crumb[]): BreadcrumbListSchema {
     })),
   };
 }
+
+// ─── Article (state question pages) ─────────────────────────────────────────
+
+interface ArticleSchema {
+  "@context": "https://schema.org";
+  "@type": "Article";
+  headline: string;
+  description?: string;
+  datePublished: string;
+  dateModified: string;
+  mainEntityOfPage: { "@type": "WebPage"; "@id": string };
+  author: { "@id": string };
+  publisher: { "@id": string };
+  image?: string;
+}
+
+/**
+ * Article JSON-LD for a state question page. author + publisher reference the
+ * single site-wide Organization node (defined once in the layout entity graph).
+ * datePublished/dateModified both come from the row's Last Verified date — these
+ * pages are living reference answers, re-verified rather than "published once".
+ * Nothing merchant-shaped here (no Offer/Product/aggregateRating) — nothing is for sale.
+ */
+export function buildArticle(opts: {
+  headline: string;
+  path: string;
+  dateIso: string;
+  description?: string;
+  image?: string;
+}): ArticleSchema {
+  const url = `${SITE}${opts.path}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: opts.headline,
+    ...(opts.description ? { description: opts.description } : {}),
+    datePublished: opts.dateIso,
+    dateModified: opts.dateIso,
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    author: { "@id": ORGANIZATION_ID },
+    publisher: { "@id": ORGANIZATION_ID },
+    ...(opts.image ? { image: opts.image } : {}),
+  };
+}
+
+// ─── FAQPage (emitted ONLY when a page genuinely has a Q&A section) ──────────
+
+interface FAQPageSchema {
+  "@context": "https://schema.org";
+  "@type": "FAQPage";
+  mainEntity: Array<{
+    "@type": "Question";
+    name: string;
+    acceptedAnswer: { "@type": "Answer"; text: string };
+  }>;
+}
+
+/** FAQPage JSON-LD from explicit Q&A pairs. Returns null for an empty set so the
+ *  caller never emits an empty node (a single-answer page is NOT an FAQ). */
+export function buildFaqPage(pairs: Array<{ question: string; answer: string }>): FAQPageSchema | null {
+  const clean = pairs.filter((p) => p.question.trim() && p.answer.trim());
+  if (clean.length === 0) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: clean.map((p) => ({
+      "@type": "Question",
+      name: p.question.trim(),
+      acceptedAnswer: { "@type": "Answer", text: p.answer.trim() },
+    })),
+  };
+}

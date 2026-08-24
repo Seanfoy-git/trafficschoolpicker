@@ -4,7 +4,8 @@ import { getAllPosts, getPostBySlug } from "@/lib/blog";
 import { BLOG_SEO } from "@/lib/seo-config";
 import { BlogMdxComponents } from "@/components/BlogMdxComponents";
 import { RelatedStateGuides } from "@/components/RelatedStateGuides";
-import { getLinkableStates } from "@/lib/notion";
+import { QuestionStateLinks } from "@/components/QuestionStateLinks";
+import { getLinkableStates, getQuestionPages } from "@/lib/notion";
 import { ORGANIZATION_ID, buildBreadcrumbList } from "@/lib/structured-data";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -55,6 +56,9 @@ export default async function BlogPostPage({ params }: Props) {
 
   const seo = BLOG_SEO[slug];
   const linkableStates = await getLinkableStates();
+  // Hub posts (slug === a question slug) link down to every Complete state version.
+  // Empty on any other post, so the block renders nothing there.
+  const questionVersions = (await getQuestionPages()).filter((q) => q.questionSlug === slug);
 
   // Dynamically import the MDX file
   let PostContent;
@@ -123,6 +127,10 @@ export default async function BlogPostPage({ params }: Props) {
             linking. Placed outside .prose so it isn't styled as article body.
             Gated on getLinkableStates(). */}
         <RelatedStateGuides postSlug={slug} linkable={linkableStates} />
+
+        {/* HUB → STATE VERSIONS — on a question hub post, links to every live
+            /{state}/{question}. Renders nothing on other posts. */}
+        <QuestionStateLinks questions={questionVersions} />
 
         <div className="mt-12 pt-8 border-t border-slate-200">
           <p className="text-sm text-slate-500">

@@ -63,6 +63,10 @@
 - [Wisconsin Traffic School](https://www.trafficschoolpicker.com/wisconsin)
 - [Wyoming Defensive Driving](https://www.trafficschoolpicker.com/wyoming)
 
+## State-specific question pages
+
+Standalone, source-cited answers to one question for one state, at /{state}/{question-slug}. Each is verified against primary statutes, court rules, and DMV records with a "Last verified" date. National overview: [Does Traffic School Remove Points?](https://www.trafficschoolpicker.com/blog/does-traffic-school-remove-points). The live per-state answers — with full Key Facts and sources — are enumerated in [llms-full.txt](https://www.trafficschoolpicker.com/llms-full.txt) and the sitemap as each state's row is published.
+
 ## Blog posts and guides
 
 - [How to Dismiss a Traffic Ticket Online](https://www.trafficschoolpicker.com/blog/how-to-dismiss-traffic-ticket-online)
