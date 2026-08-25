@@ -85,6 +85,29 @@ function parseStateCodes(raw: string): string[] {
   return raw.split(",").map((s) => s.trim().toUpperCase()).filter(Boolean);
 }
 
+// ─── PAGE-SOURCE GUARDS (P0 incident, 2026-08-25) ───────────
+// Any route that renders a Notion page BODY (blocks) by id is in the incident's
+// risk class: an over-broad token + an API mis-serve could resolve that id to a
+// foreign workspace page (recipe / Credentials Vault). Before rendering blocks we
+// confirm the page's PARENT is the expected CMS database; otherwise fail closed.
+const normId = (s: string | undefined | null) => (s ?? "").replace(/-/g, "").toLowerCase();
+const pageParentDbId = (p: PageObjectResponse): string =>
+  normId((p as any)?.parent?.database_id ?? (p as any)?.parent?.data_source_id ?? "");
+
+// Retrieve a page and confirm its parent is one of `allowed` (normalized db/data-
+// source ids). Returns false on any error or mismatch (fail-closed). Empty
+// `allowed` (db env unset) → false, so nothing renders rather than risking a leak.
+async function pageBelongsTo(pageId: string, allowed: Set<string>): Promise<boolean> {
+  if (allowed.size === 0) return false;
+  try {
+    const page = await withNotionRetry(() => notion.pages.retrieve({ page_id: pageId }));
+    return allowed.has(pageParentDbId(page as PageObjectResponse));
+  } catch {
+    return false;
+  }
+}
+const SCHOOLS_PARENT_IDS = new Set([normId(SCHOOLS_DB)].filter(Boolean));
+
 function parseLines(raw: string): string[] {
   // Split on newlines first; if that yields a single element with pipes, split on pipes
   const lines = raw.split("\n").map((s) => s.replace(/^[-•*]\s*/, "").trim()).filter(Boolean);
@@ -587,6 +610,10 @@ function mapReviewRichText(rich: any[] | undefined): ReviewRichText[] {
 // Returns [] for a page with no renderable body (school renders no review section).
 export const getSchoolReviewBody = cache(async (pageId: string): Promise<ReviewBlock[]> => {
   if (!process.env.NOTION_TOKEN) return [];
+  // GUARD (same risk class as the question-page incident): only render the blocks
+  // of a page that provably belongs to the Traffic Schools DB. If the API mis-serves
+  // this id as another workspace page, its parent won't match → [] (no body).
+  if (!(await pageBelongsTo(pageId, SCHOOLS_PARENT_IDS))) return [];
   const blocks: ReviewBlock[] = [];
   let cursor: string | undefined;
   do {
@@ -623,13 +650,8 @@ export const getSchoolReviewBody = cache(async (pageId: string): Promise<ReviewB
 // accepted (Notion reports one or the other depending on API version). Normalized
 // (dashless, lowercase) for comparison.
 const QP_DATA_SOURCE_ID = "c7b5a29d-6138-4787-a771-bbe59af041bc";
-const normId = (s: string | undefined | null) => (s ?? "").replace(/-/g, "").toLowerCase();
 const QP_PARENT_IDS = new Set([normId(QUESTIONS_DB), normId(QP_DATA_SOURCE_ID)].filter(Boolean));
-function belongsToQuestionsDb(p: PageObjectResponse): boolean {
-  const parent = (p as any)?.parent;
-  const pid = parent?.database_id ?? parent?.data_source_id ?? "";
-  return QP_PARENT_IDS.has(normId(pid));
-}
+const belongsToQuestionsDb = (p: PageObjectResponse): boolean => QP_PARENT_IDS.has(pageParentDbId(p));
 
 // All COMPLETE question rows, once per build. Same gate discipline as state
 // pages: only Content Status === "Complete" exists as a page. Returns [] if the
@@ -690,12 +712,7 @@ export const getQuestionBody = cache(async (pageId: string): Promise<QuestionBod
   // page at this id is actually a Question Pages row before rendering its blocks.
   // If the API ever mis-serves this id as another workspace page, its parent won't
   // be the Question Pages DB → null → 404. Belt-and-suspenders with the scoped token.
-  try {
-    const page = await withNotionRetry(() => notion.pages.retrieve({ page_id: pageId }));
-    if (!belongsToQuestionsDb(page as PageObjectResponse)) return null;
-  } catch {
-    return null; // fail-closed
-  }
+  if (!(await pageBelongsTo(pageId, QP_PARENT_IDS))) return null; // fail-closed
   const raw: { type: string; rich: ReviewRichText[] }[] = [];
   let cursor: string | undefined;
   try {
