@@ -9,6 +9,7 @@ import {
   resolveStateContent,
   getLinkableStates,
   getAllSchools,
+  getQuestionsForState,
 } from "@/lib/notion";
 import { buildComparisonItemList, buildVideoObject, buildBreadcrumbList, lowestDisplayedPrice, type VideoEntry } from "@/lib/structured-data";
 import { STATE_SEO } from "@/lib/seo-config";
@@ -22,6 +23,7 @@ import { TrustBar } from "@/components/TrustBar";
 import { StateKeyFacts } from "@/components/StateKeyFacts";
 import { NearbyStates } from "@/components/NearbyStates";
 import { RelatedPosts } from "@/components/RelatedPosts";
+import { StateQuestions } from "@/components/StateQuestions";
 import Image from "next/image";
 import {
   ShieldCheck,
@@ -110,7 +112,7 @@ export default async function StatePage({ params }: Props) {
   const stateMeta = getStateBySlug(stateSlug);
   if (!stateMeta) notFound();
 
-  const [schools, stateInfo, directory, notionFaqs, stateReqs, variants, linkableStates] = await Promise.all([
+  const [schools, stateInfo, directory, notionFaqs, stateReqs, variants, linkableStates, stateQuestions] = await Promise.all([
     getSchoolPricingForState(stateMeta.code),
     getStateInfo(stateMeta.code),
     getDirectoryForState(stateMeta.name),
@@ -118,6 +120,7 @@ export default async function StatePage({ params }: Props) {
     getStateRequirements(),
     getSchoolVariantsForState(stateMeta.code),
     getLinkableStates(),
+    getQuestionsForState(stateSlug),
   ]);
 
   // FAQ source priority: per-state JSON on the States DB (richest, state-specific)
@@ -493,6 +496,10 @@ export default async function StatePage({ params }: Props) {
           <FaqSection faqs={faqs} stateDisplayName={stateMeta.name} />
         </div>
       </section>
+
+      {/* COMMON QUESTIONS — links to this state's Complete question pages
+          (/{state}/{question}). Renders nothing when the state has none. */}
+      <StateQuestions questions={stateQuestions} stateName={stateMeta.name} />
 
       {/* RELATED BLOG GUIDES — state → blog half of the bidirectional linking,
           surfacing the most relevant posts so the blog hub gains inlinks. */}

@@ -14,6 +14,9 @@ import type {
   ReviewBlock,
   ReviewBlockType,
   ReviewRichText,
+  QuestionPage,
+  QuestionKeyFact,
+  QuestionBody,
 } from "./types";
 import { pickCanonicalRow } from "./state-canonical";
 import { STATE_LIST, type StateMeta } from "./state-utils";
@@ -26,6 +29,7 @@ const STATES_DB = process.env.NOTION_STATES_DB;
 const PRICING_DB = process.env.NOTION_PRICING_DB;
 const STATE_REQUIREMENTS_DB = process.env.NOTION_STATE_REQUIREMENTS_DB;
 const SCHOOL_VARIANTS_DB = process.env.NOTION_SCHOOL_VARIANTS_DB;
+const QUESTIONS_DB = process.env.NOTION_QUESTIONS_DB;
 
 // ─── HELPERS ────────────────────────────────────────────────
 
@@ -600,6 +604,100 @@ export const getSchoolReviewBody = cache(async (pageId: string): Promise<ReviewB
     cursor = res.has_more ? (res.next_cursor ?? undefined) : undefined;
   } while (cursor);
   return blocks;
+});
+
+// ─── STATE QUESTION PAGES DB (/{state}/{question-slug}) ──────
+
+// All COMPLETE question rows, once per build. Same gate discipline as state
+// pages: only Content Status === "Complete" exists as a page. Returns [] if the
+// DB is unset or unreachable (not yet shared with the integration) — the build
+// then simply renders zero question pages, never a placeholder.
+export const getQuestionPages = memoize(async (): Promise<QuestionPage[]> => {
+  if (!process.env.NOTION_TOKEN || !QUESTIONS_DB) return [];
+  try {
+    const pages = await withNotionRetry(() =>
+      queryAllPages(QUESTIONS_DB, { property: "Content Status", select: { equals: "Complete" } })
+    );
+    return pages
+      .map((p) => ({
+        id: p.id,
+        title: getText(p, "Title"),
+        stateCode: getText(p, "State Code").toUpperCase(),
+        stateSlug: getText(p, "State Slug").toLowerCase(),
+        questionSlug: getText(p, "Question Slug").toLowerCase(),
+        h1: getText(p, "H1"),
+        titleTag: getFullRichText(p, "Title Tag"),
+        metaDescription: getFullRichText(p, "Meta Description"),
+        lastVerified: getDate(p, "Last Verified"),
+        sources: getFullRichText(p, "Sources"),
+      }))
+      .filter((q) => q.stateSlug && q.questionSlug && q.h1);
+  } catch {
+    return []; // DB not created / not shared with the integration yet.
+  }
+});
+
+export async function getQuestionPage(stateSlug: string, questionSlug: string): Promise<QuestionPage | null> {
+  return (await getQuestionPages()).find(
+    (q) => q.stateSlug === stateSlug.toLowerCase() && q.questionSlug === questionSlug.toLowerCase()
+  ) ?? null;
+}
+
+// Complete question pages for one state (drives the state page's "Common questions" block).
+export async function getQuestionsForState(stateSlug: string): Promise<QuestionPage[]> {
+  return (await getQuestionPages()).filter((q) => q.stateSlug === stateSlug.toLowerCase());
+}
+
+// Parse the page body (blocks) into the three `## Key Facts` / `## Body` /
+// `## Sources` sections. Key Facts are `Label: value` lines → <dl>; Body/Sources
+// keep the renderable block types. hasQA flags a real Q&A subsection (a heading_3
+// ending in "?") so an FAQPage node is only emitted when one actually exists.
+const QUESTION_BODY_TYPES = new Set<ReviewBlockType>([
+  "paragraph", "heading_2", "heading_3", "bulleted_list_item", "numbered_list_item",
+]);
+export const getQuestionBody = cache(async (pageId: string): Promise<QuestionBody> => {
+  const empty: QuestionBody = { keyFacts: [], body: [], sources: [], hasQA: false };
+  if (!process.env.NOTION_TOKEN) return empty;
+  const raw: { type: string; rich: ReviewRichText[] }[] = [];
+  let cursor: string | undefined;
+  try {
+    do {
+      const res = await withNotionRetry(() =>
+        notion.blocks.children.list({ block_id: pageId, start_cursor: cursor, page_size: 100 })
+      );
+      for (const block of res.results as any[]) {
+        const type = block.type as string;
+        raw.push({ type, rich: mapReviewRichText(block[type]?.rich_text) });
+      }
+      cursor = res.has_more ? (res.next_cursor ?? undefined) : undefined;
+    } while (cursor);
+  } catch {
+    return empty;
+  }
+
+  const keyFacts: QuestionKeyFact[] = [];
+  const body: ReviewBlock[] = [];
+  const sources: ReviewBlock[] = [];
+  let section: "keyFacts" | "body" | "sources" | null = null;
+  for (const b of raw) {
+    const text = b.rich.map((r) => r.text).join("");
+    if (b.type === "heading_2") {
+      const h = text.trim().toLowerCase();
+      section = h === "key facts" ? "keyFacts" : h === "body" ? "body" : h === "sources" ? "sources" : null;
+      continue;
+    }
+    if (text.trim() === "") continue;
+    if (section === "keyFacts") {
+      const idx = text.indexOf(":");
+      if (idx > 0) keyFacts.push({ label: text.slice(0, idx).trim(), value: text.slice(idx + 1).trim() });
+    } else if (section === "body" && QUESTION_BODY_TYPES.has(b.type as ReviewBlockType)) {
+      body.push({ type: b.type as ReviewBlockType, richText: b.rich });
+    } else if (section === "sources" && QUESTION_BODY_TYPES.has(b.type as ReviewBlockType)) {
+      sources.push({ type: b.type as ReviewBlockType, richText: b.rich });
+    }
+  }
+  const hasQA = body.some((blk) => blk.type === "heading_3" && /\?\s*$/.test(blk.richText.map((r) => r.text).join("")));
+  return { keyFacts, body, sources, hasQA };
 });
 
 // ─── SCHOOL PRICING DB ──────────────────────────────────────

@@ -228,6 +228,44 @@ async function main() {
     }
   }
 
+  // ── State question pages (gated on Content Status = Complete) ──
+  // Each Complete question row's Key Facts + prose + sources become citable
+  // per-state LLM facts. Same gate as the pages themselves — Draft rows never emit.
+  const { getQuestionPages, getQuestionBody } = await import("../lib/notion");
+  const questions = [...(await getQuestionPages())].sort(
+    (a, b) => a.stateSlug.localeCompare(b.stateSlug) || a.questionSlug.localeCompare(b.questionSlug)
+  );
+  let questionsEmitted = 0;
+  if (questions.length) {
+    lines.push("# TrafficSchoolPicker.com — State Question Pages");
+    lines.push("");
+    lines.push("> Per-state answers to common traffic-school questions, each verified against primary sources.");
+    lines.push("> Source: TrafficSchoolPicker editorial content, verified against official DMV, court, and statute records.");
+    lines.push("");
+    for (const q of questions) {
+      const body = await getQuestionBody(q.id);
+      lines.push(`## ${q.h1}`);
+      lines.push("");
+      lines.push(`**URL:** ${BASE_URL}/${q.stateSlug}/${q.questionSlug}`);
+      lines.push("");
+      if (body.keyFacts.length) {
+        for (const f of body.keyFacts) lines.push(`- **${f.label}:** ${f.value}`);
+        lines.push("");
+      }
+      if (body.body.length) {
+        lines.push(blocksToMarkdown(body.body));
+        lines.push("");
+      }
+      if (q.sources.trim()) {
+        lines.push(`**Sources:** ${q.sources.trim()}`);
+        lines.push("");
+      }
+      lines.push("---");
+      lines.push("");
+      questionsEmitted++;
+    }
+  }
+
   // ── True Cost of a Traffic Ticket (fixed 2026 study) ──
   // A static block (no Notion data) so the per-state cost figures become citable
   // LLM facts. Appended last so the file ends with the study section.
@@ -250,7 +288,7 @@ async function main() {
 
   writeOut(lines.join("\n"));
   console.log(
-    `Written llms-full.txt with ${emitted} states, ${schoolsEmitted} school reviews, and the True Cost study`
+    `Written llms-full.txt with ${emitted} states, ${schoolsEmitted} school reviews, ${questionsEmitted} question pages, and the True Cost study`
   );
 }
 

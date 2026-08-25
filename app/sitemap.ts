@@ -6,6 +6,7 @@ import {
   getStateVerificationMap,
   getLatestStateVerification,
   getAllSchools,
+  getQuestionPages,
 } from "@/lib/notion";
 import { getAllPosts } from "@/lib/blog";
 
@@ -23,11 +24,12 @@ const STATIC_LASTMOD = "2026-08-01";
 export const revalidate = 86400;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [linkable, stateVerified, latestVerified, schools] = await Promise.all([
+  const [linkable, stateVerified, latestVerified, schools, questions] = await Promise.all([
     getLinkableStateCodes(),
     getStateVerificationMap(),
     getLatestStateVerification(),
     getAllSchools(),
+    getQuestionPages(),
   ]);
   const posts = getAllPosts();
 
@@ -99,5 +101,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...statePages, ...blogPages, ...reviewPages];
+  // State question pages — gated on Content Status = Complete (same discipline as
+  // state pages). lastmod is each row's real "Last Verified" date.
+  const questionPages: MetadataRoute.Sitemap = questions.map((q) => ({
+    url: `${BASE_URL}/${q.stateSlug}/${q.questionSlug}`,
+    lastModified: q.lastVerified ?? dataLastmod,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...statePages, ...blogPages, ...reviewPages, ...questionPages];
 }

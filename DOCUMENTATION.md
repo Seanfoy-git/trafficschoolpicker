@@ -1005,6 +1005,14 @@ Schema builders live in one typed module, [lib/structured-data.ts](lib/structure
 - **`FAQPage`** on every state page (via `FaqSection`).
 - **`Review`** on each `/reviews/[slug]` page.
 - **`Article`** on each blog post.
+- **State question pages** (`/{state}/{question-slug}`) — `Organization` + `WebSite`
+  (via layout), **`Article`** (`buildArticle`; `author`/`publisher` → the site-wide
+  Organization `@id`; `datePublished`/`dateModified` = the row's Last Verified),
+  **`BreadcrumbList`** (`Home › State › Question`), and **`FAQPage`** **only** when
+  the body has a real Q&A section (`buildFaqPage`, gated on `body.hasQA`). **No**
+  `Product`/`Offer`/`AggregateRating` — nothing is for sale on these pages. (The
+  brief's `schema-deploy-verification.md` doesn't exist in this repo; this list is
+  the structured-data record of record — keep it in sync when page types change.)
 
 ### LLM discoverability
 
