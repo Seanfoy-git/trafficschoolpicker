@@ -649,8 +649,10 @@ export const getSchoolReviewBody = cache(async (pageId: string): Promise<ReviewB
 // database container id (the NOTION_QUESTIONS_DB env) and the data source id are
 // accepted (Notion reports one or the other depending on API version). Normalized
 // (dashless, lowercase) for comparison.
-const QP_DATA_SOURCE_ID = "c7b5a29d-6138-4787-a771-bbe59af041bc";
-const QP_PARENT_IDS = new Set([normId(QUESTIONS_DB), normId(QP_DATA_SOURCE_ID)].filter(Boolean));
+// Parent-source allowlist is derived from the env DB id (Notion reports row parents
+// as { database_id: <NOTION_QUESTIONS_DB> }). No hardcoded ids — nothing to rot on a
+// workspace migration.
+const QP_PARENT_IDS = new Set([normId(QUESTIONS_DB)].filter(Boolean));
 const belongsToQuestionsDb = (p: PageObjectResponse): boolean => QP_PARENT_IDS.has(pageParentDbId(p));
 
 // All COMPLETE question rows, once per build. Same gate discipline as state
