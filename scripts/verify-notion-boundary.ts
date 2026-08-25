@@ -30,9 +30,21 @@ const SITE_DB_ENVS = [
 ];
 const dbTitle = (db: any) => (db?.title?.map((t: any) => t.plain_text).join("") || "").trim();
 
+import { createHash } from "crypto";
+// Redaction-proof fingerprint: length + a sha prefix (NOT a substring of the value,
+// so Vercel won't redact it, and it never exposes the secret). Lets us compare a
+// build-log value to the known-good one without printing either.
+const fp = (v: string) => `len=${v.length} sha=${createHash("sha256").update(v).digest("hex").slice(0, 8)}`;
+
 async function main() {
   if (!process.env.NOTION_TOKEN) { console.error("❌ NOTION_TOKEN not set"); process.exit(1); }
   const problems: string[] = [];
+
+  // Diagnostic fingerprints (safe to log): compare against the known-good set.
+  console.log(`env fingerprints — NOTION_TOKEN ${fp((process.env.NOTION_TOKEN || "").trim())}`);
+  for (const env of ["NOTION_SCHOOLS_DB", "NOTION_DIRECTORY_DB", "NOTION_STATE_REQUIREMENTS_DB", "NOTION_SCHOOL_VARIANTS_DB", "NOTION_QUESTIONS_DB", "NOTION_STATES_DB", "NOTION_PRICING_DB", "NOTION_FAQ_DB_ID"]) {
+    console.log(`  ${env} ${fp((process.env[env] || "").trim())}`);
+  }
 
   // 1) every configured CMS db id must resolve to an expected database
   for (const env of SITE_DB_ENVS) {
