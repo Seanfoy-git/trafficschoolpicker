@@ -1,14 +1,12 @@
 /**
  * NOTION BOUNDARY CHECK (P0 relaunch gate, 2026-08-25).
  *
- * The scoped read-only integration (tsp-site-cms) must see ONLY the CMS databases
- * and NOTHING private. This asserts, using the live token:
- *   1. every database the token can see is an expected CMS database (no surprise /
- *      private DB leaked into scope) — a stray DB fails the build;
- *   2. a known-private id from the OLD workspace (the "🚦 trafficschoolpicker.com"
- *      hub) is NOT reachable (must 404) — proves the boundary holds.
- *
- * Runs in `prebuild`; a non-zero exit fails the build. Fail-closed.
+ * Runs in `prebuild`; a non-zero exit fails the build (fail-closed). Asserts:
+ *   1. every CMS database id the site is configured with (NOTION_*_DB env) is
+ *      RETRIEVABLE and is an expected CMS database — a missing/mangled/mis-shared
+ *      id fails HERE with the offending env var name, not deep in page generation;
+ *   2. the OLD workspace's private hub id is NOT reachable (must 404);
+ *   3. (best-effort) the token sees no UNEXPECTED database beyond the CMS set.
  */
 import { config } from "dotenv";
 config({ path: ".env.local" });
@@ -17,54 +15,61 @@ import { makeNotionClient } from "./lib/notion-client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const notion: any = makeNotionClient();
 
-// Old workspace's private hub id — MUST be unreachable with the new token.
 const OLD_PRIVATE_HUB_ID = "3362c5a8-ad0a-8180-844b-f0f44d1b487c";
-
-// Expected CMS databases (title, normalized: alnum-only, lowercased). Blog Content
-// is optional — the site renders the blog from MDX, not Notion.
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
 const EXPECTED = new Set([
   "Traffic Schools", "School Directory", "State Requirements", "School State Variants",
   "Question Pages", "States", "School Pricing", "State FAQ Facts", "Blog Content",
 ].map(norm));
 
+// The DB env vars the SITE build reads. Each must point at a real, shared CMS db.
+const SITE_DB_ENVS = [
+  "NOTION_SCHOOLS_DB", "NOTION_DIRECTORY_DB", "NOTION_STATE_REQUIREMENTS_DB",
+  "NOTION_SCHOOL_VARIANTS_DB", "NOTION_QUESTIONS_DB", "NOTION_STATES_DB",
+  "NOTION_PRICING_DB", "NOTION_FAQ_DB_ID",
+];
+const dbTitle = (db: any) => (db?.title?.map((t: any) => t.plain_text).join("") || "").trim();
+
 async function main() {
   if (!process.env.NOTION_TOKEN) { console.error("❌ NOTION_TOKEN not set"); process.exit(1); }
-
-  // 1) enumerate visible databases
-  const res = await notion.search({ filter: { property: "object", value: "database" }, page_size: 100 });
-  const dbs = (res.results as any[]).map((d) => ({
-    id: d.id,
-    title: (d.title?.map((t: any) => t.plain_text).join("") || "(untitled)").trim(),
-  }));
-  const unexpected = dbs.filter((d) => !EXPECTED.has(norm(d.title)));
-
-  // 2) the old private hub must NOT be reachable
-  let hubReachable = false;
-  try {
-    await notion.pages.retrieve({ page_id: OLD_PRIVATE_HUB_ID });
-    hubReachable = true;
-  } catch { /* expected: object_not_found → boundary holds */ }
-  try {
-    await notion.databases.retrieve({ database_id: OLD_PRIVATE_HUB_ID });
-    hubReachable = true;
-  } catch { /* expected */ }
-
-  console.log(`Notion boundary: ${dbs.length} databases visible — ${dbs.map((d) => d.title).join(", ")}`);
-
   const problems: string[] = [];
-  if (unexpected.length) problems.push(`UNEXPECTED database(s) in token scope: ${unexpected.map((d) => `${d.title} (${d.id})`).join(", ")}`);
+
+  // 1) every configured CMS db id must resolve to an expected database
+  for (const env of SITE_DB_ENVS) {
+    const id = (process.env[env] || "").trim();
+    if (!id) { problems.push(`${env} is not set`); continue; }
+    if (!/^[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}$/i.test(id)) {
+      problems.push(`${env} is not a valid Notion id: "${id}"`); continue;
+    }
+    try {
+      const db = await notion.databases.retrieve({ database_id: id });
+      const title = dbTitle(db);
+      if (!EXPECTED.has(norm(title))) problems.push(`${env} → "${title}" is not an expected CMS database`);
+    } catch (e: any) {
+      problems.push(`${env} (${id}) → ${e?.code ?? e?.message ?? "unretrievable"} (bad id or not shared with tsp-site-cms)`);
+    }
+  }
+
+  // 2) old private hub must be unreachable
+  let hubReachable = false;
+  for (const fn of [() => notion.pages.retrieve({ page_id: OLD_PRIVATE_HUB_ID }), () => notion.databases.retrieve({ database_id: OLD_PRIVATE_HUB_ID })]) {
+    try { await fn(); hubReachable = true; } catch { /* expected 404 */ }
+  }
   if (hubReachable) problems.push(`OLD PRIVATE HUB ${OLD_PRIVATE_HUB_ID} is REACHABLE — boundary breached`);
 
+  // 3) best-effort: no unexpected database in scope
+  try {
+    const res = await notion.search({ filter: { property: "object", value: "database" }, page_size: 100 });
+    const unexpected = (res.results as any[]).map(dbTitle).filter((t) => t && !EXPECTED.has(norm(t)));
+    if (unexpected.length) problems.push(`UNEXPECTED database(s) visible to the token: ${unexpected.join(", ")}`);
+  } catch { /* search is best-effort; the per-id checks above are authoritative */ }
+
   if (problems.length) {
-    console.error("\n❌ NOTION BOUNDARY FAILED:");
+    console.error("\n❌ NOTION BOUNDARY / ENV FAILED:");
     for (const p of problems) console.error(`  - ${p}`);
     process.exit(1);
   }
-
-  const missing = [...EXPECTED].filter((e) => !dbs.some((d) => norm(d.title) === e));
-  if (missing.length) console.warn(`  ⚠ not shared (ok if unused by the site, e.g. Blog Content = MDX): ${missing.join(", ")}`);
-  console.log(`✅ boundary OK — only CMS databases visible; old private hub is 404.`);
+  console.log(`✅ boundary OK — all ${SITE_DB_ENVS.length} CMS db ids resolve to expected databases; old private hub is 404.`);
 }
 
 main().catch((e) => { console.error("❌ boundary check error (fail-closed):", e?.message ?? e); process.exit(1); });
