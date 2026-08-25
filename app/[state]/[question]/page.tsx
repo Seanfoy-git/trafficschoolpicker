@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { getQuestionPages, getQuestionPage, getQuestionBody } from "@/lib/notion";
+import { getQuestionPages, getQuestionPage, getQuestionBody, getQuestionsForState } from "@/lib/notion";
 import { getStateBySlug } from "@/lib/state-utils";
 import { buildArticle, buildBreadcrumbList, buildFaqPage } from "@/lib/structured-data";
 import { QuestionArticle } from "@/components/QuestionArticle";
@@ -72,7 +72,12 @@ export default async function QuestionPage({ params }: Props) {
 
   const stateMeta = getStateBySlug(q.stateSlug);
   const stateName = stateMeta?.name ?? q.stateCode;
-  const body = await getQuestionBody(q.id);
+  const [body, stateQuestions] = await Promise.all([
+    getQuestionBody(q.id),
+    getQuestionsForState(q.stateSlug),
+  ]);
+  // Other Complete question pages for this state → sibling-link gating in the body.
+  const siblingSlugs = stateQuestions.map((x) => x.questionSlug).filter((s) => s !== q.questionSlug);
 
   const path = `/${q.stateSlug}/${q.questionSlug}`;
   const ogImage = `${SITE}/images/states/${q.stateSlug}.png`;
@@ -122,6 +127,7 @@ export default async function QuestionPage({ params }: Props) {
         stateSlug={q.stateSlug}
         lastVerified={q.lastVerified}
         hubPath={hubPath}
+        siblingSlugs={siblingSlugs}
       />
     </main>
   );

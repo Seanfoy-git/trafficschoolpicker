@@ -14,27 +14,44 @@ function escapeRegex(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-/** Turn the FIRST plain-text "{State} page" reference in the prose into a link to
- *  the parent state page (the single contextual link the brief asks for). Splits
- *  the run so bold/italic marks on the surrounding text are preserved. */
-function linkStateReference(blocks: ReviewBlock[], stateName: string, stateSlug: string): ReviewBlock[] {
-  const re = new RegExp(`${escapeRegex(stateName)}\\s+page`, "i");
-  let linked = false;
+// Natural-language references in the prose → the sibling question slug they point
+// at. A phrase links only when that sibling row is Complete for the same state
+// (checked by the caller); otherwise the phrase renders as plain text. Add a row
+// per new question template.
+const SIBLING_QUESTION_PHRASES: Array<{ re: RegExp; slug: string }> = [
+  { re: /(?:our|the)\s+points\s+page/i, slug: "does-traffic-school-remove-points" },
+];
+
+type LinkRule = { re: RegExp; href: string };
+
+/** Inject internal links into the prose: the FIRST match of each rule becomes a
+ *  link, splitting the run so surrounding bold/italic marks survive. One link per
+ *  rule total (a rule that never matches, or points at a non-Complete sibling,
+ *  simply leaves the phrase as plain text). */
+function linkBodyReferences(blocks: ReviewBlock[], rules: LinkRule[]): ReviewBlock[] {
+  const done = new Set<number>();
   return blocks.map((b) => {
-    if (linked || b.type !== "paragraph") return b;
-    const runs: ReviewRichText[] = [];
-    for (const run of b.richText) {
-      if (linked || run.href) { runs.push(run); continue; }
-      const m = run.text.match(re);
-      if (!m || m.index === undefined) { runs.push(run); continue; }
-      const before = run.text.slice(0, m.index);
-      const after = run.text.slice(m.index + m[0].length);
-      if (before) runs.push({ ...run, text: before });
-      runs.push({ ...run, text: m[0], href: `/${stateSlug}` });
-      if (after) runs.push({ ...run, text: after });
-      linked = true;
+    if (b.type !== "paragraph" || done.size === rules.length) return b;
+    let runs = b.richText;
+    for (let ri = 0; ri < rules.length; ri++) {
+      if (done.has(ri)) continue;
+      const rule = rules[ri];
+      const next: ReviewRichText[] = [];
+      let linkedHere = false;
+      for (const run of runs) {
+        if (linkedHere || run.href) { next.push(run); continue; }
+        const m = run.text.match(rule.re);
+        if (!m || m.index === undefined) { next.push(run); continue; }
+        const before = run.text.slice(0, m.index);
+        const after = run.text.slice(m.index + m[0].length);
+        if (before) next.push({ ...run, text: before });
+        next.push({ ...run, text: m[0], href: rule.href });
+        if (after) next.push({ ...run, text: after });
+        linkedHere = true;
+      }
+      if (linkedHere) { done.add(ri); runs = next; }
     }
-    return { ...b, richText: runs };
+    return runs === b.richText ? b : { ...b, richText: runs };
   });
 }
 
@@ -54,6 +71,7 @@ export function QuestionArticle({
   stateSlug,
   lastVerified,
   hubPath,
+  siblingSlugs = [],
 }: {
   keyFacts: QuestionKeyFact[];
   body: ReviewBlock[];
@@ -62,12 +80,21 @@ export function QuestionArticle({
   stateSlug: string;
   lastVerified: string | null;
   hubPath?: string | null;
+  siblingSlugs?: string[]; // Complete question slugs for this state, excluding self
 }) {
   const verified = verifiedLabel(lastVerified);
   // The Last Verified date renders as its own footer line (like the state page),
   // so drop any duplicate "Last verified" row from the Key Facts list.
   const facts = keyFacts.filter((f) => !/^last\s+verified$/i.test(f.label.trim()));
-  const linkedBody = linkStateReference(body, stateName, stateSlug);
+  // Body links: the parent state page ("{State} page"), plus any sibling question
+  // page whose row is Complete for this state ("our points page" → /{state}/{slug}).
+  const rules: LinkRule[] = [
+    { re: new RegExp(`${escapeRegex(stateName)}\\s+page`, "i"), href: `/${stateSlug}` },
+    ...SIBLING_QUESTION_PHRASES
+      .filter((p) => siblingSlugs.includes(p.slug))
+      .map((p) => ({ re: p.re, href: `/${stateSlug}/${p.slug}` })),
+  ];
+  const linkedBody = linkBodyReferences(body, rules);
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
