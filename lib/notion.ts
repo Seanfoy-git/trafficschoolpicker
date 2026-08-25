@@ -85,6 +85,29 @@ function parseStateCodes(raw: string): string[] {
   return raw.split(",").map((s) => s.trim().toUpperCase()).filter(Boolean);
 }
 
+// ─── PAGE-SOURCE GUARDS (P0 incident, 2026-08-25) ───────────
+// Any route that renders a Notion page BODY (blocks) by id is in the incident's
+// risk class: an over-broad token + an API mis-serve could resolve that id to a
+// foreign workspace page (recipe / Credentials Vault). Before rendering blocks we
+// confirm the page's PARENT is the expected CMS database; otherwise fail closed.
+const normId = (s: string | undefined | null) => (s ?? "").replace(/-/g, "").toLowerCase();
+const pageParentDbId = (p: PageObjectResponse): string =>
+  normId((p as any)?.parent?.database_id ?? (p as any)?.parent?.data_source_id ?? "");
+
+// Retrieve a page and confirm its parent is one of `allowed` (normalized db/data-
+// source ids). Returns false on any error or mismatch (fail-closed). Empty
+// `allowed` (db env unset) → false, so nothing renders rather than risking a leak.
+async function pageBelongsTo(pageId: string, allowed: Set<string>): Promise<boolean> {
+  if (allowed.size === 0) return false;
+  try {
+    const page = await withNotionRetry(() => notion.pages.retrieve({ page_id: pageId }));
+    return allowed.has(pageParentDbId(page as PageObjectResponse));
+  } catch {
+    return false;
+  }
+}
+const SCHOOLS_PARENT_IDS = new Set([normId(SCHOOLS_DB)].filter(Boolean));
+
 function parseLines(raw: string): string[] {
   // Split on newlines first; if that yields a single element with pipes, split on pipes
   const lines = raw.split("\n").map((s) => s.replace(/^[-•*]\s*/, "").trim()).filter(Boolean);
@@ -587,6 +610,10 @@ function mapReviewRichText(rich: any[] | undefined): ReviewRichText[] {
 // Returns [] for a page with no renderable body (school renders no review section).
 export const getSchoolReviewBody = cache(async (pageId: string): Promise<ReviewBlock[]> => {
   if (!process.env.NOTION_TOKEN) return [];
+  // GUARD (same risk class as the question-page incident): only render the blocks
+  // of a page that provably belongs to the Traffic Schools DB. If the API mis-serves
+  // this id as another workspace page, its parent won't match → [] (no body).
+  if (!(await pageBelongsTo(pageId, SCHOOLS_PARENT_IDS))) return [];
   const blocks: ReviewBlock[] = [];
   let cursor: string | undefined;
   do {
@@ -607,11 +634,31 @@ export const getSchoolReviewBody = cache(async (pageId: string): Promise<ReviewB
 });
 
 // ─── STATE QUESTION PAGES DB (/{state}/{question-slug}) ──────
+//
+// P0 INCIDENT HARDENING (2026-08-25): a question route may render ONLY a row that
+// provably belongs to the Question Pages data source. Two independent guards below
+// mean that even if the Notion API ever returns a foreign page under load (the
+// necessary condition for the incident, together with an over-broad token):
+//   (1) parent-id allowlist — the row's parent must be the Question Pages
+//       database/data source, else it is dropped; and
+//   (2) schema validation — the row must carry State Slug + Question Slug + H1.
+// A recipe / Credentials-Vault page satisfies neither, so it can never become a
+// QuestionPage. The structural fix remains the SCOPED token (see incident notes).
+
+// Allowlist of parent ids that a legitimate Question Pages row may have. Both the
+// database container id (the NOTION_QUESTIONS_DB env) and the data source id are
+// accepted (Notion reports one or the other depending on API version). Normalized
+// (dashless, lowercase) for comparison.
+// Parent-source allowlist is derived from the env DB id (Notion reports row parents
+// as { database_id: <NOTION_QUESTIONS_DB> }). No hardcoded ids — nothing to rot on a
+// workspace migration.
+const QP_PARENT_IDS = new Set([normId(QUESTIONS_DB)].filter(Boolean));
+const belongsToQuestionsDb = (p: PageObjectResponse): boolean => QP_PARENT_IDS.has(pageParentDbId(p));
 
 // All COMPLETE question rows, once per build. Same gate discipline as state
 // pages: only Content Status === "Complete" exists as a page. Returns [] if the
-// DB is unset or unreachable (not yet shared with the integration) — the build
-// then simply renders zero question pages, never a placeholder.
+// DB is unset or unreachable — the build then renders zero question pages, never a
+// placeholder. FAIL-CLOSED: any query error → [] (no pages), never fallback content.
 export const getQuestionPages = memoize(async (): Promise<QuestionPage[]> => {
   if (!process.env.NOTION_TOKEN || !QUESTIONS_DB) return [];
   try {
@@ -619,6 +666,7 @@ export const getQuestionPages = memoize(async (): Promise<QuestionPage[]> => {
       queryAllPages(QUESTIONS_DB, { property: "Content Status", select: { equals: "Complete" } })
     );
     return pages
+      .filter(belongsToQuestionsDb) // guard 1: provably a Question Pages row
       .map((p) => ({
         id: p.id,
         title: getText(p, "Title"),
@@ -631,16 +679,18 @@ export const getQuestionPages = memoize(async (): Promise<QuestionPage[]> => {
         lastVerified: getDate(p, "Last Verified"),
         sources: getFullRichText(p, "Sources"),
       }))
-      .filter((q) => q.stateSlug && q.questionSlug && q.h1);
+      .filter((q) => q.stateSlug && q.questionSlug && q.h1); // guard 2: QP schema present
   } catch {
-    return []; // DB not created / not shared with the integration yet.
+    return []; // fail-closed: no pages, never foreign/placeholder content.
   }
 });
 
+// Exactly-one-row lookup. 0 matches OR >1 (a duplicate) → null → the route 404s.
 export async function getQuestionPage(stateSlug: string, questionSlug: string): Promise<QuestionPage | null> {
-  return (await getQuestionPages()).find(
+  const matches = (await getQuestionPages()).filter(
     (q) => q.stateSlug === stateSlug.toLowerCase() && q.questionSlug === questionSlug.toLowerCase()
-  ) ?? null;
+  );
+  return matches.length === 1 ? matches[0] : null;
 }
 
 // Complete question pages for one state (drives the state page's "Common questions" block).
@@ -655,9 +705,16 @@ export async function getQuestionsForState(stateSlug: string): Promise<QuestionP
 const QUESTION_BODY_TYPES = new Set<ReviewBlockType>([
   "paragraph", "heading_2", "heading_3", "bulleted_list_item", "numbered_list_item",
 ]);
-export const getQuestionBody = cache(async (pageId: string): Promise<QuestionBody> => {
-  const empty: QuestionBody = { keyFacts: [], body: [], sources: [], hasQA: false };
-  if (!process.env.NOTION_TOKEN) return empty;
+// FAIL-CLOSED: returns null on ANY fetch error (missing token, 429 after retries,
+// network) so the route 404s rather than rendering partial/absent content. Called
+// ONLY with a page id from a parent+schema-validated getQuestionPages row.
+export const getQuestionBody = cache(async (pageId: string): Promise<QuestionBody | null> => {
+  if (!process.env.NOTION_TOKEN) return null;
+  // GUARD (incident symptom was foreign content under a valid route): confirm the
+  // page at this id is actually a Question Pages row before rendering its blocks.
+  // If the API ever mis-serves this id as another workspace page, its parent won't
+  // be the Question Pages DB → null → 404. Belt-and-suspenders with the scoped token.
+  if (!(await pageBelongsTo(pageId, QP_PARENT_IDS))) return null; // fail-closed
   const raw: { type: string; rich: ReviewRichText[] }[] = [];
   let cursor: string | undefined;
   try {
@@ -672,7 +729,7 @@ export const getQuestionBody = cache(async (pageId: string): Promise<QuestionBod
       cursor = res.has_more ? (res.next_cursor ?? undefined) : undefined;
     } while (cursor);
   } catch {
-    return empty;
+    return null; // fail-closed → route 404s.
   }
 
   const keyFacts: QuestionKeyFact[] = [];
