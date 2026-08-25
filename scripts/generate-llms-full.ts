@@ -244,6 +244,7 @@ async function main() {
     lines.push("");
     for (const q of questions) {
       const body = await getQuestionBody(q.id);
+      if (!body) continue; // fail-closed: skip a row whose body couldn't be fetched
       lines.push(`## ${q.h1}`);
       lines.push("");
       lines.push(`**URL:** ${BASE_URL}/${q.stateSlug}/${q.questionSlug}`);

@@ -76,6 +76,9 @@ export default async function QuestionPage({ params }: Props) {
     getQuestionBody(q.id),
     getQuestionsForState(q.stateSlug),
   ]);
+  // FAIL-CLOSED: a fetch failure (null) or a body with no renderable content is a
+  // 404 — never render a shell or partial/foreign content under a question route.
+  if (!body || (body.keyFacts.length === 0 && body.body.length === 0)) notFound();
   // Other Complete question pages for this state → sibling-link gating in the body.
   const siblingSlugs = stateQuestions.map((x) => x.questionSlug).filter((s) => s !== q.questionSlug);
 
