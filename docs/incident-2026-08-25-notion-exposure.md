@@ -89,7 +89,10 @@ transient API mis-serve into a private-content render.
 - [x] Route guard — emitted routes == Complete rows (`postbuild`).
 - [x] `sanitizeHref` strips `notion.*` links from rendered content.
 - [x] Live sweep script for post-deploy verification.
-- [ ] **Delete the duplicate `tsp-site-cms` integration** in Notion (avoid token ambiguity).
-- [ ] **Rotate the `tsp-site-cms` token** (it was shared in a chat during response).
+- [x] **Vercel token reconciled** — a stale/old token value (`d3dc228c`) was in Vercel vs
+      the working one (`996637ea`); the correct token is now live. No duplicate
+      integration was found on inspection (the two values just caused the confusion).
+- [ ] **Rotate the `tsp-site-cms` token** (it was shared in a chat during response);
+      update Vercel + `.env.local` when you do.
 - [ ] Rotate Credentials Vault secrets (Sean's call; low real-world risk given the wall).
 - [ ] Consider retrieving DB ids from `search` at build (title→id) to remove hand-entered id risk.
