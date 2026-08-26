@@ -33,14 +33,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const path = `/${q.stateSlug}/${q.questionSlug}`;
   const url = `${SITE}${path}`;
   const ogImage = `${SITE}/images/states/${q.stateSlug}.png`; // reuse the state card for now
-  const title = q.titleTag || q.title;
+  const fullTitle = q.titleTag || q.title;
+  // The Notion Title Tag is authored WITH the "| TrafficSchoolPicker" suffix, and
+  // the layout title template (%s | TrafficSchoolPicker) re-appends it → doubled.
+  // Strip a trailing brand suffix so the template adds it exactly once (robust
+  // whether or not a given row includes it). OG/Twitter keep the full authored title.
+  const title = fullTitle.replace(/\s*\|\s*TrafficSchoolPicker\s*$/i, "").trim();
   const description = q.metaDescription;
   return {
     title,
     description,
     alternates: { canonical: url },
-    openGraph: { title, description, url, siteName: "TrafficSchoolPicker", type: "article", images: [ogImage] },
-    twitter: { card: "summary_large_image", title, description, images: [ogImage] },
+    openGraph: { title: fullTitle, description, url, siteName: "TrafficSchoolPicker", type: "article", images: [ogImage] },
+    twitter: { card: "summary_large_image", title: fullTitle, description, images: [ogImage] },
   };
 }
 
