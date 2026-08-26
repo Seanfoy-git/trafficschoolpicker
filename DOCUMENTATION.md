@@ -206,6 +206,33 @@ database (4.9, Scraper Rules) that drives the price/offer pipeline. Each has a
 clear single responsibility. Database IDs are stored in env vars; the frontend
 reads them at module-init time (see [lib/notion.ts](lib/notion.ts)).
 
+### 4.0 CMS access boundary & page-source isolation (security)
+
+As of the **Pellucid CMS migration (Aug 2026)** the databases live in a dedicated
+Notion workspace, read through a **scoped, read-only integration `tsp-site-cms`**
+shared with **only** the "🌐 SITE DATA" page (the nine CMS databases) — never the
+workspace root or any page containing private data. This is the structural control:
+a fetch bug can only ever surface a CMS page, never a private one.
+
+Defense-in-depth in the render path (all fail-closed — an error is a 404/empty, never
+fallback content). This closed the Aug 2026 P0 where an over-broad token + an API
+mis-serve rendered a private page under a question route (see the incident retro):
+- **No search endpoint, no rewrite/proxy, no catch-all** — a page is fetched only by
+  a scoped `databases.query` on its DB, then blocks by that row's own page id.
+- **Parent-source allowlist** — before rendering a page BODY (blocks), the code
+  confirms the page's `parent` is the expected CMS database (`getQuestionBody`,
+  `getSchoolReviewBody` via `pageBelongsTo`). A foreign page → 404/empty.
+- **Exactly-one-row** lookups; **retry-with-backoff** on 429s.
+- **Never render an internal Notion link** — `sanitizeHref` strips any `notion.*`
+  href from rendered rich text (a migrated body once linked to `app.notion.com`).
+- **Boundary CI gate** (`scripts/verify-notion-boundary.ts`, `prebuild`) — every
+  configured `NOTION_*_DB` id must resolve to an expected CMS database and the old
+  private hub id must 404, else the build fails (catches env-entry slips early).
+- **Route guard** (`scripts/verify-question-routes.ts`, `postbuild`) — emitted
+  question routes must exactly equal the Complete rows, else the build fails.
+- **Live sweep** (`scripts/live-sweep.ts`) — post-deploy, asserts every question +
+  review page has 0 tracker/merchant markup (questions), 0 Notion links, correct schema.
+
 ### 4.1 Traffic Schools DB
 Env: `NOTION_SCHOOLS_DB`
 
