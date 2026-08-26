@@ -20,6 +20,7 @@ function escapeRegex(s: string): string {
 // per new question template.
 const SIBLING_QUESTION_PHRASES: Array<{ re: RegExp; slug: string }> = [
   { re: /(?:our|the)\s+points\s+page/i, slug: "does-traffic-school-remove-points" },
+  { re: /(?:our|the)\s+cost\s+page/i, slug: "how-much-does-traffic-school-cost" },
 ];
 
 type LinkRule = { re: RegExp; href: string };

@@ -592,12 +592,23 @@ const REVIEW_BLOCK_TYPES = new Set<ReviewBlockType>([
   "numbered_list_item",
 ]);
 
+// SECURITY: never surface an internal Notion link on the public site. CMS bodies
+// sometimes carry cross-reference phrases linked to app.notion.com/notion.so URLs
+// (private pages — this was the visible tail of the P0). Drop any such href → the
+// text renders plain, and the question-page body linker re-adds the correct
+// SITE-relative link for known phrases (gated on the target being Complete).
+function sanitizeHref(href: string | null | undefined): string | null {
+  if (!href) return null;
+  if (/^https?:\/\/(?:[a-z0-9-]+\.)*notion\.(?:so|com|site)\b/i.test(href.trim())) return null;
+  return href;
+}
+
 function mapReviewRichText(rich: any[] | undefined): ReviewRichText[] {
   return (rich ?? []).map((r: any) => ({
     text: r.plain_text ?? "",
     bold: r.annotations?.bold ?? false,
     italic: r.annotations?.italic ?? false,
-    href: r.href ?? null,
+    href: sanitizeHref(r.href),
   }));
 }
 
