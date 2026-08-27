@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getLinkableStates } from "@/lib/notion";
+import { FooterAffiliateNote } from "./FooterAffiliateNote";
 
 // Curated "popular" ordering for the compact column; filtered against the
 // linkable set below so a state never appears here unless it's eligible.
@@ -150,8 +151,8 @@ export async function Footer() {
 
         <div className="border-t border-slate-700 mt-8 pt-6 text-center text-xs text-slate-400">
           &copy; {new Date().getFullYear()} PellucidMedia LLC · TrafficSchoolPicker.com.
-          All rights reserved. | Affiliate disclosure: we earn commissions from partner
-          links. | Prices &amp; offers subject to change — verify on the provider&apos;s site.
+          All rights reserved. | <FooterAffiliateNote /> | Prices &amp; offers subject to
+          change — verify on the provider&apos;s site.
         </div>
       </div>
     </footer>
