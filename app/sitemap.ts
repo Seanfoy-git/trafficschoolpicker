@@ -51,6 +51,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/schools`, lastModified: dataLastmod, changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/reviews`, lastModified: dataLastmod, changeFrequency: "weekly", priority: 0.7 },
     { url: `${BASE_URL}/about`, lastModified: STATIC_LASTMOD, changeFrequency: "monthly", priority: 0.5 },
+    // Standing multi-state reference (outreach link target). lastmod is the page's
+    // real last-verified/edit date — bump app/out-of-state-ticket DATE_MODIFIED and
+    // this together when its facts change (never wire either to build time).
+    { url: `${BASE_URL}/out-of-state-ticket`, lastModified: "2026-08-27", changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/blog`, lastModified: blogIndexLastmod, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/disclaimer`, lastModified: STATIC_LASTMOD, changeFrequency: "yearly", priority: 0.3 },
     { url: `${BASE_URL}/terms`, lastModified: STATIC_LASTMOD, changeFrequency: "yearly", priority: 0.3 },
