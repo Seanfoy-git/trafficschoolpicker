@@ -57,3 +57,6 @@ ids-price-sync.json
 
 xgrit-price-sync.json
 jsonld-price-sync.json
+
+# Runtime research queue for /out-of-state-ticket (contains emails) — never commit
+data/state-requests.json
