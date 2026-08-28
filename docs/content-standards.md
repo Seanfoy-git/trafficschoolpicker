@@ -102,3 +102,23 @@ Run this before shipping any page or post:
 - [ ] **"Last verified" stamp** present; changed-law effective dates noted.
 - [ ] Internal links wired (guide ↔ state pages ↔ related posts); SEO config + sitemap updated for new routes.
 - [ ] Build passes; route guard green.
+
+---
+
+## 7. What's enforced automatically
+
+A prebuild gate — `scripts/verify-content-standards.ts` — **hard-fails the build** on
+the structural invariants this standard requires (same philosophy as the Notion
+boundary + route guards: assert the expected so drift goes red):
+
+- Every published blog post has a `BLOG_SEO` entry (else it's missing from the sitemap).
+- The out-of-state reference guide carries **no** affiliate/course/tracker/Notion link.
+- The reference guide carries a "Last verified" stamp.
+- Every **new** published blog post shows sources/citations. Legacy posts that predate
+  this standard are grandfathered in `LEGACY_UNSOURCED` and printed as debt — retrofit
+  them and shrink the set; when it's empty, every post is gated.
+
+**Best-intent, not proof.** The gate verifies the author *did the sourcing work*, not
+that a fact is *true* — nothing automated can. Truth, primary-vs-secondary quality,
+balance, and "did you state what you couldn't settle" stay with the checklist above,
+the `content` skill, and human review.
