@@ -139,13 +139,24 @@ export default async function StatePage({ params }: Props) {
   // State grids are Tier 1 only. Tier 2 schools appear in the /schools directory only.
   const tier1 = schools.filter((s) => s.tier === 1);
   const year = new Date().getFullYear();
-  const h1 = seo?.h1 ?? `Online Traffic Schools in ${stateMeta.name} (${year})`;
+  // States that show the comparison grid get an "online traffic schools" H1;
+  // court-program / in-person states get a neutral one (they sell no online course).
+  const onlineComparisonStatus =
+    onlineStatus === "Online — ticket dismissal" ||
+    onlineStatus === "Online — insurance discount only" ||
+    onlineStatus === "Online — court discretion";
+  const h1 =
+    seo?.h1 ??
+    (onlineComparisonStatus
+      ? `Online Traffic Schools in ${stateMeta.name} (${year})`
+      : `Traffic School in ${stateMeta.name}`);
 
   // The comparison grid (and its Product/ItemList schema) render only for online
   // states that actually have tier-1 schools — the single gate shared below.
   const showComparison =
     (onlineStatus === "Online — ticket dismissal" ||
-      onlineStatus === "Online — insurance discount only") &&
+      onlineStatus === "Online — insurance discount only" ||
+      onlineStatus === "Online — court discretion") &&
     tier1.length > 0;
 
   // Resolve each tier-1 school's per-state content once and share it between the
@@ -330,6 +341,49 @@ export default async function StatePage({ params }: Props) {
               <p className="text-sm text-slate-600">
                 We&apos;re still researching {stateMeta.name}&apos;s online traffic school rules.
                 Contact the court on your citation for current eligibility.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* COURT-DISCRETION states (no statewide program; courses may be accepted
+          court by court). The comparison grid still renders below — an approved
+          course can count toward a diversion where the court allows it. */}
+      {onlineStatus === "Online — court discretion" && (
+        <section className="py-6 bg-slate-50 border-b border-slate-200">
+          <div className="max-w-5xl mx-auto px-4 flex items-start gap-3">
+            <Info className="w-5 h-5 text-slate-500 mt-0.5 shrink-0" />
+            <div>
+              <p className="font-semibold text-slate-700">Decided court by court</p>
+              <p className="text-sm text-slate-600">
+                {stateMeta.name} has no statewide traffic-school program — whether a
+                course helps with your ticket is decided by the court on your citation.
+                An approved online course can count toward a diversion or dismissal
+                agreement where the court accepts it, so confirm with that court before
+                you enroll.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* COURT-PROGRAM-ONLY states (no self-serve online course resolves a ticket;
+          relief runs through a court program — IL supervision, KY State Traffic
+          School). No comparison grid: the national online courses don't satisfy it. */}
+      {onlineStatus === "Court program only" && (
+        <section className="py-8 bg-slate-50 border-b border-slate-200">
+          <div className="max-w-3xl mx-auto px-4 flex items-start gap-3">
+            <Info className="w-5 h-5 text-slate-500 mt-0.5 shrink-0" />
+            <div>
+              <p className="font-semibold text-slate-700">
+                Handled through the court, not a retail online course
+              </p>
+              <p className="text-sm text-slate-600">
+                There is no self-serve online course that resolves a {stateMeta.name}{" "}
+                ticket on its own. Relief runs through a court program set by the court
+                on your citation — contact that court about your options before paying
+                for any course.
               </p>
             </div>
           </div>
