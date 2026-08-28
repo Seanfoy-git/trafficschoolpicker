@@ -309,6 +309,50 @@
 .oost .tag.x  { background: var(--accent-w);  color: var(--accent); }
 .oost .tag.q  { background: var(--flag-w);    color: var(--flag); }
 
+/* On phones the two wide comparison tables become labelled cards — one per state —
+   so the payoff columns ("Non-resident eligible", "Helps a licence…") are visible
+   without horizontal scrolling. Column labels are injected by position. */
+@media (max-width: 680px) {
+  .oost .tw { overflow-x: visible; border: 0; background: transparent; margin: 20px 0 8px; }
+  .oost .tw table { min-width: 0; width: 100%; }
+  /* hide the header row visually, keep it for screen readers */
+  .oost .tw thead {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); border: 0;
+  }
+  .oost .tw tbody tr {
+    display: block;
+    border: 1px solid var(--rule-2);
+    background: var(--surface);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .oost .tw tbody tr:last-child td { border-bottom: 0; }
+  .oost .tw tbody th[scope="row"] {
+    display: block; border: 0; padding: 0 0 10px; margin-bottom: 10px;
+    font-size: 1.08rem; white-space: normal;
+    border-bottom: 1px solid var(--rule);
+  }
+  .oost .tw tbody td {
+    display: block; border: 0; padding: 9px 0 0;
+    white-space: normal; font-size: .92rem;
+  }
+  .oost .tw tbody td:first-of-type { padding-top: 0; }
+  .oost .tw tbody td::before {
+    display: block; margin-bottom: 3px;
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: .07em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600;
+  }
+  .oost .t-ticketing tbody td:nth-of-type(1)::before { content: "Programme"; }
+  .oost .t-ticketing tbody td:nth-of-type(2)::before { content: "What it does"; }
+  .oost .t-ticketing tbody td:nth-of-type(3)::before { content: "Non-resident eligible"; }
+  .oost .t-ticketing tbody td:nth-of-type(4)::before { content: "Helps a licence from elsewhere"; }
+  .oost .t-home tbody td:nth-of-type(1)::before { content: "Points on out-of-state convictions"; }
+  .oost .t-home tbody td:nth-of-type(2)::before { content: "Detail"; }
+  .oost .t-home tbody td:nth-of-type(3)::before { content: "Source"; }
+}
+
 /* ------------ callouts ------------ */
 .oost .box {
   border: 1px solid var(--rule-2);
