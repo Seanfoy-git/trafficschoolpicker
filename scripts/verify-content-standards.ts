@@ -25,19 +25,10 @@ import { BLOG_SEO } from "../lib/seo-config";
 const BLOG_DIR = "content/blog";
 const GUIDE_CONTENT = "app/out-of-state-ticket/content.ts";
 
-// Legacy posts that predate the sourcing standard. DEBT: retrofit each with a
-// Sources section / statute citations, then remove it here. Do NOT add new slugs.
-const LEGACY_UNSOURCED = new Set<string>([
-  "best-online-traffic-schools-2026",
-  "does-traffic-school-remove-points",
-  "florida-bdi-vs-adi",
-  "how-long-does-online-traffic-school-take",
-  "how-to-dismiss-traffic-ticket-california",
-  "how-to-dismiss-traffic-ticket-online",
-  "idrivesafely-vs-aceable",
-  "texas-deferred-disposition",
-  "traffic-school-vs-paying-ticket",
-]);
+// Legacy posts that predated the sourcing standard, now all retrofitted (2026-08-27)
+// — the set is empty, so the grandfather clause is dead and EVERY published post is
+// gated on sources. Do NOT add slugs here; source the post instead.
+const LEGACY_UNSOURCED = new Set<string>([]);
 
 // "Sources present" heuristic: a Sources section, a named statute/reg, or an
 // external (non-TSP) source link. Deliberately broad — this is a nudge, not proof.
