@@ -234,7 +234,9 @@ export const BODY_TOP = `
   <div class="states">
 
     <div class="st">
-      <div class="st-hd"><h3 id="arizona">Arizona</h3><span class="tag y">Dismissal</span></div>
+      <p class="st-eyebrow">Out-of-state driver's guide</p>
+      <div class="st-hd"><h3 id="arizona">Arizona</h3><span class="tag y">Works for you</span></div>
+      <p class="st-verdict"><strong>Good news if you're licensed elsewhere:</strong> Arizona's defensive-driving diversion is open to any valid licence and dismisses the citation outright, so nothing reaches your home state. Finish a Supreme Court-certified course at least 7 days before your court date — the strongest option on this page for a visiting driver.</p>
       <dl>
         <dt>Programme</dt><dd>Defensive driving school, run under Arizona Supreme Court authority</dd>
         <dt>Length</dt><dd>240 to 270 minutes including testing</dd>
@@ -251,7 +253,9 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3 id="florida">Florida</h3><span class="tag y">Adjudication withheld</span></div>
+      <p class="st-eyebrow">Out-of-state driver's guide</p>
+      <div class="st-hd"><h3 id="florida">Florida</h3><span class="tag y">Works for you</span></div>
+      <p class="st-verdict"><strong>Florida works for a visiting driver:</strong> electing Basic Driver Improvement within 30 days withholds adjudication, so there's no conviction to report home. The cleanest option here — just don't pay the ticket first, and mind the 30-day deadline.</p>
       <dl>
         <dt>Programme</dt><dd>Basic Driver Improvement (BDI)</dd>
         <dt>Length</dt><dd>4 hours minimum of course content</dd>
@@ -266,7 +270,9 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3 id="texas">Texas</h3><span class="tag x">Texas licence required</span></div>
+      <p class="st-eyebrow">Out-of-state driver's guide</p>
+      <div class="st-hd"><h3 id="texas">Texas</h3><span class="tag x">You can't take it</span></div>
+      <p class="st-verdict"><strong>You can't use the Texas course at all</strong> if your licence is from another state — it needs a Texas licence and no judge can waive that. Call the clerk of the court on your citation, ask whether any disposition avoids a conviction and whether you qualify out-of-state; for a serious charge, a Texas lawyer is worth it.</p>
       <dl>
         <dt>Programme</dt><dd>Driving safety course approved by TDLR</dd>
         <dt>Length</dt><dd>6 hours</dd>
@@ -282,7 +288,9 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3 id="california">California</h3><span class="tag q">Masked, effect elsewhere unknown</span></div>
+      <p class="st-eyebrow">Out-of-state driver's guide</p>
+      <div class="st-hd"><h3 id="california">California</h3><span class="tag q">Unresolved for you</span></div>
+      <p class="st-verdict"><strong>Treat this as unresolved.</strong> California masks the conviction on its own record, but whether that stops it reaching your home state is genuinely unsettled — it's one of the open questions below. Don't assume it protects your home record; call the clerk, and if the stakes are high, get advice first.</p>
       <dl>
         <dt>Programme</dt><dd>Traffic violator school</dd>
         <dt>Length</dt><dd>340 minutes of instruction plus 60 minutes of testing. Online courses are measured by word count instead, at a minimum of 42,500 words</dd>
@@ -297,7 +305,9 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3 id="north-carolina">North Carolina</h3><span class="tag q">No judgment entered</span></div>
+      <p class="st-eyebrow">Out-of-state driver's guide</p>
+      <div class="st-hd"><h3 id="north-carolina">North Carolina</h3><span class="tag q">Court route, not a course</span></div>
+      <p class="st-verdict"><strong>The tool here is a court disposition, not a course.</strong> Ask the clerk about a Prayer for Judgment Continued and don't just pay the ticket online, which forecloses it — though whether a PJC follows you home is an open question below.</p>
       <dl>
         <dt>Mechanism</dt><dd>Prayer for judgment continued, a court disposition rather than a course. North Carolina also runs a driver improvement clinic, which is the separate point-credit route</dd>
         <dt>Clinic length</dt><dd>Not fixed by rule. The administrative code specifies the course content, not a number of hours</dd>
@@ -313,7 +323,9 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3 id="ohio">Ohio</h3><span class="tag n">Point credit only</span></div>
+      <p class="st-eyebrow">Out-of-state driver's guide</p>
+      <div class="st-hd"><h3 id="ohio">Ohio</h3><span class="tag n">No help for you</span></div>
+      <p class="st-verdict"><strong>The Ohio course does nothing for you</strong> — it only credits points on an Ohio record you don't have. Whether an Ohio court will instead dismiss or reduce your ticket for a course is up to that court, so call the clerk on your citation before you pay and ask.</p>
       <dl>
         <dt>Programme</dt><dd>Course of remedial driving instruction, usually sold as the adult remedial or two-point course</dd>
         <dt>Length</dt><dd>Minimum 8 hours</dd>
@@ -329,7 +341,9 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3 id="new-york">New York</h3><span class="tag n">Point credit only</span></div>
+      <p class="st-eyebrow">Out-of-state driver's guide</p>
+      <div class="st-hd"><h3 id="new-york">New York</h3><span class="tag n">No help for you</span></div>
+      <p class="st-verdict"><strong>New York's PIRP does nothing for you</strong> — it only cuts points on a New York record you don't have, and never dismisses the ticket. There's no course-based fix for a visiting driver; if the ticket matters, that's a plea or hearing, which is a lawyer's territory.</p>
       <dl>
         <dt>Programme</dt><dd>Point and Insurance Reduction Program (PIRP), online version I-PIRP</dd>
         <dt>Length</dt><dd>320 minutes, classroom and online alike. Classroom delivery sits under Part 138 and the internet version under Part 141</dd>
@@ -345,7 +359,9 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3 id="new-jersey">New Jersey</h3><span class="tag n">Point credit only</span></div>
+      <p class="st-eyebrow">Out-of-state driver's guide</p>
+      <div class="st-hd"><h3 id="new-jersey">New Jersey</h3><span class="tag n">No help for you</span></div>
+      <p class="st-verdict"><strong>The New Jersey course does nothing for you</strong> — it only credits points on a New Jersey record you don't have, and New Jersey has no online dismissal at all. Protecting your home record means contesting the charge, which usually means a lawyer.</p>
       <dl>
         <dt>Programmes</dt><dd>Three separate ones. The voluntary Defensive Driving Course, the Driver Improvement Program triggered by point accumulation, and the Probationary Driver Program. MVC states that defensive driving is not a substitute for driver improvement</dd>
         <dt>Length</dt><dd>Defensive driving is at least six hours, of which at least four must be classroom</dd>
@@ -359,7 +375,9 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3 id="virginia">Virginia</h3><span class="tag n">Point credit only</span></div>
+      <p class="st-eyebrow">Out-of-state driver's guide</p>
+      <div class="st-hd"><h3 id="virginia">Virginia</h3><span class="tag n">No help for you</span></div>
+      <p class="st-verdict"><strong>The Virginia clinic does nothing for you</strong> — it only touches a Virginia record you don't have. And take Virginia seriously: reckless driving is a criminal charge here at surprisingly low speeds, so if that's what you're facing, get a Virginia lawyer, not a course.</p>
       <dl>
         <dt>Programme</dt><dd>Driver improvement clinic. CDL holders have a separate commercial programme</dd>
         <dt>Length</dt><dd>8 hours</dd>
@@ -376,7 +394,9 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3 id="georgia">Georgia</h3><span class="tag n">Nothing to reduce</span></div>
+      <p class="st-eyebrow">Out-of-state driver's guide</p>
+      <div class="st-hd"><h3 id="georgia">Georgia</h3><span class="tag n">No help for you</span></div>
+      <p class="st-verdict"><strong>The Georgia course does nothing for you</strong> — Georgia gives a non-resident no points to reduce in the first place. One quirk in your favour: Georgia is outside the Driver License Compact, so a routine <em>paid</em> speeding fine has no automatic route to your home state — but don't just ignore the ticket, which can trigger a suspension.</p>
       <dl>
         <dt>Programme</dt><dd>Driver improvement, which DDS also calls defensive driving</dd>
         <dt>Length</dt><dd>6 hours</dd>
