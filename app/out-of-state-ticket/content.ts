@@ -108,7 +108,7 @@ export const BODY_TOP = `
   <p>This is the table that matters if you are the visiting driver. The question is not whether the course is good. It is whether the court ends up entering a conviction.</p>
 
   <div class="tw">
-    <table>
+    <table class="t-ticketing">
       <caption>Ticketing state: what the course does, and whether you qualify</caption>
       <thead>
         <tr><th scope="col">State</th><th scope="col">Programme</th><th scope="col">What it does</th><th scope="col">Non-resident eligible</th><th scope="col">Helps a licence from elsewhere</th></tr>
@@ -202,7 +202,7 @@ export const BODY_TOP = `
   <p>Now flip it. The ticket has been reported back. Whether it costs you anything depends entirely on the state that issued your licence, and the spread here is wider than most people expect.</p>
 
   <div class="tw">
-    <table>
+    <table class="t-home">
       <caption>Home state: points on a conviction that happened elsewhere</caption>
       <thead>
         <tr><th scope="col">Your licence</th><th scope="col">Points on out-of-state convictions</th><th scope="col">Detail</th><th scope="col">Source</th></tr>
