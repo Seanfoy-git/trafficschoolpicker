@@ -1,6 +1,7 @@
 import { CheckCircle } from "lucide-react";
 import type { ReviewBlock, ReviewRichText, QuestionKeyFact } from "@/lib/types";
 import { ReviewBody } from "./ReviewBody";
+import { OutOfStateCallout } from "./OutOfStateCallout";
 
 /** Month + year in UTC — matches the state-page Key Facts footer. */
 function verifiedLabel(iso: string | null): string | null {
@@ -99,6 +100,9 @@ export function QuestionArticle({
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
+      {/* Out-of-state signpost — same reference guide as the state hub pages. */}
+      <OutOfStateCallout stateName={stateName} />
+
       {/* Key Facts */}
       {facts.length > 0 && (
         <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">

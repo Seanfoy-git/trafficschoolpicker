@@ -20,6 +20,7 @@ import { SchoolCard } from "@/components/SchoolCard";
 import { FaqSection } from "@/components/FaqSection";
 import { DirectoryTable } from "@/components/DirectoryTable";
 import { TrustBar } from "@/components/TrustBar";
+import { OutOfStateCallout } from "@/components/OutOfStateCallout";
 import { StateKeyFacts } from "@/components/StateKeyFacts";
 import { NearbyStates } from "@/components/NearbyStates";
 import { RelatedPosts } from "@/components/RelatedPosts";
@@ -231,6 +232,14 @@ export default async function StatePage({ params }: Props) {
       </section>
 
       <TrustBar lastVerified={stateInfo?.lastVerified} />
+
+      {/* Out-of-state signpost — this page is written for {State} licensees; flag
+          drivers ticketed here on an out-of-state licence to the reference guide. */}
+      <section className="pt-6">
+        <div className="max-w-5xl mx-auto px-4">
+          <OutOfStateCallout stateName={stateMeta.name} />
+        </div>
+      </section>
 
       {/* KEY FACTS — scannable at-a-glance summary; the first substantive content
           on the page (targets featured snippets / AI Overviews / LLM extraction).

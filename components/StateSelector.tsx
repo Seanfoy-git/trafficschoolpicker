@@ -18,7 +18,7 @@ export function StateSelector({ size = "lg" }: { size?: "sm" | "lg" }) {
   return (
     <div className="relative inline-block">
       <MapPin
-        className={`absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 ${
+        className={`pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 ${
           size === "lg" ? "w-5 h-5" : "w-4 h-4"
         }`}
       />
