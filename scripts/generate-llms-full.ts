@@ -39,6 +39,41 @@ function fullText(page: PageObjectResponse, name: string): string {
 
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
+// The question-page "Sources" property mixes public cites (statutes, agency URLs)
+// with internal working artifacts a reader/model can't resolve ("States DB AZ row",
+// "Tranche-one CA ledger", "Pricing DB pull …"). Sanitize before emitting to the
+// public llms file: drop the internal names, keep the real cites, preserve any
+// verification date as "last verified YYYY-MM-DD", canonicalize the cost study to
+// its public page, and point the stale FL statute URL at the current one.
+function sanitizeSources(raw: string): string {
+  const FL_CURRENT =
+    "http://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0300-0399/0318/Sections/0318.14.html";
+  const TICKET_COST = `Ticket Cost Study: ${BASE_URL}/blog/true-cost-of-a-traffic-ticket`;
+  const out: string[] = [];
+  for (let seg of raw.split("|").map((s) => s.trim()).filter(Boolean)) {
+    if (/Pricing DB/i.test(seg)) continue; // internal, no public equivalent
+    if (/Tranche-one/i.test(seg)) continue; // internal verification ledger
+    if (/Ticket Cost Study/i.test(seg)) { out.push(TICKET_COST); continue; }
+    // Stale FL statute URL + its editorial TODO parenthetical
+    seg = seg.replace(/https?:\/\/www\.flsenate\.gov\/laws\/statutes\/2021\/318\.14/gi, FL_CURRENT);
+    seg = seg.replace(/\s*\(update to current-year URL\)/gi, "");
+    // "States DB … (verified 2026-08-13[, …])" / "States DB verified 2026-08-13" → keep the date
+    seg = seg.replace(/States DB [A-Za-z ]*?\(verified (\d{4}-\d{2}-\d{2})[^)]*\)/gi, "last verified $1");
+    seg = seg.replace(/States DB verified (\d{4}-\d{2}-\d{2})/gi, "last verified $1");
+    // Remaining internal "States DB …" references (no clean date) → drop the phrase
+    seg = seg.replace(/States DB [A-Z]{2} row \+ \d{4}-\d{2}-\d{2}[^,;|]*/gi, "");
+    seg = seg.replace(/States DB [A-Z]{2} Minimum Hours(?:\s*\(corrected\))?/gi, "");
+    seg = seg.replace(/States DB [A-Z]{2} rows?/gi, "");
+    seg = seg.replace(/States DB[^|]*/gi, ""); // catch-all
+    // Tidy leftover separators / label-only fragments
+    seg = seg.replace(/^\s*[:,]\s*/, "").replace(/\s*[:,]\s*$/, "").replace(/\s{2,}/g, " ").trim();
+    if (!seg || /^(Cost figures|Prices|Discount math|County fees[^|]*|via [^|]*)$/i.test(seg)) continue;
+    out.push(seg);
+  }
+  const seen = new Set<string>();
+  return out.filter((s) => { const k = s.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; }).join(" | ");
+}
+
 type StateContent = { intro: string; faqs: { q: string; a: string }[] };
 
 function writeOut(body: string) {
@@ -257,8 +292,9 @@ async function main() {
         lines.push(blocksToMarkdown(body.body));
         lines.push("");
       }
-      if (q.sources.trim()) {
-        lines.push(`**Sources:** ${q.sources.trim()}`);
+      const cleanSources = sanitizeSources(q.sources);
+      if (cleanSources) {
+        lines.push(`**Sources:** ${cleanSources}`);
         lines.push("");
       }
       lines.push("---");

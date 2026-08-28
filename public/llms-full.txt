@@ -1440,7 +1440,7 @@ None of that makes it a scam. Millions of people have gotten their certificate t
 
 **URL:** https://www.trafficschoolpicker.com/reviews/idrivesafely
 
-**Facts:** Rating 4.7/5 (27,867 reviews on Trustpilot) · from $29 · Covers 10 states (NY, GA, TX, NM, NV, IN, SC, PA, NC, MA) · All Courts · 6h course
+**Facts:** Rating 4.7/5 (27,867 reviews on Trustpilot) · from $29 · Covers 45 states (AK, AL, AR, CO, CT, DC, DE, GA, HI, IA, ID, IN, KS, LA, MA, MD, MI, MN, MO, MS, MT, NC, ND, NE, NH, NJ, NM, NV, NY, OH, OK, OR, PA, RI, SC, SD, TN, TX, UT, VA, VT, WA, WI, WV, WY) · All Courts · 6h course
 
 ---
 
@@ -1499,6 +1499,1502 @@ The pitch is simple. Court-approved where it operates, fast to get through, and 
 The honest limit is social proof. It has only a few hundred reviews, which is thin next to schools sitting on thousands. That doesn't make it worse. Plenty of good small operators just haven't collected reviews at scale. But if a giant wall of ratings is what makes you comfortable hitting buy, TicketSchool won't give you that. And it only covers California, Florida, and Texas, so outside those three it isn't an option.
 
 **Bottom line.** If you're in CA, FL, or TX and you want a cheap, court-approved course that gets you in and out without drama, TicketSchool is a fair pick. Just know you're trusting a smaller name with a thinner review pile in exchange for the low price.
+
+---
+
+# TrafficSchoolPicker.com — State Question Pages
+
+> Per-state answers to common traffic-school questions, each verified against primary sources.
+> Source: TrafficSchoolPicker editorial content, verified against official DMV, court, and statute records.
+
+## Can You Take Defensive Driving Online in Arizona?
+
+**URL:** https://www.trafficschoolpicker.com/arizona/can-you-take-traffic-school-online
+
+- **Online accepted:** Yes, fully, by every Arizona court, for schools certified by the Arizona Supreme Court
+- **The credential:** Supreme Court certification, not MVD approval, is what makes an Arizona school real
+- **Your school reports for you:** Completion goes to the court electronically within 24 hours
+- **The deadline is yours alone:** Course complete at least 7 days before your court date
+- **Last verified:** August 2026
+
+Yes, completely. Online defensive driving is accepted by every Arizona court for the diversion program, and the state built the plumbing to match: your school transmits your completion to the court electronically within 24 hours of finishing, no certificate to mail, no clerk visit.
+
+The credential to check is distinctive here. Arizona's program is run by the Arizona Supreme Court, not the MVD, and the court certifies each school and each delivery method. A school that's legitimate for Arizona will hold and display that Supreme Court certification, and Arizona is unusually strict about what gets certified, requiring online curricula to be substantially distinct rather than relicensed copies of one another. If a site can't show Arizona Supreme Court certification, its certificate is worthless here regardless of how many other states approve it.
+
+Format settled, the two rules that actually decide outcomes are timing rules: eligibility runs once every 12 months measured violation date to violation date, and your course must be done at least 7 days before your court date. The online course being available at midnight in your kitchen is exactly why the 7-day rule catches people; available-anytime breeds started-too-late.
+
+Every Supreme Court-certified online school we track is compared on the Arizona page, what completion buys, full dismissal, nothing reported to insurers, is on our points page, and the fee layers are on our cost page.
+
+**Sources:** last verified 2026-08-13 | ARS 28-3392 | ACJA 7-205 | azcourts.gov
+
+---
+
+## Does Defensive Driving Remove Points in Arizona?
+
+**URL:** https://www.trafficschoolpicker.com/arizona/does-traffic-school-remove-points
+
+- **Points removed:** None needed. Completing the course means the citation is dismissed and no points are ever assessed
+- **What insurers see:** Nothing. The violation is not reported, so there is no conviction to price
+- **Legal basis:** Arizona Defensive Driving Program under ARS §28-3392, administered by the Arizona Supreme Court
+- **Frequency:** Once every 12 months, measured violation date to violation date
+- **Deadline:** Complete the course at least 7 days before your court date
+- **How the court finds out:** Your school submits completion electronically within 24 hours
+- **CDL holders:** Eligible only if the violation occurred in a non-commercial vehicle
+- **Not eligible:** Violations involving a collision with serious injury or death
+- **Course:** 4 to 4.5 hours, Supreme Court-certified school; typical cost $45 to $150 plus state and court fees
+- **Last verified:** August 2026
+
+Arizona makes the question obsolete. There are no points to remove because, done right, the points never happen and neither does anything else.
+
+Here's the machine. Arizona's Defensive Driving Program is a diversion program, run not by the MVD but by the Arizona Supreme Court, which certifies every school. Get an eligible ticket, complete a certified course before your deadline, and the citation is dismissed. Not reduced, not masked, not credited against. Dismissed, with no points assessed and nothing reported for insurers to see. California hides the conviction; Texas erases the charge after a plea. Arizona intercepts the whole thing before it becomes anything. It's the cleanest version of this mechanism in the United States.
+
+The program's demands in exchange are mostly about the calendar. You can use it once every 12 months, measured violation date to violation date. And the deadline that matters isn't your court date, it's 7 days before your court date, which is when your course must be complete. Arizona drivers lose this program to that one-week buffer constantly, because they diarize the court date and start the course the weekend before. Count back seven days, then give yourself margin. Your school transmits your completion to the court electronically within 24 hours, so the follow-through is automatic once you finish; the finishing on time is entirely on you.
+
+Eligibility is broad with sharp edges. Minor civil moving violations qualify. Violations from a collision involving serious injury or death don't. CDL holders, shut out entirely in most states, get a carve-out here: eligible as long as the violation happened in a non-commercial vehicle. The course itself is short by national standards, 4 to 4.5 hours by rule, though Arizona's pricing runs higher than most states, $45 to $150 in tuition before state and court fees, because the diversion fee structure rides along with the course.
+
+And it's worth every dollar of that. Our Arizona data puts a typical 10-over ticket at a $231 fine and roughly $3,039 in three-year insurance exposure as a ceiling estimate. The diversion deletes both: the fine goes with the dismissed citation and the insurance exposure never materializes because there's no conviction to rate. Very few financial decisions return three thousand dollars for one afternoon, and Arizona hands it to eligible drivers once a year.
+
+And unlike most states, none of this requires an Arizona license: the dismissal is open to [drivers licensed in another state](https://www.trafficschoolpicker.com/out-of-state-ticket) too, which makes Arizona one of the few genuinely good answers when the ticket and the license don't come from the same place.
+
+Every Arizona Supreme Court-certified online school we track is compared on the Arizona page.
+
+**Sources:** last verified 2026-08-13 | ARS 28-3392 | AZ Supreme Court Defensive Driving Program: https://www.azcourts.gov/ | AZDOT: https://azdot.gov/motor-vehicles/driver-services/defensive-driving | Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket
+
+---
+
+## How Long Is Defensive Driving School in Arizona?
+
+**URL:** https://www.trafficschoolpicker.com/arizona/how-long-does-traffic-school-take
+
+- **Course length:** 4 to 4.5 hours, and uniquely, the 4.5 is a maximum, set by the Arizona Supreme Court
+- **Shortest course in our coverage, attached to the biggest benefit:** full dismissal
+- **The deadline around it:** Complete at least 7 days before your court date
+- **Last verified:** August 2026
+
+Four to four and a half hours, and Arizona is the only state in our coverage that caps the course from above: Supreme Court program rules set a minimum of 4 hours and a maximum of 4.5, excluding breaks and registration. Nobody can sell you a padded 8-hour Arizona diversion course, because one isn't allowed to exist.
+
+That makes Arizona's trade the steepest in the country in the driver's favor: the shortest mandatory sit anywhere, exchanged for the biggest prize anywhere, complete dismissal of the citation with no points and nothing reported to insurers. Four and a half hours against roughly three thousand dollars of avoided insurance exposure is the arithmetic; there's no version of being too busy for it that survives contact with that number.
+
+The hours themselves are schedulable online with saved progress, certified schools transmit your completion to the court electronically within 24 hours of finishing, and the only clock that can beat you is the one outside the course: everything must be done at least 7 days before your court date. Count back seven days from the date on your citation paperwork, then subtract your own procrastination honestly, and start.
+
+Every Arizona Supreme Court-certified online school we track is compared on the Arizona page, and the full diversion mechanics are on our points page.
+
+**Sources:** last verified 2026-08-13 | azcourts.gov | ARS 28-3392
+
+---
+
+## How Much Does Defensive Driving School Cost in Arizona?
+
+**URL:** https://www.trafficschoolpicker.com/arizona/how-much-does-traffic-school-cost
+
+- **Course tuition:** Roughly $38.95 to $150 depending on school; Improv listed at $38.95 as of August 2026
+- **Tuition is not the total:** Arizona adds a state fee and a court diversion fee on top, set per court, so the all-in number varies by where you got the ticket
+- **What the total buys:** Complete dismissal of the citation, no points, nothing reported to insurers
+- **The ticket you're deleting:** A typical 10-over ticket runs a $231 fine and roughly $3,039 in three-year insurance exposure (ceiling estimate), and the diversion removes both
+- **Deadline that matters:** Course complete at least 7 days before your court date
+- **Last verified:** August 2026
+
+Arizona's course is the most expensive in this series, and it's also the only one where the price doesn't really matter, because of what's on the other side of the trade.
+
+Start with the structure, because Arizona bills differently from every other state we cover. What you pay has three layers: the school's tuition, a state fee, and a diversion fee set by the court that issued your ticket. Tuition alone runs roughly $38.95 to $150 depending on the school, Improv listed at $38.95 in our August 2026 pull, but the checkout total will be meaningfully higher once the court and state charges attach, and that total varies by jurisdiction because each court sets its own diversion fee. That's why Arizona schools can't advertise one clean price and why you should compare schools on tuition, the only layer they control, then expect the same government fees regardless of which school you pick.
+
+Now the other side of the trade. Completing the course means the citation is dismissed. Not points reduced, dismissed: no fine, no points assessed, no conviction, nothing for your insurer to ever see. Our Arizona data puts a typical 10-over ticket at a $231 fine plus roughly $3,039 in three-year insurance exposure as a ceiling estimate, and the diversion deletes the entire column. Even at the top of the market, a $150 course plus court fees returning three thousand dollars of avoided cost is the best-value purchase on this entire site. Arizona drivers who are eligible and skip it because the checkout total looked high compared to other states are making a $3,000 mistake to save $100.
+
+Two cost-adjacent rules to respect: the program is available once every 12 months, measured violation date to violation date, so its value is rationed, and your course must be complete at least 7 days before your court date, so its value expires. The most expensive version of this course is the one you start too late.
+
+Every Arizona Supreme Court-certified online school we track is compared on the Arizona page, and the full diversion mechanics are on our points page.
+
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | ARS 28-3392 | AZ Supreme Court: https://www.azcourts.gov/
+
+---
+
+## How Often Can You Take Defensive Driving in Arizona?
+
+**URL:** https://www.trafficschoolpicker.com/arizona/how-often-can-you-take-traffic-school
+
+- **Diversion frequency:** Once every 12 months, measured violation date to violation date
+- **The measurement matters:** It's the dates of the two violations that must be 12+ months apart
+- **Each use still requires:** Course complete at least 7 days before that ticket's court date
+- **Last verified:** August 2026
+
+Once every 12 months, and Arizona measures the interval more precisely than any state we cover: violation date to violation date.
+
+Here's why the measurement is the whole answer. Arizona's diversion dismisses the citation entirely, so the state rations it tightly and defines the ration exactly: the date of the violation you want diverted must be more than 12 months after the date of the last violation you diverted. Not the course dates, not the court dates, the violation dates. Two tickets 13 months apart both qualify no matter when you took each course; two tickets 11 months apart never can, even if the first course was 14 months ago. When a new ticket lands, the eligibility check is one subtraction between two dates printed on two citations.
+
+That precision creates a genuinely awkward edge case worth knowing: a driver who diverted a ticket in, say, September 2025 and picks up another in July 2026 is simply outside the program for that new ticket. There's no partial credit and no discretion in the interval. The options revert to what any ineligible driver has, contesting or paying, which is why the once-a-year dismissal deserves to be treated like the valuable, rationed thing it is rather than an assumed safety net.
+
+And each eligible use carries its own internal deadline: the course must be complete at least 7 days before that ticket's court date. The annual ration and the 7-day rule fail people in opposite directions, one from using the program too often, one from starting it too late.
+
+What a successful use buys, the full dismissal with nothing reported to insurers, is on our points page, the fee structure is on our cost page, and every Supreme Court-certified online school we track is compared on the Arizona page.
+
+**Sources:** last verified 2026-08-13 | ARS 28-3392 | azcourts.gov
+
+---
+
+## Is Defensive Driving Worth It in Arizona?
+
+**URL:** https://www.trafficschoolpicker.com/arizona/is-traffic-school-worth-it
+
+- **Verdict:** The strongest yes on this site
+- **What you spend:** Roughly $38.95 to $150 tuition plus state and court fees, and 4 to 4.5 hours
+- **What it deletes:** The citation itself, the $231 fine, and roughly $3,039 in three-year insurance exposure (ceiling estimate), around a 20x return even at the top of the fee range
+- **The only ways to lose it:** Miss the 7-day deadline or be inside the 12-month window
+- **Last verified:** August 2026
+
+Yes, more decisively than anywhere else in the country, because Arizona is the only state where the course deletes the entire problem.
+
+Everywhere else, some residue survives: California's fine, New York's conviction, Georgia's insurer-visible record. Arizona's diversion leaves nothing. Complete the course before the deadline and the citation is dismissed, the $231 fine is never owed, no points are assessed, and nothing is reported for insurers to price, taking the roughly $3,039 three-year exposure at ceiling off the table with it. Total avoided value runs past $3,200 on a typical ticket. Against even the top of the market, $150 tuition plus the state and court fees your jurisdiction stacks on, that's on the order of a 20x return, and at the cheaper schools it climbs well beyond. Four and a half hours is the entire time cost, the shortest course in our coverage.
+
+The worth-it question in Arizona therefore collapses into an eligibility question. Once every 12 months, measured violation date to violation date; nothing involving serious injury; CDL only for tickets in a personal vehicle. Eligible and past those gates, the only remaining way to lose value is the calendar: the course must be complete at least 7 days before your court date, and every year Arizona drivers donate three-thousand-dollar returns to procrastination.
+
+If you're eligible, this isn't a decision, it's a deadline. Certified schools are compared on the Arizona page, and the 7-day mechanics are on our frequency page.
+
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | ARS 28-3392
+
+---
+
+## Can You Do Traffic School Online in California?
+
+**URL:** https://www.trafficschoolpicker.com/california/can-you-take-traffic-school-online
+
+- **Online accepted:** Yes. DMV-licensed internet traffic schools are accepted by California courts
+- **How to confirm a school is real:** The DMV's traffic school list, searchable by name, shows every licensed school and its status
+- **Not eligible at any format:** CDL holders (for masking)
+- **Last verified:** August 2026
+
+Yes. California licenses internet traffic schools as their own DMV category, and courts accept them the same as classroom schools. Online is how the overwhelming majority of California traffic school gets done.
+
+The question worth your thirty seconds isn't whether online counts, it's whether the specific school does. California's market has hundreds of licensed schools and a fringe of unlicensed lookalikes, and the DMV settles it definitively: its public traffic school list is searchable by business name and shows every licensed school, its license number, and whether the license is active. Any legitimate school will also display its license number on its site. If you can't find a school on the DMV list, spend your money elsewhere.
+
+Eligibility rides on the ticket, not the format: your court notice controls whether you can attend at all, the once-per-18-months masking window applies online or off, and commercial license holders are excluded either way.
+
+Every school we compare on the California page is DMV-licensed with the license verified, and the fee stack is on our cost page.
+
+**Sources:** DMV OLL traffic school lookup | VC 1808.7
+
+---
+
+## Does Traffic School Remove Points in California?
+
+**URL:** https://www.trafficschoolpicker.com/california/does-traffic-school-remove-points
+
+- **Points removed by traffic school:** None. California masks the conviction instead
+- **Legal mechanism:** Confidential conviction under Vehicle Code §1808.7; election under VC §41501 and Rule of Court 4.104
+- **What insurers see:** Nothing. The conviction is held confidential from insurers during the masking period
+- **What the DMV keeps:** The conviction stays on the internal DMV record for state purposes
+- **Frequency limit:** Once per 18 months, measured from violation date to violation date
+- **Eligible:** One-point moving violations, valid non-commercial California license
+- **Not eligible:** Speeding 25+ mph over the limit, alcohol or drug offenses, any offense in a commercial vehicle
+- **Course length:** 8 hours minimum, DMV-licensed provider
+- **Typical total cost:** Fine + court administrative fee (typically $52–$55) + course tuition ($15–$45)
+- **Last verified:** August 2026
+
+No. And the distinction actually matters, because what California does instead is better.
+
+Traffic school in California doesn't reach into your record and delete a point. It stops the point from ever becoming visible in the first place. Complete a DMV-licensed course after an eligible ticket and the court reports your conviction as confidential under Vehicle Code 1808.7. The conviction still exists. The DMV still has it. But it's held confidential from insurance companies, which means the one party you were worried about never sees it. People call this masking, and it's the cleanest version of this mechanism in any state.
+
+That's also why timing matters so much. Masking works on the reporting step, before the conviction hits the public record. Once a conviction has been reported publicly, traffic school can't pull it back. You elect traffic school through the court before or at the time you resolve the ticket, not after.
+
+Who qualifies. You need a valid non-commercial California license and an eligible one-point moving violation. The standard exclusions: speeding 25 mph or more over the limit, anything alcohol or drug related, and any offense committed in a commercial vehicle, whatever class of license you hold. And you get this once every 18 months, measured from violation date to violation date. Get a second eligible ticket 14 months after the first one and you're taking the point.
+
+What it costs. Three pieces. You pay the full fine on the ticket, that doesn't go away. The court adds an administrative fee, typically $52 to $55 depending on the county. Then the course itself, and California's course market is the cheapest in the country, generally $15 to $45 for the 8-hour minimum.
+
+What it saves. Our ticket cost data puts California's three-year insurance exposure for a routine 10-mph-over ticket at roughly $5,385 on top of a $234 fine, and that's a ceiling estimate since some carriers taper after year one. Spending under $100 to keep a conviction invisible to the people who set that number is about the best trade a California driver ever gets offered.
+
+One thing that trips people up. Your DMV printout can still show the violation, because the record isn't erased, it's held confidential from insurers. Courts and law enforcement see it. The state counts it internally. If someone tells you their masked ticket "showed up," that's usually what happened. The masking did its job. The job was never to make it vanish for everyone.
+
+One caveat we can't close: masking is documented to protect your California record. Whether it also stops the conviction reaching [a license issued in another state](https://www.trafficschoolpicker.com/out-of-state-ticket) is genuinely unresolved — so if you're not a California licensee, don't assume traffic school here buys you the same protection.
+
+Every school on our California page is on the DMV's licensed list and submits your certificate electronically, and we've compared what they actually cost and what they're like to get through.
+
+**Sources:** Vehicle Code 1808.7 and 41501: https://leginfo.legislature.ca.gov | Rule of Court 4.104: https://courts.ca.gov | CA DMV TVS program: https://www.dmv.ca.gov/portal/driver-education-and-safety/educational-resources/traffic-violator-school/ | Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket
+
+---
+
+## How Long Is Traffic School in California?
+
+**URL:** https://www.trafficschoolpicker.com/california/how-long-does-traffic-school-take
+
+- **Course length:** 8 hours is California's standard, set by the state, identical at every licensed school
+- **Last verified:** August 2026
+
+Eight hours is the standard, and it's California's number, not the school's. Every DMV-licensed traffic school teaches to the same state requirement, which is why "fastest California traffic school" ads are selling something the license doesn't permit.
+
+The online wrinkle is that California regulates internet courses by content volume rather than a running timer, mandating the amount of material a licensed course must contain. Practically, that means your real completion time tracks your reading speed: quick readers genuinely finish faster than the nominal eight hours, slow readers take longer, and the final exam waits at the end either way. It's the one state where "how long does it take" honestly answers "how fast do you read."
+
+The deadline around the course comes from your court: your notice sets the completion date, and the school reports electronically once you pass. Between saved progress and the court's window, the sane pattern is a few sittings, not a marathon.
+
+Every DMV-licensed online school we track is compared on the California page, and the once-per-18-months rule on using it is on our frequency page.
+
+**Sources:** 13 CCR 345.30 | DMV TVS program
+
+---
+
+## How Much Does Traffic School Cost in California?
+
+**URL:** https://www.trafficschoolpicker.com/california/how-much-does-traffic-school-cost
+
+- **Course price:** $5 to $29 online across DMV-licensed schools we track
+- **Court administrative fee:** Typically $52 to $55, set by your county court
+- **The fine:** You pay it in full; traffic school doesn't reduce it
+- **Course length:** 8 hours minimum, DMV-licensed provider
+- **Typical all-in:** Fine + roughly $60 to $85 in fee and tuition
+- **What it buys:** The conviction stays confidential from insurers (VC §1808.7 masking)
+- **Last verified:** August 2026
+
+California has the cheapest traffic school courses in America and the most misleading sticker prices, because the course is the smallest number on the bill.
+
+Three pieces. First, the fine, and you pay all of it. Traffic school in California doesn't reduce or dismiss the ticket, it masks the conviction from insurers. A typical 10-over ticket runs $234 with assessments. Second, the court's administrative fee for the traffic school option, typically $52 to $55 depending on the county. That fee usually costs more than the course. Third, tuition, and here the market has raced to the bottom in your favor: among schools we track, 5DollarTrafficSchool is genuinely five dollars and has been since 1998, Improv runs $24.95, Aceable $29. All of them cover the same 8-hour DMV minimum, because the state sets the curriculum floor, not the school.
+
+So the honest arithmetic on a typical ticket: $234 fine, call it $54 to the court, $5 to $29 for the course. Roughly $300 all-in, of which the part you get to shop is under thirty bucks.
+
+Which raises the fair question of whether $300 is worth it. Our California data says it isn't close. The three-year insurance exposure on that same 10-over conviction is roughly $5,385 as a ceiling estimate, because California insurers price visible convictions hard. Masking keeps the conviction confidential from them under Vehicle Code 1808.7. You're spending about $85 above the fine you owed anyway to take a four-figure risk off the table.
+
+One warning on the cheap end. A $5 sticker sometimes grows fees at checkout, so read the final total before you pay. The schools we list on the California page are compared on the checkout price, not the banner.
+
+**Sources:** VC 1808.7 / 42007: https://leginfo.legislature.ca.gov | DMV TVS: https://www.dmv.ca.gov/portal/driver-education-and-safety/educational-resources/traffic-violator-school/ | Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket
+
+---
+
+## How Often Can You Go to Traffic School in California?
+
+**URL:** https://www.trafficschoolpicker.com/california/how-often-can-you-take-traffic-school
+
+- **For keeping a ticket confidential (masking):** Once every 18 months, measured violation date to violation date
+- **CDL holders:** Not eligible for masking
+- **Last verified:** August 2026
+
+Once every 18 months, and California measures it the strict way: from the date of the violation, not the date you finished the course or the date the court signed off.
+
+The mechanism matters here. California traffic school doesn't dismiss your ticket; under Vehicle Code 1808.7, it masks the conviction, keeping it confidential so insurers and employers pulling your record don't see it. That confidentiality is what's rationed. Pick up a second eligible violation within 18 months of the first and the court can still let you attend traffic school, some do, but the second conviction shows on your record anyway, points and all. You'd be paying tuition for the certificate, not the benefit.
+
+So the practical questions when a new ticket arrives: what was the violation date on your last masked ticket, and is this new violation date at least 18 months after it? Your court notice will usually tell you whether you're eligible, but courts process on their own information, and if you believe you're outside the window and the notice says otherwise, that's a call to the clerk before you pay anything.
+
+Two permanent exclusions run at any frequency: commercial license holders can't mask, and violations serious enough to be ineligible, alcohol offenses and the like, stay ineligible.
+
+Inside the window with a fresh ticket, the course won't protect your record, so weigh the fine-plus-points reality instead. Outside it, the trade is excellent, roughly $52 to $55 in court fees plus a course that can cost under $10, details on our cost page.
+
+Every DMV-licensed online school we track is compared on the California page.
+
+**Sources:** VC 1808.7
+
+---
+
+## Is Traffic School Worth It in California?
+
+**URL:** https://www.trafficschoolpicker.com/california/is-traffic-school-worth-it
+
+- **Verdict:** Yes, emphatically, and it's the insurance masking doing the work
+- **What you spend:** Course plus a court fee of about $52 to $55; total often under $90, sometimes under $70
+- **What it can prevent:** Roughly $3,600 in three-year insurance exposure (ceiling estimate), a return on the order of 40x
+- **What it doesn't touch:** The fine itself, around $238 all-in, which you pay either way
+- **Last verified:** August 2026
+
+Yes, and the reason is a nuance worth stating plainly: in California you pay the fine no matter what. Roughly $238 all-in on a typical ticket once the state stacks its penalty assessments on a $35 base. Traffic school never touches that number. What it touches is the far bigger one.
+
+California insurance runs high, and our data puts the three-year exposure on an unmasked ticket at roughly $3,600 as a ceiling estimate, driven by one of the steepest premium-increase percentages in the country. Masking the conviction, which is what traffic school does under VC 1808.7, keeps the ticket confidential and that exposure unrealized. Your cost for the masking: the court's administrative fee, about $52 to $55, plus a course that can run under $10 in California's hyper-competitive market. Call it $60 to $90 total. Against a $3,600 ceiling, that's a return on the order of 40x, and still excellent if your carrier's real surcharge lands well under the ceiling.
+
+The conditions: eligibility per your court notice, once every 18 months measured violation date to violation date, no commercial licenses. Inside the 18-month window the answer flips to no; you'd be buying a course whose benefit can't apply.
+
+DMV-licensed schools are compared on the California page; the fee stack is on our cost page.
+
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | VC 1808.7
+
+---
+
+## Can You Take Florida Traffic School Online?
+
+**URL:** https://www.trafficschoolpicker.com/florida/can-you-take-traffic-school-online
+
+- **Online accepted:** Yes, statewide, for FLHSMV-approved Basic Driver Improvement courses
+- **The deadline that governs everything:** Elect the course with the clerk within 30 days of the citation
+- **Not eligible at any format:** CDL holders; citations for 30+ mph over the limit
+- **Last verified:** August 2026
+
+Yes. Florida approves online Basic Driver Improvement courses at the state level, through FLHSMV, so an approved online course counts in every county; there's no court-by-court lottery on format.
+
+What Florida rations instead is time and turns. The election, telling the clerk you're taking the course, must happen within 30 days of the citation, and blowing that deadline closes the option no matter how eligible the course is. And each election spends one of your once-per-12-months, five-per-lifetime allotment, which is worth checking on your driving record before you commit a marginal ticket to it.
+
+The exclusions run at any format: commercial license holders can't elect, and a citation for 30 mph or more over the limit is ineligible outright.
+
+One practical note on picking a school: FLHSMV approval is the only credential that matters. Florida's course market is crowded with lookalike sites, and the approved-provider status is what makes the certificate real. Every online BDI course we compare on the Florida page carries it, and the full price stack, including the state assessment fees behind Florida's famously low sticker prices, is on our cost page.
+
+**Sources:** Fla. Stat. 318.14(9)
+
+---
+
+## Does Traffic School Remove Points in Florida?
+
+**URL:** https://www.trafficschoolpicker.com/florida/does-traffic-school-remove-points
+
+- **Points removed by traffic school:** None removed. Electing BDI prevents points from ever being assessed
+- **Legal mechanism:** Election under Fla. Stat. §318.14(9); adjudication withheld, no points per §322.27
+- **Is it a conviction:** No. Adjudication withheld is not a conviction (§318.14(11))
+- **Insurance protection:** Insurer may not raise your premium or refuse renewal based solely on that infraction (§626.9541(1)(o))
+- **Election deadline:** 30 days from the citation
+- **Frequency limit:** Once per 12 months, five elections per lifetime
+- **Not eligible:** CDL or commercial permit holders, tickets in a commercial vehicle, speeding 30+ mph over the limit
+- **Course:** 4-hour Basic Driver Improvement (BDI), FLHSMV-approved
+- **Certificate:** School e-files with the clerk within 5 days (§318.1451)
+- **Last verified:** August 2026
+
+Florida's answer is no, and it's the best no on this site. BDI doesn't remove points. It makes sure they never exist.
+
+Here's the mechanism. When you get an eligible ticket, you can elect a Basic Driver Improvement course instead of paying and taking the conviction. Make that election and complete the 4-hour course, and under section 318.14(9) adjudication is withheld and no points may be assessed. The statute goes further in subsection (11): adjudication withheld is not a conviction. Nothing to remove, because nothing ever landed.
+
+The whole thing turns on the deadline. You have 30 days from the citation to make the election, and you make it with the clerk of court, before you pay, before you plead. Pay the ticket first and you've converted it into a conviction, and BDI can't touch a conviction. More Florida drivers lose this option to the calendar than to eligibility. If you're inside your 30 days right now, sort the election today and worry about picking a course after.
+
+Florida then does something almost no other state does. Section 626.9541(1)(o) tells insurers they cannot impose an additional premium or refuse to renew your policy based solely on that infraction. Most states leave you hoping your insurer never looks. Florida makes it law.
+
+Who's out. Anyone holding a CDL or commercial learner's permit, anyone cited while driving a commercial vehicle, and anyone clocked 30 mph or more over the limit. Notice that's 30, not the 25 you'll see quoted for California and Texas. Florida's line is more generous and half the internet gets it wrong.
+
+You can elect once every 12 months and five times in your life, so treat it as a card you play, not a subscription. The clock runs ticket to ticket.
+
+On cost, Florida's course market is absurdly cheap, $4 to $25 for the 4-hour BDI, though watch the fee stack at checkout on the bargain ones. You still pay the citation. Set that against our ticket cost data for Florida, roughly $3,966 in three-year insurance exposure on a $204 ticket as a ceiling estimate, and the election is the highest-leverage 30-day deadline in Florida driving.
+
+Once you finish, the school files your certificate electronically with the clerk within 5 days under 318.1451. Check the county's court records portal that it landed. That's the one piece of follow-through left to you.
+
+Florida also doesn't care where your license is from — the BDI election is open [even to drivers licensed in another state](https://www.trafficschoolpicker.com/out-of-state-ticket), which is rarer than it sounds and makes Florida one of the cleaner options when you're ticketed away from home.
+
+Every FLHSMV-approved online BDI course we track is compared on the Florida page, including which ones keep the checkout price honest.
+
+**Sources:** Fla. Stat. 318.14 (current year): http://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0300-0399/0318/Sections/0318.14.html | 318.1451 e-filing via Polk clerk: https://polkcountyclerk.net/FAQ.aspx?QID=167 | CDL exclusion via Martin clerk: https://www.martinclerk.com/m/faq?cat=19,28 | 626.9541(1)(o): last verified 2026-08-13 | FLHSMV: https://www.flhsmv.gov/driver-licenses-id-cards/driver-improvement/ | Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket
+
+---
+
+## How Long Is Florida Traffic School?
+
+**URL:** https://www.trafficschoolpicker.com/florida/how-long-does-traffic-school-take
+
+- **Basic Driver Improvement, the ticket-election course:** 4 hours, set by the state
+- **Don't confuse it with ADI:** Advanced Driver Improvement runs 8 or 12 hours and serves court orders and license reinstatement, not the standard election
+- **Last verified:** August 2026
+
+Four hours, for the course you almost certainly mean. Florida's Basic Driver Improvement, the one you elect within 30 days of a citation, is a 4-hour course by state rule, the same at every FLHSMV-approved school, making it one of the shortest ticket courses in the country.
+
+The confusion to avoid is buying the wrong Florida course entirely. Florida also runs Advanced Driver Improvement at 8 and 12 hours, which serves court orders and habitual-offender license reinstatement, a different tool for a different problem. A driver electing on an ordinary ticket wants the 4-hour BDI, and a course page pushing you toward a longer Florida course for a standard election deserves suspicion.
+
+One clock clarification that relieves people: the famous 30-day deadline is for electing the course with the clerk, not completing it. Elect in time and the completion window runs on the clerk's schedule, with the course itself savable across sittings. Four hours against that window is the easy part; the election deadline is the part that bites.
+
+Every approved online BDI course we track is compared on the Florida page, and the once-per-12-months, five-per-lifetime rationing is on our frequency page.
+
+**Sources:** FLHSMV BDI/ADI | Fla. Stat. 318.14(9)
+
+---
+
+## How Much Does Traffic School Cost in Florida?
+
+**URL:** https://www.trafficschoolpicker.com/florida/how-much-does-traffic-school-cost
+
+- **Course price:** $5 to $25 for the 4-hour BDI across FLHSMV-approved schools we track
+- **The catch:** Low headline prices often stack fees at checkout; compare final totals
+- **The fine:** You still pay the civil penalty on the citation
+- **Election deadline:** 30 days from the citation, with the clerk, before you pay or plead
+- **Course length:** 4 hours (Basic Driver Improvement)
+- **Certificate:** The school e-files with the clerk within 5 days (§318.1451), usually free; expedited options are upsells
+- **What it buys:** Adjudication withheld, no points, and insurers can't raise your rate for it (§626.9541(1)(o))
+- **Last verified:** August 2026
+
+Florida runs the cheapest sticker prices in the country and the most creative checkouts. Both things are true, so here's how to read them.
+
+The 4-hour BDI courses we track start at genuinely five dollars: 5DollarTrafficSchool at $5, Aceable currently at $5.94 against a $34.95 list, Improv at $23.95. Florida's market is a price war and drivers are the winners, mostly. The asterisk is the fee stack. Some low-headline schools add processing fees, certificate fees or "state fees" at checkout, so a $4.94 banner can leave the register at $30. The number that matters is the final total on the payment screen, and that's the number we compare schools on.
+
+The course is also not the whole cost, and anyone telling you otherwise is selling something. You still pay the civil penalty on the ticket. What the election buys you is everything else: elect BDI with the clerk inside your 30-day window, finish the course, and adjudication is withheld, no points are assessed, and Florida law bars your insurer from raising your rate over that infraction. The fine you were always paying. The four-figure insurance exposure, roughly $3,966 over three years on a $204 ticket in our data as a ceiling estimate, is what the $5 course deletes.
+
+Two pieces of follow-through. The election happens before you pay or plead, with the clerk of the county that issued the ticket, and missing the 30 days kills the option entirely. And once you finish, your school is required by law to e-file your certificate with the clerk within 5 days. That filing is included; paying extra for "rush certificate delivery" on a 4-hour online course is almost never necessary. Check the county's records portal that it landed and you're done.
+
+Every FLHSMV-approved online BDI course we track is on the Florida page, compared on the checkout total.
+
+**Sources:** Fla. Stat. 318.14 / 318.1451: http://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0300-0399/0318/Sections/0318.14.html | 626.9541(1)(o): last verified 2026-08-13 | Clerk guidance: https://polkcountyclerk.net/FAQ.aspx?QID=167 | Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket
+
+---
+
+## How Often Can You Take Traffic School in Florida?
+
+**URL:** https://www.trafficschoolpicker.com/florida/how-often-can-you-take-traffic-school
+
+- **Election frequency:** Once in any 12-month period
+- **Lifetime cap:** 5 elections, total, ever
+- **Deadline each time:** You must elect the course within 30 days of the citation
+- **CDL holders:** Not eligible
+- **Last verified:** August 2026
+
+Florida runs two clocks, and it's the second one most drivers have never heard of.
+
+The first clock is familiar: you can elect Basic Driver Improvement once in any 12-month period. The second is the one to respect: Florida caps you at five elections in a lifetime. Not five per license cycle, not five per decade. Five, ever, tracked by the state across your driving life. Every election you spend in your twenties is one you don't have in your fifties.
+
+That changes how to think about a marginal ticket. In most states the only question is whether the course is worth the tuition this time. In Florida there's a portfolio question stacked on top: is this ticket worth one of your remaining elections? A cheap ticket with minimal insurance consequence might not be, especially if you've already burned two or three. A ticket that would put real points on your record almost certainly is. Your election count is on your driving record; if you don't know your number, pull the record before deciding.
+
+The deadline makes the decision urgent every time: you have 30 days from the citation to elect the course with the clerk. Miss it and that ticket's election never existed, no matter how many you have left.
+
+The permanent rails don't move with frequency: CDL holders can't elect at all, and a citation for driving 30 mph or more over the limit is ineligible regardless of your count.
+
+If you're electing, the full price stack is on our cost page, and every approved online BDI course we track is compared on the Florida page.
+
+**Sources:** Fla. Stat. 318.14(9)
+
+---
+
+## Is Traffic School Worth It in Florida?
+
+**URL:** https://www.trafficschoolpicker.com/florida/is-traffic-school-worth-it
+
+- **Verdict:** Yes, with the most honest caveat in the series: Florida's return is the most modest of the big states
+- **What you spend:** A low-priced course plus fees, typically $40 to $60 all-in beyond the ticket
+- **What it can prevent:** Roughly $930 in three-year insurance exposure (ceiling estimate), up to roughly a 15 to 20x return
+- **The rationing question:** Each use spends one of five lifetime elections
+- **Last verified:** August 2026
+
+Yes, but Florida deserves the honest version, because its numbers are different from its neighbors'.
+
+Florida's insurance market punishes a single ticket less than most big states: our data shows a comparatively mild premium-increase percentage, putting three-year exposure on a typical ticket at roughly $930 as a ceiling estimate. The election route, paying the fine plus a 4-hour course and fees, typically costs $40 to $60 beyond the ticket itself, and buys no points, no conviction, and statutory protection against the surcharge, since Florida law bars insurers from raising rates on an election with no points. Up to roughly 15 to 20x on the money. Excellent by any normal standard, and still the smallest multiple among the big states on this site.
+
+Why the modest multiple changes behavior: Florida is the state where the course competes with your lifetime ration. Five elections, ever. On a ticket whose realistic insurance consequence is small, especially for a driver whose carrier tapers or shrugs, spending election three of five is a real cost the sticker price doesn't show. Our rule of thumb: elect without hesitation when points would land on a record that matters, think twice on a marginal ticket late in your election count.
+
+The clock either way: elect with the clerk within 30 days or the question answers itself.
+
+Approved BDI courses are compared on the Florida page; the rationing math is on our frequency page.
+
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | 318.14(9) | 626.9541(1)(o)
+
+---
+
+## Can You Take Defensive Driving Online in Georgia?
+
+**URL:** https://www.trafficschoolpicker.com/georgia/can-you-take-traffic-school-online
+
+- **Online accepted:** Yes, for DDS-approved driver improvement courses
+- **The credential:** Georgia DDS certification is what makes a course count for the 7-point reduction
+- **The reduction isn't automatic:** You apply to DDS with your completion certificate
+- **Court-ordered courses:** Follow the court's instructions on approved format
+- **Last verified:** August 2026
+
+Yes. Georgia's Department of Driver Services certifies driver improvement courses including online delivery, and a DDS-approved online course qualifies you for the state's headline benefit, the once-every-five-years reduction of up to 7 points.
+
+The operative word is certified. Georgia's benefit is generous enough that the course market around it is noisy, and only DDS certification makes a certificate worth anything. Check the school's DDS approval before paying; every course we compare carries it.
+
+Two process points that outrank the format question. First, the reduction isn't automatic: completing the course produces a certificate, and you apply to DDS with it. Course finished, application skipped, record unchanged. Second, if a court ordered or accepted a course as part of resolving your specific ticket, including Georgia's fine reductions of up to 20% and zero-point orders, the court's instructions control which courses and formats it accepts, so confirm with the clerk before enrolling for a court purpose.
+
+Every DDS-approved online course we track is compared on the Georgia page, the five-year clock is on our frequency page, and pricing, roughly $20 to $95, is on our cost page.
+
+**Sources:** OCGA 40-5-86 | DDS Court Reference Manual
+
+---
+
+## Does Defensive Driving Remove Points in Georgia?
+
+**URL:** https://www.trafficschoolpicker.com/georgia/does-traffic-school-remove-points
+
+- **Points removed:** Up to 7 points already on your record, not below zero
+- **Legal basis:** O.C.G.A. §40-5-86; certificate submitted to the Department of Driver Services
+- **Frequency:** Once in any 5-year period
+- **How to claim:** Complete a DDS-certified Driver Improvement (defensive driving) course, then bring or mail the original certificate to DDS
+- **Course length:** 6 hours; "Driver Improvement" and "Defensive Driving" are the same program
+- **Suspension context:** Georgia suspends at 15 points in 24 months (drivers 21+); violations carry 2–6 points each
+- **Court-side option:** If a court orders or accepts your certificate for a pending ticket, the base fine drops 20% and the court can dispose of it as a zero-point request
+- **Insurance:** Premium discount on completion under O.C.G.A. §33-9-42
+- **Last verified:** August 2026
+
+Yes. Georgia is the one state where the question means exactly what it says and the answer is exactly yes.
+
+Everywhere else this question needs a paragraph of translation. California masks, Texas dismisses, Florida withholds, New York adjusts the suspension math. Georgia reaches into your record and takes points off it. O.C.G.A. 40-5-86: complete a DDS-approved defensive driving course, submit your certificate to the Department of Driver Services, and your point total is reduced by seven points, down to but not below zero. Points that are already there, from tickets you already took the hit on. Once in any five-year period.
+
+Claiming it is almost comically manual. You finish the 6-hour course, then you take the original certificate to a DDS customer service center, or mail it to the DDS in Conyers. The reduction doesn't happen on its own and your course provider doesn't do it for you. Finish the course, sit on the certificate, get nothing.
+
+Context for what 7 points buys you. Georgia violations carry 2 to 6 points each and the state suspends an adult license at 15 points in a 24-month window. Seven points is two or three average tickets wiped from that count. If you're sitting at 10 or 12, this course is the difference between driving and not.
+
+There's a second, less-known use for the same certificate, and it comes straight from the DDS's own reference manual for traffic court judges. If you have a ticket pending, a Georgia court can order you to a driver improvement clinic, or accept a completion certificate you bring in on your own. When it does either, the base fine is reduced by 20 percent and the court can dispose of the violation as a zero-point request, meaning the new ticket lands without points. Whether a judge plays it that way is the judge's call, it's discretionary, but the mechanism is printed in the state's own bench manual, and showing up to court with a completed certificate is the cheapest leverage available to a Georgia driver. The manual is also explicit that a court-side zero-point disposition and the DDS-side 7-point reduction can both happen inside the same five-year period. They're separate tools.
+
+And the insurance angle stacks on top. Georgia law, O.C.G.A. 33-9-42, ties a premium discount to completing the course, about 10% on average in our data, roughly $250 a year on a typical Georgia premium. Courses run roughly $20 to $95 for the 6 hours depending on online versus classroom. Between the fine reduction, the point removal and the discount, Georgia has quietly built the most driver-friendly version of this program in the country, and almost nobody in Georgia knows all three pieces exist.
+
+All of this is for Georgia licensees, though. Georgia doesn't assign points to [a driver licensed in another state](https://www.trafficschoolpicker.com/out-of-state-ticket) in the first place, so for a visitor there's nothing for the 7-point reduction to remove — a quirk worth understanding before you enroll.
+
+Every DDS-certified online course we track is compared on the Georgia page.
+
+**Sources:** DDS Points and Points Reduction: https://dds.georgia.gov/georgia-licenseid/violations-suspensions-revocations/points-and-points-reduction | DDS Defensive Driving FAQ: https://dds.georgia.gov/defensive-driving-program-faqs | DDS Traffic Court Reference Manual: https://dds.georgia.gov/document/manual/court-reference-manual-2021-2022v3/download | O.C.G.A. 40-5-86, 33-9-42 | Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket
+
+---
+
+## How Long Is Defensive Driving in Georgia?
+
+**URL:** https://www.trafficschoolpicker.com/georgia/how-long-does-traffic-school-take
+
+- **Course length:** 6 hours for a DDS-certified driver improvement course
+- **After the 6 hours:** The 7-point reduction still requires your application to DDS
+- **Last verified:** August 2026
+
+Six hours at any DDS-certified school, because Georgia's Department of Driver Services certifies courses to a standard length along with a standard curriculum. The school choice changes the price, roughly $20 to $95 across the market, and the experience; it can't change the clock.
+
+Six hours is a meaningful sit, and Georgia attaches it to the country's biggest single prize, the reduction of up to 7 points, available once every five years, which is a fair trade and then some. Online delivery makes the hours schedulable: progress saves, and the realistic pattern is a couple of evenings.
+
+The step people skip after hour six is the one that makes the hours count: the reduction isn't automatic on completion. You apply to DDS with your certificate, and until you do, your record sits exactly where it was. If a court sent you instead, the court's paperwork requirements control, and its deadline is the one to respect.
+
+Every DDS-certified online course we track is compared on the Georgia page, the five-year clock is on our frequency page, and the pricing spread is on our cost page.
+
+**Sources:** OCGA 40-5-86 | DDS
+
+---
+
+## How Much Does Defensive Driving Cost in Georgia?
+
+**URL:** https://www.trafficschoolpicker.com/georgia/how-much-does-traffic-school-cost
+
+- **Course price:** Roughly $20 to $30 online for the DDS-certified 6-hour course; classroom courses run higher, up to about $95
+- **Fine reduction:** When a court orders or accepts your certificate for a pending ticket, the base fine drops 20%
+- **Insurance:** Premium discount on completion under O.C.G.A. §33-9-42, about 10% on average
+- **Points:** The same certificate claims the 7-point reduction from DDS, once every 5 years
+- **Course length:** 6 hours; "Driver Improvement" and "Defensive Driving" are the same DDS program
+- **Typical value:** One $25 course can return several hundred dollars across fine, points and premium
+- **Last verified:** August 2026
+
+Georgia's course costs about what lunch for two costs, and no state pays the certificate back harder.
+
+The DDS-certified 6-hour course runs roughly $20 to $30 online, with I Drive Safely currently at $29. Classroom versions of the same program run higher, up to about $95, and buy you nothing extra: DDS treats Driver Improvement and Defensive Driving as one program, and the certificate is identical either way. Online is the same credential at a third of the price.
+
+Now the part that makes Georgia unusual. That one certificate has three separate cash values, and most Georgia drivers only ever collect one of them.
+
+Value one, the fine. If you have a ticket pending, Georgia courts can order you to a driver improvement clinic or accept a certificate you completed on your own, and when they do, the state's own reference manual for traffic court judges says the base fine is reduced by 20 percent. On a decent-sized ticket the fine reduction alone can cover the course.
+
+Value two, the premium. O.C.G.A. 33-9-42 ties an insurance discount to completing the course, roughly 10% on average in our data, call it $250 a year on a typical Georgia premium. That's not a one-off. It's a rate reduction.
+
+Value three, the points. The same certificate, submitted to DDS, removes up to 7 points already on your record under O.C.G.A. 40-5-86, once every five years. If you're carrying points, that's the piece that protects your license, and it's free once you've taken the course. You just have to actually bring or mail the original certificate to DDS, because nothing happens automatically.
+
+So the honest cost answer for Georgia: about $25 out, and if you use all three values, several hundred dollars back in the first year. There isn't another state where the math tilts this far in the driver's favor.
+
+Every DDS-certified online course we track is compared on the Georgia page, and the full points mechanics are on our points page.
+
+**Sources:** DDS: https://dds.georgia.gov/georgia-licenseid/violations-suspensions-revocations/points-and-points-reduction | Court Reference Manual (20% fine reduction): https://dds.georgia.gov/document/manual/court-reference-manual-2021-2022v3/download | O.C.G.A. 40-5-86, 33-9-42 | Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket
+
+---
+
+## How Often Can You Take Defensive Driving in Georgia?
+
+**URL:** https://www.trafficschoolpicker.com/georgia/how-often-can-you-take-traffic-school
+
+- **For the 7-point reduction:** Once every 5 years
+- **Court-ordered courses:** As often as courts order them; separate from the 5-year clock
+- **Last verified:** August 2026
+
+Once every five years, the longest wait in our coverage, attached to the biggest prize.
+
+Georgia's deal under OCGA 40-5-86 is straightforward: complete an approved driver improvement course, apply to DDS, and up to 7 points come off your record. Seven points is more than most single violations put on, which is why Georgia guards it with a five-year interval where most states run one to three. Use it casually on a minor ticket and it's gone until the next presidential election cycle plus one.
+
+So the Georgia question is always allocation. A 2-point ticket on an otherwise clean record barely dents you; Georgia suspends at 15 points in 24 months, and two points age off on their own. Spending the once-per-five-years reduction there is like using a fire extinguisher on a candle. The reduction earns its keep for drivers whose totals are genuinely climbing toward trouble, and for them it's the strongest single move any state offers.
+
+Two things run outside the 5-year clock. Courts can order or accept a course as part of resolving a specific case as often as cases arise, including the fine reductions of up to 20% and zero-point orders Georgia courts can attach; those are per-case tools, not the DDS reduction, and using one doesn't spend your reduction. And under-21 drivers ordered to a course for certain offenses are in a mandatory lane with its own rules.
+
+One process note that catches people: the reduction isn't automatic on course completion. You apply to DDS with your certificate. Finish the course and skip the application and your record doesn't move.
+
+Pricing sits on our cost page, roughly $20 to $95 depending on school, and every approved online course we track is compared on the Georgia page.
+
+**Sources:** OCGA 40-5-86 | DDS Court Reference Manual
+
+---
+
+## Is Defensive Driving Worth It in Georgia?
+
+**URL:** https://www.trafficschoolpicker.com/georgia/is-traffic-school-worth-it
+
+- **Verdict:** Yes when points are the problem; it is not an insurance shield
+- **What you spend:** $20 to $95 and six hours
+- **What it can do:** Up to 7 points off (once every 5 years), and courts can attach up to 20% fine reductions or zero-point orders
+- **What it can't do:** Prevent the roughly $2,100 three-year insurance exposure (ceiling estimate) from a conviction insurers can see
+- **Last verified:** August 2026
+
+Yes, for the right problem. Georgia's course is a points tool, the strongest one in the country, and the mistake is expecting it to be an insurance tool too.
+
+Start with what it does brilliantly. Up to 7 points off your record, once every five years, is a bigger single credit than any other state offers, and for a driver whose total is climbing toward Georgia's 15-points-in-24-months suspension line, a $20 to $95 course that resets most of the ladder is cheap at triple the price. Layer in what courts can attach when resolving a specific case, fine reductions up to 20% and zero-point orders, and the course earns its place in almost any Georgia ticket strategy where the court's open to it.
+
+Now the honest limit. Georgia mandates no insurance discount for course completion, and the standard course doesn't erase the conviction; insurers see the ticket, and our data puts its three-year exposure at roughly $2,100 as a ceiling estimate on a typical citation. A zero-point order from a court can blunt some of that; the once-per-five-years reduction, taken later, doesn't reach back to hide anything. So the worth-it test is simple: if the question is your point total or a court's offer, yes, decisively. If the question is purely your premium, the course isn't the instrument, and nothing in Georgia quite is.
+
+DDS-certified courses are compared on the Georgia page; the five-year allocation question is on our frequency page.
+
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | OCGA 40-5-86 | DDS Court Reference Manual
+
+---
+
+## Can You Take Defensive Driving Online in New Jersey?
+
+**URL:** https://www.trafficschoolpicker.com/new-jersey/can-you-take-traffic-school-online
+
+- **Online accepted:** Yes. The standard 6-hour defensive driving course is MVC-approved for online delivery
+- **What online earns:** The 2-point reduction and the mandated 5-10% insurance discount
+- **The course you can't take online (or choose at all):** The 3-point Driver Improvement Program, classroom-only and MVC-initiated
+- **Not eligible:** Commercial and out-of-state licenses
+- **Last verified:** August 2026
+
+Yes. New Jersey's standard defensive driving course, the 6-hour one behind the 2-point reduction and the mandated insurance discount, is MVC-approved for online delivery, and online is how most New Jerseyans take it.
+
+The format confusion in New Jersey comes from there being two programs wearing similar names. The one you choose, the defensive driving course, is fully online-friendly. The one you don't, the Driver Improvement Program with its 3-point reduction, is classroom-only, and it's not a menu item anyway: the MVC initiates it for drivers at 12 to 14 points. If a website is selling you an online 3-point New Jersey course, it's selling something that doesn't exist.
+
+Format changes nothing about the machinery: online completion still routes provider-to-MVC for the point credit, in 7 to 10 business days, with the MVC refusing driver-submitted certificates, and you still send your certificate to your insurer yourself for the discount. Commercial and out-of-state licenses stay excluded either way.
+
+Every MVC-approved online course we track is compared on the New Jersey page, the two benefit clocks are on our frequency page, and the sub-$30 math is on our cost page.
+
+**Sources:** last verified 2026-08-13 | NJ MVC | N.J.S.A. 17:33B-45.1
+
+---
+
+## Does Defensive Driving Remove Points in New Jersey?
+
+**URL:** https://www.trafficschoolpicker.com/new-jersey/does-traffic-school-remove-points
+
+- **Points removed:** 2 (not the 3 many course ads imply), once every 5 years
+- **The catch:** You must already have at least 2 points on your record when you complete the course
+- **Ticket dismissal:** Not available through an online defensive driving course in New Jersey
+- **Insurance benefit:** State-mandated discount of at least 5% (up to 10%) for 3 years; available once every 3 years
+- **How the credit posts:** Your provider reports completion to the MVC in 7 to 10 business days; the MVC does not accept certificates you submit yourself
+- **Insurance discount claim:** You DO submit the certificate to your insurer for the discount
+- **Not eligible:** Commercial and out-of-state licenses
+- **Separate program:** The 3-point Driver Improvement Program is classroom-only and MVC-initiated for drivers at 12 to 14 points
+- **Course:** 6 hours, MVC-approved; typical cost $29 to $50
+- **Last verified:** August 2026
+
+Yes, two points, with more fine print per point than any state in the country. Let's clear the three big misunderstandings in order.
+
+First, it's 2 points, not 3. New Jersey's MVC-approved online defensive driving course earns a 2-point reduction, once every five years. The 3-point figure floating around belongs to a different program, the Driver Improvement Program, which is classroom-only and which you don't choose. The MVC initiates it for drivers sitting at 12 to 14 points, the edge of suspension. If a website is promising 3 points off from an online course in New Jersey, close the tab.
+
+Second, you need points to remove points. The 2-point credit only applies if you have at least 2 points on your record when you complete the course. A clean-record driver who takes the course banking a credit against a future ticket gets nothing; the credit can't go negative and it can't be stored. Time the course after the points exist, not before.
+
+Third, no, it won't dismiss your ticket. New Jersey has no online-course dismissal mechanism, full stop. The ticket, the fine, and the conviction all stand, and your insurer sees them. What the course touches is the aftermath: the point total the state uses, since MVC surcharges start at 6 points in three years, and your premium, which brings us to the actual quiet value here.
+
+New Jersey law mandates an insurance discount for completing the course: at least 5%, up to 10% depending on carrier, for three years, claimable once every three years. On New Jersey premiums, among the highest in the country, that's real money. Our data puts a typical 10-over ticket at a $96 fine and roughly $4,869 in three-year insurance exposure as a ceiling estimate, the widest fine-to-insurance gap of any state we track. A $35 course won't erase that, but a mandated discount working against the country's most expensive premiums is the best partial hedge on offer, and plenty of clean-record New Jerseyans should take the course for the discount alone.
+
+One piece of process that trips people constantly: the point credit and the discount travel by different roads. Your course provider reports your completion to the MVC within 7 to 10 business days, and the MVC will not accept a certificate you mail in yourself. The insurer is the opposite: you send your certificate to them to claim the discount. Provider handles the state, you handle the insurance company.
+
+One thing the course can't fix: New Jersey adds a flat two points for a conviction from any other state, whatever the offense, so [a ticket you picked up out of state](https://www.trafficschoolpicker.com/out-of-state-ticket) lands on your record here regardless of how minor it was.
+
+Every MVC-approved online course we track is compared on the New Jersey page.
+
+**Sources:** last verified 2026-08-13 | NJ MVC: https://www.nj.gov/mvc/ | N.J.S.A. 17:33B-45.1 | Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket
+
+---
+
+## How Long Is Defensive Driving in New Jersey?
+
+**URL:** https://www.trafficschoolpicker.com/new-jersey/how-long-does-traffic-school-take
+
+- **Course length:** 6 hours for the MVC-approved defensive driving course, online or classroom
+- **Last verified:** August 2026
+
+Six hours, the MVC's number for every approved course, and New Jersey pairs it with sub-$30 pricing that makes this the cheapest instructional hour anywhere in our coverage, roughly $4 to $5 per hour at the $24.95 to $29 courses in our latest pull.
+
+Nothing about the six hours is deadline-driven for the standard use. There's no ticket being dismissed, so no court clock; you're taking the course for the 2-point reduction, if you're carrying points, or for the mandated 5 to 10 percent insurance discount, and completion simply starts whichever clock applies. Online progress saves, and the course divides into a weekend's worth of sittings without consequence.
+
+The one piece of timing that does matter sits at the finish line, not inside the hours: the point credit only fires if you have at least 2 points on your record when you complete, so a driver taking the course for points should finish it after the points exist. The discount has no such condition, which is why the clean-record version of this purchase, six cheap hours every three years for a standing discount on New Jersey premiums, is the quiet best use of the course.
+
+Every MVC-approved online course we track is compared on the New Jersey page, and both benefit clocks are on our frequency page.
+
+**Sources:** last verified 2026-08-13 | NJ MVC
+
+---
+
+## How Much Does Defensive Driving Cost in New Jersey?
+
+**URL:** https://www.trafficschoolpicker.com/new-jersey/how-much-does-traffic-school-cost
+
+- **Typical course price:** $24.95 to $29 for the MVC-approved 6-hour online course
+- **Examples as of August 2026:** Improv $24.95, iDriveSafely $29
+- **What the course earns back:** A state-mandated insurance discount of at least 5% (up to 10%) for 3 years
+- **The ticket context:** A typical 10-over ticket runs a $96 fine and roughly $4,869 in three-year insurance exposure (ceiling estimate), the widest gap we track
+- **Last verified:** August 2026
+
+New Jersey has the cheapest course in this series pointed at the most expensive insurance market in it, which makes the cost question here less "what does it cost" and more "why haven't you taken it yet."
+
+The MVC-approved 6-hour online defensive driving course runs $24.95 to $29 as of August 2026, Improv at $24.95 and iDriveSafely at $29. Prices move, treat that as a snapshot, but this has been a sub-$30 purchase for years and there's no reason to pay more. There's no state fee stacked on the standard course. The $75 admin fee you may see referenced belongs to the separate Driver Improvement Program, the classroom course the MVC orders for drivers at 12 to 14 points; nobody signs up for that one voluntarily.
+
+Here's what makes New Jersey's math unique. The course doesn't dismiss tickets, and its 2-point credit only helps drivers already carrying points. But New Jersey law mandates that insurers give course completers a discount of at least 5%, and up to 10%, for three full years, claimable once every three years. New Jersey premiums are among the highest in the country, which is exactly why our data shows a typical 10-over ticket carrying just a $96 fine but roughly $4,869 in three-year insurance exposure as a ceiling estimate. On premiums that size, even the 5% floor typically returns the $25 course cost many times over across three years, ticket or no ticket. This is the one state where the course is arguably a better purchase for drivers with clean records than for drivers with tickets.
+
+One process cost to respect: the discount doesn't apply itself. Your provider notifies the MVC for the point credit, but you send the completion certificate to your insurance company for the discount. Skip that step and you bought a $25 course and earned nothing.
+
+Current prices for every MVC-approved online course we track are on the New Jersey page, and the point-credit fine print is on our points page.
+
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | NJ MVC: https://www.nj.gov/mvc/ | N.J.S.A. 17:33B-45.1
+
+---
+
+## How Often Can You Take Defensive Driving in New Jersey?
+
+**URL:** https://www.trafficschoolpicker.com/new-jersey/how-often-can-you-take-traffic-school
+
+- **For the 2-point reduction:** Once every 5 years, and only if you have 2+ points at completion
+- **For the insurance discount (5-10% for 3 years):** Once every 3 years, retake to renew
+- **Last verified:** August 2026
+
+New Jersey runs the same two-clock design as New York, with stingier settings on the points side.
+
+Clock one: the 2-point reduction is available once every five years, and it only fires if you're carrying at least 2 points when you complete the course. Five years is a long interval for a small credit, which makes timing everything. A driver who takes the course reflexively after a first minor ticket spends the five-year slot on points that would matter least; a driver climbing toward the 6-point threshold where New Jersey's MVC surcharges begin is spending it exactly where it pays. Check your point total before you enroll for this reason, and remember the credit can't be banked in advance: no points on the record at completion, no reduction, slot potentially wasted.
+
+Clock two is the friendlier one: the state-mandated insurance discount, at least 5% and up to 10% for three years, is claimable once every three years, and renewing it is as simple as taking the course again when the cycle ends. On New Jersey premiums this is the benefit worth scheduling around, ticket or no ticket, a sub-$30 course every third year as a standing discount, math on our cost page.
+
+The clocks run independently. A course taken in 2026 for the discount doesn't block a points-motivated course later; each benefit checks only its own history. Just route the paperwork correctly each time, provider to MVC for points, you to your insurer for the discount.
+
+No frequency unlocks dismissal; New Jersey has none online. Every MVC-approved course we track is compared on the New Jersey page.
+
+**Sources:** last verified 2026-08-13 | NJ MVC | N.J.S.A. 17:33B-45.1
+
+---
+
+## Is Defensive Driving Worth It in New Jersey?
+
+**URL:** https://www.trafficschoolpicker.com/new-jersey/is-traffic-school-worth-it
+
+- **Verdict:** Yes, as a hedge, and knowing exactly what it can't do
+- **What you spend:** $24.95 to $29 and six hours
+- **What it returns:** A mandated 5 to 10% insurance reduction for 3 years on the country's priciest premiums, plus 2 points off when you're carrying them
+- **What it can't do:** Prevent the roughly $4,869 three-year exposure (ceiling estimate) a ticket creates; New Jersey has no online dismissal
+- **Last verified:** August 2026
+
+Yes, with the clearest eyes in the series about what you're buying.
+
+New Jersey's ticket math is brutal by design: a $96 fine attached to roughly $4,869 of three-year insurance exposure at ceiling, the widest fine-to-consequence gap we track, and no course anywhere can dismiss the ticket or hide the conviction. Anyone selling New Jersey defensive driving as a shield against that exposure is selling something the state doesn't offer.
+
+What the state does offer is the best hedge in the country. The mandated insurance reduction, at least 5% and up to 10% for three years, applies against premiums that are among the nation's highest, which means even the 5% floor typically returns the sub-$30 course price several times over across the cycle, and the 10% version does far better. Claimable once every three years, forever, ticket or no ticket. Add the 2-point reduction when you're actually carrying points, once every five years, and the course is a permanently sensible purchase that happens to also be the only lever New Jersey hands its drivers.
+
+So the verdict splits by expectation. As a premium hedge and point-manager, yes, and the clean-record driver who cycles it every three years is playing New Jersey correctly. As protection from what a fresh ticket will do to your rates, no such product exists here, and knowing that is worth as much as the course.
+
+The paperwork routing that makes both benefits real is on our points page; MVC-approved courses are compared on the New Jersey page.
+
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | 17:33B-45.1
+
+---
+
+## Can You Take a Defensive Driving Course Online in New York?
+
+**URL:** https://www.trafficschoolpicker.com/new-york/can-you-take-traffic-school-online
+
+- **Online accepted:** Yes. New York's online version is called IPIRP, the Internet Point and Insurance Reduction Program
+- **Same benefits as classroom:** Up to 4 points reduced, mandatory 10% insurance discount for 3 years
+- **Last verified:** August 2026
+
+Yes, and New York even gave the online version its own name: IPIRP, the Internet Point and Insurance Reduction Program. An approved IPIRP course delivers exactly what the classroom PIRP course delivers, the reduction of up to 4 points and the mandatory 10% insurance discount for three years, with the DMV treating the two formats identically.
+
+The catch in New York isn't format acceptance, it's sponsor scarcity. The DMV approves specific sponsors to deliver IPIRP, and the statewide list is short, roughly a dozen organizations, with course sites often operating under sponsor umbrellas. A course only counts if it traces to a DMV-approved sponsor, so the credential to look for is the sponsoring agency's approval, not the website's branding. The DMV publishes the approved list; every course we compare traces to it.
+
+Format changes nothing about what the program can't do: no New York ticket is dismissed by any course, online or off. The fine and conviction stand; the course works on points and premiums afterward.
+
+Every approved online course we track is compared on the New York page, the two benefit clocks are on our frequency page, and the math is on our cost page.
+
+**Sources:** dmv.ny.gov PIRP/IPIRP sponsor list
+
+---
+
+## Does Defensive Driving Remove Points in New York?
+
+**URL:** https://www.trafficschoolpicker.com/new-york/does-traffic-school-remove-points
+
+- **Points reduced:** Up to 4, from the total DMV uses for suspension calculations
+- **What it does NOT do:** Does not dismiss the ticket, does not remove the conviction, insurers still see it
+- **Lookback:** Applies only to points from violations in the 18 months before course completion
+- **Limits:** Cannot reduce below zero; no credit against future tickets; does not lift an existing suspension or revocation
+- **Insurance benefit:** Mandatory 10% reduction in the base rate of liability and collision premiums for 3 years (Insurance Law §2336)
+- **Who gets the discount:** The principal operator; show your certificate to your insurer within 90 days
+- **Frequency:** Point reduction once per 18 months; retake every 3 years to keep the discount
+- **Course length:** 320 minutes, DMV-approved PIRP sponsor
+- **DMV update:** Sponsor reports your completion to DMV within 10 weeks
+- **Last verified:** August 2026
+
+Yes, sort of, and New York is the only state on this site where that's the honest answer.
+
+Everywhere else, "traffic school" is really about the ticket. California masks it, Texas and Florida dismiss it. New York's Point and Insurance Reduction Program does neither. Your ticket stands. The conviction goes on your record. Your insurer sees it. What PIRP does instead is subtract up to 4 points from the total the DMV uses when it decides whether to suspend your license.
+
+Read that carefully, because it's narrower than the course ads suggest. The reduction only touches points from violations in the 18 months before you finish the course. It can't take your total below zero, it can't be banked against your next ticket, and if your license is already suspended or revoked, completing the course changes nothing about that. The DMV says all of this plainly on its own PIRP page, which is more than most of the sites selling the course do.
+
+So why take it? Two reasons, and the second one is the quiet star.
+
+One, the suspension math. If you're carrying points and one more ticket puts you in dangerous territory, a 4-point haircut is real breathing room, and it's available once every 18 months.
+
+Two, the money. Finish a PIRP course and New York law, Insurance Law section 2336, forces your insurer to cut the base rate of your liability and collision coverage by 10% for three years. Not may. Must. It applies to the principal operator of the vehicle, you claim it by showing your certificate to your insurer within 90 days of finishing, and you can retake the course every three years to keep it running forever. On a typical New York premium that's roughly $214 a year in our data, call it $642 across the cycle, for a 320-minute course that costs $24 to $60. Plenty of New Yorkers with zero points on their record take PIRP purely as an insurance play, and they're right to.
+
+The course itself is 320 minutes by regulation, online through any DMV-approved sponsor, and the sponsor reports your completion to the DMV within 10 weeks. No court involvement at any point. That's the other thing that makes New York different: PIRP is between you, the sponsor, the DMV and your insurer. The ticket process runs on its own track, and if you want to fight the ticket itself, that's a plea or a hearing, not a course.
+
+And PIRP only ever touches New York points. If [the ticket came from another state](https://www.trafficschoolpicker.com/out-of-state-ticket), New York generally won't add points for it anyway — Canada aside — so there may be nothing for the course to reduce.
+
+Every DMV-approved online PIRP sponsor we track is compared on the New York page, with current pricing.
+
+**Sources:** NY DMV PIRP: https://dmv.ny.gov/points-and-penalties/point-and-insurance-reduction-program | NY Insurance Law §2336 (10% mandate) | Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket
+
+---
+
+## How Long Is a Defensive Driving Course in New York?
+
+**URL:** https://www.trafficschoolpicker.com/new-york/how-long-does-traffic-school-take
+
+- **Course length:** 6 hours, the DMV's requirement for every approved PIRP and IPIRP course
+- **Last verified:** August 2026
+
+Six hours, whether you take it in a classroom or online through IPIRP, because the number belongs to the DMV's program requirements, not to any sponsor. Every approved course in the state runs the same length, which turns "which course is shortest" into a question with no answer and "which course is cheapest and least painful for six hours" into the real one.
+
+Online, the six hours behave like New York wrote them for commuters: progress saves, sittings are yours to schedule, and sponsors break the material into timed sections so the total instruction time meets the DMV's requirement however you slice it. There's no court deadline pressing on you for the standard voluntary use, since no ticket is being dismissed; you're taking it for the point reduction, the 10% insurance discount, or both benefit clocks, and completion simply starts them.
+
+One timing note worth six hours of your attention: the point reduction applies to violations in the 18 months before completion. Finish the course, then let the benefit do its lookback; a course finished before the points exist reduced nothing.
+
+Every DMV-approved online course we track is compared on the New York page, and the two benefit clocks are laid out on our frequency page.
+
+**Sources:** dmv.ny.gov PIRP
+
+---
+
+## How Much Does Defensive Driving Cost in New York?
+
+**URL:** https://www.trafficschoolpicker.com/new-york/how-much-does-traffic-school-cost
+
+- **Course price:** $24 to $60 across DMV-approved PIRP sponsors; fees set by each provider
+- **Court fees:** None. PIRP never touches a court
+- **Hidden costs:** None required; the certificate is part of the course
+- **The return:** Mandatory 10% cut to the base rate of liability and collision premiums for 3 years (Insurance Law §2336)
+- **Typical value:** Roughly $214 per year on an average New York premium, about $642 over the cycle
+- **Course length:** 320 minutes, online through any DMV-approved sponsor
+- **Renewal:** Retake every 3 years to keep the discount running
+- **Last verified:** August 2026
+
+New York is the only state where this question has a negative answer. The course doesn't cost you money over its life. It pays you.
+
+Start with the sticker. PIRP sponsors set their own fees, and the DMV-approved online courses run $24 to $60, with I Drive Safely currently at $24. There's nothing else on the bill. No court fee, because PIRP never involves a court. No filing fee, no state surcharge, no driving record requirement. You take the 320-minute course, the sponsor tells the DMV, you show the certificate to your insurer. Done.
+
+Then the return. New York Insurance Law section 2336 requires your insurer to cut the base rate of your liability and collision coverage by 10% for three years when the principal operator completes an approved course. Required, not offered. On a typical New York premium that's about $214 a year in our data, roughly $642 across the three-year cycle, against a course that cost $24. And you can retake it every three years and keep the discount running indefinitely, which plenty of New Yorkers with spotless records quietly do. As recurring financial decisions go, a 25x return every three years for five and a half hours of your time is hard to beat anywhere, let alone at the DMV.
+
+If you're here because of a ticket, one calibration. PIRP doesn't dismiss the ticket or hide it from your insurer, so the fine and any rate impact from the conviction still happen. What the course adds is the mandatory 10% working against that increase, plus up to 4 points off the DMV's suspension math. The full mechanics are on our points page.
+
+The upsells to skip: expedited certificates and printed copies. Sponsors report your completion to the DMV themselves, and a downloaded certificate satisfies your insurer.
+
+Every DMV-approved online sponsor we track is compared on the New York page.
+
+**Sources:** NY DMV PIRP: https://dmv.ny.gov/points-and-penalties/point-and-insurance-reduction-program | NY Insurance Law §2336 | Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket
+
+---
+
+## How Often Can You Take Defensive Driving in New York?
+
+**URL:** https://www.trafficschoolpicker.com/new-york/how-often-can-you-take-traffic-school
+
+- **For the point reduction (up to 4 points):** Benefit available once every 18 months
+- **For the insurance discount (10% for 3 years):** Retake the course every 3 years to keep it running
+- **The course itself:** You can take it any time; it's the benefits that are rationed
+- **Last verified:** August 2026
+
+New York runs its two benefits on two different clocks, and plenty of drivers take the course on the wrong one.
+
+Clock one, points: completing a DMV-approved Point and Insurance Reduction Program course reduces up to 4 points on your record, and that benefit is available once every 18 months. The reduction applies to points from violations in the 18 months before completion, so timing matters: take the course after the points exist. Points from a ticket you get next month aren't touched by a course you finished last week.
+
+Clock two, insurance: the same course completion earns a mandatory 10% reduction on your liability and collision premiums, and it runs for 3 years. When the 3 years end, the discount ends, and the renewal move is simply taking the course again. For a lot of New Yorkers with clean records, this is the whole reason PIRP exists: a course every third year as a standing 10% line item against New York premiums, no ticket required.
+
+Notice what that means in combination. A driver using the course for points in year one can retake it in year four for a fresh discount cycle, and the two uses don't interfere; the 18-month point clock and the 3-year discount clock run independently. The state doesn't limit how often you sit the course itself, only how often each benefit pays out.
+
+What no frequency unlocks: dismissal. A New York ticket is never dismissed by a course, at any interval; the fine and conviction stand and the course works on the aftermath.
+
+The full math is on our cost page, and every approved online PIRP course we track is compared on the New York page.
+
+**Sources:** dmv.ny.gov PIRP | Insurance Law §2336
+
+---
+
+## Is a Defensive Driving Course Worth It in New York?
+
+**URL:** https://www.trafficschoolpicker.com/new-york/is-traffic-school-worth-it
+
+- **Verdict:** Yes, and uniquely, yes even with no ticket
+- **What you spend:** $25 to $50 and six hours, once every three years
+- **What it returns:** A mandatory 10% insurance reduction for three years on liability and collision coverage, on premiums averaging over $4,000; plus up to 4 points reduced when you need it
+- **What it never does:** Dismiss anything; the fine and conviction stand
+- **Last verified:** August 2026
+
+Yes, and New York is the one state in this series where the answer doesn't depend on having a ticket at all.
+
+The reason is the mandatory discount. Complete a DMV-approved course and New York requires your insurer to cut 10% from your liability and collision premiums for three years. New York's average premium in our data runs over $4,000 a year, and while the discount applies to the liability and collision portion rather than the whole bill, 10% of most of a New York premium for three years comfortably runs to several hundred dollars, often approaching four figures, against a course costing $25 to $50. That's why the steady-state New York move is a course every third year as a standing line item, clean record or not. Few purchases anywhere reliably return ten times their price by state mandate.
+
+The ticket-driven version stacks on top: up to 4 points reduced, once every 18 months, applied to violations in the prior 18 months. Worth it for a driver whose total is climbing; irrelevant to a clean record, which loses nothing, because the discount pays either way.
+
+The honest limit: nothing here shields you from the ticket itself. The fine, roughly $243 all-in on a typical ticket in our data, and the conviction stand, and your insurer sees them. New York's course softens the aftermath; it never prevents it.
+
+Approved courses are compared on the New York page; both benefit clocks are on our frequency page.
+
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | Insurance Law §2336 | dmv.ny.gov PIRP
+
+---
+
+## Can You Take Defensive Driving Online in North Carolina?
+
+**URL:** https://www.trafficschoolpicker.com/north-carolina/can-you-take-traffic-school-online
+
+- **Online accepted:** Often, but never assume. Acceptance depends on your county and your court
+- **The format question comes bundled with the length question:** 4 hours in Wake and Guilford, 8 hours elsewhere
+- **Last verified:** August 2026
+
+Often yes, but North Carolina is the one state on this site where we won't give you a blanket answer, because North Carolina doesn't have one.
+
+Online defensive driving courses for North Carolina are widely available and widely used, with providers holding approvals at the county level. But whether an online certificate satisfies your obligation depends on who's asking for it. A court that agreed to dismiss or reduce your ticket sets its own terms, including format. The DMV's point-reduction path and its clinic have their own requirements. There is no statewide statement that every online course counts everywhere, so the confirmation step isn't caution theater, it's the actual system.
+
+The good news: it's one question, asked once. Whoever required the course, court clerk or DMV, tell them which course you intend to take and ask whether it qualifies, and get the course length requirement in the same breath: 4 hours if your case sits in Wake or Guilford county, 8 hours anywhere else. The wrong format or the wrong length is the same wasted receipt.
+
+And before any of that, make sure a course is even your best move; for most first NC tickets the courtroom PJC does more than any course can, covered on our points page.
+
+Courses we track are compared on the North Carolina page, with pricing on our cost page.
+
+**Sources:** NC DMV: https://www.ncdot.gov/dmv/
+
+---
+
+## Does Defensive Driving Remove Points in North Carolina?
+
+**URL:** https://www.trafficschoolpicker.com/north-carolina/does-traffic-school-remove-points
+
+- **Points removed by a defensive driving course:** Usually none. NC's course is not a standalone points tool
+- **The mechanism that actually protects you:** Prayer for Judgment Continued (PJC), a judge-discretionary court disposition
+- **DMV point reduction via course:** Only with 7+ points on your record, a $40 DMV eligibility hearing, once every 5 years
+- **Court dismissal via course:** Only with prior court permission, case by case
+- **Course length:** 4 hours in Wake and Guilford counties; 8 hours everywhere else
+- **Insurance discount:** North Carolina mandates none
+- **Typical course cost:** $45 to $95
+- **Last verified:** August 2026
+
+Mostly no, and North Carolina is the state where believing the course ads costs you the most.
+
+In most states on this site, the course is the tool. In North Carolina, the court proceeding is the tool and the course is an accessory. Here's the honest map.
+
+The thing you've probably actually heard about is the PJC, the Prayer for Judgment Continued. It's not a course and no school can sell it to you. It's a request you make to the judge at your court appearance: enter no judgment on this ticket. Granted, the ticket generates no conviction for insurance purposes, which is the outcome every other state's traffic school is imitating. It's discretionary, it's rationed, for insurance purposes one per household every three years, and it only exists if you ask for it in court instead of paying the ticket online. If you take one thing from this page: don't just pay a North Carolina ticket before you've understood what a PJC could do for you.
+
+So where does defensive driving fit? Two narrow places. First, some courts and prosecutors will agree to dismiss or reduce a charge if you complete a course, but that requires prior permission from the court, case by case, and depends on the violation, your record and local policy. Get the agreement first, then enroll, never the reverse. Second, the DMV runs a genuine point-reduction path, but read the fine print: you need 7 or more points already on your record, you pay $40 for a DMV eligibility hearing, and you can use it once every five years. That's a tool for drivers in real trouble, not for a first speeding ticket.
+
+One more North Carolina quirk: course length depends on where you are. Wake and Guilford counties mandate a 4-hour course; every other county requires 8 hours. Check which version your court or the DMV expects before you buy anything, because the wrong one is worthless.
+
+The money context makes the strategy obvious. A typical 10-over ticket runs a $203 fine and roughly $3,735 in three-year insurance exposure in our data as a ceiling estimate, and North Carolina mandates no insurance discount for course completion. The course costs $45 to $95 and, on its own, prevents none of that. The PJC, granted, can prevent nearly all of it. Spend your effort on the courtroom.
+
+All of this assumes a North Carolina license. If you were [ticketed here on an out-of-state license](https://www.trafficschoolpicker.com/out-of-state-ticket), or picked one up in another state, the PJC question and what North Carolina reports across state lines work differently — and that's its own tangle.
+
+If a court has told you to complete a course, or you've secured a dismissal agreement, the approved online options are compared on the North Carolina page.
+
+**Sources:** last verified 2026-08-13 | NC DMV: https://www.ncdot.gov/dmv/ | Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket
+
+---
+
+## How Long Is Defensive Driving in North Carolina?
+
+**URL:** https://www.trafficschoolpicker.com/north-carolina/how-long-does-traffic-school-take
+
+- **Course length:** Depends on your county. 4 hours in Wake and Guilford, 8 hours everywhere else
+- **Last verified:** August 2026
+
+Four hours or eight, and the deciding factor isn't the school or the course tier, it's the county your case sits in. Wake and Guilford counties mandate a 4-hour course; every other North Carolina county requires 8. No other state in our coverage splits course length by geography this way, and it's the single most common way North Carolina drivers waste money on this: a Raleigh driver buying the 8-hour course they didn't need, or a Charlotte driver buying the 4-hour course that doesn't count.
+
+So the sequence is fixed: establish which version your situation requires, from the court that's handling your ticket or the DMV if you're on its point-reduction path, then buy exactly that version. Providers sell both, at different prices, $27.95 to $59 in our latest pull, and a checkout page won't stop you from choosing wrong.
+
+The hours themselves behave like everywhere else online: progress saves, sittings are yours, and the deadline belongs to whoever required the course.
+
+And standing behind the whole question, as always in North Carolina: for most first tickets the courtroom PJC outperforms any course of any length, covered on our points page. Courses we track are compared on the North Carolina page.
+
+**Sources:** last verified 2026-08-13 | NC DMV
+
+---
+
+## How Much Does Defensive Driving Cost in North Carolina?
+
+**URL:** https://www.trafficschoolpicker.com/north-carolina/how-much-does-traffic-school-cost
+
+- **Typical course price:** $27.95 to $59 online, and which course you need depends on your county
+- **Course length rule:** 4 hours in Wake and Guilford counties, 8 hours everywhere else, priced differently
+- **Examples as of August 2026:** iDriveSafely 8-hour $59, Improv $27.95
+- **DMV point-reduction path:** Add a $40 eligibility hearing fee, and it requires 7+ points on your record
+- **The ticket you're avoiding:** A typical 10-over ticket runs a $203 fine and roughly $3,735 in three-year insurance exposure (ceiling estimate)
+- **Last verified:** August 2026
+
+North Carolina's course pricing has a wrinkle no other state on this site has: the price depends on your county, because the required course does.
+
+Wake and Guilford counties mandate a 4-hour course. Every other North Carolina county requires 8 hours. Providers price the two formats differently, so the first question isn't which school, it's which county your case sits in. As of August 2026, iDriveSafely's 8-hour course, the version most counties need, runs $59, and Improv lists at $27.95. Prices move; treat these as a snapshot, and confirm the course length your court or the DMV expects before paying for either, because the wrong format is $30 to $60 spent on nothing.
+
+Stack the rest of the costs by path. If a court has agreed to dismiss or reduce your ticket for a course, your cost is the tuition plus whatever the court's own process charges, which varies. If you're using the DMV's point-reduction route, add a $40 eligibility hearing fee to the tuition, and remember that path only exists for drivers with 7 or more points, once every five years. And if you're pursuing the mechanism that actually protects most first-time NC drivers, the Prayer for Judgment Continued, the course costs you nothing because it isn't a course; it's a request to the judge, and its price is showing up to court instead of paying online.
+
+That last option frames the money properly. A typical 10-over North Carolina ticket runs a $203 fine and roughly $3,735 in three-year insurance exposure in our data as a ceiling estimate, and North Carolina mandates no insurance discount for course completion. A $59 course, on its own, prevents none of that. Spend on the course when a court or the DMV has told you it buys something specific. Spend your effort on the courtroom either way.
+
+Current prices for the schools we track are on the North Carolina page, and the full strategy picture is on our points page.
+
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | NC DMV: https://www.ncdot.gov/dmv/
+
+---
+
+## How Often Can You Take Defensive Driving in North Carolina?
+
+**URL:** https://www.trafficschoolpicker.com/north-carolina/how-often-can-you-take-traffic-school
+
+- **DMV point-reduction course:** Once every 5 years, and only with 7+ points on your record plus a $40 eligibility hearing
+- **PJC, the mechanism most drivers actually use:** For insurance purposes, once per household every 3 years
+- **Court-permitted dismissals:** Per case, with prior court permission
+- **Last verified:** August 2026
+
+North Carolina rations three different things on three different clocks, and knowing which clock governs you is most of the strategy.
+
+The course clock is the strictest: the DMV's point-reduction path is available once every five years, and it isn't for everyday tickets anyway, requiring 7 or more points already on your record and a $40 eligibility hearing before the course counts for anything. Five years is a long dormancy for a tool of last resort, which is exactly what it is: drivers who qualify are drivers whose next points carry real suspension risk, and the once-a-half-decade reduction should be spent accordingly.
+
+The clock most North Carolina drivers should actually be watching belongs to the PJC, the Prayer for Judgment Continued, and it's not a course at all. For insurance purposes, a household gets one PJC every three years; use a second inside the window and the insurance protection evaporates for both. Household is the operative word: your spouse's PJC last year spends yours. Before requesting one in court, know your household's history, because a wasted PJC is the most expensive free thing in North Carolina traffic law.
+
+Court-permitted course dismissals run per case with prior permission, and a court agreeing once implies nothing about next time.
+
+Whichever clock applies, course pricing and the county-based 4-hour versus 8-hour split are on our cost page, and the full strategy picture is on our points page. Approved online courses are compared on the North Carolina page.
+
+**Sources:** last verified 2026-08-13 | NC DMV: https://www.ncdot.gov/dmv/
+
+---
+
+## Is Defensive Driving Worth It in North Carolina?
+
+**URL:** https://www.trafficschoolpicker.com/north-carolina/is-traffic-school-worth-it
+
+- **Verdict:** For the course alone, mostly no. For the court strategy it supports, emphatically yes
+- **What's at stake:** Roughly $3,735 in three-year insurance exposure (ceiling estimate) on a typical ticket, with no state-mandated discount to offset it
+- **What prevents that exposure:** A granted PJC, which costs nothing but a court appearance
+- **Where the $27.95 to $59 course earns its keep:** When a court trades something specific for it, or on the DMV's 7-point path
+- **Last verified:** August 2026
+
+This is the one state in the series where our answer about the course is mostly no, and it's the most useful answer on this page of the site.
+
+Run the numbers the way the course ads won't. A typical North Carolina ticket carries roughly $3,735 of three-year insurance exposure as a ceiling estimate, one of the steeper bills in the country, and North Carolina mandates no insurance discount for completing any course. A $27.95 to $59 course, taken on its own initiative, prevents none of that exposure and removes nothing from an ordinary record. As a standalone purchase it returns approximately zero.
+
+What's emphatically worth it is the thing the course sometimes rides along with: the court proceeding. A granted PJC can prevent the entire insurance consequence, a return that's effectively infinite against its price of showing up and asking, rationed at one per household every three years for insurance purposes. And where a prosecutor or judge trades a dismissal or reduction for a course, the course inherits the value of that deal, suddenly worth many multiples of its price because the court made it so. The DMV's point-reduction path, 7-plus points, $40 hearing, once every five years, is similarly worth it for exactly the drivers it's built for.
+
+So the North Carolina rule: never buy the course first. Understand your courtroom options, then buy the course if and when it's the ticket to something.
+
+The full strategy is on our points page; courses, when you need one, are compared on the North Carolina page.
+
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | NC DMV
+
+---
+
+## Can You Take Defensive Driving Online in Ohio?
+
+**URL:** https://www.trafficschoolpicker.com/ohio/can-you-take-traffic-school-online
+
+- **Online accepted:** Yes, for BMV-approved courses earning the 2-point credit
+- **For court dismissals:** Format acceptance is each court's call; confirm with the clerk first
+- **Last verified:** August 2026
+
+Yes for the state benefit, and ask first for the court one.
+
+Ohio's 2-point credit runs on BMV-approved courses, and approved online delivery qualifies; complete one and the credit applies the same as a classroom seat, once every three years. For that purpose the format question is settled and online is the practical default.
+
+Where Ohio stays local is dismissal. Whether a court will trade a course for dismissing or reducing your specific ticket is that court's discretion, and so is which courses and formats it accepts for the deal. Before enrolling for a court purpose, one call to the clerk answers both questions at once: do you offer a course option, and does the online course I'm looking at qualify. Enrolling first and asking second is how Ohio drivers end up with a certificate their court won't take.
+
+Every BMV-approved online course we track is compared on the Ohio page, the three-year clock is on our frequency page, and pricing is on our cost page.
+
+**Sources:** BMV: https://www.bmv.ohio.gov/
+
+---
+
+## Does a Defensive Driving Course Remove Points in Ohio?
+
+**URL:** https://www.trafficschoolpicker.com/ohio/does-traffic-school-remove-points
+
+- **Points removed by a defensive driving course:** 2-point credit toward your total, once every 3 years
+- **What it doesn't do:** The conviction stays on your record; the credit doesn't erase the ticket or hide it from insurers
+- **Ticket dismissal:** Sometimes, at the individual court's discretion; confirm with your court before enrolling
+- **Course length:** 8 hours minimum, approved provider
+- **Suspension context:** Ohio suspends at 12 points in 2 years
+- **Typical course cost:** $25 to $50
+- **Last verified:** August 2026
+
+Ohio's answer is a modest yes, and modest is worth being honest about.
+
+Complete an approved defensive driving course and Ohio grants a 2-point credit against your point total, available once every three years. That's the whole headline. The conviction stays on your record, your insurer still sees the ticket, and two points is two points, not a clean slate. Ohio built a small, sensible tool and the course ads selling it as a record-wipe are overselling.
+
+What two points actually buys you is distance from 12. Ohio suspends a license at 12 points in two years, and if you're a repeat customer of the state's speed enforcement, a 2-point credit is the difference between a warning letter and a suspension hearing. Drivers sitting at 2 or 4 points get almost nothing from the credit today. Drivers at 8 or 10 should take the course this week.
+
+There's a second, quieter use for the same course, and it's the one that can actually save you money on a fresh ticket: some Ohio courts will dismiss a citation or reduce the fine if you complete a defensive driving course, and some won't. It's genuinely court-by-court. Ohio has no statewide election right like Florida's or Texas's, so the move is to call the clerk on your citation before you pay, before you enroll, and ask whether the court offers a dismissal or diversion option involving a course. If yes, that's the valuable version and the course pays for itself several times over. If no, you're back to the 2-point credit and the math above.
+
+Cost-wise this is one of the cheaper states, $25 to $50 for the 8-hour course, against roughly $1,563 in three-year insurance exposure on a typical 10-over ticket in our data as a ceiling estimate. The course won't make that exposure disappear the way an Arizona or Florida dismissal does. Think of it as cheap insurance against the next ticket rather than a cure for this one.
+
+One caveat this page assumes away: it's written for Ohio licensees. If you were ticketed in Ohio but licensed somewhere else, the 2-point credit does nothing for you — there's no Ohio record for it to touch — and [what actually happens to an out-of-state driver](https://www.trafficschoolpicker.com/out-of-state-ticket) is a different question entirely.
+
+Every approved online course we track is compared on the Ohio page.
+
+**Sources:** last verified 2026-08-13 | BMV: https://www.bmv.ohio.gov/ | Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket
+
+---
+
+## How Long Is Defensive Driving in Ohio?
+
+**URL:** https://www.trafficschoolpicker.com/ohio/how-long-does-traffic-school-take
+
+- **Course length:** 8 hours for an approved course
+- **Last verified:** August 2026
+
+Eight hours, one of the longer courses in our coverage, attached to one of the smaller prizes, which is worth knowing before you start rather than at hour five.
+
+Every approved Ohio course runs the same 8 hours, so schools compete on price, $27.95 to $39 in our latest pull, and on how bearable they make the sit, not on length. Online courses save progress, and eight hours divides naturally into three or four evenings.
+
+Whether the hours are worth it depends on which door you're at. For the BMV's 2-point credit, eight hours for two points once every three years is a fair trade for a driver whose total is climbing toward Ohio's 12-point suspension line, and a shrug for a clean record. For a court that's offered to dismiss or reduce your ticket in exchange for the course, the same eight hours is the best deal in the state, and the court's completion deadline, not any state clock, is the one to write down.
+
+Every approved online course we track is compared on the Ohio page, with the credit's fine print on our points page.
+
+**Sources:** BMV
+
+---
+
+## How Much Does a Defensive Driving Course Cost in Ohio?
+
+**URL:** https://www.trafficschoolpicker.com/ohio/how-much-does-traffic-school-cost
+
+- **Typical course price:** $27.95 to $39 for an approved 8-hour online course
+- **Examples as of August 2026:** Improv $27.95, iDriveSafely $39
+- **State fee to enroll:** None statewide; if a court offers dismissal, the court sets any program fee
+- **The ticket you're avoiding:** A typical 10-over ticket runs a $121 fine and roughly $1,563 in three-year insurance exposure (ceiling estimate)
+- **Last verified:** August 2026
+
+Ohio is one of the cheapest states in the country to take a defensive driving course, which is fitting, because it's also a state where the course buys you something modest.
+
+The course itself runs $27.95 to $39 online for the approved 8-hour format, based on prices we pulled in August 2026, with Improv at $27.95 and iDriveSafely at $39. Prices move, so treat those as a snapshot rather than a promise, but the range has been stable and there's no reason to pay more than about $40 in Ohio.
+
+What you're buying depends on why you're buying. Take the course for Ohio's 2-point credit and the cost stack is just the tuition, no state fee, no hearing, available once every three years. Take it because a court has offered to dismiss or reduce your ticket, and the court may add its own program fee on top; that varies court by court, so ask the clerk for the full number when you confirm they'll accept the course at all.
+
+The comparison that matters isn't Improv versus iDriveSafely, it's the course versus the ticket. Our Ohio data puts a typical 10-over citation at a $121 fine and roughly $1,563 in three-year insurance exposure as a ceiling estimate. Where a court will trade a dismissal for a $30 course, that's the best deal in the state. Where it won't, you're spending $30 on a 2-point credit, still worthwhile if your point total is creeping toward Ohio's 12-point suspension, close to pointless on a clean record.
+
+Current prices for every approved school we track are on the Ohio page, and the full points picture is on our points page.
+
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | BMV: https://www.bmv.ohio.gov/
+
+---
+
+## How Often Can You Take Defensive Driving in Ohio?
+
+**URL:** https://www.trafficschoolpicker.com/ohio/how-often-can-you-take-traffic-school
+
+- **For the 2-point credit:** Once every 3 years
+- **Court-offered dismissals:** Per case, at each court's discretion, separate from the 3-year clock
+- **Last verified:** August 2026
+
+Once every three years for the thing Ohio actually promises, the 2-point credit against your total.
+
+The three-year interval is the whole rhythm of Ohio's program. Complete an approved course, the BMV applies a 2-point credit, and the option goes dormant until three years pass. Since the credit is modest, the timing question matters more here than in bigger-credit states: a credit taken when you're sitting at 2 points is a credit you can't take eighteen months later when you're sitting at 10 and staring at Ohio's 12-point suspension line. If your record has a habit of collecting points, the credit is worth more later than sooner. If a one-off ticket is genuinely out of character, taking it now is fine; you'll likely never need it again.
+
+Running outside that clock entirely: court arrangements. Where an Ohio court offers to dismiss or reduce a specific ticket in exchange for a course, that's a per-case deal between you and that court, and doing one doesn't consume your 3-year BMV credit. It's also not something you can schedule; it exists where a given court offers it, which is why the first call on any fresh Ohio ticket is to the clerk, not to a course checkout page.
+
+Nothing about frequency changes what the course can't do: the conviction from a paid ticket stays on your record and visible to insurers however often you study.
+
+Pricing is on our cost page, $27.95 to $39 as of August 2026, and every approved online course we track is compared on the Ohio page.
+
+**Sources:** last verified 2026-08-13 | BMV: https://www.bmv.ohio.gov/
+
+---
+
+## Is Defensive Driving Worth It in Ohio?
+
+**URL:** https://www.trafficschoolpicker.com/ohio/is-traffic-school-worth-it
+
+- **Verdict:** Yes where a court offers a dismissal deal; otherwise a cheap maybe
+- **What you spend:** $27.95 to $39 and eight hours
+- **Court-deal version:** Can prevent roughly $1,563 in three-year insurance exposure (ceiling estimate), up to roughly 40x on the course price
+- **Credit-only version:** 2 points off your total once every 3 years, the conviction and exposure untouched
+- **Last verified:** August 2026
+
+Depends which Ohio you're in, so here are both answers.
+
+If a court has offered to dismiss or reduce your ticket for completing a course, yes, unambiguously. A $30-something course against roughly $1,563 of three-year insurance exposure at ceiling is up to roughly 40x on the money, and even a heavily tapered real-world surcharge leaves the trade lopsided in your favor. This version exists court by court, which is why the first move on any Ohio ticket is a call to the clerk asking whether it's on the table.
+
+If no court deal exists and you're weighing the standalone 2-point BMV credit, the honest answer is: cheap, low-stakes, and worth it only when your point total says so. The credit doesn't touch the conviction or the insurance exposure; it manages license risk. At 8 or 10 points with Ohio's 12-point suspension looming, $30 and eight hours is obviously worth it. At 2 points on an otherwise clean record, you're buying a tool you probably won't need before it recharges in three years, and skipping it costs you nothing.
+
+Eight hours is the real price for many people, one of the longer sits in the country, so let the point math, not guilt, decide.
+
+Courses are compared on the Ohio page; both versions' mechanics are on our points page.
+
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | BMV
+
+---
+
+## Can You Take Defensive Driving Online in Texas?
+
+**URL:** https://www.trafficschoolpicker.com/texas/can-you-take-traffic-school-online
+
+- **Online accepted:** Yes, statewide, for TDLR-approved driving safety courses
+- **The order matters:** Get the court's permission for dismissal first, then take the course
+- **Course:** 6 hours, minimum $25 by law
+- **Not eligible at any format:** CDL holders (for dismissal)
+- **Last verified:** August 2026
+
+Yes. Texas accepts TDLR-approved online driving safety courses statewide, for both ticket dismissal and insurance discounts, and online has been the default way Texans take defensive driving for years.
+
+The thing to get right isn't the format, it's the sequence. For a dismissal, you request the court's permission first, pay the court fee, capped at $10, and only then take the course by the court's deadline. Drivers who take the course before asking sometimes find the court won't apply it retroactively. Ask, then enroll.
+
+Two Texas-specific rails: every provider must charge at least $25 by law, so a cheaper online course isn't a bargain, it's not a legal Texas course; and CDL holders can't use the dismissal at any format, online or classroom.
+
+Every TDLR-approved online course we track is compared on the Texas page, with the full cost math on our cost page.
+
+**Sources:** Art. 45A.352 | Educ. Code 1001.352
+
+---
+
+## Does Defensive Driving Remove Points in Texas?
+
+**URL:** https://www.trafficschoolpicker.com/texas/does-traffic-school-remove-points
+
+- **Points removed by defensive driving:** None. Texas has no license points system.
+- **Points system status:** Repealed effective September 1, 2019 (HB 2048, 86th Legislature)
+- **What the course does instead:** Full dismissal of an eligible ticket under Code of Criminal Procedure Art. 45A.352
+- **Effect of dismissal:** Charge may not appear on your driving record or be used for any purpose (Art. 45A.357)
+- **Frequency limit:** Once per 12 months, measured from the offense date
+- **Not eligible:** Speeding 25+ mph over the limit, any speed 95+ mph, passing a stopped school bus, leaving the scene, work zone violations with workers present, CDL holders
+- **Also required:** Proof of liability insurance
+- **Request deadline:** On or before the answer date on your citation
+- **Completion window:** 90 days from the court's order
+- **Course length:** 6 hours, TDLR-approved
+- **Minimum course price:** $25 by statute (Tex. Educ. Code 1001.352)
+- **Last verified:** August 2026
+
+Short answer: no, because there are no points to remove. Texas abolished its points system on September 1, 2019, when House Bill 2048 repealed the Driver Responsibility Program. DPS waived every outstanding surcharge on the same day. If a website is telling you how many points a Texas speeding ticket adds to your license, that page is at least seven years out of date, and there are several of them ranking on Google right now.
+
+What you're actually worried about still exists though. A conviction goes on your driving record, your insurer sees it, and your rate goes up. The fix Texas gives you is better than point removal. It's dismissal.
+
+Complete a TDLR-approved driving safety course with the court's permission and the charge is dismissed under Article 45A.352 of the Code of Criminal Procedure. Not masked, not reduced. Dismissed. The statute says a dismissed charge may not be part of your driving record or used for any purpose. Your insurer never sees it because there is nothing to see.
+
+The article number changed recently, by the way. Courts cited this as Art. 45.0511 for twenty years. Texas recodified the whole chapter effective January 1, 2025, and it's now Art. 45A.352. Same rules, new number. If your court paperwork shows either one, it's the same thing.
+
+Here's how you qualify. You hold a Texas license or permit. You haven't used a driving safety course for dismissal in the 12 months before the offense date, and that clock runs from the ticket, not from when you finished the last course. You enter a plea of guilty or no contest and request the course in writing on or before the answer date printed on your citation. Miss that date and the judge can still say yes, but now it's discretion instead of a right. The court then gives you 90 days to finish the 6-hour course and get your certificate in.
+
+One change from September 2025 that almost nobody has caught up with: if one stop produced more than one eligible ticket, Senate Bill 296 lets the court dismiss all of them off a single course completion. Before that it was one course, one ticket. If an officer wrote you up for two things at once, that amendment just cut your cost in half.
+
+Not every ticket qualifies. Speeding 25 mph or more over the limit is out, and so is any speed of 95 mph or above regardless of the limit. Passing a stopped school bus, leaving the scene or failing to stop and give information after an accident, and violations in a construction zone with workers present are all excluded too. You also need to show the court proof of liability insurance to qualify, and the option isn't available to CDL holders at all. For the excluded stuff you're either paying, fighting it, or talking to the court about deferred disposition, which is a different mechanism with its own rules.
+
+Cost-wise, the course itself runs $25 to $35. Texas law actually sets a $25 floor, so anyone advertising cheaper is making the difference up in fees. You'll also pay a court administrative fee, capped at $10, and you still pay court costs on the underlying ticket. All in you're usually out $60 to $90. Set that against what a conviction does to your insurance over three years and the math isn't close.
+
+One more limit, and it's a hard one: the course requires a Texas license or permit, so if [you're licensed in another state](https://www.trafficschoolpicker.com/out-of-state-ticket) you can't take it at all — no judge can waive that part, and active-duty military and their families are the only exception.
+
+If you're ready to pick a course, we compare every TDLR-approved online provider on the Texas page, with current prices and what each one is actually like to sit through.
+
+**Sources:** Art. 45A.351/45A.352/45A.354/45A.357 CCP: https://statutes.capitol.texas.gov/Docs/CR/htm/CR.45A.htm | SB 296 (89th Leg.): https://capitol.texas.gov/tlodocs/89R/billtext/html/SB00296F.htm | TDLR SB 296 notice: https://www.tdlr.texas.gov/news/2025/10/08/sb-296-relating-to-a-driving-safety-or-a-motorcycle-operator-training-course-dismissal/ | Exclusions per .gov courts: https://www.sugarlandtx.gov/177/Driving-Safety-Course , https://www.mctx.org/departments/departments_g_-_j/justice_of_the_peace_precinct_3/driving_safety_course.php , https://www.fortbendcountytx.gov/government/departments/justice-of-the-peace/precinct-1-place-2/driving-safety-courses , https://www.wilcotx.gov/627/Defensive-Driving | 90-day window (Art. 45A.354): https://www.victoriatx.gov/DocumentCenter/View/875/Drivers-Safety-Course-vs-Deferred-Disposition-PDF | $25 floor: https://www.tdlr.texas.gov/news/2025/08/27/driving-safety-providers-must-charge-students-a-fee-before-enrolling-them
+
+---
+
+## How Long Is Defensive Driving in Texas?
+
+**URL:** https://www.trafficschoolpicker.com/texas/how-long-does-traffic-school-take
+
+- **Course length:** 6 hours, set by Texas law, identical at every approved school
+- **Not all of it can be video:** State rules cap audio/video content, so expect reading and interaction
+- **Last verified:** August 2026
+
+Six hours, and that's Texas law talking, not the school. Every TDLR-approved driving safety course in Texas teaches the same state-mandated 300 minutes of instruction, so a school advertising a faster course is advertising something that can't legally exist. Pick on price and experience; the clock is fixed.
+
+What varies is how the six hours feel. Texas caps how much of the course can be audio and video, so even the slickest course mixes clips with reading, quizzes, and validation questions that confirm you're actually there. Online courses save progress, so the realistic pattern is two or three sittings across an evening or a weekend rather than one six-hour block.
+
+The deadline wrapping the six hours belongs to your court: after granting permission to take the course, the court sets a completion date, typically 90 days. Six hours against 90 days is generous; the drivers who miss it are the ones who file the paperwork and forget.
+
+Every approved online course we track is compared on the Texas page, and what the course actually buys is on our points page.
+
+**Sources:** 16 TAC 84.505 | TDLR
+
+---
+
+## How Much Does Defensive Driving Cost in Texas?
+
+**URL:** https://www.trafficschoolpicker.com/texas/how-much-does-traffic-school-cost
+
+- **Course price:** $25 to $29 online across TDLR-approved providers we track
+- **Statutory minimum:** $25 by law (Tex. Educ. Code 1001.352); anything cheaper isn't a TDLR course price
+- **Court administrative fee:** Capped at $10 (Code of Criminal Procedure art. 45A, formerly 45.0511(f)(1))
+- **Driving record:** Required for dismissal; the court can pull it for a fee, or you order it from DPS
+- **Course length:** 6 hours, set by state rule
+- **Typical all-in:** $60 to $90 including fees
+- **What it prevents:** A conviction your insurer prices for 3 years
+- **Last verified:** August 2026
+
+Texas is the one state where the answer starts with a law instead of a sale banner. Providers must charge at least $25 for a defensive driving course. That's Education Code 1001.352, and TDLR reminded providers of it in writing last year. So every "cheapest course in Texas" claim collapses into the same $4 window: the courses we track run $25 at I Drive Safely and TicketSchool, $28.95 at Improv, $29 at Aceable. When the state sets the floor, price stops being the decision. Pick on format and hassle instead.
+
+The course is only part of the bill though, and this is where most pages go quiet. When you request the course, the court can charge an administrative fee, capped at $10 by statute. You also have to produce your Texas driving record showing you haven't used this option in the past 12 months. Some courts pull it for you for a fee, otherwise you order it from DPS yourself. And some courts collect court costs at request time. Stack it up and a typical Texas dismissal runs $60 to $90 all-in.
+
+Watch the add-ons at checkout. The statutory floor applies to the course, so the margin games move into extras: audio upgrades, same-day certificate delivery, bundled driving records at a markup. None of them are required. The 6-hour course and a certificate are the whole legal requirement.
+
+Against that $60 to $90, the alternative is a conviction on your record that your insurer prices for three years. Our Texas data puts that exposure well into four figures as a ceiling estimate. This is one of the cheapest problems Texas will ever let you buy your way out of.
+
+Every TDLR-approved online course we track is compared on the Texas page, current prices included.
+
+**Sources:** $25 floor: https://www.tdlr.texas.gov/news/2025/08/27/driving-safety-providers-must-charge-students-a-fee-before-enrolling-them | $10 admin fee cap: https://www.txcourts.gov/media/1444617/j-ct-ct-cst-010118.pdf | Driving record mechanics: https://capitol.texas.gov/tlodocs/79R/billtext/html/HB00703F.HTM | Art. 45A: https://statutes.capitol.texas.gov/Docs/CR/htm/CR.45A.htm
+
+---
+
+## How Often Can You Take Defensive Driving in Texas?
+
+**URL:** https://www.trafficschoolpicker.com/texas/how-often-can-you-take-traffic-school
+
+- **For ticket dismissal:** Courts may grant a driving safety course dismissal once every 12 months
+- **New since September 2025:** SB 296 allows one course to dismiss multiple eligible charges filed together
+- **CDL holders:** Not eligible for dismissal regardless of timing
+- **Last verified:** August 2026
+
+Once every 12 months. That's the Texas clock on using a driving safety course to dismiss a ticket, and it runs from your last course-based dismissal, so the question a court asks isn't when you took the course, it's when a course last got a charge dismissed for you.
+
+One genuinely new wrinkle makes the once-a-year math friendlier than it used to be. Under SB 296, effective September 1, 2025, a single course can now dismiss multiple eligible charges filed in the same case, where drivers used to have to pick one ticket and eat the rest. If you picked up two eligible violations in one stop, that's no longer a choice between them.
+
+A few edges on the clock. The 12-month limit applies to the dismissal mechanism, so a court reviewing your request will check your record for a course dismissal in the preceding year. It's court-granted, not automatic: you request it, pay the court's fee, capped at $10 by state rule, and complete the approved 6-hour course by the court's deadline. And CDL holders are outside the program entirely, at any frequency, even for tickets in a personal vehicle.
+
+If you're inside the 12-month window with a fresh ticket, the course route is closed but the ticket still has options, deferred disposition being the usual next conversation with the court. And if you're eligible, the math is on our cost page: about $25 to dismiss a ticket carrying real insurance exposure.
+
+Approved online courses are compared on the Texas page.
+
+**Sources:** Art. 45A.352 | SB 296 | txcourts.gov fee chart
+
+---
+
+## Is Defensive Driving Worth It in Texas?
+
+**URL:** https://www.trafficschoolpicker.com/texas/is-traffic-school-worth-it
+
+- **Verdict:** Yes, one of the clearest yeses in the country
+- **What you spend:** Roughly $182 all-in, course, court fee and processing
+- **What it can prevent:** Roughly $4,800 in three-year insurance exposure (ceiling estimate), about a 26x return
+- **The conditions:** Court permission first, once every 12 months, no CDL
+- **Last verified:** August 2026
+
+Yes, and Texas is the state where the arithmetic barely needs an argument.
+
+Run the whole trade honestly. Taking the defensive driving route costs roughly $182 all-in: the $25-and-up course, the court's fee capped at $10, and the associated processing. What it buys is dismissal, the charge resolved with no conviction for insurers to price. Our data puts the three-year insurance exposure on a typical Texas ticket at roughly $4,800 as a ceiling estimate, which makes the course route about a 26x return on the money spent. Insurance exposure is a ceiling, not a promise, since carriers vary and some taper surcharges, but even a driver whose real exposure lands at half the ceiling is looking at a 13x return on an afternoon.
+
+The conditions are the usual Texas rails: the court grants the option, you ask before enrolling, it's available once every 12 months, and CDL holders are outside it entirely. Since September 2025, one course can even clear multiple eligible charges filed together, which only improves the math.
+
+When is it not worth it? Almost never if you're eligible. The edge cases are drivers who'd contest the ticket outright and win, and drivers inside the 12-month window with no course option left.
+
+Courses are compared on the Texas page; the full cost stack is on our cost page.
+
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | Art. 45A.352
+
+---
+
+## Can You Take a Driver Improvement Clinic Online in Virginia?
+
+**URL:** https://www.trafficschoolpicker.com/virginia/can-you-take-traffic-school-online
+
+- **Online accepted:** Yes, for most drivers, DMV-approved online clinics count for every clinic purpose
+- **The two exceptions:** Drivers under 20 and CDL holders must attend in person
+- **Same choose-one rule online:** Voluntary attendance buys safe driving points or an insurance discount, picked at enrollment
+- **Last verified:** August 2026
+
+Yes, with the cleanest carve-out in the country: everyone can take Virginia's driver improvement clinic online except two groups Virginia names outright, drivers under 20 and CDL holders, who are required to attend the classroom version, with commercial drivers taking the CMV-specific course.
+
+For everyone else, a DMV-approved online clinic is a full equivalent. It satisfies court-ordered attendance where a court sent you, DMV-ordered attendance when point accumulation triggered it, and voluntary attendance for the safe driving points or the insurance discount, with the same rules riding along regardless of format: the fee can't exceed $100 by law, the voluntary benefit runs once every 24 months, and you still choose points or discount at enrollment, never both.
+
+If you're in one of the two excluded groups, don't fight it with a workaround; the DMV tracks enrollment type, and an online certificate from an excluded driver doesn't satisfy the requirement. Classroom clinics are widespread and the obligation is the same 8 hours either way.
+
+Every DMV-approved online clinic we track is compared on the Virginia page, the enrollment codes are decoded on our points page, and pricing is on our cost page.
+
+**Sources:** last verified 2026-08-13 | VA DMV: https://www.dmv.virginia.gov/
+
+---
+
+## Does a Driver Improvement Clinic Remove Points in Virginia?
+
+**URL:** https://www.trafficschoolpicker.com/virginia/does-traffic-school-remove-points
+
+- **Points removed:** None erased. Virginia adds up to 5 safe driving points to your balance instead
+- **How you enroll matters:** Four enrollment codes — court-ordered (COU), DMV-ordered (DMV), insurance (INS), voluntary (VOL) — with different benefits
+- **The choose-one trap:** A voluntary clinic gives safe driving points OR an insurance discount, never both; you pick at enrollment
+- **Frequency:** Voluntary safe-point credit once every 24 months; maximum safe-point balance is +5
+- **Court-ordered attendance:** Court decides whether points are awarded; court-ordered drivers aren't eligible for the insurance discount
+- **DMV-ordered attendance:** Triggered at 12 demerit points in 12 months or 18 in 24; 90 days to complete or suspension
+- **Course:** 8 hours, DMV-approved; fee capped at $100 by law; online not allowed for drivers under 20 or CDL holders
+- **Last verified:** August 2026
+
+Virginia doesn't remove points. It runs a bank, and the answer depends entirely on which door you walk in through.
+
+Start with the currency. Virginia assigns demerit points for violations, but it also maintains safe driving points, plus-one for each clean year, up to a balance of plus five. Complete a DMV-approved driver improvement clinic voluntarily and Virginia credits you up to 5 safe driving points, once every 24 months. Your demerits from the ticket don't vanish; your balance improves. A driver at minus 4 who takes the clinic can climb back toward zero. It's the most generous single credit in the country, Georgia's 7-point reduction aside, and most Virginians have no idea it exists.
+
+Now the part that catches people. Virginia tracks why you enrolled, with four codes, and the code controls the benefit. Enroll voluntarily and you choose at enrollment: safe driving points or an insurance discount. One or the other, never both from the same attendance. Pick wrong and there's no switching after. If your record is carrying demerits, take the points. If your record is clean and you're purely rate-shopping, take the discount, and note the insurance track is for drivers 54 and under, with a separate mature driver course for 55 plus.
+
+If a court sent you, different rules: the court decides whether you get safe driving points as part of your case, dismissal or fine reduction is at the court's discretion, and court-ordered drivers aren't eligible for the insurance discount at all. And if the DMV sent you, because you hit 12 demerit points in 12 months or 18 in 24, this isn't optional and there's no prize: you have 90 days to complete the clinic or your license is suspended.
+
+The practical details. The clinic is 8 hours, Virginia caps the fee at $100 by law, and typical online tuition runs $45 to $75. Two groups can't take it online at all: drivers under 20 and CDL holders, who need the classroom version. Against a typical 10-over ticket, a $111 fine and roughly $1,707 in three-year insurance exposure in our data as a ceiling estimate, a $60 clinic that either restores your point balance or, where a court allows it, resolves the ticket itself is one of the easier calls in this catalog. Just decide which benefit you're there for before you type your card number, because Virginia will hold you to it.
+
+And if the ticket itself came from outside Virginia, the clinic can't reach it: Virginia assigns demerits to [a conviction from another state](https://www.trafficschoolpicker.com/out-of-state-ticket) just like an in-state one, but the credit only ever works on your Virginia balance.
+
+Every DMV-approved online clinic we track is compared on the Virginia page.
+
+**Sources:** last verified 2026-08-13 | VA DMV: https://www.dmv.virginia.gov/ | Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket
+
+---
+
+## How Long Is a Driver Improvement Clinic in Virginia?
+
+**URL:** https://www.trafficschoolpicker.com/virginia/how-long-does-traffic-school-take
+
+- **Clinic length:** 8 hours, set by state requirement, at every DMV-approved clinic
+- **Last verified:** August 2026
+
+Eight hours, fixed by Virginia's clinic standard, whichever school delivers it and whichever of the four enrollment doors you came through. Court-ordered, DMV-ordered, insurance, voluntary: same clinic, same clock.
+
+Virginia sweetens a long course two ways. The fee for the 8 hours is capped at $100 by law, with online clinics actually running $39 to $75, so the per-hour cost is among the lowest anywhere. And the prize scale matches the time: up to 5 safe driving points from a voluntary attendance is the most generous credit-per-course in the country, so Virginia is asking for a full workday and paying like it.
+
+The hours come with one enrollment decision that outlasts them, choose safe driving points or the insurance discount before you start, and one hard deadline for the involuntary crowd: DMV-ordered attendees have 90 days from the order to finish their 8 hours or face suspension, which is ample and still routinely missed. Online progress saves for everyone eligible to be online, which excludes drivers under 20 and CDL holders, whose 8 hours happen in a classroom.
+
+Every DMV-approved online clinic we track is compared on the Virginia page, and the four doors are decoded on our points page.
+
+**Sources:** last verified 2026-08-13 | VA DMV
+
+---
+
+## How Much Does a Driver Improvement Clinic Cost in Virginia?
+
+**URL:** https://www.trafficschoolpicker.com/virginia/how-much-does-traffic-school-cost
+
+- **Typical course price:** $39 to $39.95 online for the 8-hour clinic
+- **Examples as of August 2026:** iDriveSafely $39, Improv $39.95
+- **The unusual part:** Virginia caps the clinic fee at $100 by law, the only price cap in our coverage besides Texas's floor
+- **One attendance, one benefit:** Safe driving points or an insurance discount, chosen at enrollment, never both
+- **The ticket you're avoiding:** A typical 10-over ticket runs a $111 fine and roughly $1,707 in three-year insurance exposure (ceiling estimate)
+- **Last verified:** August 2026
+
+Virginia is the rare state that regulates the price of the course itself: by law, a driver improvement clinic can't charge more than $100. In practice you'll pay well under half that. As of August 2026, iDriveSafely's approved 8-hour clinic runs $39 and Improv's runs $39.95, and the online market clusters in the $40 to $75 band. Prices move, so treat those as a snapshot, but anything approaching the $100 cap is buying you nothing extra; the clinic is standardized by the DMV and the certificate is the certificate.
+
+What the money buys depends on the door you enter through, and Virginia makes you choose. Enroll voluntarily and your $40 buys either up to 5 safe driving points, once every 24 months, or an insurance discount, never both from one attendance, and you commit at enrollment. If a court sent you, the same tuition rides along with your case and the court decides what you get; court-ordered drivers don't qualify for the insurance discount at all. If the DMV ordered you in after too many demerits, the $40 isn't buying a benefit, it's keeping your license, and you have 90 days to spend it.
+
+Two groups pay differently by necessity: drivers under 20 and CDL holders can't take the clinic online and need the classroom version, where pricing varies by location.
+
+Against the ticket, the math is friendly. Our Virginia data puts a typical 10-over citation at a $111 fine and roughly $1,707 in three-year insurance exposure as a ceiling estimate. Where a court allows the clinic to resolve the ticket, $40 against $1,700 is a return few financial products offer. Even the consolation prize, 5 safe driving points restoring your balance, is the most generous voluntary credit in the country per dollar spent.
+
+Current prices for every DMV-approved online clinic we track are on the Virginia page, and the four enrollment codes are decoded on our points page.
+
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | VA DMV: https://www.dmv.virginia.gov/
+
+---
+
+## How Often Can You Take a Driver Improvement Clinic in Virginia?
+
+**URL:** https://www.trafficschoolpicker.com/virginia/how-often-can-you-take-traffic-school
+
+- **Voluntary clinic for safe driving points:** Once every 24 months
+- **Maximum safe-point balance:** +5, so back-to-back clinics can't stack beyond it
+- **Court-ordered or DMV-ordered attendance:** As often as ordered; doesn't wait on the voluntary clock
+- **Last verified:** August 2026
+
+Once every 24 months for the version you choose; as often as ordered for the versions you don't.
+
+Virginia's voluntary clinic, the one drivers take on their own initiative for safe driving points, runs on a two-year clock. Complete it, bank up to 5 safe driving points, and the voluntary option sleeps until 24 months pass. Two design features shape how to use it. First, Virginia caps your safe-point balance at +5, so a driver already at +5 gains nothing from a clinic; the two-year rhythm only pays if violations have eaten into your balance. Second, remember the choose-one rule from enrollment: each voluntary attendance buys safe driving points or an insurance discount, never both, so the 24-month interval is really rationing one benefit of your choosing at a time.
+
+The involuntary lanes ignore that clock completely. If a court orders or accepts a clinic as part of resolving a ticket, that's per case, whenever cases arise. If the DMV orders you in after hitting 12 demerit points in 12 months or 18 in 24, the clinic isn't optional, isn't waiting on any interval, and comes with a 90-day deadline against suspension. Neither ordered attendance consumes your voluntary two-year slot, though the court decides what benefits, if any, attach to its version.
+
+The steady-state pattern for a Virginia driver who collects the occasional ticket: let the clinic restore your balance every couple of years, and treat the $100 legal fee cap, detailed on our cost page, as the ceiling on what that maintenance ever costs.
+
+Every DMV-approved online clinic we track is compared on the Virginia page, and the four enrollment doors are decoded on our points page.
+
+**Sources:** last verified 2026-08-13 | VA DMV: https://www.dmv.virginia.gov/
+
+---
+
+## Is a Driver Improvement Clinic Worth It in Virginia?
+
+**URL:** https://www.trafficschoolpicker.com/virginia/is-traffic-school-worth-it
+
+- **Verdict:** Yes, in every lane, with the court-permitted version among the country's best trades
+- **What you spend:** $39 to $75, capped at $100 by law, and eight hours
+- **Court-permitted version:** Up to roughly 24x against the avoided $1,707 three-year exposure (ceiling estimate)
+- **Voluntary version:** Up to 5 safe driving points or an insurance discount, your pick, once every 24 months
+- **Last verified:** August 2026
+
+Yes, and Virginia is unusual in that the answer holds through every door you might enter.
+
+The headline trade is the court-permitted one. Where a Virginia court allows the clinic to resolve a ticket, a course costing $39 to $75 stands against roughly $1,707 of three-year insurance exposure at ceiling, up to roughly a 24x return, plus whatever the court does with the fine. That version depends on the court's discretion, which makes the clerk conversation the first move, as everywhere.
+
+But Virginia's distinctive value is that the fallback is genuinely good. Miss the court version entirely and the voluntary clinic still pays: up to 5 safe driving points, the most generous credit in the country, restoring a battered balance once every 24 months, or the insurance-discount track if your record is clean and you'd rather chip the premium. Eight hours and under $75 for either is solid value on its own terms, not a consolation prize. Even the involuntary version, when the DMV orders you in, is worth it in the bluntest sense: it's the price of keeping your license.
+
+The only way to make Virginia's clinic not worth it is to fumble the enrollment choice, buying points you don't need or a discount you can't use. Decide which benefit you're there for before checkout, because that decision is final per attendance.
+
+The four doors are decoded on our points page; approved clinics are compared on the Virginia page.
+
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | VA DMV
 
 ---
 
