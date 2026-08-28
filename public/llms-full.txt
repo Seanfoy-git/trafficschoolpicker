@@ -334,22 +334,22 @@ Typically once every 3 years. Individual courts may impose different frequency r
 
 **URL:** https://www.trafficschoolpicker.com/illinois
 
-Illinois drivers cited for most petty traffic offenses can avoid a conviction by pleading guilty and requesting court supervision, the dismissal mechanism authorized under 730 ILCS 5/5-6-1(k). Under court supervision, the judge typically requires payment of fines, court costs, and completion of a 4-hour traffic safety school within a supervision period (commonly 4 months in Cook County). If you complete the conditions, the case is dismissed without a conviction — no points are added to your driving record and the ticket does not count toward the three-in-12-months threshold that triggers a Secretary of State suspension. Eligibility is limited to twice within any 12-month period, and supervision is unavailable for CDL holders, school-zone speeding, and second-offense driving without insurance.
+Illinois drivers cited for most petty traffic offenses can avoid a conviction by pleading guilty and requesting court supervision, the dismissal mechanism authorized under 730 ILCS 5/5-6-1. Under court supervision, the judge typically requires payment of fines, court costs, and — when the court orders it — completion of a traffic safety school within a supervision period (commonly 4 months in Cook County, which uses the National Safety Council's 4-hour course). If you complete the conditions, the case is dismissed without a conviction: no points are added to your driving record and the ticket does not count toward the three-in-12-months threshold that triggers a Secretary of State suspension. Eligibility is limited to twice within any 12-month period, and supervision is unavailable for CDL holders, school-zone speeding, and second-offense driving without insurance. Last checked August 2026.
 
-**Can I do Illinois traffic school online?**
-Yes. Illinois Secretary of State-approved online IDSS courses are accepted statewide.
+**Can I do Illinois traffic school online to fix a ticket?**
+Not as a retail course you buy yourself. Illinois keeps a ticket off your record through court supervision, not an online defensive-driving product. If the court orders traffic safety school as a supervision condition, the format is set by your county — Cook County, for example, uses the National Safety Council's course in a classroom or online. Ask the court on your citation what it requires.
 
-**How often can I do Illinois traffic school?**
-Once every 12 months for the point-reduction benefit.
+**Does Illinois traffic school reduce points on my license?**
+No. Illinois has an administrative point system (92 Ill. Adm. Code 1040.20), but no course reduces points. Points matter only toward a suspension after three moving-violation convictions in 12 months (625 ILCS 5/6-206). The way to avoid a conviction is court supervision, not a point-reduction course.
 
-**How long is Illinois traffic school?**
-The Illinois Driver Safety School (IDSS) course is a minimum of 4 hours.
+**How does court supervision work in Illinois?**
+You plead guilty and ask the judge for court supervision (730 ILCS 5/5-6-1). The judge defers judgment and sets conditions — typically fines and court costs, and sometimes traffic safety school. Complete them within the supervision period and the case is dismissed without a conviction (730 ILCS 5/5-6-3.1), so no points are added and it does not count toward the three-in-12-months suspension threshold.
 
-**Does Illinois traffic school dismiss my ticket?**
-Illinois does not offer ticket dismissal through traffic school. A Secretary of State-approved defensive driving course (IDSS) reduces your active points by up to 3 and may provide an auto insurance discount.
+**How often can I get court supervision in Illinois?**
+Court supervision is limited to twice within any 12-month period (730 ILCS 5/5-6-1(k)). It is generally unavailable to CDL holders, for school-zone speeding, and for a second offense of driving without insurance.
 
-**Who submits my certificate in Illinois?**
-Your school reports your completion to the Illinois Secretary of State's office, which processes the point reduction automatically.
+**Does a course dismiss my Illinois ticket by itself?**
+No. Only the court can dismiss the ticket, through supervision. A traffic safety course is one possible condition of supervision, ordered at the court's discretion — it is not a standalone dismissal you can buy online. Confirm the details with the court on your citation.
 
 ---
 
@@ -417,22 +417,22 @@ No. Iowa defensive driving is not available for DUI, reckless driving, or commer
 
 **URL:** https://www.trafficschoolpicker.com/kansas
 
-Kansas does not use a driver point system — the Department of Revenue's Division of Vehicles tracks violations by count rather than numeric points, and 3 moving-violation convictions within any 12-month period can trigger a license suspension. Whether traffic school can dismiss a ticket is decided court-by-court at the county or municipal level, typically through a diversion agreement with the prosecutor that requires payment of court fees, completion of an approved defensive driving course, and a clean driving record for a set probation period (commonly 6 months). Eligibility usually excludes CDL holders, drivers with multiple violations on the same citation, and serious offenses like DUI or reckless driving. Kansas does have a statutorily mandated insurance discount: completing an approved course entitles eligible drivers to a 3-year auto insurance premium reduction (typically around 10%). Always contact the issuing court before enrolling — Kansas has no statewide diversion program, and what's available in Sedgwick County may differ from Johnson County or Shawnee County.
+Kansas does not use a driver point system — the Department of Revenue's Division of Vehicles tracks violations by count rather than numeric points, and three moving-violation convictions within any 12-month period can trigger a license suspension (K.S.A. 8-255). Whether traffic school can dismiss a ticket is decided court by court at the county or municipal level, typically through a diversion agreement with the prosecutor (K.S.A. 22-2906) that requires payment of court fees, completion of an approved defensive driving course, and a clean record for a set probation period. Eligibility, and whether a course is accepted at all, is set by that court, so there is no statewide course length. Kansas does separately mandate an auto-insurance discount: completing an approved course of at least four hours entitles eligible drivers to a three-year premium reduction, with the amount set by each insurer (K.S.A. 40-1112a). Always contact the issuing court before enrolling — what's available in Sedgwick County may differ from Johnson County or Shawnee County. Last checked August 2026.
 
 **Does Kansas traffic school dismiss my ticket?**
-Kansas has no statewide ticket dismissal program. Dismissal is handled court-by-court via a diversion program. Eligibility depends on your specific court, your violation, and your driving history. Check with your court before enrolling.
-
-**Who submits my certificate in Kansas?**
-You submit your completion certificate to the court yourself. Your provider emails or mails you the certificate after you complete the course. Submission method is determined by your specific court.
-
-**How often can I do Kansas defensive driving?**
-For the mandatory insurance discount, you may take a course once every 3 years. For ticket dismissal via diversion, frequency is determined by your individual court — there is no statewide rule.
+Not on its own. Kansas has no statewide dismissal program and no driver point system. Dismissal is handled court by court through a prosecutorial diversion agreement (K.S.A. 22-2906); where a court accepts it, completing an approved course can be part of that agreement. Eligibility depends on your court, your violation, and your record, so check with the court on your citation before enrolling.
 
 **Can I do Kansas defensive driving online?**
-Yes. Kansas defensive driving courses are available fully online. Online courses are accepted by courts for diversion and by insurers for the mandatory discount.
+Yes. Kansas defensive driving courses are available fully online. Whether a court accepts one toward a diversion is up to that court, but an approved online course does count toward the state's mandatory insurance discount.
 
-**How long is Kansas defensive driving?**
-Kansas defensive driving courses are a minimum of 4 hours. This applies to all formats — online, classroom, and video.
+**Does Kansas give an insurance discount for defensive driving?**
+Yes. Kansas law requires insurers to give a three-year premium reduction to a driver who completes an approved course of at least four hours (K.S.A. 40-1112a). The discount amount is set by each insurer. This is separate from anything to do with your ticket.
+
+**How long is a Kansas defensive driving course?**
+There is no statewide length for ticket dismissal — each court's diversion agreement sets its own requirement. For the mandatory insurance discount, the course must be at least four hours (K.S.A. 40-1112a).
+
+**Who submits my certificate in Kansas?**
+You do. Your provider sends you the completion certificate, and you submit it to the court (for a diversion) or to your insurer (for the discount). The exact method is set by your court.
 
 ---
 
@@ -440,27 +440,22 @@ Kansas defensive driving courses are a minimum of 4 hours. This applies to all f
 
 **URL:** https://www.trafficschoolpicker.com/kentucky
 
-Kentucky's approved defensive driving courses can prevent points from being added to your driving record when the court agrees to refer you to State Traffic School as part of your case. The referral is not automatic. It has to be requested at your court appearance, and the judge decides.
+Kentucky's State Traffic School can prevent points from being added to your driving record, but only when the court refers you to it as part of your case (KRS 186.574). The referral is not automatic and there is no voluntary sign-up: you have to request it at your court appearance, and the judge decides. Completion withholds the points, yet the conviction itself still stands — it is not a dismissal. The only Transportation Cabinet-approved online version is the state's contractor, RightLane, which runs about 4 hours ($39 online, or $15 in a classroom); a national online course does not satisfy a Kentucky referral, and the course must be finished within 30 days. Completion is generally allowed once every 12 months. Ask your court clerk about State Traffic School eligibility before you enter a plea. Last checked August 2026.
 
-Kentucky Transportation Cabinet-approved courses run about 4 hours online, one of the shorter formats in the country. Course tuition averages around $20. Where the court agrees to State Traffic School, the ticket effectively bypasses the standard insurance surcharge pattern most carriers apply after a moving violation. Ask your court's clerk about State Traffic School eligibility before entering a plea. Completion is generally allowed once every 12 months.
+**Can I take Kentucky State Traffic School online?**
+Yes, but only when the court refers you, and only through the Transportation Cabinet's contractor, RightLane. It runs about 4 hours ($39 online, $15 in a classroom) and must be finished within 30 days of referral. A national online course you buy on your own does not satisfy a Kentucky referral (KRS 186.574).
 
-**Can I take defensive driving online in Kentucky?**
-Yes. The Kentucky Transportation Cabinet licenses approved online defensive driving providers. When court-referred, completion prevents points from being added to your driving record.
+**Does Kentucky State Traffic School dismiss my ticket?**
+No. Completion keeps points from being added to your record, but the conviction still stands — it is not a dismissal. Actual dismissal, where it is offered, comes from a separate county-attorney diversion (KRS 186.574(6)), decided case by case. Ask the court on your citation which options apply.
 
-**How long is Kentucky defensive driving?**
-Approved online courses run about 4 hours, one of the shorter formats in the country.
+**Can I just sign up for a Kentucky course myself?**
+No. Kentucky State Traffic School is court-referral only — there is no voluntary enrollment. You have to request it at your court appearance and the judge decides (601 KAR 13:025).
 
-**How much does Kentucky defensive driving cost?**
-Course tuition typically runs $19.95 to $25 for state-approved online providers.
-
-**Does Kentucky defensive driving dismiss my ticket?**
-Sometimes. Kentucky courts may allow dismissal or reduced charges through diversion in exchange for course completion. The court decides. Request State Traffic School at your court appearance to explore this option.
-
-**How often can I take Kentucky defensive driving?**
-Once per 12 months. The 12-month clock starts from your most recent completion date.
+**How much does it cost and how often can I take it?**
+RightLane, the state's approved online provider, charges $39 online ($15 for the classroom version). Completion is generally allowed once every 12 months, measured from your most recent completion date.
 
 **Will my Kentucky insurance go down after the course?**
-Some Kentucky carriers offer a voluntary discount for approved course completion. The discount is not state-mandated. Check with your specific insurer before enrolling.
+Maybe. Some Kentucky carriers offer a voluntary discount for approved course completion, but it is not state-mandated. Check with your own insurer before enrolling.
 
 ---
 
@@ -502,16 +497,16 @@ Maine does not currently accept online defensive driving courses for ticket dism
 For a Maine driver looking at a routine speeding ticket, the primary options for reducing the insurance impact are contesting the ticket at court or negotiating a reduced charge, often with the assistance of a traffic attorney familiar with the specific court. Online defensive driving, while widely marketed nationally, does not offer a legitimate benefit in Maine. Any provider claiming otherwise for Maine drivers should be viewed with skepticism.
 
 **Can I take defensive driving online in Maine?**
-No. Maine does not accept online defensive driving courses for ticket dismissal, point reduction, or state-mandated insurance discount. Any provider claiming otherwise for Maine drivers is not offering a legitimate course.
+No. Maine does not accept any online defensive driving course for ticket dismissal or points. The only course that earns a record credit is the state's classroom Driving Dynamics program; a national online course does nothing for a Maine ticket.
+
+**Does any Maine course reduce points on my record?**
+Yes, but only in a classroom. Completing the state's Driving Dynamics course earns a three-point credit on your driving record. It is a 5-hour classroom course ($70) run by the Maine Bureau of Highway Safety through local adult education programs. There is no approved online version.
 
 **What driver improvement options does Maine offer?**
-The Maine Bureau of Motor Vehicles maintains in-person driver improvement programs, but these are typically assigned by the BMV after multiple violations rather than being voluntary.
+Beyond Driving Dynamics, the Maine Bureau of Motor Vehicles runs in-person driver improvement programs, but these are typically assigned by the BMV after multiple violations rather than chosen voluntarily.
 
-**How can I reduce the insurance impact of a Maine ticket?**
-The primary options are contesting the ticket at court or negotiating a reduced charge, often with the assistance of a traffic attorney familiar with the specific court.
-
-**Are there any Maine insurance discounts for course completion?**
-No state-mandated discount for defensive driving course completion exists in Maine. Some individual carriers offer voluntary discounts for approved programs, but these are the exception.
+**Are there Maine insurance discounts for course completion?**
+There is no state-mandated insurance discount for a defensive driving course in Maine. Some individual carriers offer a voluntary discount for approved programs, but it is the exception — ask your insurer.
 
 **Why do national providers advertise Maine defensive driving?**
 National providers often list all 50 states in their marketing without noting state-level exceptions. Maine, along with Massachusetts, New Hampshire, and Vermont, does not accept online courses for standard driver relief. Verify before purchasing.
@@ -1327,7 +1322,7 @@ Court-by-court for most violations. The Wisconsin DOT also mandates a specific F
 
 **URL:** https://www.trafficschoolpicker.com/wyoming
 
-Wyoming does not use a driver point system — the Wyoming Department of Transportation (WyDOT) tracks moving-violation convictions by count rather than numeric points, and 4 moving-violation convictions within any 12-month period trigger an automatic 90-day license suspension under Title 31 of the Wyoming Statutes. Whether traffic school can dismiss a ticket is decided court-by-court at the circuit court or municipal court level, typically as part of a diversion or deferred-prosecution agreement; some courts approve WyDOT-recognized online defensive driving providers, others do not. CDL holders are generally excluded, as are violations involving 25+ mph over the limit, school zones, accidents, reckless driving, or DUI. Convictions remain on the driving record for 3 years from conviction date. Always contact the issuing court before enrolling in any course — Wyoming has no statewide ticket-dismissal program, and a defensive driving certificate accepted by Laramie Municipal Court may not be accepted by Cheyenne or Casper.
+Wyoming does not use a driver point system — the Wyoming Department of Transportation (WYDOT) tracks moving-violation convictions by count rather than numeric points, and four moving-violation convictions within any 12-month period trigger an automatic 90-day license suspension under Title 31 of the Wyoming Statutes. Whether traffic school can dismiss a ticket is decided court by court at the circuit court or municipal court level, typically as part of a diversion or deferred-prosecution agreement; some courts accept WyDOT-recognized online defensive driving providers, others do not. CDL holders are generally excluded, as are violations involving 25-plus mph over the limit, school zones, accidents, reckless driving, or DUI. Convictions remain on the driving record for three years from the conviction date. Always contact the issuing court before enrolling in any course — Wyoming has no statewide ticket-dismissal program, and a defensive driving certificate accepted by Laramie Municipal Court may not be accepted by Cheyenne or Casper. Last checked August 2026.
 
 **Does Wyoming have a driver license point system?**
 No. Wyoming does not use a numeric driver license point system. Instead, the Wyoming Department of Transportation (WyDOT) tracks the count of moving-violation convictions on a driving record. Four moving-violation convictions within any 12-month period trigger an automatic 90-day license suspension under Title 31 of the Wyoming Statutes; each subsequent violation can extend the suspension by another 90 days.

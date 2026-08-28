@@ -171,7 +171,9 @@ async function main() {
 
       const intro = fullText(p, "Intro Paragraph").trim();
       let faqs: { q: string; a: string }[] = [];
-      const raw = fullText(p, "State FAQ").trim();
+      // Strip the optional `faqjson:` prefix (see parseStateFaqJson in lib/notion.ts —
+      // the Notion editing connector can't store a value that parses as top-level JSON).
+      const raw = fullText(p, "State FAQ").trim().replace(/^faqjson:\s*/i, "");
       if (raw) {
         try {
           const parsed = JSON.parse(raw);

@@ -47,18 +47,22 @@ export function StateKeyFacts({
       ? "Yes — for ticket dismissal"
       : status === "Online — insurance discount only"
         ? "Insurance discount only"
-        : status === "In-person only"
-          ? "In-person only"
-          : null; // Unknown → omit
+        : status === "Online — court discretion"
+          ? "Yes — but court acceptance varies"
+          : status === "In-person only"
+            ? "In-person only"
+            : null; // Court program only / Unknown → omit
   if (available) facts.push({ label: "Online course available", value: available });
 
   // Ticket dismissal — only where the answer is unambiguous for an online summary.
+  // Court-discretion / court-program states are decided court by court, so we never
+  // print a statewide "Yes"; the deeper sections explain the actual path.
   const dismissal =
     status === "Online — ticket dismissal"
       ? "Yes"
       : status === "Online — insurance discount only"
         ? "No — insurance discount only"
-        : null; // in-person / unknown → omit
+        : null; // court discretion / court program / in-person / unknown → omit
   if (dismissal) facts.push({ label: "Ticket dismissal", value: dismissal });
 
   if (stateInfo.minHours) facts.push({ label: "Course length", value: `${stateInfo.minHours} hours` });

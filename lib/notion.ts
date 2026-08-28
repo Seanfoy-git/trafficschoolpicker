@@ -208,8 +208,19 @@ function memoize<T>(fn: () => Promise<T>): () => Promise<T> {
 function deriveOnlineStatus(
   onlineAllowed: boolean,
   dismissesTicket: boolean,
-  insuranceDiscount: boolean
+  insuranceDiscount: boolean,
+  onlineModel: string | null
 ): OnlineStatus {
+  // "Online Model" is an explicit editorial override for states whose reality the
+  // three checkboxes can't model honestly (court-by-court states). It wins when set:
+  //  - "Court discretion": online courses exist but acceptance is decided court by
+  //    court (no statewide program) — keeps the comparison cards, drops any
+  //    statewide "ticket dismissal: yes" claim (KS, WY).
+  //  - "Court program only": no self-serve online course resolves a ticket; relief
+  //    runs through a court program (IL court supervision, KY State Traffic School).
+  //    No cards — the national online courses don't satisfy that process.
+  if (onlineModel === "Court discretion") return "Online — court discretion";
+  if (onlineModel === "Court program only") return "Court program only";
   if (onlineAllowed && dismissesTicket) return "Online — ticket dismissal";
   if (onlineAllowed && insuranceDiscount) return "Online — insurance discount only";
   if (!onlineAllowed) return "In-person only";
@@ -223,9 +234,13 @@ function deriveOnlineStatus(
 // surface in Vercel logs instead of silently rendering the static fallback.
 function parseStateFaqJson(raw: string, stateCodeForLog?: string): StateFaqEntry[] {
   if (!raw || !raw.trim()) return [];
+  // Optional `faqjson:` prefix. The Notion editing connector rejects a property
+  // value that parses as top-level JSON, so FAQ blobs edited through it are stored
+  // as `faqjson:[…]`. Strip it here; legacy values are bare JSON and untouched.
+  const body = raw.trim().replace(/^faqjson:\s*/i, "");
   let parsed: unknown;
   try {
-    parsed = JSON.parse(raw);
+    parsed = JSON.parse(body);
   } catch (err) {
     console.warn(
       `[State FAQ] JSON.parse failed for ${stateCodeForLog ?? "?"}: ${(err as Error).message} — falling back to legacy FAQs`
@@ -269,7 +284,7 @@ function mapStateInfo(page: PageObjectResponse): StateInfo {
     onlineAllowed,
     onlineDismissesTicket: dismissesTicket,
     insuranceDiscountAvailable: insuranceDiscount,
-    onlineStatus: deriveOnlineStatus(onlineAllowed, dismissesTicket, insuranceDiscount),
+    onlineStatus: deriveOnlineStatus(onlineAllowed, dismissesTicket, insuranceDiscount, getSelect(page, "Online Model")),
     dmvUrl: getText(page, "DMV URL"),
     notes: getText(page, "Research Notes"),
     eligibility: getText(page, "Eligibility Requirements"),
