@@ -382,6 +382,32 @@
 .oost .st { background: var(--surface); padding: 22px 24px 24px; }
 .oost .st-hd { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
 .oost .st-hd h3 { margin: 0; font-size: 1.14rem; font-weight: 700; }
+/* Deep-linked arrivals (#texas etc.) land on the state name — leave room above so the
+   "Out-of-state driver's guide" eyebrow is visible on arrival, not scrolled just off. */
+.oost .st-hd h3[id] { scroll-margin-top: 52px; }
+/* Persistent context cue — tells a visitor who deep-linked mid-page what this is. */
+.oost .st-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+/* The bottom line for an out-of-state driver — the standalone answer each card leads with. */
+.oost .st-verdict {
+  font-family: var(--font-sans);
+  font-size: .96rem;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--surface-2);
+  border-left: 3px solid var(--accent);
+  padding: 12px 15px;
+  margin: 0 0 16px;
+  max-width: 66ch;
+}
+.oost .st-verdict strong { font-weight: 700; }
 .oost .st dl { display: grid; grid-template-columns: 190px 1fr; gap: 6px 0; margin: 0 0 14px; font-family: var(--font-sans); font-size: .86rem; }
 .oost .st dt { color: var(--muted); font-weight: 500; }
 .oost .st dd { margin: 0; color: var(--ink-2); }
