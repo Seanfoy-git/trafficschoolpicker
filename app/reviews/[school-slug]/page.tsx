@@ -155,8 +155,10 @@ export default async function ReviewPage({ params }: Props) {
       </section>
 
       <div className="max-w-5xl mx-auto px-4 py-10 grid lg:grid-cols-3 gap-10">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-10">
+        {/* Main Content — min-w-0 lets the wide competitor table scroll inside its
+            overflow-x-auto wrapper instead of forcing this grid column (and the whole
+            page) wider than the viewport on mobile. */}
+        <div className="min-w-0 lg:col-span-2 space-y-10">
           {/* Quick Summary */}
           <section>
             <h2 className="text-2xl font-bold text-slate-900 mb-4">Quick Summary</h2>
