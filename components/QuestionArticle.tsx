@@ -101,7 +101,7 @@ export function QuestionArticle({
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
       {/* Out-of-state signpost — same reference guide as the state hub pages. */}
-      <OutOfStateCallout stateName={stateName} />
+      <OutOfStateCallout stateName={stateName} stateSlug={stateSlug} />
 
       {/* Key Facts */}
       {facts.length > 0 && (

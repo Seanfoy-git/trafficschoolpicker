@@ -604,9 +604,11 @@ To switch to coupon-code:
 | `/blog` | [app/blog/page.tsx](app/blog/page.tsx) | Blog index | 24h |
 | `/blog/[slug]` | [app/blog/[slug]/page.tsx](app/blog/[slug]/page.tsx) | MDX blog posts (10 posts) | 24h |
 | `/about` | [app/about/page.tsx](app/about/page.tsx) | Methodology + affiliate disclosure | static |
+| `/out-of-state-ticket` | [app/out-of-state-ticket/page.tsx](app/out-of-state-ticket/page.tsx) | Standing multi-state reference for drivers ticketed outside their licence state (outreach link target). Own editorial identity (scoped `.oost` CSS, next/font), `TechArticle`+`BreadcrumbList` schema, **no affiliate/course/tracker links**. Body ported verbatim via `dangerouslySetInnerHTML`. See §7.1. | static |
 | `/admin` | [app/admin/page.tsx](app/admin/page.tsx) | Internal dashboard (env checks, school counts) | dynamic |
 | `/api/click` | route handler | Click tracking endpoint | dynamic |
 | `/api/admin/deploy` | route handler | Manual deploy hook trigger | dynamic |
+| `/api/state-request` | [app/api/state-request/route.ts](app/api/state-request/route.ts) | "Request your state" queue for the out-of-state guide: server-validates `state` against the 41-jurisdiction allowlist ([lib/state-requests.ts](lib/state-requests.ts)), honeypot + rate-limit, degrades without JS. See §7.1. | dynamic |
 
 ### State page (`app/[state]/page.tsx`)
 
@@ -625,6 +627,7 @@ The most complex page. Flow:
 4. Render order (top to bottom):
    - Hero with state flag (desktop only — `hidden md:block`)
    - TrustBar ("Last verified …")
+   - **Out-of-state callout** (`OutOfStateCallout`) — a "Licensed in another state?" signpost (§7.1) on every state page; deep-links to the guide's per-state section for covered states, else the general guide
    - **Key Facts** (`StateKeyFacts`) — a scannable `<dl>` summary (online availability, ticket dismissal, course length, typical cost, eligibility, certificate submission) targeting featured snippets / AI Overviews. First substantive content; rows render only when their value is present, and adapt to `onlineStatus`. "Typical cost" reuses `lowestDisplayedPrice` so it matches the cards.
    - **Intro Paragraph** (if set)
    - **True Cost of a Ticket** section — H2 + prose, between the intro and the comparison (if set)
@@ -633,6 +636,7 @@ The most complex page. Flow:
      - **`Online — insurance discount only`**: amber banner + reduced grid
      - **`In-person only`**: no schools, just a "find local" CTA (DC, MA, OR)
      - **`Unknown`**: research-in-progress notice
+   - `onlineStatus` = `deriveOnlineStatus(onlineAllowed, dismissesTicket, insuranceDiscount)`, keyed on the States DB **`Online Dismisses Ticket`** checkbox. Point-reduction states where an online course does **not** itself dismiss the ticket are `NO` → "insurance discount only" (NJ, NY, OH, VA); states with a genuine (even court-discretionary) online-dismissal path stay `YES`. OH + VA were corrected to `NO` on 2026-08-27 to match their question pages.
    - Georgia-specific callout banner (DDS quirks)
    - YouTube video embed if `STATE_VIDEOS[stateSlug]` is configured
    - Tier 1 comparison cards — each gets a `resolved` prop (`resolveStateContent`)
@@ -678,6 +682,45 @@ content — gray-matter still reads it for metadata), `remark-gfm` (pipe tables 
 strikethrough — `BlogMdxComponents` styles `<table>`/`<th>`/`<td>`), and
 `rehype-slug` (heading ids). Each post can use a `<QuickAnswer>` component for
 above-the-fold direct answers. 10 long-form posts; index page sorts by date.
+
+### 7.1 The out-of-state guide + internal-linking strategy
+
+`/out-of-state-ticket` is a standing multi-state reference for drivers ticketed
+outside their licence state — the link target for an outreach campaign to
+university student-services offices and law librarians. Deliberately **not** a
+blog post and not under `/blog`: a short, top-level, pasteable URL.
+
+- **Rendering:** own editorial identity (Newsreader / Libre Franklin / JetBrains
+  Mono via `next/font`), CSS scoped under `.oost` in
+  [app/out-of-state-ticket/out-of-state.css](app/out-of-state-ticket/out-of-state.css)
+  (custom properties on the `.oost` wrapper, never `:root`, so the page palette
+  can't collide with the site tokens; light + dark preserved). Body ported
+  **verbatim** from the authored source via `dangerouslySetInnerHTML`
+  ([content.ts](app/out-of-state-ticket/content.ts)) so no statute citation or the
+  "Last verified" stamp can drift. `TechArticle` + `BreadcrumbList` schema; **no
+  affiliate / course-provider / tracker / Notion links anywhere on the page**. The
+  sitewide footer's affiliate-disclosure sentence is swapped for an accurate scoped
+  note on this path only ([components/FooterAffiliateNote.tsx](components/FooterAffiliateNote.tsx)).
+- **Request queue:** the page's "your state isn't here" form posts to
+  `/api/state-request` (`state` + optional `email`), validated server-side against
+  the 41-jurisdiction allowlist ([lib/state-requests.ts](lib/state-requests.ts)),
+  with a honeypot + rate limit; degrades without JS (native POST → HTML success).
+  On Vercel the filesystem is read-only, so submissions currently fall back to a
+  log line — a durable store (Blob/KV) + a periodic digest is the planned follow-up.
+- **Inbound links:** each of the ten covered states' `does-traffic-school-remove-points`
+  pages carries a bespoke in-body sentence linking to the guide (authored directly
+  in the Notion bodies, real-domain href so `sanitizeHref` passes it), plus the
+  blog pillar. Theory: external links landing on the guide create crawl demand that
+  flows out through its links into the state pages (GSC "Discovered — not indexed").
+- **`OutOfStateCallout`:** a "Licensed in another state?" signpost near the top of
+  every state hub page and question page. For the ten covered states it deep-links
+  to that state's section in the guide (`#<slug>` anchors on the guide's state
+  cards); every other state links to the general guide.
+
+> **CMS workspace note:** the site reads from the **Pellucid CMS** Notion workspace
+> (scoped read-only `tsp-site-cms` token). The pre-migration source workspace ("Sean
+> Foy's Workspace", `…c5a8-ad0a-…` page ids) is the *old copy* and no longer drives
+> the site — content edits must target the Pellucid pages (`…e794-4352-…`). See §4.0.
 
 ---
 
