@@ -417,6 +417,14 @@ export const BLOG_SEO: Record<string, PageSeoConfig> = {
     primaryKeyword: "does traffic school remove points from record",
     canonicalPath: "/blog/does-traffic-school-remove-points",
   },
+  "do-you-need-a-lawyer-for-a-traffic-ticket": {
+    title: "Do You Need a Lawyer for a Traffic Ticket? (2026)",
+    description:
+      "For most routine tickets, traffic school beats a lawyer on cost. A reckless charge, a CDL, or a looming suspension flips it. A state-by-state guide.",
+    h1: "Do You Need a Lawyer for a Traffic Ticket?",
+    primaryKeyword: "do you need a lawyer for a traffic ticket",
+    canonicalPath: "/blog/do-you-need-a-lawyer-for-a-traffic-ticket",
+  },
   "how-long-does-online-traffic-school-take": {
     title: "How Long Does Online Traffic School Take? (By State)",
     description: "California requires 8 hours. Texas requires 6. Florida requires 4. This guide covers every state so you know before you enroll.",
