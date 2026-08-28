@@ -237,7 +237,7 @@ export default async function StatePage({ params }: Props) {
           drivers ticketed here on an out-of-state licence to the reference guide. */}
       <section className="pt-6">
         <div className="max-w-5xl mx-auto px-4">
-          <OutOfStateCallout stateName={stateMeta.name} />
+          <OutOfStateCallout stateName={stateMeta.name} stateSlug={stateSlug} />
         </div>
       </section>
 

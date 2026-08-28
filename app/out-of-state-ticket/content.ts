@@ -234,7 +234,7 @@ export const BODY_TOP = `
   <div class="states">
 
     <div class="st">
-      <div class="st-hd"><h3>Arizona</h3><span class="tag y">Dismissal</span></div>
+      <div class="st-hd"><h3 id="arizona">Arizona</h3><span class="tag y">Dismissal</span></div>
       <dl>
         <dt>Programme</dt><dd>Defensive driving school, run under Arizona Supreme Court authority</dd>
         <dt>Length</dt><dd>240 to 270 minutes including testing</dd>
@@ -251,7 +251,7 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3>Florida</h3><span class="tag y">Adjudication withheld</span></div>
+      <div class="st-hd"><h3 id="florida">Florida</h3><span class="tag y">Adjudication withheld</span></div>
       <dl>
         <dt>Programme</dt><dd>Basic Driver Improvement (BDI)</dd>
         <dt>Length</dt><dd>4 hours minimum of course content</dd>
@@ -266,7 +266,7 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3>Texas</h3><span class="tag x">Texas licence required</span></div>
+      <div class="st-hd"><h3 id="texas">Texas</h3><span class="tag x">Texas licence required</span></div>
       <dl>
         <dt>Programme</dt><dd>Driving safety course approved by TDLR</dd>
         <dt>Length</dt><dd>6 hours</dd>
@@ -282,7 +282,7 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3>California</h3><span class="tag q">Masked, effect elsewhere unknown</span></div>
+      <div class="st-hd"><h3 id="california">California</h3><span class="tag q">Masked, effect elsewhere unknown</span></div>
       <dl>
         <dt>Programme</dt><dd>Traffic violator school</dd>
         <dt>Length</dt><dd>340 minutes of instruction plus 60 minutes of testing. Online courses are measured by word count instead, at a minimum of 42,500 words</dd>
@@ -297,7 +297,7 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3>North Carolina</h3><span class="tag q">No judgment entered</span></div>
+      <div class="st-hd"><h3 id="north-carolina">North Carolina</h3><span class="tag q">No judgment entered</span></div>
       <dl>
         <dt>Mechanism</dt><dd>Prayer for judgment continued, a court disposition rather than a course. North Carolina also runs a driver improvement clinic, which is the separate point-credit route</dd>
         <dt>Clinic length</dt><dd>Not fixed by rule. The administrative code specifies the course content, not a number of hours</dd>
@@ -313,7 +313,7 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3>Ohio</h3><span class="tag n">Point credit only</span></div>
+      <div class="st-hd"><h3 id="ohio">Ohio</h3><span class="tag n">Point credit only</span></div>
       <dl>
         <dt>Programme</dt><dd>Course of remedial driving instruction, usually sold as the adult remedial or two-point course</dd>
         <dt>Length</dt><dd>Minimum 8 hours</dd>
@@ -329,7 +329,7 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3>New York</h3><span class="tag n">Point credit only</span></div>
+      <div class="st-hd"><h3 id="new-york">New York</h3><span class="tag n">Point credit only</span></div>
       <dl>
         <dt>Programme</dt><dd>Point and Insurance Reduction Program (PIRP), online version I-PIRP</dd>
         <dt>Length</dt><dd>320 minutes, classroom and online alike. Classroom delivery sits under Part 138 and the internet version under Part 141</dd>
@@ -345,7 +345,7 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3>New Jersey</h3><span class="tag n">Point credit only</span></div>
+      <div class="st-hd"><h3 id="new-jersey">New Jersey</h3><span class="tag n">Point credit only</span></div>
       <dl>
         <dt>Programmes</dt><dd>Three separate ones. The voluntary Defensive Driving Course, the Driver Improvement Program triggered by point accumulation, and the Probationary Driver Program. MVC states that defensive driving is not a substitute for driver improvement</dd>
         <dt>Length</dt><dd>Defensive driving is at least six hours, of which at least four must be classroom</dd>
@@ -359,7 +359,7 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3>Virginia</h3><span class="tag n">Point credit only</span></div>
+      <div class="st-hd"><h3 id="virginia">Virginia</h3><span class="tag n">Point credit only</span></div>
       <dl>
         <dt>Programme</dt><dd>Driver improvement clinic. CDL holders have a separate commercial programme</dd>
         <dt>Length</dt><dd>8 hours</dd>
@@ -376,7 +376,7 @@ export const BODY_TOP = `
     </div>
 
     <div class="st">
-      <div class="st-hd"><h3>Georgia</h3><span class="tag n">Nothing to reduce</span></div>
+      <div class="st-hd"><h3 id="georgia">Georgia</h3><span class="tag n">Nothing to reduce</span></div>
       <dl>
         <dt>Programme</dt><dd>Driver improvement, which DDS also calls defensive driving</dd>
         <dt>Length</dt><dd>6 hours</dd>
