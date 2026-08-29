@@ -21,7 +21,10 @@ function formatVerifiedLabel(iso: string | null | undefined): string {
   return `Last verified ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
 }
 
-export function TrustBar({ lastVerified }: { lastVerified?: string | null } = {}) {
+export function TrustBar({
+  lastVerified,
+  approvalLabel,
+}: { lastVerified?: string | null; approvalLabel?: string | null } = {}) {
   return (
     <div className="bg-slate-50 border-y border-slate-200">
       <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-slate-600">
@@ -31,7 +34,7 @@ export function TrustBar({ lastVerified }: { lastVerified?: string | null } = {}
         </span>
         <span className="flex items-center gap-1.5">
           <ShieldCheck className="w-4 h-4 text-accent" />
-          All schools court-approved
+          {approvalLabel || "All schools court-approved"}
         </span>
         <span className="flex items-center gap-1.5">
           <RefreshCw className="w-4 h-4 text-accent" />

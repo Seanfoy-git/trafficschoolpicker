@@ -153,7 +153,11 @@ export default async function StatePage({ params }: Props) {
 
   // The comparison grid (and its Product/ItemList schema) render only for online
   // states that actually have tier-1 schools — the single gate shared below.
+  // noPartnerOffer suppresses it even where the program exists (we list no offer):
+  // the driver is pointed at the official approved-school list + directory instead.
+  const noPartnerOffer = stateInfo?.noPartnerOffer ?? false;
   const showComparison =
+    !noPartnerOffer &&
     (onlineStatus === "Online — ticket dismissal" ||
       onlineStatus === "Online — insurance discount only" ||
       onlineStatus === "Online — court discretion") &&
@@ -227,7 +231,7 @@ export default async function StatePage({ params }: Props) {
                 : h1}
             </h1>
           </div>
-          {onlineStatus === "Online — ticket dismissal" && schools.length > 0 && (
+          {onlineStatus === "Online — ticket dismissal" && !noPartnerOffer && schools.length > 0 && (
             <p className="text-lg text-slate-300 max-w-3xl">
               Comparing {schools.length} reviewed option
               {schools.length !== 1 ? "s" : ""}
@@ -242,7 +246,7 @@ export default async function StatePage({ params }: Props) {
         </div>
       </section>
 
-      <TrustBar lastVerified={stateInfo?.lastVerified} />
+      <TrustBar lastVerified={stateInfo?.lastVerified} approvalLabel={stateInfo?.approvalLabel} />
 
       {/* Out-of-state signpost — this page is written for {State} licensees; flag
           drivers ticketed here on an out-of-state licence to the reference guide. */}
@@ -384,6 +388,42 @@ export default async function StatePage({ params }: Props) {
                 ticket on its own. Relief runs through a court program set by the court
                 on your citation — contact that court about your options before paying
                 for any course.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* NO-PARTNER-OFFER states (real program, but we list no offer) — suppress the
+          comparison grid and point drivers at the official approved-school list and
+          the directory below (e.g. Arizona DDS). */}
+      {noPartnerOffer && (
+        <section className="py-8 bg-slate-50 border-b border-slate-200">
+          <div className="max-w-3xl mx-auto px-4 flex items-start gap-3">
+            <Info className="w-5 h-5 text-slate-500 mt-0.5 shrink-0" />
+            <div>
+              <p className="font-semibold text-slate-700">
+                Choose from the official approved-school list
+              </p>
+              <p className="text-sm text-slate-600">
+                We don&apos;t list a partner offer for {stateMeta.name}. Pick an approved
+                course from the state&apos;s official list
+                {stateInfo?.dmvUrl && (
+                  <>
+                    {" "}(
+                    <a
+                      href={stateInfo.dmvUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-accent hover:underline"
+                    >
+                      {stateMeta.name} approved schools
+                    </a>
+                    )
+                  </>
+                )}{" "}
+                or the directory below, and confirm eligibility with the court on your
+                citation before you enroll.
               </p>
             </div>
           </div>

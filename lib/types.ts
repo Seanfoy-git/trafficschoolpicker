@@ -49,6 +49,14 @@ export type StateInfo = {
   stateFaq: StateFaqEntry[];     // parsed from JSON; empty array if missing/malformed
   lastVerified: string | null;   // ISO date — drives the "Last verified" header chip
   contentStatus: ContentStatus | null;  // null treated as Stub for sitemap inclusion
+  // Per-state TrustBar approval label. Null → the site default ("All schools
+  // court-approved"). Set where "court-approved" is wrong (e.g. NY PIRP is a DMV
+  // program, not court-administered → "DMV-approved (PIRP)").
+  approvalLabel: string | null;
+  // True when the state has a real program but we list no partner offer: suppress
+  // the comparison grid and point drivers at the official approved-school list +
+  // the directory below (e.g. Arizona DDS).
+  noPartnerOffer: boolean;
 };
 
 // ─── Traffic Schools DB (editorial + reviews) ───────────────
