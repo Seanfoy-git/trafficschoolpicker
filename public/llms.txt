@@ -96,10 +96,10 @@ Standalone, source-cited answers to one question for one state, at /{state}/{que
 
 - California traffic school costs from $5 (cheapest: $5 Dollar Traffic School, license E1014)
 - California traffic school requires 8 hours minimum and masks the ticket (does not erase it)
-- Texas defensive driving requires 6 hours and fully dismisses the ticket via deferred disposition
+- Texas defensive driving requires 6 hours and fully dismisses the ticket via a driving safety course dismissal (CCP art. 45A.352; deferred disposition is a separate remedy)
 - Florida BDI requires 4 hours and withholds adjudication (no points, insurer not notified)
-- New York PIRP requires 6 hours and reduces up to 4 points plus 10% insurance discount
-- Arizona defensive driving requires 8 hours and fully dismisses the ticket
+- New York PIRP requires 320 minutes (5h20m) and reduces up to 4 points plus 10% insurance discount
+- Arizona defensive driving (DDS) requires 4 to 4.5 hours and fully dismisses the ticket (the separate 8-hour Traffic Survival School does not dismiss tickets)
 - Georgia online courses are for court-ordered ticket dismissal only — not accepted by DDS for point reduction
 - Ohio Adult Remedial courses are available online and reduce 2 points
 - New Jersey defensive driving reduces up to 2 points and provides insurance discount

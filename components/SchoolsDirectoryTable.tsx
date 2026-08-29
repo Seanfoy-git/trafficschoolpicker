@@ -6,7 +6,7 @@ import type { School } from "@/lib/types";
 import { STATE_LIST } from "@/lib/state-utils";
 import { ArrowUpDown, ExternalLink } from "lucide-react";
 
-type SortKey = "name" | "rating" | "reviewCount" | "price" | "hours";
+type SortKey = "name" | "rating" | "reviewCount" | "price";
 type SortDir = "asc" | "desc";
 
 export function SchoolsDirectoryTable({ schools }: { schools: School[] }) {
@@ -36,7 +36,6 @@ export function SchoolsDirectoryTable({ schools }: { schools: School[] }) {
           case "rating": return s.rating ?? 0;
           case "reviewCount": return s.reviewCount ?? 0;
           case "price": return s.genericPrice ?? Number.MAX_SAFE_INTEGER;
-          case "hours": return s.completionHours ?? Number.MAX_SAFE_INTEGER;
         }
       };
       const av = getValue(a);
@@ -97,6 +96,8 @@ export function SchoolsDirectoryTable({ schools }: { schools: School[] }) {
       <p className="text-sm text-slate-500 mb-3">
         Showing {filtered.length} of {schools.length} schools
         {stateFilter && <> approved in {STATE_LIST.find((s) => s.code === stateFilter)?.name}</>}
+        . Course length is set by your state, not the school. See your state page
+        for the required hours.
       </p>
 
       <div className="overflow-x-auto bg-white rounded-xl border border-slate-200">
@@ -107,7 +108,6 @@ export function SchoolsDirectoryTable({ schools }: { schools: School[] }) {
               <SortHeader label="Rating" keyName="rating" />
               <SortHeader label="Reviews" keyName="reviewCount" />
               <SortHeader label="Price" keyName="price" />
-              <SortHeader label="Hours" keyName="hours" />
               <th className="py-3 px-4 text-left font-semibold text-slate-700">States</th>
               <th className="py-3 px-4"></th>
             </tr>
@@ -131,9 +131,6 @@ export function SchoolsDirectoryTable({ schools }: { schools: School[] }) {
                 </td>
                 <td className="py-3 px-4 text-slate-700">
                   {school.genericPrice !== null ? `$${school.genericPrice.toFixed(2)}` : "Varies"}
-                </td>
-                <td className="py-3 px-4 text-slate-500">
-                  {school.completionHours ? `${school.completionHours}h` : "—"}
                 </td>
                 <td className="py-3 px-4 text-slate-500 text-xs">
                   {school.stateCodes.includes("all")

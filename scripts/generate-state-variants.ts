@@ -51,7 +51,6 @@ interface SchoolData {
   rating: number | null;
   reviewCount: number | null;
   reviewSource: string;
-  completionHours: number | null;
   mobileApp: boolean;
   moneyBackGuarantee: boolean;
   certificateDelivery: string;
@@ -159,7 +158,6 @@ async function loadSchools(): Promise<SchoolData[]> {
       rating: getNumber(p, "Rating"),
       reviewCount: getNumber(p, "Review Count"),
       reviewSource: getSelect(p, "Review Source") ?? "Trustpilot",
-      completionHours: getNumber(p, "Completion Time (hrs)"),
       mobileApp: getCheckbox(p, "Mobile App"),
       moneyBackGuarantee: getCheckbox(p, "Money Back Guarantee"),
       certificateDelivery: getSelect(p, "Certificate Delivery") ?? "Electronic",
@@ -247,7 +245,6 @@ function buildPrompt(school: SchoolData, stateCode: string, state: StateReq): st
   return `SCHOOL DATA:
 Name: ${school.name}
 Rating: ${school.rating ?? "N/A"} (${school.reviewCount ?? 0} reviews on ${school.reviewSource})
-Completion Time: ${school.completionHours ?? "unknown"} hours
 Has Mobile App: ${school.mobileApp}
 Money Back Guarantee: ${school.moneyBackGuarantee}
 Certificate Delivery: ${school.certificateDelivery}

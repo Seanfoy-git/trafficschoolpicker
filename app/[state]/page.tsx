@@ -178,7 +178,7 @@ export default async function StatePage({ params }: Props) {
     : new Set<string>();
 
   const comparisonSchema = showComparison
-    ? buildComparisonItemList(tier1Resolved, stateMeta.name, stateSlug, reviewSlugs, year)
+    ? buildComparisonItemList(tier1Resolved, stateMeta.name, stateSlug, reviewSlugs, year, stateInfo?.courseHours ?? null)
     : null;
 
   // VideoObject for the embedded explainer — emitted only when this state has a
@@ -503,6 +503,7 @@ export default async function StatePage({ params }: Props) {
                   rank={i + 1}
                   showProsAndCons
                   stateCode={stateMeta.code}
+                  courseHours={stateInfo?.courseHours ?? null}
                 />
               ))}
             </div>
@@ -530,9 +531,9 @@ export default async function StatePage({ params }: Props) {
                   <h3 className="font-semibold text-slate-900">Online Status</h3>
                 </div>
                 <p className="text-sm text-slate-600">{stateInfo.onlineStatus}</p>
-                {stateInfo.minHours && (
+                {stateInfo.courseHours && (
                   <p className="text-sm text-slate-500 mt-1">
-                    Minimum {stateInfo.minHours} hours required
+                    Course length: {stateInfo.courseHours}
                   </p>
                 )}
               </div>

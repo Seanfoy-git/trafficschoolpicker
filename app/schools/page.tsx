@@ -8,14 +8,14 @@ export const revalidate = 86400;
 export const metadata: Metadata = {
   title: "All Online Traffic Schools — Complete Directory",
   description:
-    "Browse every court-approved online traffic school we review. Filter by state, sort by price, rating, or completion time to find the right fit.",
+    "Browse every online traffic school we review. Filter by state, sort by price or rating to find the right fit.",
   alternates: {
     canonical: "https://www.trafficschoolpicker.com/schools",
   },
   openGraph: {
     title: "All Online Traffic Schools — TrafficSchoolPicker",
     description:
-      "Full directory of court-approved online traffic schools. Filter by state, sort by price or rating.",
+      "Full directory of online traffic schools. Filter by state, sort by price or rating.",
     url: "https://www.trafficschoolpicker.com/schools",
     siteName: "TrafficSchoolPicker",
     type: "website",
@@ -34,7 +34,7 @@ export default async function SchoolsPage() {
           </h1>
           <p className="text-lg text-slate-300 max-w-3xl">
             The complete list of {schools.length} online traffic schools we review.
-            Filter by state, sort by price, rating, or completion time.
+            Filter by state, sort by price or rating.
           </p>
         </div>
       </section>

@@ -372,7 +372,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
 
 export const HOME_SEO: PageSeoConfig = {
   title: "Best Online Traffic School — Compare & Save (2026)",
-  description: "Compare court-approved online traffic schools across all 50 states. Find the lowest price, read real reviews, and enroll in minutes.",
+  description: "Compare online traffic school and defensive driving options for all 50 states and DC. Find the lowest price, read real reviews, and enroll in minutes.",
   h1: "Find the Best Online Traffic School in Your State",
   primaryKeyword: "best online traffic school",
   canonicalPath: "/",

@@ -14,12 +14,16 @@ export function SchoolCard({
   rank,
   showProsAndCons = false,
   stateCode,
+  courseHours = null,
 }: {
   school: School | SchoolWithPrice;
   resolved: ResolvedSchoolContent;
   rank?: number;
   showProsAndCons?: boolean;
   stateCode?: string;
+  // State-level course length (display string), null unless the state's Hours
+  // Source is set. There is no per-school hours value. See Package 4.
+  courseHours?: string | null;
 }) {
   const originalPrice = "originalPrice" in school ? (school as SchoolWithPrice).originalPrice : null;
   const hasActiveOffer = "hasActiveOffer" in school && (school as SchoolWithPrice).hasActiveOffer;
@@ -62,10 +66,10 @@ export function SchoolCard({
           )}
 
           <div className="flex flex-wrap gap-4 mt-3 text-sm text-slate-600">
-            {resolved.mandatedHours && (
+            {courseHours && (
               <span className="flex items-center gap-1">
                 <Clock className="w-4 h-4 text-slate-400" />
-                {resolved.mandatedHours} hours
+                {courseHours}
               </span>
             )}
             {resolved.approvalBodyShort !== "State Approved" && (

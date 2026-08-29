@@ -9,7 +9,7 @@ import { AffiliateButton } from "./AffiliateButton";
 import { ArrowUpDown, Clock, CheckCircle, Smartphone, Shield } from "lucide-react";
 import Link from "next/link";
 
-type SortKey = "price" | "rating" | "completionHours";
+type SortKey = "price" | "rating";
 
 export function ComparisonTable({
   schools,
@@ -36,7 +36,7 @@ export function ComparisonTable({
       setSortAsc(!sortAsc);
     } else {
       setSortBy(key);
-      setSortAsc(key === "price" || key === "completionHours");
+      setSortAsc(key === "price");
     }
   };
 
@@ -62,9 +62,7 @@ export function ComparisonTable({
             <th className="pb-3 px-4">
               <SortHeader label="Rating" sortKey="rating" />
             </th>
-            <th className="pb-3 px-4">
-              <SortHeader label="Time" sortKey="completionHours" />
-            </th>
+            <th className="pb-3 px-4 font-semibold text-slate-700">Course length</th>
             <th className="pb-3 px-4 font-semibold text-slate-700">Features</th>
             <th className="pb-3 pl-4"></th>
           </tr>
@@ -124,12 +122,10 @@ export function ComparisonTable({
                 ) : null}
               </td>
               <td className="py-4 px-4">
-                {school.completionHours && (
-                  <span className="flex items-center gap-1 text-slate-700">
-                    <Clock className="w-4 h-4 text-slate-400" />
-                    {school.completionHours}h
-                  </span>
-                )}
+                <span className="flex items-center gap-1 text-slate-700">
+                  <Clock className="w-4 h-4 text-slate-400" />
+                  By state
+                </span>
               </td>
               <td className="py-4 px-4">
                 <div className="flex gap-2">

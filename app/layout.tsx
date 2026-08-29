@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: "%s | TrafficSchoolPicker",
   },
   description:
-    "Compare court-approved online traffic schools across all 50 states. Find the lowest price and enroll today.",
+    "Compare online traffic school and defensive driving options for all 50 states and DC. Find the lowest price and enroll today.",
   robots: {
     index: true,
     follow: true,
