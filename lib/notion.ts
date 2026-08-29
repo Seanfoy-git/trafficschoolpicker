@@ -297,6 +297,8 @@ function mapStateInfo(page: PageObjectResponse): StateInfo {
     stateFaq: parseStateFaqJson(getFullRichText(page, "State FAQ"), getText(page, "Abbreviation")),
     lastVerified: getDate(page, "Last Verified"),
     contentStatus: isContentStatus(contentStatusRaw) ? contentStatusRaw : null,
+    approvalLabel: getText(page, "Approval Label") || null,
+    noPartnerOffer: getCheckbox(page, "No Partner Offer"),
   };
 }
 

@@ -34,6 +34,9 @@ const BANNED = [
   "TODO:",
   "FIXME",
   "lorem",
+  // Storage prefix for FAQ blobs edited through the Notion connector. The parser
+  // and llms generator strip it; if a render path ever ships it raw, fail the build.
+  "faqjson:",
 ];
 
 function walk(dir: string, exts: string[]): string[] {

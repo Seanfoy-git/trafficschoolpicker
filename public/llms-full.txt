@@ -58,22 +58,22 @@ Some Alaska carriers offer voluntary discounts for approved course completion. T
 
 **URL:** https://www.trafficschoolpicker.com/arizona
 
-Arizona drivers cited for a civil moving violation can complete a 4.5-hour Defensive Driving School (DDS) course under A.R.S. §§28-3391 to 28-3399 to dismiss the ticket and prevent points from being assessed to the MVD record. The Arizona Supreme Court regulates the DDS program; eligible drivers can use the diversion option once every 12 months from violation date to violation date, must complete the course at least 7 days before the scheduled court date, and may dismiss only one violation per citation. CDL holders and drivers cited in commercial vehicles are excluded entirely, as are violations involving accidents with serious injury or death and most criminal violations (criminal speeding under A.R.S. §28-701.02 may be eligible with court permission). Total DDS cost typically runs $150–$250 — the course fee plus a $69 state fee plus court diversion fees that vary by jurisdiction. DDS is structurally distinct from Traffic Survival School (TSS), which is an 8-hour MVD-mandated remediation course required for drivers who accumulate 8 or more points in 12 months, ran a red light, or committed certain other serious offenses; TSS does not dismiss tickets.
-
-**Who submits my certificate in Arizona?**
-You submit the certificate to the court yourself after completing the course. Keep a copy of your certificate for your records.
+Arizona drivers cited for a civil moving violation can complete a Defensive Driving School (DDS) course of 240 to 270 minutes (4 to 4.5 hours) under ACJA § 7-205 and A.R.S. §§ 28-3391 to 28-3399 to dismiss the ticket and keep points off the MVD record. The Arizona Supreme Court regulates the DDS program; eligible drivers can use it once every 12 months from violation date to violation date, must complete the course at least seven days before the scheduled court date, and may dismiss only one violation per citation. CDL holders and drivers cited in commercial vehicles are excluded, as are violations involving a serious-injury or fatal accident and most criminal violations. The all-in cost is the school's course fee plus a court diversion fee that varies by court (Maricopa County roughly $110 to $162), a $24 State Fee, and a $45 state surcharge. DDS is distinct from Traffic Survival School (TSS), the separate 8-hour MVD-mandated remediation course required after certain serious offenses or point accumulation; TSS does not dismiss tickets. Last checked August 2026.
 
 **Does Arizona defensive driving dismiss my ticket?**
-Yes — Arizona's Defensive Driving School (DDS) program results in full dismissal of the ticket and prevents any points from being assessed to your record. It is one of the most complete dismissal programs in the country.
-
-**How often can I do Arizona defensive driving?**
-Once every 24 months. You are not eligible if you completed an Arizona defensive driving program within the past 24 months, or if your citation is for an offense that makes you ineligible (e.g. DUI, excessive speeding, CDL holder on duty).
+Yes. Completing an Arizona Supreme Court-approved Defensive Driving School (DDS) course dismisses an eligible civil traffic ticket and keeps points off your MVD record (A.R.S. § 28-3392). It is one of the more complete dismissal programs in the country.
 
 **How long is Arizona defensive driving?**
-The course is 8 hours, which can be completed online at your own pace.
+A DDS course is 240 to 270 minutes, about 4 to 4.5 hours (ACJA § 7-205). Do not confuse it with the 8-hour Traffic Survival School (TSS), a separate MVD remediation course that does not dismiss tickets.
+
+**How often can I use Arizona defensive driving?**
+Once every 12 months, measured violation date to violation date (A.R.S. § 28-3392(B)). You can dismiss only one violation per citation, and you must finish the course at least seven days before your court date.
+
+**Who submits my certificate in Arizona?**
+The school does. Your Supreme Court-approved school reports your completion to the court electronically, so you do not mail anything yourself. Keep a copy for your records.
 
 **Can I do Arizona defensive driving online?**
-Yes. Arizona Supreme Court-approved online defensive driving courses are accepted statewide. Verify your course provider is listed on the Arizona Supreme Court website before enrolling.
+Yes. Arizona Supreme Court-approved online DDS courses are accepted statewide. Confirm your provider is on the Supreme Court's approved-school list at azcourts.gov/drive before enrolling.
 
 ---
 
@@ -109,7 +109,7 @@ Typically once every 18 months where court-permitted. Individual courts may impo
 
 **URL:** https://www.trafficschoolpicker.com/california
 
-California drivers cited for an eligible 1-point moving violation can complete a state-licensed 8-hour Traffic Violator School (TVS) course under Vehicle Code §41501 and Rule of Court 4.104 to keep the conviction confidential to insurers for 18 months, effectively masking the point from rate-setting. The option is limited to one TVS dismissal per 18-month period, requires a valid non-commercial license, and excludes violations 25+ mph over the limit, alcohol- or drug-related offenses, and any offense in a commercial vehicle regardless of the driver's license class. The court charges an administrative fee (typically $52–$55) plus the TVS provider's course fee. The point itself stays on the DMV record for state purposes, but is not reported to insurers during the masking window.
+California drivers cited for an eligible one-point moving violation can complete a state-licensed 8-hour Traffic Violator School (TVS) course to hold the conviction confidential under Vehicle Code § 1808.7: insurers do not see it and no point is assessed. There is no expiry on that confidentiality. What the 18 months controls is frequency: you can use traffic school once per 18-month period, measured violation date to violation date. The option requires an eligible violation and a valid non-commercial license, and excludes violations 25-plus mph over the limit, alcohol- or drug-related offenses, and any offense in a commercial vehicle regardless of license class. The court charges an administrative fee, set by each county court and typically about $50 to $70 (Butte $52, Los Angeles $64), plus the TVS provider's course fee. Last checked August 2026.
 
 **Who submits my certificate to the California court?**
 Your school submits the certificate electronically to the DMV and court on your behalf. You do not need to mail anything — but confirm the school offers electronic submission before enrolling, as some older schools still require you to handle it yourself.
@@ -223,22 +223,22 @@ No. The ticket stays on your record. Delaware's benefit is point reduction and t
 
 **URL:** https://www.trafficschoolpicker.com/florida
 
-Florida drivers who receive a non-criminal moving violation can complete a 4-hour Basic Driver Improvement (BDI) course to keep the citation off their official driving record under FL Statutes §318.14(9), preventing both points and an insurance-affecting conviction. Election must be made within 30 days of the citation, and a driver may use this option once per 12 months and a maximum of 5 times in a lifetime. The court withholds adjudication once proof of completion is filed, but BDI is not available for CDL holders or for violations involving a crash with injuries. Florida's separate 8-hour Advanced Driver Improvement (ADI) course is required for habitual offenders or after certain serious convictions, not as a voluntary BDI substitute.
+Florida drivers who receive a non-criminal moving violation can complete a 4-hour Basic Driver Improvement (BDI) course to keep points off their driving record under Fla. Stat. § 318.14(9). Election must be made within 30 days of the citation, and a driver may use this option once per 12 months and up to eight times in a lifetime (§ 318.14(9), as amended by ch. 2025-77; FLHSMV's FAQ still shows the old five-election limit). Completing BDI means adjudication is withheld: no points are added and your insurer is not notified of that violation, though the citation itself stays on your record as a withheld adjudication. BDI is not available to CDL holders or for a crash involving injuries. Florida also runs an 8-hour Intermediate Driver Improvement (IDI) course for certain repeat situations and a 12-hour Advanced Driver Improvement (ADI) course for suspension or habitual-offender cases; neither is a voluntary BDI substitute. Last checked August 2026.
 
 **Who submits my certificate to the Florida court?**
-Your school submits the certificate electronically to the Florida DHSMV within 5 days of your completion, and to the court within 3 days after that. You do not need to mail anything yourself — but check with your school to confirm they handle electronic submission.
+Your school submits the certificate electronically to the Florida DHSMV within 5 days of completion, and to the court shortly after. You do not need to mail anything yourself, but check with your school to confirm they handle electronic submission.
 
 **Does Florida traffic school dismiss my ticket?**
-Florida withholds adjudication rather than dismissing the ticket outright. Completing BDI means no points are added to your record and your insurer is not notified of the violation, but the citation itself remains as a withheld adjudication.
+Florida withholds adjudication rather than dismissing the ticket outright. Completing BDI means no points are added and your insurer is not notified of the violation, but the citation itself stays on your record as a withheld adjudication.
 
 **Can I do Florida traffic school online?**
-Yes. DHSMV-approved online BDI courses are accepted by all Florida courts. You must elect traffic school within 30 days of the citation date — do not pay the ticket before electing traffic school or you may waive your right to attend.
+Yes. DHSMV-approved online BDI courses are accepted by all Florida courts. You must elect traffic school within 30 days of the citation date, and do not pay the ticket before electing, or you may waive your right to attend.
 
 **How long is Florida traffic school?**
-The standard Basic Driver Improvement (BDI) course for minor violations is 4 hours. An 8-hour Advanced Driver Improvement (ADI) course is required for repeat offenders or license reinstatement cases. A 12-hour ADI is used for habitual offenders.
+The Basic Driver Improvement (BDI) course for minor violations is 4 hours. Florida also runs an 8-hour Intermediate Driver Improvement (IDI) course for certain repeat situations and a 12-hour Advanced Driver Improvement (ADI) course for suspension or habitual-offender cases.
 
 **How often can I elect Florida BDI?**
-Once per 12 months, and no more than 5 times in your lifetime. Florida law allows you to elect BDI once within any 12-month period for eligible violations.
+Once per 12 months, and up to eight times in your lifetime (s. 318.14(9), as amended in 2025). FLHSMV's FAQ still lists the old five-election limit, but the amended statute sets eight.
 
 ---
 
@@ -852,31 +852,31 @@ Some New Mexico carriers offer a voluntary discount for approved course completi
 
 **URL:** https://www.trafficschoolpicker.com/new-york
 
-New York drivers can complete a DMV-approved Point and Insurance Reduction Program (PIRP), also known as the Defensive Driving Course or Accident Prevention Course, to remove up to 4 active points from their record and earn a mandatory 10% auto liability and collision insurance discount for 3 years under NY Insurance Law §2336. The course is a minimum of 320 minutes (5 hours, 20 minutes) of instruction whether taken online or in-person, and is available to drivers with all license classes — including CDL holders for the insurance discount, though CDL holders cannot use it to reduce points. Point reduction applies only to points accumulated within the prior 18 months of course completion and is allowed once every 18 months. The PIRP does not dismiss tickets and the violation conviction stays on the driving record; it offsets points for the DMV's 11-point/18-month suspension threshold and the Driver Responsibility Assessment fee thresholds.
+New York drivers can complete a DMV-approved Point and Insurance Reduction Program (PIRP), also known as the Defensive Driving Course or Accident Prevention Course, to remove up to 4 active points from their record and earn a mandatory 10% auto liability and collision insurance discount for 3 years under NY Insurance Law § 2336. The course is a minimum of 320 minutes (5 hours, 20 minutes) of instruction, whether taken online or in-person, and is available to drivers of all license classes. Point reduction applies only to points accumulated within the 18 months before course completion and is allowed once every 18 months. PIRP does not dismiss tickets and the violation conviction stays on the driving record; it offsets points for the DMV's 11-point/18-month suspension threshold and the Driver Responsibility Assessment fee thresholds. Last checked August 2026.
 
 **How long is New York PIRP?**
-The course is 6 hours (320 minutes), which is the state minimum. It can be completed online at your own pace but must be finished within 30 days of registration.
+The course is 320 minutes (5 hours, 20 minutes), the state minimum, whether online or in a classroom. Providers often schedule it as a 6-hour session that includes breaks.
 
 **How often can I take New York PIRP?**
-Once every 18 months for the point-reduction benefit. You can retake it every 3 years to renew your 10% insurance discount. Note: only violations from the 18 months prior to course completion are eligible for the point reduction.
+Once every 18 months for the point-reduction benefit. You can retake it every 3 years to renew your 10% insurance discount. Only violations from the 18 months before course completion are eligible for the point reduction.
 
 **Does New York defensive driving dismiss my ticket?**
 No. New York's Point and Insurance Reduction Program (PIRP) does not dismiss tickets or remove violations from your driving record. It reduces your active point total by up to 4 points and earns a mandatory 10% auto insurance discount for 3 years — but the underlying ticket remains.
 
 **Who submits my PIRP certificate in New York?**
-Your school reports completion electronically to the NY DMV, which automatically applies the point reduction to your record. You are responsible for submitting the certificate to your insurance company yourself to receive the 10% discount.
+Your school reports completion electronically to the NY DMV, which automatically applies the point reduction. You submit the certificate to your insurance company yourself to receive the 10% discount.
 
 **Can I do New York PIRP online?**
-Yes. NY DMV-approved online PIRP courses are accepted statewide. The course is not court-ordered — any licensed NY driver can take it voluntarily at any time to earn point reduction and insurance benefits.
+Yes. NY DMV-approved online PIRP courses are accepted statewide. The course is not court-ordered — any licensed NY driver can take it voluntarily to earn point reduction and insurance benefits.
 
 **How long is New York traffic school?**
-New York's Point and Insurance Reduction Program (PIRP) is a 6-hour course. This applies to all approved formats including fully online courses.
+New York's PIRP is 320 minutes (5 hours, 20 minutes) of instruction. This applies to all approved formats, including fully online courses; providers may schedule a longer session to include breaks.
 
 **How often can I do New York traffic school?**
-You can take New York's PIRP once every 18 months. The 18-month period begins from the completion date of your most recent PIRP course.
+You can take New York's PIRP once every 18 months for point reduction. The 18-month period runs from the completion date of your most recent PIRP course.
 
 **Does New York traffic school dismiss my ticket?**
-No. New York's PIRP does not dismiss your ticket — the conviction still appears on your driving record. However, completing PIRP reduces 4 points from your DMV driving record abstract and qualifies you for a 10% insurance discount for 3 years. Think of it as damage control rather than erasure.
+No. New York's PIRP does not dismiss your ticket — the conviction still appears on your driving record. It reduces up to 4 points from your DMV abstract and qualifies you for a 10% insurance discount for 3 years. Think of it as damage control rather than erasure.
 
 **Can I do New York traffic school online?**
 Yes. New York's PIRP is available fully online through DMV-approved providers. You can complete the course at your own pace from any device.
@@ -1100,22 +1100,22 @@ Driver submits. You download or receive your certificate by email after completi
 
 **URL:** https://www.trafficschoolpicker.com/texas
 
-Texas drivers cited for most non-CDL moving violations under 25 mph over the limit can request a TDLR-approved 6-hour Driving Safety Course to dismiss the ticket and keep the conviction off their record, under Code of Criminal Procedure Article 45.0511. The driver must request the court's permission before pleading, plead guilty or no contest, present a valid Texas license and proof of liability insurance, and complete the course within 90 days. Successful completion is reported via certificate to the court and produces a Type 3A driving record entry, which is not a conviction, prevents surcharges and points, and qualifies the driver for a 10% auto-insurance discount for 3 years from many carriers. The dismissal is available once every 12 months per driver, is not available to commercial license holders or for violations 25+ mph over the limit, in construction zones with workers present, or for offenses involving passing a school bus.
+Texas drivers cited for most non-CDL moving violations under 25 mph over the limit can request a TDLR-approved 6-hour Driving Safety Course (DSC) to dismiss the ticket and keep the conviction off their record, under Code of Criminal Procedure art. 45A.352. The driver must request the court's permission before the appearance date, plead guilty or no contest, present a valid Texas license and proof of liability insurance, and complete the course within 90 days. On completion the charge is dismissed and no conviction is reported to the driving record; many insurers also give a defensive-driving discount, though Texas has no state-mandated discount. The DSC dismissal is available once every 12 months per driver, and is not available to commercial license holders or for violations 25-plus mph over the limit, in construction zones with workers present, or for passing a stopped school bus. (Deferred disposition is a separate remedy: a court-ordered probation period under Chapter 45A, not the course election.) Texas SB 296, effective September 1, 2025, lets multiple citations from the same traffic stop each be dismissed. Last checked August 2026.
 
 **How often can I use Texas defensive driving for ticket dismissal?**
-Once per 12 months. You cannot use defensive driving for ticket dismissal if you have already done so within the past 12 months. Additional eligibility: the violation cannot be more than 25 mph over the posted speed limit.
+Once per 12 months. You cannot use a driving safety course dismissal if you have already done so within the past 12 months. The violation also cannot be more than 25 mph over the posted limit.
 
 **Can I do Texas defensive driving online?**
-Yes. TDLR-approved online defensive driving courses are accepted by all Texas county courts. Always verify your course provider is listed on the TDLR website before enrolling.
+Yes. TDLR-approved online defensive driving courses are accepted by Texas courts. Always verify your provider is listed on the TDLR website before enrolling.
 
 **Does Texas defensive driving dismiss my ticket?**
-Yes — Texas uses deferred disposition. You request it from the court, plead no contest, pay a court fee, complete a 6-hour defensive driving course within 90 days, and the ticket is dismissed entirely from your public record.
+Yes, through a driving safety course (DSC) dismissal under Code of Criminal Procedure art. 45A.352. You request the court's permission, plead guilty or no contest, pay a court fee, and complete a 6-hour DSC within 90 days; the charge is then dismissed and no conviction is reported. Deferred disposition is a different remedy, a court-ordered probation period, so ask the court which one applies.
 
 **How long is Texas defensive driving?**
-Texas requires exactly 6 hours — the shortest state-mandated course length in the country. The course includes 5 hours of instruction plus 1 hour of mandatory breaks.
+Six hours, the shortest state-mandated course length in the country. It is 5 hours of instruction plus 1 hour of mandatory breaks.
 
 **Who submits my certificate to the Texas court?**
-You do. After completing the course, you receive a certificate and must submit it — along with a copy of your Texas driving record — to the court yourself, by the deadline specified in your deferred disposition order (usually 90 days from the plea date).
+You do. After completing the course you receive a certificate and submit it, with a certified copy of your Texas driving record, to the court by the deadline in your dismissal order (usually 90 days from the plea date).
 
 ---
 
@@ -1549,7 +1549,7 @@ Eligibility is broad with sharp edges. Minor civil moving violations qualify. Vi
 
 And it's worth every dollar of that. Our Arizona data puts a typical 10-over ticket at a $231 fine and roughly $3,039 in three-year insurance exposure as a ceiling estimate. The diversion deletes both: the fine goes with the dismissed citation and the insurance exposure never materializes because there's no conviction to rate. Very few financial decisions return three thousand dollars for one afternoon, and Arizona hands it to eligible drivers once a year.
 
-And unlike most states, none of this requires an Arizona license: the dismissal is open to [drivers licensed in another state](https://www.trafficschoolpicker.com/out-of-state-ticket) too, which makes Arizona one of the few genuinely good answers when the ticket and the license don't come from the same place.
+Arizona's program follows the citation and the court rather than your home state, so [drivers licensed elsewhere](https://www.trafficschoolpicker.com/out-of-state-ticket) can often use it for an Arizona ticket. Because eligibility is set by the court on your citation, out-of-state drivers should confirm with that court before enrolling.
 
 Every Arizona Supreme Court-certified online school we track is compared on the Arizona page.
 
@@ -1827,7 +1827,7 @@ One practical note on picking a school: FLHSMV approval is the only credential t
 - **Is it a conviction:** No. Adjudication withheld is not a conviction (§318.14(11))
 - **Insurance protection:** Insurer may not raise your premium or refuse renewal based solely on that infraction (§626.9541(1)(o))
 - **Election deadline:** 30 days from the citation
-- **Frequency limit:** Once per 12 months, five elections per lifetime
+- **Frequency limit:** Once per 12 months, eight elections per lifetime
 - **Not eligible:** CDL or commercial permit holders, tickets in a commercial vehicle, speeding 30+ mph over the limit
 - **Course:** 4-hour Basic Driver Improvement (BDI), FLHSMV-approved
 - **Certificate:** School e-files with the clerk within 5 days (§318.1451)
@@ -1843,7 +1843,7 @@ Florida then does something almost no other state does. Section 626.9541(1)(o) t
 
 Who's out. Anyone holding a CDL or commercial learner's permit, anyone cited while driving a commercial vehicle, and anyone clocked 30 mph or more over the limit. Notice that's 30, not the 25 you'll see quoted for California and Texas. Florida's line is more generous and half the internet gets it wrong.
 
-You can elect once every 12 months and five times in your life, so treat it as a card you play, not a subscription. The clock runs ticket to ticket.
+You can elect once every 12 months and eight times in your life (s. 318.14(9), as amended in 2025), so treat it as a card you play, not a subscription. The clock runs ticket to ticket.
 
 On cost, Florida's course market is absurdly cheap, $4 to $25 for the 4-hour BDI, though watch the fee stack at checkout on the bargain ones. You still pay the citation. Set that against our ticket cost data for Florida, roughly $3,966 in three-year insurance exposure on a $204 ticket as a ceiling estimate, and the election is the highest-leverage 30-day deadline in Florida driving.
 
@@ -1909,16 +1909,16 @@ Every FLHSMV-approved online BDI course we track is on the Florida page, compare
 **URL:** https://www.trafficschoolpicker.com/florida/how-often-can-you-take-traffic-school
 
 - **Election frequency:** Once in any 12-month period
-- **Lifetime cap:** 5 elections, total, ever
+- **Lifetime cap:** 8 elections, total, ever (raised from five in 2025)
 - **Deadline each time:** You must elect the course within 30 days of the citation
 - **CDL holders:** Not eligible
 - **Last verified:** August 2026
 
 Florida runs two clocks, and it's the second one most drivers have never heard of.
 
-The first clock is familiar: you can elect Basic Driver Improvement once in any 12-month period. The second is the one to respect: Florida caps you at five elections in a lifetime. Not five per license cycle, not five per decade. Five, ever, tracked by the state across your driving life. Every election you spend in your twenties is one you don't have in your fifties.
+The first clock is familiar: you can elect Basic Driver Improvement once in any 12-month period. The second is the one to respect: Florida caps you at eight elections in a lifetime, raised from five when the statute was amended in 2025 (s. 318.14(9)). Not eight per license cycle, not eight per decade. Eight, ever, tracked by the state across your driving life. Every election you spend in your twenties is one you don't have in your fifties.
 
-That changes how to think about a marginal ticket. In most states the only question is whether the course is worth the tuition this time. In Florida there's a portfolio question stacked on top: is this ticket worth one of your remaining elections? A cheap ticket with minimal insurance consequence might not be, especially if you've already burned two or three. A ticket that would put real points on your record almost certainly is. Your election count is on your driving record; if you don't know your number, pull the record before deciding.
+That changes how to think about a marginal ticket. In most states the only question is whether the course is worth the tuition this time. In Florida there's a portfolio question stacked on top: is this ticket worth one of your remaining elections? A cheap ticket with minimal insurance consequence might not be, especially if you've already burned several. A ticket that would put real points on your record almost certainly is. Your election count is on your driving record; if you don't know your number, pull the record before deciding.
 
 The deadline makes the decision urgent every time: you have 30 days from the citation to elect the course with the clerk. Miss it and that ticket's election never existed, no matter how many you have left.
 
@@ -2738,7 +2738,7 @@ What you're actually worried about still exists though. A conviction goes on you
 
 Complete a TDLR-approved driving safety course with the court's permission and the charge is dismissed under Article 45A.352 of the Code of Criminal Procedure. Not masked, not reduced. Dismissed. The statute says a dismissed charge may not be part of your driving record or used for any purpose. Your insurer never sees it because there is nothing to see.
 
-The article number changed recently, by the way. Courts cited this as Art. 45.0511 for twenty years. Texas recodified the whole chapter effective January 1, 2025, and it's now Art. 45A.352. Same rules, new number. If your court paperwork shows either one, it's the same thing.
+The article number changed recently, by the way. Texas recodified the whole chapter effective January 1, 2025, and this dismissal is now Art. 45A.352 (courts cited the former article number for years). Same rules, new number. If your court paperwork shows the old citation, it is the same thing.
 
 Here's how you qualify. You hold a Texas license or permit. You haven't used a driving safety course for dismissal in the 12 months before the offense date, and that clock runs from the ticket, not from when you finished the last course. You enter a plea of guilty or no contest and request the course in writing on or before the answer date printed on your citation. Miss that date and the judge can still say yes, but now it's discretion instead of a right. The court then gives you 90 days to finish the 6-hour course and get your certificate in.
 
@@ -2782,7 +2782,7 @@ Every approved online course we track is compared on the Texas page, and what th
 
 - **Course price:** $25 to $29 online across TDLR-approved providers we track
 - **Statutory minimum:** $25 by law (Tex. Educ. Code 1001.352); anything cheaper isn't a TDLR course price
-- **Court administrative fee:** Capped at $10 (Code of Criminal Procedure art. 45A, formerly 45.0511(f)(1))
+- **Court administrative fee:** Capped at $10 (Code of Criminal Procedure art. 45A)
 - **Driving record:** Required for dismissal; the court can pull it for a fee, or you order it from DPS
 - **Course length:** 6 hours, set by state rule
 - **Typical all-in:** $60 to $90 including fees

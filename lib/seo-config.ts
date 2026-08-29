@@ -18,7 +18,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   texas: {
     title: "Best Online Defensive Driving Texas (2026)",
-    description: "Compare TDLR-approved online defensive driving courses in Texas. Dismiss your ticket via deferred disposition. Lowest prices, verified reviews.",
+    description: "Compare TDLR-approved online defensive driving courses in Texas. Dismiss your ticket with a state-approved driving safety course. Lowest prices, verified reviews.",
     h1: "The Best Online Defensive Driving Courses in Texas (2026)",
     primaryKeyword: "online defensive driving Texas",
     canonicalPath: "/texas",
@@ -38,10 +38,10 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
     canonicalPath: "/new-york",
   },
   arizona: {
-    title: "Best Online Defensive Driving Arizona (2026)",
-    description: "Compare Arizona Supreme Court-approved online defensive driving courses. Dismiss your ticket entirely. Lowest prices, verified reviews.",
-    h1: "The Best Online Defensive Driving Courses in Arizona (2026)",
-    primaryKeyword: "Arizona defensive driving online",
+    title: "Arizona Defensive Driving & Ticket Dismissal (2026)",
+    description: "Arizona's Supreme Court-approved Defensive Driving School (DDS) dismisses an eligible ticket and keeps points off your record. How it works and what it costs.",
+    h1: "Arizona Defensive Driving & Ticket Dismissal (2026)",
+    primaryKeyword: "Arizona defensive driving school",
     canonicalPath: "/arizona",
   },
   georgia: {

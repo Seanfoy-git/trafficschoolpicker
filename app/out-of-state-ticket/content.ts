@@ -282,7 +282,7 @@ export const BODY_TOP = `
         <dt>Cost</dt><dd>Court reimbursement fee capped at $10, plus a records fee, plus course tuition</dd>
         <dt>Citations</dt><dd class="cite">Tex. Code Crim. Proc. arts. 45A.351 to 45A.359</dd>
       </dl>
-      <p>If your court paperwork still cites the old Art. 45.0511, don't worry — it's the same rule, renumbered to Art. 45A.352 on 1 January 2025.</p>
+      <p>If your court paperwork still cites the former article number, it is the same rule, recodified as Art. 45A.352 on 1 January 2025.</p>
       <p>Senate Bill 296 then changed things again from 1 September 2025. You can now make the written request by email or through a court's own online portal, and where several charges came out of the same incident, each of them is eligible for dismissal on a single course. The court may also charge the $10 fee per eligible offence rather than once.</p>
       <p class="more"><a href="/texas/does-traffic-school-remove-points">Texas in more depth: does traffic school remove points there</a></p>
     </div>
