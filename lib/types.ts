@@ -57,6 +57,13 @@ export type StateInfo = {
   // the comparison grid and point drivers at the official approved-school list +
   // the directory below (e.g. Arizona DDS).
   noPartnerOffer: boolean;
+  // SINGLE SOURCE OF TRUTH for course length. `courseHours` is a display string
+  // ("8 hours", "320 minutes (5h20m)", "4 to 4.5 hours") and is null unless
+  // `hoursSource` is set — an unsourced hours value renders NOWHERE. There is no
+  // per-school hours field; every hour claim sitewide reads this. See Package 4.
+  courseHours: string | null;
+  hoursSource: string | null;    // primary-source cite (statute/regulator URL)
+  hoursVerified: string | null;  // ISO date — powers the hours "Last verified" line
 };
 
 // ─── Traffic Schools DB (editorial + reviews) ───────────────
@@ -90,7 +97,6 @@ export type School = {
   stateCons: Record<string, string[]>;
   bestFor: string;
   notFor: string;
-  completionHours: number | null;
   mobileApp: boolean;
   moneyBackGuarantee: boolean;
   certificateDelivery: 'Electronic' | 'Mail' | 'Both' | null;
@@ -200,7 +206,6 @@ export type ResolvedSchoolContent = {
   officialTerm: string;
   approvalBody: string;
   approvalBodyShort: string;
-  mandatedHours: number | null;
   hasFinalExam: boolean;
   examAttemptsAllowed: number | null;
   examIsOpenBook: boolean;

@@ -34,7 +34,7 @@ export function TrustBar({
         </span>
         <span className="flex items-center gap-1.5">
           <ShieldCheck className="w-4 h-4 text-accent" />
-          {approvalLabel || "All schools court-approved"}
+          {approvalLabel || "All 50 states and DC covered"}
         </span>
         <span className="flex items-center gap-1.5">
           <RefreshCw className="w-4 h-4 text-accent" />

@@ -299,6 +299,16 @@ function mapStateInfo(page: PageObjectResponse): StateInfo {
     contentStatus: isContentStatus(contentStatusRaw) ? contentStatusRaw : null,
     approvalLabel: getText(page, "Approval Label") || null,
     noPartnerOffer: getCheckbox(page, "No Partner Offer"),
+    // Course length: single source. courseHours is null unless Hours Source is
+    // set, so an unsourced value can never render anywhere (Package 4).
+    ...(() => {
+      const hoursSource = getText(page, "Hours Source") || null;
+      return {
+        hoursSource,
+        courseHours: hoursSource ? (getText(page, "Course Hours").trim() || null) : null,
+        hoursVerified: getDate(page, "Hours Verified"),
+      };
+    })(),
   };
 }
 
@@ -549,7 +559,6 @@ function mapSchool(page: PageObjectResponse): School {
     stateCons: buildStateSpecificField(page, "Cons"),
     bestFor: getText(page, "Best For"),
     notFor: getText(page, "Not For"),
-    completionHours: getNumber(page, "Completion Time (hrs)"),
     mobileApp: getCheckbox(page, "Mobile App"),
     moneyBackGuarantee: getCheckbox(page, "Money Back Guarantee"),
     certificateDelivery: getSelect(page, "Certificate Delivery") as School["certificateDelivery"],
@@ -1112,7 +1121,6 @@ export function resolveStateContent(
     officialTerm: state?.officialTerm ?? "Traffic School",
     approvalBody: state?.approvalBody ?? "State Approved",
     approvalBodyShort: state?.approvalBodyShort ?? "State Approved",
-    mandatedHours: state?.mandatedHours ?? school.completionHours,
     hasFinalExam,
     examAttemptsAllowed: state?.examAttemptsAllowed ?? null,
     examIsOpenBook: state?.examIsOpenBook ?? false,

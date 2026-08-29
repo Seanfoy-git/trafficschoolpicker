@@ -110,7 +110,7 @@ function schoolFacts(s: School): string {
   if (s.stateCodes.includes("all")) parts.push("Available nationwide");
   else if (s.stateCodes.length) parts.push(`Covers ${s.stateCodes.length} states (${s.stateCodes.join(", ")})`);
   if (s.courtAcceptance) parts.push(s.courtAcceptance);
-  if (s.completionHours != null) parts.push(`${s.completionHours}h course`);
+  // No per-school course hours: course length is a state fact (Package 4).
   return parts.length ? `**Facts:** ${parts.join(" · ")}` : "";
 }
 

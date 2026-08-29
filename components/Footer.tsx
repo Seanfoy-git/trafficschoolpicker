@@ -45,8 +45,8 @@ export async function Footer() {
               </span>
             </div>
             <p className="text-sm text-slate-300 leading-relaxed">
-              Independent comparison site helping drivers find the best
-              court-approved online traffic school at the lowest price.
+              Independent comparison site helping drivers compare online traffic
+              school and defensive driving options at the lowest price.
             </p>
           </div>
 

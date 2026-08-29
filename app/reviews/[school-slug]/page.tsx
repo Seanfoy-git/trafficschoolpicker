@@ -125,11 +125,9 @@ export default async function ReviewPage({ params }: Props) {
             </div>
           ) : null}
           <div className="flex flex-wrap gap-6 text-sm text-slate-300">
-            {school.completionHours && (
-              <span className="flex items-center gap-1.5">
-                <Clock className="w-4 h-4" /> {school.completionHours} hours
-              </span>
-            )}
+            <span className="flex items-center gap-1.5">
+              <Clock className="w-4 h-4" /> Meets your state&apos;s minimum
+            </span>
             {school.courtAcceptance && (
               <span className="flex items-center gap-1.5">
                 <CheckCircle className="w-4 h-4" /> {school.courtAcceptance}
@@ -252,7 +250,7 @@ export default async function ReviewPage({ params }: Props) {
                     {[
                       { label: "Price", getValue: () => "Varies by state" },
                       { label: "Rating", getValue: (s: typeof school) => s.rating ? `${s.rating}/5` : "—" },
-                      { label: "Completion Time", getValue: (s: typeof school) => s.completionHours ? `${s.completionHours}h` : "—" },
+                      { label: "Course Length", getValue: () => "Set by your state" },
                       { label: "Mobile App", getValue: (s: typeof school) => s.mobileApp ? "Yes" : "No" },
                       { label: "Money-Back Guarantee", getValue: (s: typeof school) => s.moneyBackGuarantee ? "Yes" : "No" },
                       { label: "Court Acceptance", getValue: (s: typeof school) => s.courtAcceptance ?? "—" },
@@ -301,11 +299,9 @@ export default async function ReviewPage({ params }: Props) {
               </div>
             ) : null}
             <ul className="mt-4 space-y-2 text-sm text-slate-600">
-              {school.completionHours && (
-                <li className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-slate-400" /> {school.completionHours} hours to complete
-                </li>
-              )}
+              <li className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-slate-400" /> Course length set by your state
+              </li>
               {school.stateCodes.length > 0 && (
                 <li className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-slate-400" />

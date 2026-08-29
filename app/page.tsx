@@ -79,8 +79,8 @@ export default async function HomePage() {
             {HOME_SEO.h1}
           </h1>
           <p className="text-lg md:text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
-            Compare court-approved online traffic schools by price, speed, and
-            quality. Save money and keep your driving record clean.
+            Compare online traffic school and defensive driving options by price,
+            speed, and quality. Save money and keep your driving record clean.
           </p>
           <StateSelector size="lg" />
         </div>
@@ -99,7 +99,7 @@ export default async function HomePage() {
               {
                 icon: Search,
                 title: "Select your state",
-                desc: "Choose your state to see court-approved schools and state-specific pricing.",
+                desc: "Choose your state to see approved schools and state-specific pricing.",
               },
               {
                 icon: BarChart3,

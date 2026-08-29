@@ -54,7 +54,7 @@ export const ORG_WEBSITE_GRAPH: EntityGraph = {
       name: "TrafficSchoolPicker",
       url: SITE,
       description:
-        "Independent comparison site for court-approved online traffic schools across all 50 US states. Ranks schools by price, reviews, and court acceptance; does not sell courses directly.",
+        "Independent comparison site for online traffic school and defensive driving options across all 50 US states and DC. Ranks schools by price, reviews, and court acceptance; does not sell courses directly.",
       logo: { "@type": "ImageObject", url: `${SITE}/logo.png` },
       sameAs: ["https://www.youtube.com/@trafficschoolpicker"],
     },
@@ -158,16 +158,18 @@ function buildProductDescription(
   school: SchoolWithPrice,
   resolved: ResolvedSchoolContent,
   stateName: string,
-  price: number | null
+  price: number | null,
+  courseHours: string | null
 ): string {
-  const specs: string[] = [];
-  if (resolved.mandatedHours) specs.push(`${resolved.mandatedHours}-hour`);
-  specs.push(
+  // Duration is a STATE fact and appears only when the state has a sourced value
+  // (courseHours). No per-school hours (Package 4): unsourced states carry no
+  // duration rather than a fabricated per-school number.
+  const approval =
     resolved.approvalBodyShort && resolved.approvalBodyShort !== "State Approved"
       ? `${resolved.approvalBodyShort}-approved`
-      : "state-approved"
-  );
-  let lead = `${school.name}'s ${specs.join(" ")} online traffic school course for ${stateName}`;
+      : "state-approved";
+  let lead = `${school.name}'s ${approval} online traffic school course for ${stateName}`;
+  if (courseHours) lead += ` (${courseHours})`;
   if (price !== null) lead += `, $${price.toFixed(2)}`;
   if (school.mobileApp) lead += `, with a mobile app`;
 
@@ -178,7 +180,8 @@ function buildProduct(
   { school, resolved }: SchemaSchool,
   stateName: string,
   stateSlug: string,
-  reviewSlugs: ReadonlySet<string>
+  reviewSlugs: ReadonlySet<string>,
+  courseHours: string | null
 ): ProductSchema {
   const url = productUrl(school.slug, stateSlug, reviewSlugs);
   const price = displayedPrice(school, resolved);
@@ -189,7 +192,7 @@ function buildProduct(
     // Array form: Google accepts repeated image values; the card genuinely
     // represents the school being marked up (name + rating + branding).
     image: [schoolImageUrl(school.slug)],
-    description: buildProductDescription(school, resolved, stateName, price),
+    description: buildProductDescription(school, resolved, stateName, price, courseHours),
     url,
     brand: { "@type": "Brand", name: school.name },
   };
@@ -237,7 +240,8 @@ export function buildComparisonItemList(
   stateName: string,
   stateSlug: string,
   reviewSlugs: ReadonlySet<string>,
-  year: number
+  year: number,
+  courseHours: string | null
 ): ItemListSchema {
   // Omit any school with no displayed price ("Check website") from the ItemList
   // entirely, rather than emit a Product node with no Offer. A node with neither
@@ -252,7 +256,7 @@ export function buildComparisonItemList(
     itemListElement: priced.map((s, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      item: buildProduct(s, stateName, stateSlug, reviewSlugs),
+      item: buildProduct(s, stateName, stateSlug, reviewSlugs, courseHours),
     })),
   };
 }

@@ -65,7 +65,9 @@ export function StateKeyFacts({
         : null; // court discretion / court program / in-person / unknown → omit
   if (dismissal) facts.push({ label: "Ticket dismissal", value: dismissal });
 
-  if (stateInfo.minHours) facts.push({ label: "Course length", value: `${stateInfo.minHours} hours` });
+  // Course length is a state-level fact and renders only when sourced (courseHours
+  // is null unless Hours Source is set). No per-school hours anywhere. See Package 4.
+  if (stateInfo.courseHours) facts.push({ label: "Course length", value: stateInfo.courseHours });
 
   // Reuses the exact lowest card/Offer price, so it can't drift from the grid.
   if (lowestPrice !== null) facts.push({ label: "Typical cost", value: `from $${lowestPrice.toFixed(2)}` });
