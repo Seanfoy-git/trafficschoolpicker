@@ -30,7 +30,7 @@ export function Header() {
           <Link href="/reviews" className="hover:text-highlight transition-colors">
             Reviews
           </Link>
-          <Link href="/about" className="hover:text-highlight transition-colors">
+          <Link href="/methodology" className="hover:text-highlight transition-colors">
             How We Rank
           </Link>
           <Link href="/blog" className="hover:text-highlight transition-colors">

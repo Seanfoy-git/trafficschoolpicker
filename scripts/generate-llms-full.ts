@@ -98,11 +98,17 @@ function formatPrice(n: number): string {
 // One-line fact summary — only the parts that are present (never a placeholder).
 function schoolFacts(s: School): string {
   const parts: string[] = [];
+  // Our own rating is the TSP Score (Package 5); see /methodology for the rubric.
+  if (s.tspScore != null) parts.push(`TSP Score ${s.tspScore.toFixed(1)}/5 (our independent rating; methodology at ${BASE_URL}/methodology)`);
+  // Third-party ratings are attributed, never presented as ours.
   if (s.rating != null) {
-    let r = `Rating ${s.rating}/5`;
-    if (s.reviewCount != null) {
-      r += ` (${s.reviewCount.toLocaleString()} reviews${s.reviewSource ? ` on ${s.reviewSource}` : ""})`;
-    }
+    const asOf = s.lastVerified
+      ? new Date(s.lastVerified).toLocaleDateString("en-US", { year: "numeric", month: "long", timeZone: "UTC" })
+      : null;
+    let r = `${s.reviewSource ?? "Third-party"} rating ${s.rating}/5 (attributed`;
+    if (s.reviewCount != null) r += `, ${s.reviewCount.toLocaleString()} reviews`;
+    if (asOf) r += `, as of ${asOf}`;
+    r += ")";
     parts.push(r);
   }
   const price = representativePrice(s);

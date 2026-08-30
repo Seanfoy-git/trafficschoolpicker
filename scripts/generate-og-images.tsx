@@ -19,12 +19,9 @@ import { join } from "path";
 import { STATE_LIST } from "../lib/state-utils";
 import type { School } from "../lib/types";
 
-function representativePrice(s: School): number | null {
-  if (s.genericPrice != null) return s.genericPrice;
-  const vals = Object.values(s.statePrices).filter((v): v is number => typeof v === "number");
-  return vals.length ? Math.min(...vals) : null;
-}
-const fmtPrice = (n: number) => (Number.isInteger(n) ? `${n}` : n.toFixed(2));
+// Package 5: card art carries NO burned-in rating and NO burned-in price. One image
+// per school is reused across every state, so any number burned in is wrong somewhere
+// and goes stale everywhere. Cards show name + "Online traffic school review" only.
 
 const SHELL = {
   width: "100%",
@@ -46,46 +43,15 @@ function Wordmark() {
   );
 }
 
-function Star({ filled }: { filled: boolean }) {
-  return (
-    <svg width="54" height="54" viewBox="0 0 24 24" style={{ marginRight: 8 }}>
-      <path
-        d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-        fill={filled ? "#F59E0B" : "#2f4a42"}
-      />
-    </svg>
-  );
-}
-
 function SchoolCard({ school }: { school: School }) {
-  const price = representativePrice(school);
-  const stars = Math.round(school.rating ?? 0);
   return (
     <div style={SHELL}>
       <Wordmark />
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <div style={{ display: "flex", fontSize: 78, fontWeight: 700, lineHeight: 1.05 }}>{school.name}</div>
-        {school.rating != null && (
-          <div style={{ display: "flex", alignItems: "center", marginTop: 30 }}>
-            {[0, 1, 2, 3, 4].map((i) => (
-              <Star key={i} filled={i < stars} />
-            ))}
-            <span style={{ display: "flex", fontSize: 46, fontWeight: 700, marginLeft: 20 }}>{school.rating}</span>
-            {school.reviewCount != null && (
-              <span style={{ display: "flex", fontSize: 32, color: "#cbd5e1", marginLeft: 18 }}>
-                {school.reviewCount.toLocaleString()} reviews
-              </span>
-            )}
-          </div>
-        )}
+        <div style={{ display: "flex", fontSize: 84, fontWeight: 700, lineHeight: 1.05 }}>{school.name}</div>
       </div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div style={{ display: "flex", fontSize: 34, color: "#cbd5e1" }}>Online traffic school review</div>
-        {price != null && (
-          <div style={{ display: "flex", background: "#1D9E75", fontSize: 42, fontWeight: 700, padding: "14px 34px", borderRadius: 16 }}>
-            from ${fmtPrice(price)}
-          </div>
-        )}
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ display: "flex", fontSize: 36, color: "#cbd5e1" }}>Online traffic school review</div>
       </div>
     </div>
   );
@@ -102,7 +68,7 @@ function StateCard({ name, year }: { name: string; year: number }) {
         <div style={{ display: "flex", fontSize: 92, fontWeight: 700, lineHeight: 1.02, marginTop: 12 }}>{name}</div>
       </div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div style={{ display: "flex", fontSize: 34, color: "#cbd5e1" }}>Court-approved courses compared</div>
+        <div style={{ display: "flex", fontSize: 34, color: "#cbd5e1" }}>Online traffic school options compared</div>
         <div style={{ display: "flex", background: "#1D9E75", fontSize: 40, fontWeight: 700, padding: "14px 34px", borderRadius: 16 }}>
           {year}
         </div>

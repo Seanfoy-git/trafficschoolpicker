@@ -1,10 +1,9 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllSchools, getSchoolBySlug, getSchoolReviewBody } from "@/lib/notion";
-import { ORGANIZATION_ID, buildBreadcrumbList, schoolImageUrl } from "@/lib/structured-data";
+import { buildCriticReview, buildBreadcrumbList, schoolImageUrl } from "@/lib/structured-data";
 import { ReviewBody } from "@/components/ReviewBody";
-import { RatingStars } from "@/components/RatingStars";
-import { MultiRating, ReviewSynthesis } from "@/components/MultiRating";
+import { MultiRating } from "@/components/MultiRating";
 import { Badge } from "@/components/Badge";
 import { AffiliateButton } from "@/components/AffiliateButton";
 import { trackerUrl } from "@/lib/affiliate";
@@ -38,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${school.name} Review (2026) — Is It Worth It?`,
-    description: `Detailed review of ${school.name} online traffic school. ${school.rating ? `Rating: ${school.rating}/5.` : ""} See pros, cons, and our verdict.`,
+    description: `Detailed review of ${school.name} online traffic school. See pros, cons, pricing, and our independent verdict.`,
     alternates: {
       canonical: `https://www.trafficschoolpicker.com/reviews/${school.slug}`,
     },
@@ -70,22 +69,25 @@ export default async function ReviewPage({ params }: Props) {
   // at build/ISR; empty for schools whose body isn't written yet (no section).
   const reviewBody = await getSchoolReviewBody(school.id);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Review",
-    itemReviewed: {
-      "@type": "EducationalOrganization",
-      name: school.name,
-    },
-    ...(school.rating && {
-      reviewRating: {
-        "@type": "Rating",
-        ratingValue: school.rating,
-        bestRating: 5,
-      },
-    }),
-    author: { "@id": ORGANIZATION_ID },
-  };
+  // Critic Review markup — ONLY for schools with a TSP Score (an approved written
+  // review). reviewRating is our own six-dimension score, never a borrowed number;
+  // scoreless schools emit no Review at all (Package 5).
+  const reviewJsonLd =
+    school.tspScore != null
+      ? buildCriticReview({
+          name: school.name,
+          website: school.website || null,
+          tspScore: school.tspScore,
+          dateIso: school.lastVerified ?? "2026-08-20",
+          reviewBody: `${school.name} earns a TSP Score of ${school.tspScore.toFixed(1)} out of 5 in our independent review, weighing course experience, price and transparency, state coverage, certificate handling, support and guarantees, and track record.`,
+        })
+      : null;
+
+  // "As of" month for the attributed third-party ratings — from the row's last
+  // verified date so the borrowed numbers always carry a freshness stamp (Package 5).
+  const asOf = school.lastVerified
+    ? new Date(school.lastVerified).toLocaleDateString("en-US", { year: "numeric", month: "long", timeZone: "UTC" })
+    : null;
 
   // Breadcrumb: Home › Reviews › {School}. The /reviews hub is a real index route,
   // so the trail includes the Reviews crumb.
@@ -97,10 +99,12 @@ export default async function ReviewPage({ params }: Props) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      {reviewJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewJsonLd) }}
+        />
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
@@ -115,15 +119,30 @@ export default async function ReviewPage({ params }: Props) {
             </h1>
             {school.badge && <Badge type={school.badge} />}
           </div>
+          {school.tspScore != null && (
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              <span className="inline-flex items-baseline gap-1.5 bg-white/10 border border-white/20 rounded-lg px-3 py-1.5">
+                <span className="text-xs font-semibold uppercase tracking-wide text-slate-300">TSP Score</span>
+                <span className="text-2xl font-bold">{school.tspScore.toFixed(1)}</span>
+                <span className="text-sm text-slate-300">/ 5</span>
+              </span>
+              <a href="/methodology" className="text-sm text-slate-200 underline hover:text-white">
+                how we score
+              </a>
+            </div>
+          )}
           {school.ratings.length > 0 || school.bbb ? (
             <div className="mb-4">
+              <p className="text-xs text-slate-300 mb-1.5">
+                Third-party ratings{asOf ? ` (as of ${asOf})` : ""}, attributed, not ours:
+              </p>
               <MultiRating ratings={school.ratings} bbb={school.bbb} />
             </div>
-          ) : school.rating !== null ? (
-            <div className="flex items-center gap-2 mb-4">
-              <RatingStars rating={school.rating} count={school.reviewCount ?? undefined} size="lg" />
-            </div>
-          ) : null}
+          ) : (
+            <p className="text-sm text-slate-300 mb-4">
+              {school.name} has no substantial third-party review presence we can verify.
+            </p>
+          )}
           <div className="flex flex-wrap gap-6 text-sm text-slate-300">
             <span className="flex items-center gap-1.5">
               <Clock className="w-4 h-4" /> Meets your state&apos;s minimum
@@ -249,7 +268,7 @@ export default async function ReviewPage({ params }: Props) {
                   <tbody>
                     {[
                       { label: "Price", getValue: () => "Varies by state" },
-                      { label: "Rating", getValue: (s: typeof school) => s.rating ? `${s.rating}/5` : "—" },
+                      { label: "TSP Score", getValue: (s: typeof school) => s.tspScore != null ? `${s.tspScore.toFixed(1)}/5` : "—" },
                       { label: "Course Length", getValue: () => "Set by your state" },
                       { label: "Mobile App", getValue: (s: typeof school) => s.mobileApp ? "Yes" : "No" },
                       { label: "Money-Back Guarantee", getValue: (s: typeof school) => s.moneyBackGuarantee ? "Yes" : "No" },
@@ -274,8 +293,14 @@ export default async function ReviewPage({ params }: Props) {
             <h2 className="text-2xl font-bold text-slate-900 mb-3">Our Verdict</h2>
             <p className="text-slate-600 leading-relaxed mb-4">
               {school.name} is a{" "}
-              {school.rating && school.rating >= 4.5 ? "top-tier" : school.rating && school.rating >= 4.0 ? "solid" : "decent"}{" "}
+              {school.tspScore != null && school.tspScore >= 4.5 ? "top-tier" : school.tspScore != null && school.tspScore >= 4.0 ? "solid" : "capable"}{" "}
               choice for online traffic school.{" "}
+              {school.tspScore != null && (
+                <>
+                  Our TSP Score is {school.tspScore.toFixed(1)}/5 (
+                  <a href="/methodology" className="text-accent underline">how we score</a>).{" "}
+                </>
+              )}
               {school.bestFor && <>It&apos;s best for {school.bestFor.toLowerCase()}.</>}
             </p>
             <AffiliateButton school={school} />
@@ -291,11 +316,10 @@ export default async function ReviewPage({ params }: Props) {
             <AffiliateButton school={school} />
             {school.ratings.length > 0 || school.bbb ? (
               <div className="mt-4">
+                <p className="text-xs text-slate-400 mb-1">
+                  Third-party ratings{asOf ? ` (as of ${asOf})` : ""}, attributed:
+                </p>
                 <MultiRating ratings={school.ratings} bbb={school.bbb} layout="vertical" />
-              </div>
-            ) : school.rating !== null ? (
-              <div className="mt-4 text-center">
-                <RatingStars rating={school.rating} count={school.reviewCount ?? undefined} />
               </div>
             ) : null}
             <ul className="mt-4 space-y-2 text-sm text-slate-600">
@@ -326,6 +350,12 @@ export default async function ReviewPage({ params }: Props) {
                 </li>
               )}
             </ul>
+            <a
+              href="/methodology"
+              className="mt-4 block text-center text-sm text-accent hover:underline"
+            >
+              How we score schools
+            </a>
           </div>
         </aside>
       </div>

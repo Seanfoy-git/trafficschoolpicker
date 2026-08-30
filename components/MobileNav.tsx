@@ -8,7 +8,7 @@ import { StateSelector } from "./StateSelector";
 const LINKS = [
   { href: "/schools", label: "All Schools" },
   { href: "/reviews", label: "Reviews" },
-  { href: "/about", label: "How We Rank" },
+  { href: "/methodology", label: "How We Rank" },
   { href: "/blog", label: "Blog" },
 ];
 
