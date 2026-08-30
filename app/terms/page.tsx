@@ -110,7 +110,7 @@ export default function TermsPage() {
                 Disclaimer
               </Link>{" "}
               and{" "}
-              <Link href="/about" className="text-accent hover:underline">
+              <Link href="/methodology" className="text-accent hover:underline">
                 methodology
               </Link>
               .

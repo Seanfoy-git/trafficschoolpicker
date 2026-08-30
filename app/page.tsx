@@ -104,7 +104,7 @@ export default async function HomePage() {
               {
                 icon: BarChart3,
                 title: "Compare prices & features",
-                desc: "Sort by price, rating, and completion time to find the perfect fit.",
+                desc: "Sort by price and rating, and see each school's TSP Score, to find the perfect fit.",
               },
               {
                 icon: MousePointerClick,
@@ -162,14 +162,14 @@ export default async function HomePage() {
             Why Trust TrafficSchoolPicker?
           </h2>
           <p className="text-slate-600 leading-relaxed mb-6">
-            We independently research and review every traffic school we list.
-            Our rankings are based on price, course quality, user reviews,
-            completion time, and court acceptance rates. We may earn affiliate
-            commissions, but this never influences our rankings or
-            recommendations.
+            We independently review the schools we score. Each one gets a TSP Score
+            built from six weighted dimensions: course experience, price and
+            transparency, state coverage, certificate handling, support and
+            guarantees, and track record. We may earn affiliate commissions, but that
+            never affects a school&apos;s score or where it ranks.
           </p>
           <Link
-            href="/about"
+            href="/methodology"
             className="inline-flex items-center gap-1 text-accent font-semibold hover:underline"
           >
             Read our full methodology <ArrowRight className="w-4 h-4" />

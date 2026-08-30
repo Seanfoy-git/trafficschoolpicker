@@ -527,6 +527,30 @@ function buildStatePrices(page: PageObjectResponse): Partial<Record<string, numb
   return result;
 }
 
+// TSP Score — weighted mean of the six rubric sub-scores (Package 5). Weights per
+// the published methodology: course experience 30, price & transparency 20, state
+// coverage 15, certificate handling 15, support & guarantees 10, track record 10.
+// Returns null unless ALL six are present — that absence is the gate for whether a
+// school gets a TSP Score at all (only schools with an approved written review are
+// scored). Never hardcoded; always computed here.
+const TSP_WEIGHTS: ReadonlyArray<readonly [string, number]> = [
+  ["Score Course Experience", 0.3],
+  ["Score Price Transparency", 0.2],
+  ["Score State Coverage", 0.15],
+  ["Score Certificate Handling", 0.15],
+  ["Score Support Guarantees", 0.1],
+  ["Score Track Record", 0.1],
+];
+function computeTspScore(page: PageObjectResponse): number | null {
+  let sum = 0;
+  for (const [field, w] of TSP_WEIGHTS) {
+    const v = getNumber(page, field);
+    if (v === null) return null; // any missing sub-score → no TSP Score
+    sum += v * w;
+  }
+  return Math.round(sum * 10) / 10;
+}
+
 function mapSchool(page: PageObjectResponse): School {
   const tierRaw = getSelect(page, "Tier") ?? "";
   const tier: 1 | 2 = tierRaw === "1 - Featured" ? 1 : 2;
@@ -552,6 +576,7 @@ function mapSchool(page: PageObjectResponse): School {
     bbb: buildBBB(page),
     synthesizedGood: getText(page, "Review Highlights Good"),
     synthesizedBad: getText(page, "Review Highlights Bad"),
+    tspScore: computeTspScore(page),
     stateCodes: parseStateCodes(getText(page, "State Codes")),
     pros: parseLines(getText(page, "Pros")),
     cons: parseLines(getText(page, "Cons")),

@@ -1,11 +1,11 @@
 # TrafficSchoolPicker.com
 
-> Independent comparison site for court-approved online traffic schools across all 50 US states. We rank schools by price, reviews, and court acceptance. We do not sell courses directly — we link to approved providers.
+> Independent comparison site for online traffic school and defensive driving options across all 50 US states and DC. We score schools with our own TSP Score (six-dimension rubric; methodology at https://www.trafficschoolpicker.com/methodology) and compare price, coverage, and court acceptance. Third-party ratings are shown attributed, never restated as ours. We do not sell courses directly; we link to approved providers.
 
 ## What we cover
 
 - Price comparison of DMV-approved online traffic schools by state
-- Verified reviews aggregated from Trustpilot, Google, App Store, and BBB
+- Our independent TSP Score for each reviewed school (methodology: https://www.trafficschoolpicker.com/methodology); Trustpilot/Google/BBB figures shown attributed with an as-of date, never restated as our own rating
 - State-specific rules: course length, ticket dismissal vs masking, cooldown periods, certificate submission
 - Full directory of all DMV-licensed schools sourced from official state records (2,000+ schools across 18 states)
 - Blog guides on traffic ticket dismissal, deferred disposition, and course selection

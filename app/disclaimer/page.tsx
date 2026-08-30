@@ -105,7 +105,11 @@ export default function DisclaimerPage() {
               additional cost to you. We may have financial relationships with some
               of the schools we review. This never changes the price you pay and does
               not influence our editorial rankings, ratings, or reviews, which are
-              based on our published methodology. This disclosure is made in
+              based on our{" "}
+              <Link href="/methodology" className="text-accent hover:underline">
+                published methodology
+              </Link>
+              . This disclosure is made in
               accordance with U.S. Federal Trade Commission guidelines.
             </p>
           </div>

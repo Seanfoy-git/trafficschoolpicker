@@ -78,12 +78,6 @@ interface OfferSchema {
   url: string;
 }
 
-interface AggregateRatingSchema {
-  "@type": "AggregateRating";
-  ratingValue: string;
-  reviewCount: string;
-}
-
 interface BrandSchema {
   "@type": "Brand";
   name: string;
@@ -97,7 +91,6 @@ interface ProductSchema {
   url: string;
   brand: BrandSchema;
   offers?: OfferSchema;
-  aggregateRating?: AggregateRatingSchema;
 }
 
 interface ListItemSchema {
@@ -212,20 +205,10 @@ function buildProduct(
     };
   }
 
-  // AggregateRating — only from genuine data the page displays; both must be > 0.
-  // If either is missing the whole node is omitted (never a placeholder rating).
-  if (
-    school.rating !== null &&
-    school.rating > 0 &&
-    school.reviewCount !== null &&
-    school.reviewCount > 0
-  ) {
-    product.aggregateRating = {
-      "@type": "AggregateRating",
-      ratingValue: String(school.rating),
-      reviewCount: String(school.reviewCount),
-    };
-  }
+  // NO aggregateRating: Google's review-snippet policy forbids aggregating ratings
+  // from other sites, and our on-card ratings are Trustpilot/Google numbers we only
+  // attribute, never author. Product snippet eligibility survives via `offers`.
+  // Our own rating is the TSP Score, emitted as a critic Review on /reviews (P5).
 
   return product;
 }
@@ -272,6 +255,52 @@ export function lowestDisplayedPrice(schools: SchemaSchool[]): number | null {
     .map(({ school, resolved }) => displayedPrice(school, resolved))
     .filter((p): p is number => p !== null);
   return prices.length ? Math.min(...prices) : null;
+}
+
+// ─── Critic Review (school review pages) ────────────────────────────────────
+
+interface CriticReviewSchema {
+  "@context": "https://schema.org";
+  "@type": "Review";
+  itemReviewed: {
+    "@type": "EducationalOrganization";
+    name: string;
+    url?: string;
+    sameAs?: string;
+  };
+  author: { "@type": "Organization"; name: string; url: string };
+  reviewRating: { "@type": "Rating"; ratingValue: number; bestRating: number; worstRating: number };
+  datePublished: string;
+  reviewBody: string;
+}
+
+/**
+ * The TSP critic Review for a school's review page — emitted ONLY when the school
+ * has a TSP Score (an approved written review; scoreless schools get NO Review
+ * markup, Package 5). reviewRating is OUR score, never a borrowed Trustpilot number.
+ * author is the TrafficSchoolPicker Organization inlined (no cross-<script> @id
+ * reference). datePublished is the review's real last-verified date, not build date.
+ */
+export function buildCriticReview(opts: {
+  name: string;
+  website: string | null;
+  tspScore: number;
+  dateIso: string;
+  reviewBody: string;
+}): CriticReviewSchema {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    itemReviewed: {
+      "@type": "EducationalOrganization",
+      name: opts.name,
+      ...(opts.website ? { url: opts.website, sameAs: opts.website } : {}),
+    },
+    author: { "@type": "Organization", name: "TrafficSchoolPicker", url: SITE },
+    reviewRating: { "@type": "Rating", ratingValue: opts.tspScore, bestRating: 5, worstRating: 1 },
+    datePublished: opts.dateIso,
+    reviewBody: opts.reviewBody,
+  };
 }
 
 // ─── VideoObject (embedded state explainer videos) ──────────────────────────

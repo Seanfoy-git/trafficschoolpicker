@@ -1,5 +1,6 @@
 import { Metadata } from "next";
-import { CheckCircle, DollarSign, Star, Clock, Shield, BarChart3 } from "lucide-react";
+import Link from "next/link";
+import { CheckCircle } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "How We Rank Traffic Schools — Our Methodology",
@@ -25,52 +26,17 @@ export default function AboutPage() {
             <h2 className="text-2xl font-bold text-slate-900 mb-4">
               Our Ranking Criteria
             </h2>
-            <div className="space-y-4">
-              {[
-                {
-                  icon: DollarSign,
-                  title: "Price (25%)",
-                  desc: "We compare current prices including any promotions. Lower prices rank higher. We also consider whether the price includes the certificate or if there are hidden fees.",
-                },
-                {
-                  icon: Star,
-                  title: "User Ratings (25%)",
-                  desc: "We aggregate ratings from thousands of verified student reviews across multiple platforms. Schools with consistently high ratings rank higher.",
-                },
-                {
-                  icon: BarChart3,
-                  title: "Course Quality (20%)",
-                  desc: "Our editorial team evaluates course content for depth, accuracy, engagement, and production value. Video-based and interactive courses generally score higher.",
-                },
-                {
-                  icon: Shield,
-                  title: "Court Acceptance (15%)",
-                  desc: "We verify which courts and DMVs accept each school. Schools approved in all 50 states or with wider court acceptance rank higher.",
-                },
-                {
-                  icon: Clock,
-                  title: "Features & Experience (15%)",
-                  desc: "We evaluate mobile app availability, certificate delivery speed, customer support quality, money-back guarantees, and overall user experience.",
-                },
-              ].map((criterion) => (
-                <div
-                  key={criterion.title}
-                  className="flex gap-4 bg-slate-50 rounded-lg p-5"
-                >
-                  <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
-                    <criterion.icon className="w-5 h-5 text-accent" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-900">
-                      {criterion.title}
-                    </h3>
-                    <p className="text-sm text-slate-600 mt-1">
-                      {criterion.desc}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Every school we&apos;ve reviewed gets a <strong>TSP Score</strong>, our own
+              independent rating built from six weighted dimensions: course experience,
+              price and transparency, state coverage, certificate handling, support and
+              guarantees, and track record. See the full rubric, the weights, and exactly
+              how the score is computed on our{" "}
+              <Link href="/methodology" className="text-accent hover:underline">
+                scoring methodology
+              </Link>{" "}
+              page.
+            </p>
           </div>
 
           <div>

@@ -1,6 +1,5 @@
 import type { School, SchoolWithPrice, ResolvedSchoolContent } from "@/lib/types";
 import { MultiRating } from "./MultiRating";
-import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
 import { AffiliateButton } from "./AffiliateButton";
 import { trackerUrl } from "@/lib/affiliate";
@@ -48,11 +47,21 @@ export function SchoolCard({
             )}
           </div>
 
-          {school.ratings.length > 0 || school.bbb ? (
-            <MultiRating ratings={school.ratings} bbb={school.bbb} />
-          ) : school.rating !== null ? (
-            <RatingStars rating={school.rating} count={school.reviewCount ?? undefined} />
-          ) : null}
+          <div className="flex flex-wrap items-center gap-2">
+            {school.tspScore != null && (
+              <a
+                href="/methodology"
+                className="inline-flex items-baseline gap-1 bg-accent/10 text-accent rounded px-2 py-0.5 text-sm font-bold hover:bg-accent/20 transition-colors"
+                title="How we score — our independent TSP Score"
+              >
+                TSP {school.tspScore.toFixed(1)}
+                <span className="text-[10px] font-normal">/5</span>
+              </a>
+            )}
+            {(school.ratings.length > 0 || school.bbb) && (
+              <MultiRating ratings={school.ratings} bbb={school.bbb} />
+            )}
+          </div>
 
           {resolved.oneLiner && (
             <div className="mt-3">

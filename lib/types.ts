@@ -88,6 +88,11 @@ export type School = {
   bbb: BBBRating | null;
   synthesizedGood: string;
   synthesizedBad: string;
+  // TSP Score — our independent six-dimension rubric score (Package 5), the ONLY
+  // rating we present as ours. Computed (weighted mean of the six sub-scores, one
+  // decimal); null unless all six sub-scores are set — i.e. the school has an
+  // approved written review. Trustpilot/Google numbers are attributed only, never ours.
+  tspScore: number | null;
   // Content
   stateCodes: string[];          // ["CA","TX","FL"] or ["all"]
   pros: string[];
