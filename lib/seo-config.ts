@@ -74,7 +74,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   washington: {
     title: "Washington Traffic Tickets & Deferred Findings (2026)",
-    description: "Washington keeps no point system. The one way to clear a ticket is a court-granted deferred finding: pay in full and finish an online class, once every 7 years. Here's how it works.",
+    description: "Washington keeps no point system. A ticket can be cleared through a court-granted deferred finding, once every 7 years; the court sets the conditions, which many courts satisfy with a traffic safety course. Here's how it works.",
     h1: "Washington Traffic Tickets & Deferred Findings (2026)",
     primaryKeyword: "Washington deferred finding traffic ticket",
     canonicalPath: "/washington",
