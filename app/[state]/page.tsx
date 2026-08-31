@@ -403,13 +403,13 @@ export default async function StatePage({ params }: Props) {
             <Info className="w-5 h-5 text-slate-500 mt-0.5 shrink-0" />
             <div>
               <p className="font-semibold text-slate-700">
-                Handled through the court, not a retail online course
+                Handled through an official program, not a retail online course
               </p>
               <p className="text-sm text-slate-600">
                 There is no self-serve online course that resolves a {stateMeta.name}{" "}
-                ticket on its own. Relief runs through a court program set by the court
-                on your citation — contact that court about your options before paying
-                for any course.
+                ticket on its own. Any required course runs through an official program,
+                set by the court on your citation or your state licensing agency, so
+                contact them about your options before paying for any course.
               </p>
             </div>
           </div>

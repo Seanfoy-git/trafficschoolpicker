@@ -490,7 +490,11 @@ function buildPlatformRatings(page: PageObjectResponse): import("./types").Platf
 function buildBBB(page: PageObjectResponse): import("./types").BBBRating | null {
   const grade = getSelect(page, "BBB Grade");
   if (!grade || grade === "NR") return null;
-  return { grade, url: getText(page, "BBB URL") || null };
+  return {
+    grade,
+    url: getText(page, "BBB URL") || null,
+    label: getText(page, "BBB Note") || null,
+  };
 }
 
 // Read state-specific fields like "Pros CA", "Pros TX", "Cons GA" etc.
