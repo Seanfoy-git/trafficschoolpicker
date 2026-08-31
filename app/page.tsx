@@ -164,7 +164,7 @@ export default async function HomePage() {
           <p className="text-slate-600 leading-relaxed mb-6">
             We independently review the schools we score. Each one gets a TSP Score
             built from six weighted dimensions: course experience, price and
-            transparency, state coverage, certificate handling, support and
+            transparency, state fit, certificate handling, support and
             guarantees, and track record. We may earn affiliate commissions, but that
             never affects a school&apos;s score or where it ranks.
           </p>

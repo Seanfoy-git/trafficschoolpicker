@@ -1,5 +1,14 @@
 import { Metadata } from "next";
 import { CheckCircle, BookOpen, DollarSign, Map, FileCheck, LifeBuoy, History } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+type Dimension = {
+  icon: LucideIcon;
+  title: string;
+  weight: number;
+  desc: string;
+  bands?: string[];
+};
 
 export const metadata: Metadata = {
   title: "How We Score Traffic Schools — The TSP Score Methodology",
@@ -8,7 +17,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://www.trafficschoolpicker.com/methodology" },
 };
 
-const DIMENSIONS = [
+const DIMENSIONS: Dimension[] = [
   {
     icon: BookOpen,
     title: "Course experience",
@@ -23,9 +32,16 @@ const DIMENSIONS = [
   },
   {
     icon: Map,
-    title: "State coverage",
+    title: "State fit",
     weight: 15,
-    desc: "How many states the school is approved in, and how well its course maps to each state's actual requirement rather than a generic national course.",
+    desc: "How well the course serves your state: whether the content is genuinely built for the state's program rather than a generic national course, and whether completing it actually earns the state's real benefit (dismissal, point credit, or discount) where the school sells it.",
+    bands: [
+      "5.0 — Holds its own state license or approval and the course is built for that state's program; qualifies for the benefit everywhere it's sold.",
+      "4.0–4.5 — State-specific versions per state (correct hours, correct program framing, state-labeled courses); qualifies where sold, with at most minor generic patches.",
+      "3.0–3.5 — Broadly generic course adapted per state; qualifies in most states sold, with known mismatches or unverifiable qualification in some.",
+      "2.0–2.5 — Substantially generic, or sold in states where it does not earn the state's benefit.",
+      "1.0 — Marketed in states where it cannot deliver the promised benefit.",
+    ],
   },
   {
     icon: FileCheck,
@@ -44,6 +60,13 @@ const DIMENSIONS = [
     title: "Track record",
     weight: 10,
     desc: "How long the school has operated, its standing with regulators and accreditation bodies, and the overall pattern of its verifiable public reputation.",
+    bands: [
+      "5 = 20+ years operating with a large, verifiable public record",
+      "4 = 10–20 years or a strong verifiable record",
+      "3.5 = around 10 years or a modest verifiable record",
+      "3 = established but thin public record",
+      "2 = short history or no verifiable record",
+    ],
   },
 ];
 
@@ -78,6 +101,15 @@ export default function MethodologyPage() {
                   {d.title} <span className="text-accent">({d.weight}%)</span>
                 </h3>
                 <p className="text-sm text-slate-600 mt-1">{d.desc}</p>
+                {d.bands && (
+                  <ul className="mt-3 space-y-1.5 border-t border-slate-200 pt-3">
+                    {d.bands.map((b) => (
+                      <li key={b} className="text-sm text-slate-500 leading-snug">
+                        {b}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
           ))}
@@ -114,6 +146,16 @@ export default function MethodologyPage() {
           it. Until then, its page shows the facts and any attributed third-party ratings,
           but no score of ours. We would rather show no score than a number we cannot stand
           behind.
+        </p>
+
+        <h2 className="text-2xl font-bold text-slate-900 mb-3 mt-10">Changelog</h2>
+        <p className="text-slate-600 leading-relaxed">
+          <strong>Updated August 2026:</strong> the State coverage dimension is now State
+          fit. Coverage rewarded how many states a school sells in, which tells you nothing
+          about the course you&apos;ll take in yours. State fit scores what does: whether the
+          course is genuinely built for your state&apos;s program, and whether it earns your
+          state&apos;s actual benefit where it&apos;s sold. Same 15% weight. Scores were
+          re-derived under the new definition on this date.
         </p>
       </div>
     </section>
