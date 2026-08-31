@@ -41,6 +41,10 @@ const bbbGradeColors: Record<string, string> = {
 
 function BBBBadge({ bbb }: { bbb: BBBRating }) {
   const colorClass = bbbGradeColors[bbb.grade] ?? "bg-slate-100 text-slate-700";
+  // When the BBB profile is filed under a parent/operator name, surface it as a
+  // tooltip + accessible label so the grade is never silently misattributed.
+  const title = bbb.label ?? undefined;
+  const ariaLabel = bbb.label ? `BBB ${bbb.grade}. ${bbb.label}` : undefined;
   const inner = (
     <span
       className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg ${colorClass} text-sm font-semibold`}
@@ -52,12 +56,19 @@ function BBBBadge({ bbb }: { bbb: BBBRating }) {
 
   if (bbb.url) {
     return (
-      <a href={bbb.url} target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
+      <a
+        href={bbb.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:opacity-80 transition-opacity"
+        title={title}
+        aria-label={ariaLabel}
+      >
         {inner}
       </a>
     );
   }
-  return inner;
+  return title ? <span title={title} aria-label={ariaLabel}>{inner}</span> : inner;
 }
 
 export function MultiRating({
@@ -102,6 +113,10 @@ export function MultiRating({
         </a>
       ))}
       {bbb && <BBBBadge bbb={bbb} />}
+      {/* Visible attribution when the BBB profile sits under a parent/operator name. */}
+      {bbb?.label && (
+        <p className="w-full text-xs text-slate-400">{bbb.label}</p>
+      )}
     </div>
   );
 }
@@ -131,7 +146,11 @@ export function MultiRatingCompact({
         </div>
       ))}
       {bbb && (
-        <div className="flex items-center gap-1 text-xs">
+        <div
+          className="flex items-center gap-1 text-xs"
+          title={bbb.label ?? undefined}
+          aria-label={bbb.label ? `BBB ${bbb.grade}. ${bbb.label}` : undefined}
+        >
           <Shield className="w-3 h-3 text-slate-500" />
           <span className="font-semibold text-slate-800">BBB {bbb.grade}</span>
         </div>

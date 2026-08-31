@@ -95,7 +95,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   nevada: {
     title: "Best Online Traffic School Nevada (2026)",
-    description: "Compare Nevada DMV-approved online traffic schools. Mask your ticket and protect your insurance rate. Lowest prices.",
+    description: "Compare Nevada DMV-approved traffic safety schools. Remove 3 demerit points from your record. Lowest prices and verified reviews.",
     h1: "The Best Online Traffic Schools in Nevada (2026)",
     primaryKeyword: "Nevada traffic school online",
     canonicalPath: "/nevada",
@@ -109,14 +109,14 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   missouri: {
     title: "Best Online Driver Improvement Missouri (2026)",
-    description: "Compare Missouri-approved online Driver Improvement Program courses. Reduce points on your record. Lowest prices.",
+    description: "Compare Missouri-approved online Driver Improvement Program courses. Reduce points with court approval, once every 3 years. Lowest prices.",
     h1: "The Best Online Driver Improvement Programs in Missouri (2026)",
     primaryKeyword: "Missouri driver improvement online",
     canonicalPath: "/missouri",
   },
   tennessee: {
     title: "Best Online Traffic School Tennessee (2026)",
-    description: "Compare Tennessee-approved online traffic school courses. Keep your ticket off your public record. Lowest prices.",
+    description: "Compare Tennessee-approved online traffic school courses. Remove points from your record, once every 4 years. Lowest prices.",
     h1: "The Best Online Traffic Schools in Tennessee (2026)",
     primaryKeyword: "Tennessee traffic school online",
     canonicalPath: "/tennessee",
@@ -165,7 +165,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   mississippi: {
     title: "Best Online Defensive Driving Mississippi (2026)",
-    description: "Compare Mississippi-approved online defensive driving courses. Dismiss your ticket if ticket-free for 3 years. Lowest prices.",
+    description: "Compare Mississippi-approved online defensive driving courses. Keep the conviction off your record via nonadjudication, once every 3 years. Lowest prices.",
     h1: "The Best Online Defensive Driving Courses in Mississippi (2026)",
     primaryKeyword: "Mississippi defensive driving online",
     canonicalPath: "/mississippi",
@@ -255,10 +255,10 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
     canonicalPath: "/maine",
   },
   maryland: {
-    title: "Best Online Driver Improvement Maryland (2026)",
-    description: "Compare Maryland MVA-approved online driver improvement courses. Reduce points on your record. Lowest prices.",
-    h1: "The Best Online Driver Improvement Courses in Maryland (2026)",
-    primaryKeyword: "Maryland driver improvement online",
+    title: "Maryland Traffic Tickets & Driver Improvement (2026)",
+    description: "Maryland has no voluntary course that dismisses a ticket or removes points. The MVA Driver Improvement Program is assigned/remedial. Here's what actually applies.",
+    h1: "Maryland Traffic Tickets & Driver Improvement (2026)",
+    primaryKeyword: "Maryland driver improvement program",
     canonicalPath: "/maryland",
   },
   massachusetts: {
@@ -318,10 +318,10 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
     canonicalPath: "/oregon",
   },
   pennsylvania: {
-    title: "Best Online Defensive Driving Pennsylvania (2026)",
-    description: "Compare Pennsylvania PennDOT-approved defensive driving courses. Reduce points and earn an insurance discount.",
-    h1: "The Best Online Defensive Driving Courses in Pennsylvania (2026)",
-    primaryKeyword: "Pennsylvania defensive driving online",
+    title: "Pennsylvania Traffic Tickets & Driver Improvement (2026)",
+    description: "Pennsylvania has no voluntary course that dismisses a ticket or removes points. PennDOT assigns a mandatory Driver Improvement School at 6+ points. Here's what to know.",
+    h1: "Pennsylvania Traffic Tickets & Driver Improvement (2026)",
+    primaryKeyword: "Pennsylvania driver improvement school",
     canonicalPath: "/pennsylvania",
   },
   "rhode-island": {
@@ -332,10 +332,10 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
     canonicalPath: "/rhode-island",
   },
   "south-carolina": {
-    title: "Best Online Defensive Driving South Carolina (2026)",
-    description: "Compare South Carolina DMV-approved online defensive driving courses. Dismiss your ticket. Lowest prices.",
-    h1: "The Best Online Defensive Driving Courses in South Carolina (2026)",
-    primaryKeyword: "South Carolina defensive driving online",
+    title: "South Carolina Traffic Tickets & Point Reduction (2026)",
+    description: "South Carolina removes 4 points only for the National Safety Council 8-hour course, in a classroom or NSC virtual, not general online courses. Here's what actually qualifies.",
+    h1: "South Carolina Traffic Tickets & Point Reduction (2026)",
+    primaryKeyword: "South Carolina point reduction course",
     canonicalPath: "/south-carolina",
   },
   "south-dakota": {
