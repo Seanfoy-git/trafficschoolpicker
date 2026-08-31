@@ -49,9 +49,11 @@ export function StateKeyFacts({
         ? "Insurance discount only"
         : status === "Online — court discretion"
           ? "Yes — but court acceptance varies"
-          : status === "In-person only"
-            ? "In-person only"
-            : null; // Court program only / Unknown → omit
+          : status === "Online — point reduction"
+            ? "Yes — for point reduction"
+            : status === "In-person only"
+              ? "In-person only"
+              : null; // Court program only / Unknown → omit
   if (available) facts.push({ label: "Online course available", value: available });
 
   // Ticket dismissal — only where the answer is unambiguous for an online summary.
@@ -62,7 +64,9 @@ export function StateKeyFacts({
       ? "Yes"
       : status === "Online — insurance discount only"
         ? "No — insurance discount only"
-        : null; // court discretion / court program / in-person / unknown → omit
+        : status === "Online — point reduction"
+          ? "No — reduces points, not a dismissal"
+          : null; // court discretion / court program / in-person / unknown → omit
   if (dismissal) facts.push({ label: "Ticket dismissal", value: dismissal });
 
   // Course length is a state-level fact and renders only when sourced (courseHours

@@ -144,7 +144,8 @@ export default async function StatePage({ params }: Props) {
   const onlineComparisonStatus =
     onlineStatus === "Online — ticket dismissal" ||
     onlineStatus === "Online — insurance discount only" ||
-    onlineStatus === "Online — court discretion";
+    onlineStatus === "Online — court discretion" ||
+    onlineStatus === "Online — point reduction";
   const h1 =
     seo?.h1 ??
     (onlineComparisonStatus
@@ -160,7 +161,8 @@ export default async function StatePage({ params }: Props) {
     !noPartnerOffer &&
     (onlineStatus === "Online — ticket dismissal" ||
       onlineStatus === "Online — insurance discount only" ||
-      onlineStatus === "Online — court discretion") &&
+      onlineStatus === "Online — court discretion" ||
+      onlineStatus === "Online — point reduction") &&
     tier1.length > 0;
 
   // Resolve each tier-1 school's per-state content once and share it between the
@@ -366,6 +368,26 @@ export default async function StatePage({ params }: Props) {
                 An approved online course can count toward a diversion or dismissal
                 agreement where the court accepts it, so confirm with that court before
                 you enroll.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* POINT-REDUCTION states: a real online course reduces/credits points but does
+          NOT dismiss the ticket. Cards render; the benefit is a point credit, not a
+          dismissal. Per-school benefit eligibility is refined by Qualifies-For-Benefit. */}
+      {onlineStatus === "Online — point reduction" && (
+        <section className="py-6 bg-slate-50 border-b border-slate-200">
+          <div className="max-w-5xl mx-auto px-4 flex items-start gap-3">
+            <Info className="w-5 h-5 text-slate-500 mt-0.5 shrink-0" />
+            <div>
+              <p className="font-semibold text-slate-700">Reduces points, not a dismissal</p>
+              <p className="text-sm text-slate-600">
+                In {stateMeta.name}, completing an approved course reduces or credits
+                points on your driving record. It does not dismiss the ticket, and the
+                conviction still stands. Confirm the course you pick is state-approved
+                for the point credit before you enroll.
               </p>
             </div>
           </div>

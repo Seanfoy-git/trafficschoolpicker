@@ -220,6 +220,7 @@ function deriveOnlineStatus(
   //    runs through a court program (IL court supervision, KY State Traffic School).
   //    No cards — the national online courses don't satisfy that process.
   if (onlineModel === "Court discretion") return "Online — court discretion";
+  if (onlineModel === "Point reduction") return "Online — point reduction";
   if (onlineModel === "Court program only") return "Court program only";
   if (onlineAllowed && dismissesTicket) return "Online — ticket dismissal";
   if (onlineAllowed && insuranceDiscount) return "Online — insurance discount only";
