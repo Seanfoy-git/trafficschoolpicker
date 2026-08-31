@@ -20,6 +20,7 @@ export type OnlineStatus =
   | 'Online — ticket dismissal'
   | 'Online — insurance discount only'
   | 'Online — court discretion'   // online courses exist, but acceptance is decided court-by-court (no statewide program) — e.g. KS, WY
+  | 'Online — point reduction'    // a real online course reduces/credits points but does NOT dismiss the ticket — e.g. DC, DE, IN, NE
   | 'Court program only'          // no self-serve online course resolves a ticket; relief runs through a court program — e.g. IL supervision, KY State Traffic School
   | 'In-person only'
   | 'Unknown';
