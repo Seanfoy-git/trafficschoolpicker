@@ -12,6 +12,10 @@ export type PlatformRating = {
 export type BBBRating = {
   grade: string;  // "A+", "A", "B+", etc. or "NR"
   url: string | null;
+  // Attribution note for when the BBB profile is filed under a parent/operator name
+  // rather than the brand (e.g. TicketSchool's profile is "Driver Training Associates,
+  // Inc."). Null when the profile matches the brand. Read from the "BBB Note" field.
+  label: string | null;
 };
 
 // ─── States DB ──────────────────────────────────────────────
