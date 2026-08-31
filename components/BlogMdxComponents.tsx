@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { MDXComponents } from "mdx/types";
+import { TicketCostTable } from "@/components/TicketCostTable";
 
 function QuickAnswer({ children }: { children: React.ReactNode }) {
   return (
@@ -20,6 +21,7 @@ function QuickAnswer({ children }: { children: React.ReactNode }) {
 
 export const BlogMdxComponents: MDXComponents = {
   QuickAnswer,
+  TicketCostTable,
 
   a: ({ href, children }) => {
     const isInternal = href?.startsWith("/");

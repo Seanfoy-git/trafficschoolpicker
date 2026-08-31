@@ -16,6 +16,7 @@ import { writeFileSync } from "fs";
 import { join } from "path";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { STATE_LIST } from "../lib/state-utils";
+import { ticketCostFor, formatCost, TICKET_COST_STUDY } from "../lib/ticket-cost-study";
 // Type-only imports are erased at compile time, so they don't trigger lib/notion's
 // module-load (its Client reads the token then). The runtime helpers are pulled in
 // via dynamic import inside main(), AFTER config() has loaded .env.local.
@@ -74,7 +75,22 @@ function sanitizeSources(raw: string): string {
   return out.filter((s) => { const k = s.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; }).join(" | ");
 }
 
-type StateContent = { intro: string; faqs: { q: string; a: string }[] };
+type StateContent = {
+  intro: string;
+  faqs: { q: string; a: string }[];
+  source: string; // public cite: Program Source, else Hours Source ("" if none)
+  lastVerified: string | null; // "Month YYYY", from States DB Last Verified
+};
+
+/** Read a Notion date property's start as "Month YYYY" (UTC), or null. */
+function verifiedMonth(p: PageObjectResponse, prop: string): string | null {
+  const v = p.properties?.[prop];
+  const iso = v && v.type === "date" ? v.date?.start : null;
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toLocaleDateString("en-US", { year: "numeric", month: "long", timeZone: "UTC" });
+}
 
 function writeOut(body: string) {
   writeFileSync(join(process.cwd(), "public", "llms-full.txt"), body);
@@ -192,7 +208,9 @@ async function main() {
           /* malformed JSON — skip FAQs for this state, keep the intro */
         }
       }
-      byCode[code] = { intro, faqs };
+      const source =
+        fullText(p, "Program Source").trim() || fullText(p, "Hours Source").trim();
+      byCode[code] = { intro, faqs, source, lastVerified: verifiedMonth(p, "Last Verified") };
     }
     cursor = res.next_cursor ?? undefined;
   } while (cursor);
@@ -219,6 +237,24 @@ async function main() {
     lines.push("");
     if (content.intro) {
       lines.push(content.intro);
+      lines.push("");
+    }
+    // Provenance: the public cite the state's model is built on, its last-verified
+    // month, and the canonical all-in ticket cost (published states only) — the same
+    // figure the state page and study blog show, from lib/ticket-cost-study.ts.
+    const cost = ticketCostFor(s.code);
+    if (content.source) {
+      lines.push(`**Source:** ${content.source}`);
+      lines.push("");
+    }
+    if (content.lastVerified) {
+      lines.push(`**Last verified:** ${content.lastVerified}`);
+      lines.push("");
+    }
+    if (cost?.allInCost) {
+      lines.push(
+        `**Estimated all-in cost of a first speeding ticket:** ${formatCost(cost.allInCost)} (fine plus a three-year insurance surcharge; 2026 study at ${BASE_URL}/blog/${TICKET_COST_STUDY.slug})`
+      );
       lines.push("");
     }
     for (const faq of content.faqs) {

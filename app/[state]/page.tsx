@@ -13,7 +13,7 @@ import {
 } from "@/lib/notion";
 import { buildComparisonItemList, buildVideoObject, buildBreadcrumbList, lowestDisplayedPrice, type VideoEntry } from "@/lib/structured-data";
 import { STATE_SEO } from "@/lib/seo-config";
-import { getStateFAQs } from "@/lib/state-faqs";
+import { ticketCostFor, formatCost } from "@/lib/ticket-cost-study";
 import { getNotionStateFaqs } from "@/lib/notion-faqs";
 import { getStateBySlug, getAllStateSlugs } from "@/lib/state-utils";
 import { SchoolCard } from "@/components/SchoolCard";
@@ -124,15 +124,16 @@ export default async function StatePage({ params }: Props) {
     getQuestionsForState(stateSlug),
   ]);
 
-  // FAQ source priority: per-state JSON on the States DB (richest, state-specific)
-  // → standalone Notion FAQ DB (legacy) → hardcoded static fallback (generic).
-  // Falling all the way to static keeps the page from breaking on a fresh state.
+  // ONE FAQ set per state, always derived from the state's own program model:
+  // per-state JSON on the States DB (richest, state-specific) → standalone Notion
+  // FAQ DB (legacy). No generic static fallback — a hand-written "in most states a
+  // course dismisses your ticket" set would contradict the point-reduction /
+  // court-discretion states, so a state with neither source simply shows no FAQ
+  // (FaqSection renders nothing on an empty set) rather than a false generic one.
   const faqs =
     stateInfo?.stateFaq?.length
       ? stateInfo.stateFaq.map((f) => ({ question: f.q, answer: f.a }))
-      : notionFaqs.length > 0
-        ? notionFaqs
-        : getStateFAQs(stateMeta.code).map((f) => ({ question: f.question, answer: f.answer }));
+      : notionFaqs;
 
   const seo = STATE_SEO[stateSlug];
   const onlineStatus = stateInfo?.onlineStatus ?? "Unknown";
@@ -157,6 +158,10 @@ export default async function StatePage({ params }: Props) {
   // noPartnerOffer suppresses it even where the program exists (we list no offer):
   // the driver is pointed at the official approved-school list + directory instead.
   const noPartnerOffer = stateInfo?.noPartnerOffer ?? false;
+  // Canonical ticket-cost figure (published states only) — the exact same number
+  // the study blog and llms show, read from the single source. Null where the
+  // study publishes no per-state figure; we never invent one.
+  const ticketCost = ticketCostFor(stateMeta.code);
   const showComparison =
     !noPartnerOffer &&
     (onlineStatus === "Online — ticket dismissal" ||
@@ -233,14 +238,18 @@ export default async function StatePage({ params }: Props) {
                 : h1}
             </h1>
           </div>
-          {onlineStatus === "Online — ticket dismissal" && !noPartnerOffer && schools.length > 0 && (
+          {/* Counts are computed from what the page actually renders: tier-1 cards in
+              the grid (showComparison already accounts for noPartnerOffer + status),
+              plus real DMV-directory rows. Never the raw pricing set, which includes
+              tier-2 schools the grid doesn't show. */}
+          {showComparison && (
             <p className="text-lg text-slate-300 max-w-3xl">
-              Comparing {schools.length} reviewed option
-              {schools.length !== 1 ? "s" : ""}
-              {directory.length > 0 && <> from {schools.length + directory.length} {stateMeta.name}-approved online schools</>}
+              Comparing {tier1.length} reviewed option
+              {tier1.length !== 1 ? "s" : ""}
+              {directory.length > 0 && <> from {tier1.length + directory.length} {stateMeta.name}-approved online schools</>}
             </p>
           )}
-          {onlineStatus === "Online — insurance discount only" && (
+          {!showComparison && onlineStatus === "Online — insurance discount only" && (
             <p className="text-lg text-slate-300 max-w-3xl">
               Online courses in {stateMeta.name} are for insurance discounts, not ticket dismissal
             </p>
@@ -284,15 +293,36 @@ export default async function StatePage({ params }: Props) {
       {/* TRUE COST OF A TICKET — state-specific explainer on the real financial
           impact (fine + insurance hike + surcharges), between the intro lead-in
           and the school comparison. Renders only when the field is populated. */}
-      {stateInfo?.trueCostOfATicket && (
+      {(stateInfo?.trueCostOfATicket || ticketCost?.allInCost) && (
         <section className="py-8 bg-white border-b border-slate-100">
           <div className="max-w-3xl mx-auto px-4">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">
               The True Cost of a Ticket in {stateMeta.name}
             </h2>
-            <p className="text-base md:text-lg text-slate-700 leading-relaxed whitespace-pre-line">
-              {stateInfo.trueCostOfATicket}
-            </p>
+            {/* Canonical study figure — identical to the blog study and llms
+                (lib/ticket-cost-study.ts). Shown only for published states. */}
+            {ticketCost?.allInCost && (
+              <div className="mb-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-lg bg-slate-50 border border-slate-200 px-5 py-4">
+                <span className="text-3xl font-bold text-primary tabular-nums">
+                  {formatCost(ticketCost.allInCost)}
+                </span>
+                <span className="text-sm text-slate-600">
+                  estimated all-in cost of a first speeding ticket in {stateMeta.name}
+                  {" "}(fine plus a three-year insurance surcharge).
+                  {ticketCost.netSavings ? (
+                    <> A state-approved course can avoid about {formatCost(ticketCost.netSavings)} of it.</>
+                  ) : null}{" "}
+                  <a href="/blog/true-cost-of-a-traffic-ticket" className="text-accent hover:underline">
+                    See the 2026 study.
+                  </a>
+                </span>
+              </div>
+            )}
+            {stateInfo?.trueCostOfATicket && (
+              <p className="text-base md:text-lg text-slate-700 leading-relaxed whitespace-pre-line">
+                {stateInfo.trueCostOfATicket}
+              </p>
+            )}
           </div>
         </section>
       )}
