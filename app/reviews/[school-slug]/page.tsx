@@ -79,7 +79,7 @@ export default async function ReviewPage({ params }: Props) {
           website: school.website || null,
           tspScore: school.tspScore,
           dateIso: school.lastVerified ?? "2026-08-20",
-          reviewBody: `${school.name} earns a TSP Score of ${school.tspScore.toFixed(1)} out of 5 in our independent review, weighing course experience, price and transparency, state coverage, certificate handling, support and guarantees, and track record.`,
+          reviewBody: `${school.name} earns a TSP Score of ${school.tspScore.toFixed(1)} out of 5 in our independent review, weighing course experience, price and transparency, state fit, certificate handling, support and guarantees, and track record.`,
         })
       : null;
 

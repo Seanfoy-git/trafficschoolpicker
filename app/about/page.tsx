@@ -29,7 +29,7 @@ export default function AboutPage() {
             <p className="text-slate-600 leading-relaxed">
               Every school we&apos;ve reviewed gets a <strong>TSP Score</strong>, our own
               independent rating built from six weighted dimensions: course experience,
-              price and transparency, state coverage, certificate handling, support and
+              price and transparency, state fit, certificate handling, support and
               guarantees, and track record. See the full rubric, the weights, and exactly
               how the score is computed on our{" "}
               <Link href="/methodology" className="text-accent hover:underline">
