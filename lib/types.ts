@@ -58,6 +58,14 @@ export type StateInfo = {
   // court-approved"). Set where "court-approved" is wrong (e.g. NY PIRP is a DMV
   // program, not court-administered → "DMV-approved (PIRP)").
   approvalLabel: string | null;
+  // P10: the Key Facts "Ticket dismissal" row renders this verbatim when set, so a
+  // masking / withheld-adjudication / court-by-court state names its real mechanism
+  // instead of a bare Yes/No. Null → derive the phrase from onlineStatus.
+  dismissalAnswer: string | null;
+  // P10: which authority actually administers the benefit (Court/DMV/BMV/MVA/DPS/
+  // insurer/None). Drives the eligibility banner's "check with ..." target so we
+  // never send a reader to a court that has no role (NY/MN). Null → generic.
+  administeringBody: string | null;
   // True when the state has a real program but we list no partner offer: suppress
   // the comparison grid and point drivers at the official approved-school list +
   // the directory below (e.g. Arizona DDS).
