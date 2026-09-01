@@ -72,3 +72,56 @@ All URLs resolved and supported the claim; nothing was unpinnable.
 
 ## Flag
 - No corrected state so far had its last Key Facts row stripped by an omission (NM/OR/OK still render availability + dismissal(Court-by-court) + eligibility rows).
+
+---
+
+## 2026-09-01 — Task 6 guard SHIPPED (autonomous continuation)
+
+**Note on authority:** the standalone brief file `cc-brief-p10-keyfacts-2026-09` is
+NOT in the repo — only this progress doc + `research/hours-to-verify.md`. Task 2 is
+therefore run against hours-to-verify.md (its primary-source research basis) plus
+first-party source verification per docs/content-standards.md, with omitted-beats-
+guessed applied. Deletion-class fixes (overstated "Yes" -> court-by-court) are
+corroborated by each state's *own already-correct FAQ prose* + hours-to-verify.md.
+
+**Built `scripts/verify-page-contradictions.ts`** and wired it into `postbuild`
+(after verify-no-internal-leaks). It reads each built state page's Key Facts `<dl>`
++ FAQPage JSON-LD and fails the build on: (a) dismissal polarity double-answer
+(Key Facts value vs the answers to *dismissal questions* only — an "erase" or
+"can I take it online" answer is a different question and never counts; a
+"Court-by-court" Key Facts value is neutral); (b) a "how long" answer whose hour
+value differs from Key Facts course length, outside a labeled secondary program;
+(c) Key Facts eligibility frequency window vs a different FAQ window; (d) Key Facts
+submitter vs the opposite party in the FAQ (a page that names *both* parties =
+court-dependent nuance, passes; a downstream "court reports to DMV" is not a
+submitter answer). Plus greps the two P13 join signatures.
+
+**Calibration mattered:** naive matching over the whole page gave 30 findings, ~half
+false positives (CA "masks not erases", NJ multi-benefit windows, OK "within 24
+hours" deadline read as course length, LA "provider … and submit it yourself" read
+as school-submits). Tuned to the four structured surfaces above -> **zero false
+positives**, 13 real findings. **Proven:** planted `Ticket dismissal: Yes` onto
+Kansas (FAQ says no-statewide) -> guard exits 1 with the right message; clean
+fixture passes; plant removed.
+
+**The 13 findings = the live Task 2/3 worklist** (stale local build, so LA/NM here
+are pre-deploy artifacts that a fresh build clears):
+- **Genuine 2a (overstated dismissal -> court-by-court):** colorado, hawaii, iowa,
+  montana, north-dakota. (KF "Yes" vs each page's own FAQ "no statewide / court
+  discretion".)
+- **Genuine 2b:** michigan (KF "Yes" but point-reduction BDIC; phantom 8-hr
+  "Driver Improvement Program" vs BDIC 4-hr; KF "Driver Submits" but provider
+  notifies SOS -> should be School Submits); wisconsin (KF "Yes" but court-by-court);
+  virginia (eligibility 24mo vs FAQ 12mo).
+- **Task 3 wording (monetized, keep product story):** georgia — FAQ "Georgia
+  defensive driving … does not dismiss" (about the DDS classroom point-reduction)
+  reads as contradicting KF "Yes" (the online court-dismissal courses). Align the
+  FAQ wording to the existing amber callout; do NOT change GA's product story.
+- **Stale-build artifacts (already reconciled in Notion, redeploy clears):**
+  louisiana, new-mexico.
+
+**Deploy-gating reordering:** because the guard is now in `postbuild`, a Vercel
+deploy fails until these are cleared. So the "deploy after each batch" cadence
+becomes "clear the guard, then deploy green" — safer given Sean's records-ahead-of-
+prose concern. Guard commit is on main but **push is held until the build is
+guard-green** (else main's HEAD deploy would red-fail on the 13 known contradictions).
