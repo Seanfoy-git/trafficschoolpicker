@@ -8,11 +8,12 @@ Handoff insurance for continuing P10 in a fresh session. Read this + the P10 bri
 - **Task 2c + NM pins (the approved 6-agent fan-out): DONE — records written to Notion, NOT yet deployed.**
 - **Everything else: NOT STARTED** — Task 6 guard, Task 2a/2b/2d batches, prose/FAQ/meta alignment, Task 1 finish (banner authority + meta generator), Task 4 card gating, Task 5 regeneration.
 
-## IMPORTANT: Notion is ahead of the deployed site
+## State of play (updated)
 
-The six pin corrections below are written to the States DB but the site still serves the pre-P10 prose for them. Their **record + Court Notes + Eligibility** were corrected (drives the first screen), but their **Intro / FAQ / meta prose was NOT yet aligned**. So a build right now would ship corrected Key Facts against stale FAQ/Intro text = a fresh contradiction.
+- The **six pin states (LA/OK/OR/TX/VA/NM) are now FULLY reconciled** end-to-end: record + Eligibility + Court Notes + Intro + FAQ + meta all aligned to the corrected framing. A build (commit d779129) is deploying them consistently. This happened because pushing this very note triggered a build with Notion ahead of prose (exactly the risk Sean warned about) — caught and closed manually. LA was the worst: old prose had court-by-court (vs statewide statutory), a submitter double-answer, and a length double-answer; all fixed.
+- **Every OTHER state's prose is still un-audited.** So the "new Key Facts vs old FAQ" risk is live for all Task 2a/2b/2d states the moment their records change.
 
-**=> Build the Task 6 contradiction guard BEFORE any Task 2a batch or deploy** (Sean's reorder). The guard turns "new Key Facts vs old FAQ" from a silent regression into a failed deploy.
+**=> Build the Task 6 contradiction guard BEFORE any Task 2a batch** (Sean's reorder). The guard turns "new Key Facts vs old FAQ" from a silent regression into a failed deploy. The manual LA scramble above is the proof of why.
 
 ## Phase 1 — what shipped (live on prod)
 
