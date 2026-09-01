@@ -20,8 +20,12 @@ import type {
 } from "./types";
 import { pickCanonicalRow } from "./state-canonical";
 import { STATE_LIST, type StateMeta } from "./state-utils";
+import { retryingFetch } from "./notion-retry-fetch";
 
-const notion = new Client({ auth: process.env.NOTION_TOKEN });
+// 429-aware retrying fetch: a full build fetches every DB in a burst, and the
+// SDK's small 429 budget gets exhausted under sustained rate-limiting, failing
+// the build. retryingFetch waits the limit out instead. See lib/notion-retry-fetch.
+const notion = new Client({ auth: process.env.NOTION_TOKEN, fetch: retryingFetch });
 
 const SCHOOLS_DB = process.env.NOTION_SCHOOLS_DB;
 const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB;

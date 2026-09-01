@@ -1,4 +1,5 @@
 import { Client } from "@notionhq/client";
+import { retryingFetch as retrying429Fetch } from "../../lib/notion-retry-fetch";
 
 /**
  * Notion client factory with transient-network-error retry.
@@ -67,7 +68,9 @@ export const retryingFetch: typeof fetch = async (url, init) => {
   throw lastErr;
 };
 
-/** Notion Client that transparently retries transient network failures. */
+/** Notion Client that transparently retries transient network failures AND 429
+ *  rate limits (the shared retryingFetch adds Retry-After-aware 429 backoff, so
+ *  prebuild guards + the llms generator survive a saturated token). */
 export function makeNotionClient(): Client {
-  return new Client({ auth: process.env.NOTION_TOKEN, fetch: retryingFetch });
+  return new Client({ auth: process.env.NOTION_TOKEN, fetch: retrying429Fetch });
 }
