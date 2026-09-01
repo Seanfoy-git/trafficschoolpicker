@@ -303,6 +303,8 @@ function mapStateInfo(page: PageObjectResponse): StateInfo {
     lastVerified: getDate(page, "Last Verified"),
     contentStatus: isContentStatus(contentStatusRaw) ? contentStatusRaw : null,
     approvalLabel: getText(page, "Approval Label") || null,
+    dismissalAnswer: getText(page, "Dismissal Answer") || null,
+    administeringBody: getSelect(page, "Administering Body"),
     noPartnerOffer: getCheckbox(page, "No Partner Offer"),
     // Course length: single source. courseHours is null unless Hours Source is
     // set, so an unsourced value can never render anywhere (Package 4).

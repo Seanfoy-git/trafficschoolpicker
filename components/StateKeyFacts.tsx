@@ -3,12 +3,12 @@ import { CheckCircle } from "lucide-react";
 
 type Fact = { label: string; value: string };
 
-/** First sentence of a longer field, so a Key Facts row stays short without
- *  altering meaning — we never fabricate a condensed value. */
-function firstSentence(text: string): string {
-  const t = text.trim();
-  const m = t.match(/^(.*?[.!?])(?:\s|$)/);
-  return m ? m[1] : t;
+/** Eligibility value for the Key Facts row: the full sentence WITH its citation,
+ *  minus only the trailing freshness stamp. The old first-sentence approach broke
+ *  on the period inside an abbreviated cite ("Conn.", "K.S.A.", "Minn.", "Miss.",
+ *  "Neb.", "S.C.") and truncated the citation mid-word (P10 Task 1). */
+function eligibilitySummary(text: string): string {
+  return text.trim().replace(/\s*Last checked\s+[A-Za-z]+\s+\d{4}\.?\s*$/i, "").trim();
 }
 
 /** Month + year in UTC (matches TrustBar; ISO dates are UTC, so no TZ drift). */
@@ -56,17 +56,23 @@ export function StateKeyFacts({
               : null; // Court program only / Unknown → omit
   if (available) facts.push({ label: "Online course available", value: available });
 
-  // Ticket dismissal — only where the answer is unambiguous for an online summary.
-  // Court-discretion / court-program states are decided court by court, so we never
-  // print a statewide "Yes"; the deeper sections explain the actual path.
+  // Ticket dismissal — the row names the actual mechanism from the program model,
+  // never a bare "Yes" on a point-credit, masking, or court-discretion state
+  // (P10 Task 1). A per-state "Dismissal Answer" override wins when set (e.g. CA
+  // masking); otherwise the honest phrase is derived from onlineStatus.
   const dismissal =
-    status === "Online — ticket dismissal"
+    stateInfo.dismissalAnswer?.trim() ||
+    (status === "Online — ticket dismissal"
       ? "Yes"
       : status === "Online — insurance discount only"
         ? "No — insurance discount only"
         : status === "Online — point reduction"
-          ? "No — reduces points, not a dismissal"
-          : null; // court discretion / court program / in-person / unknown → omit
+          ? "No, point credit instead"
+          : status === "Online — court discretion"
+            ? "Court-by-court"
+            : status === "Court program only"
+              ? "Via a court program, not a retail course"
+              : null); // in-person / unknown → omit
   if (dismissal) facts.push({ label: "Ticket dismissal", value: dismissal });
 
   // Course length is a state-level fact and renders only when sourced (courseHours
@@ -77,7 +83,7 @@ export function StateKeyFacts({
   if (lowestPrice !== null) facts.push({ label: "Typical cost", value: `from $${lowestPrice.toFixed(2)}` });
 
   if (stateInfo.eligibility?.trim())
-    facts.push({ label: "Eligibility", value: firstSentence(stateInfo.eligibility) });
+    facts.push({ label: "Eligibility", value: eligibilitySummary(stateInfo.eligibility) });
 
   if (stateInfo.certificateSubmission?.trim())
     facts.push({ label: "Certificate submission", value: stateInfo.certificateSubmission.trim() });
