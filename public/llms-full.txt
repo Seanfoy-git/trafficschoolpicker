@@ -56,6 +56,8 @@ Arizona drivers cited for a civil moving violation can complete a Defensive Driv
 
 **Last verified:** August 2026
 
+**Estimated all-in cost of a first speeding ticket:** $3,270 (fine plus a three-year insurance surcharge; 2026 study at https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket)
+
 **Does Arizona defensive driving dismiss my ticket?**
 Yes. Completing an Arizona Supreme Court-approved Defensive Driving School (DDS) course dismisses an eligible civil traffic ticket and keeps points off your MVD record (A.R.S. § 28-3392). It is one of the more complete dismissal programs in the country.
 
@@ -256,16 +258,7 @@ Yes. Georgia DDS-approved online defensive driving courses are accepted statewid
 You submit your certificate of completion to the Georgia DDS. Once processed, the point reduction is automatically applied to your driving record.
 
 **Does Georgia defensive driving dismiss my ticket?**
-No. Georgia's approved course reduces your active points by up to 7 points and may qualify you for an insurance discount, but it does not dismiss the ticket or remove the conviction from your record.
-
-**Does Georgia traffic school dismiss my ticket?**
-Yes. Georgia allows you to mask a traffic conviction and reduce up to 7 points from your driving record by completing a DDS-approved defensive driving course. This benefit is available once every 5 years.
-
-**Can I do Georgia traffic school online?**
-Yes. DDS-approved online defensive driving courses are available in Georgia. You can complete the course entirely online from home through a state-approved provider.
-
-**How long is Georgia traffic school?**
-Georgia requires a minimum of 6 hours for a DDS-approved defensive driving course. Both online and in-person formats are available at this length.
+No. Georgia's approved course reduces your active points by up to 7 points and may qualify you for an insurance discount, but it does not dismiss the ticket or remove the conviction from your record. Georgia has no masking mechanism.
 
 ---
 
@@ -851,6 +844,8 @@ New York drivers can complete a DMV-approved Point and Insurance Reduction Progr
 
 **Last verified:** August 2026
 
+**Estimated all-in cost of a first speeding ticket:** $2,553 (fine plus a three-year insurance surcharge; 2026 study at https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket)
+
 **How long is New York PIRP?**
 The course is 320 minutes (5 hours, 20 minutes), the state minimum, whether online or in a classroom. Providers often schedule it as a 6-hour session that includes breaks.
 
@@ -887,6 +882,8 @@ Yes. New York's PIRP is available fully online through DMV-approved providers. Y
 North Carolina's Prayer for Judgment Continued (PJC) is a common-law remedy unique to the state — a defendant pleads guilty to a traffic offense, and the judge, at their discretion, "continues" entering a final judgment. No points are assessed against the license, no fine is imposed (though court costs of roughly $190–$210 still apply), and the violation is not reported as a conviction for insurance or DMV purposes. PJCs are limited: insurance carriers count only one PJC per household every 3 years for premium-rate purposes, and the NC DMV recognizes only two PJCs per driver every 5 years. PJCs are not available for speeding 25+ mph over the limit, DWI, passing a stopped school bus, or any offense by a CDL holder. Online defensive-driving courses in NC are an insurance-discount tool only — they do not affect points or the underlying conviction.
 
 **Last verified:** August 2026
+
+**Estimated all-in cost of a first speeding ticket:** $3,938 (fine plus a three-year insurance surcharge; 2026 study at https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket)
 
 **Does traffic school dismiss a ticket in North Carolina?**
 Not on its own. Dismissal requires prior court permission on a per-case basis, and eligibility depends on the violation, your driving history, and prosecutor policy. Many drivers instead use a Prayer for Judgment Continued (PJC), a separate step where the judge delays entering judgment; for insurance purposes it is limited to once every three years per household.
@@ -1221,7 +1218,7 @@ Virginia operates a unique two-direction point system administered by the DMV: d
 **Estimated all-in cost of a first speeding ticket:** $1,818 (fine plus a three-year insurance surcharge; 2026 study at https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket)
 
 **Does Virginia driver improvement dismiss my ticket?**
-No. Virginia's Driver Improvement Clinic (DIC) reduces demerit points by 5 points and earns a mandatory insurance discount — but it does not dismiss the ticket or remove the underlying conviction.
+Not by itself. Completing a DMV-approved Driver Improvement Clinic reduces your demerit points by five and earns a mandatory insurance discount, but on its own it does not dismiss the ticket or remove the conviction. Separately, some Virginia courts offer deferred disposition, where the judge may dismiss the charge if you complete an approved course — that is decided court by court, so confirm with the court on your citation.
 
 **Who submits my certificate in Virginia?**
 Your school submits completion to the Virginia DMV, which processes the 5-point reduction automatically. You submit the certificate to your insurance company separately to receive the discount.
@@ -1230,19 +1227,10 @@ Your school submits completion to the Virginia DMV, which processes the 5-point 
 Virginia Driver Improvement Clinic (DIC) courses are 8 hours.
 
 **Can I do Virginia driver improvement online?**
-Yes. Virginia DMV-approved online Driver Improvement Clinics are accepted statewide.
+Yes. Virginia DMV-approved online Driver Improvement Clinics are accepted statewide, and you can complete the full 8-hour course online at your own pace.
 
 **How often can I do Virginia driver improvement?**
 Once every 12 months for the demerit point reduction benefit. The auto insurance discount typically lasts 3 years from the date of completion.
-
-**How long is Virginia traffic school?**
-Virginia requires 8 hours for a DMV-approved driver improvement course. This is one of the longer requirements in the Southeast, but the course earns you both potential ticket dismissal under deferred disposition and +5 safe driver points on your record.
-
-**Can I do Virginia traffic school online?**
-Yes. Virginia DMV-approved online driver improvement courses are available statewide. You can complete the full 8-hour course online at your own pace.
-
-**Does Virginia traffic school dismiss my ticket?**
-Yes. Virginia courts may offer deferred disposition, allowing ticket dismissal if you complete a DMV-approved driver improvement course. Additionally, completing the course earns +5 positive safe driver points on your Virginia driving record.
 
 ---
 
@@ -1837,13 +1825,13 @@ Every DMV-licensed online school we track is compared on the California page.
 
 - **Verdict:** Yes, emphatically, and it's the insurance masking doing the work
 - **What you spend:** Course plus a court fee of about $52 to $55; total often under $90, sometimes under $70
-- **What it can prevent:** Roughly $3,600 in three-year insurance exposure (ceiling estimate), a return on the order of 40x
-- **What it doesn't touch:** The fine itself, around $238 all-in, which you pay either way
+- **What it can prevent:** Roughly $5,385 in three-year insurance exposure (ceiling estimate), a return on the order of 60x
+- **What it doesn't touch:** The fine itself, around $234 all-in, which you pay either way
 - **Last verified:** August 2026
 
-Yes, and the reason is a nuance worth stating plainly: in California you pay the fine no matter what. Roughly $238 all-in on a typical ticket once the state stacks its penalty assessments on a $35 base. Traffic school never touches that number. What it touches is the far bigger one.
+Yes, and the reason is a nuance worth stating plainly: in California you pay the fine no matter what. Roughly $234 all-in on a typical ticket once the state stacks its penalty assessments on the base fine. Traffic school never touches that number. What it touches is the far bigger one.
 
-California insurance runs high, and our data puts the three-year exposure on an unmasked ticket at roughly $3,600 as a ceiling estimate, driven by one of the steepest premium-increase percentages in the country. Masking the conviction, which is what traffic school does under VC 1808.7, keeps the ticket confidential and that exposure unrealized. Your cost for the masking: the court's administrative fee, about $52 to $55, plus a course that can run under $10 in California's hyper-competitive market. Call it $60 to $90 total. Against a $3,600 ceiling, that's a return on the order of 40x, and still excellent if your carrier's real surcharge lands well under the ceiling.
+California insurance runs high, and our data puts the three-year exposure on an unmasked ticket at roughly $5,385 as a ceiling estimate, driven by one of the steepest premium-increase percentages in the country. Masking the conviction, which is what traffic school does under VC 1808.7, keeps the ticket confidential and that exposure unrealized. Your cost for the masking: the court's administrative fee, about $52 to $55, plus a course that can run under $10 in California's hyper-competitive market. Call it $60 to $90 total. Against a $5,385 ceiling, that's a return on the order of 60x, and still excellent if your carrier's real surcharge lands well under the ceiling.
 
 The conditions: eligibility per your court notice, once every 18 months measured violation date to violation date, no commercial licenses. Inside the 18-month window the answer flips to no; you'd be buying a course whose benefit can't apply.
 
@@ -2445,18 +2433,18 @@ The full math is on our cost page, and every approved online PIRP course we trac
 **URL:** https://www.trafficschoolpicker.com/new-york/is-traffic-school-worth-it
 
 - **Verdict:** Yes, and uniquely, yes even with no ticket
-- **What you spend:** $25 to $50 and six hours, once every three years
+- **What you spend:** $24 to $60 and six hours, once every three years
 - **What it returns:** A mandatory 10% insurance reduction for three years on liability and collision coverage, on premiums averaging over $4,000; plus up to 4 points reduced when you need it
 - **What it never does:** Dismiss anything; the fine and conviction stand
 - **Last verified:** August 2026
 
 Yes, and New York is the one state in this series where the answer doesn't depend on having a ticket at all.
 
-The reason is the mandatory discount. Complete a DMV-approved course and New York requires your insurer to cut 10% from your liability and collision premiums for three years. New York's average premium in our data runs over $4,000 a year, and while the discount applies to the liability and collision portion rather than the whole bill, 10% of most of a New York premium for three years comfortably runs to several hundred dollars, often approaching four figures, against a course costing $25 to $50. That's why the steady-state New York move is a course every third year as a standing line item, clean record or not. Few purchases anywhere reliably return ten times their price by state mandate.
+The reason is the mandatory discount. Complete a DMV-approved course and New York requires your insurer to cut 10% from your liability and collision premiums for three years. New York's average premium in our data runs over $4,000 a year, and while the discount applies to the liability and collision portion rather than the whole bill, 10% of most of a New York premium for three years comfortably runs to several hundred dollars, often approaching four figures, against a course costing $24 to $60. That's why the steady-state New York move is a course every third year as a standing line item, clean record or not. Few purchases anywhere reliably return ten times their price by state mandate.
 
 The ticket-driven version stacks on top: up to 4 points reduced, once every 18 months, applied to violations in the prior 18 months. Worth it for a driver whose total is climbing; irrelevant to a clean record, which loses nothing, because the discount pays either way.
 
-The honest limit: nothing here shields you from the ticket itself. The fine, roughly $243 all-in on a typical ticket in our data, and the conviction stand, and your insurer sees them. New York's course softens the aftermath; it never prevents it.
+The honest limit: nothing here shields you from the ticket itself. The fine, roughly $183 on a typical ticket in our data, and the conviction stand, and your insurer sees them. New York's course softens the aftermath; it never prevents it.
 
 Approved courses are compared on the New York page; both benefit clocks are on our frequency page.
 

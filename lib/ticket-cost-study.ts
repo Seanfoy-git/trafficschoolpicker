@@ -16,6 +16,8 @@
 export type StateTicketCost = {
   code: string;
   allInCost?: number; // fine + estimated 3-year surcharge (published states only)
+  fine?: number; // typical first-offense 10-over fine (study row)
+  threeYearSurcharge?: number; // three-year insurance exposure (study row); allInCost = fine + this
   netSavings?: number; // ~ 3-year surcharge avoided, minus course cost
   mechanism?: string; // short mechanism note for the savings table
 };
@@ -32,30 +34,35 @@ export const TICKET_COST_STUDY = {
 export const STATE_TICKET_COST: Record<string, StateTicketCost> = {
   // Most expensive (all-in) — several also carry a savings figure
   MI: { code: "MI", allInCost: 8742, netSavings: 8600, mechanism: "Basic Driver Improvement masks points" },
-  CA: { code: "CA", allInCost: 5619, netSavings: 5300, mechanism: "masking under VC §1808.7" },
+  CA: { code: "CA", allInCost: 5619, fine: 234, threeYearSurcharge: 5385, netSavings: 5300, mechanism: "masking under VC §1808.7" },
   HI: { code: "HI", allInCost: 5227, netSavings: 5050, mechanism: "court dismissal, case by case" },
-  TX: { code: "TX", allInCost: 5047, netSavings: 4650, mechanism: "course dismissal, under 25 over" },
-  NJ: { code: "NJ", allInCost: 4965 },
+  TX: { code: "TX", allInCost: 5047, fine: 223, threeYearSurcharge: 4824, netSavings: 4650, mechanism: "course dismissal, under 25 over" },
+  NJ: { code: "NJ", allInCost: 4965, fine: 96, threeYearSurcharge: 4869 },
   DE: { code: "DE", allInCost: 4582 },
   LA: { code: "LA", allInCost: 4512, netSavings: 4300, mechanism: "court dismissal" },
   RI: { code: "RI", allInCost: 4481 },
   NV: { code: "NV", allInCost: 4228, netSavings: 3950, mechanism: "court dismissal" },
-  FL: { code: "FL", allInCost: 4170, netSavings: 3900, mechanism: "adjudication withheld, BDI" },
+  FL: { code: "FL", allInCost: 4170, fine: 204, threeYearSurcharge: 3966, netSavings: 3900, mechanism: "adjudication withheld, BDI" },
   // Cheapest (all-in)
   VT: { code: "VT", allInCost: 1305 },
   MT: { code: "MT", allInCost: 1486 },
   PA: { code: "PA", allInCost: 1494 },
   NE: { code: "NE", allInCost: 1528 },
-  OH: { code: "OH", allInCost: 1684 },
+  OH: { code: "OH", allInCost: 1684, fine: 121, threeYearSurcharge: 1563 },
   UT: { code: "UT", allInCost: 1792 },
-  VA: { code: "VA", allInCost: 1818 },
+  VA: { code: "VA", allInCost: 1818, fine: 111, threeYearSurcharge: 1707 },
   MD: { code: "MD", allInCost: 1869 },
   NH: { code: "NH", allInCost: 2024 },
   ME: { code: "ME", allInCost: 2100 },
   // Savings-only (not in the top/bottom-10 all-in lists)
   TN: { code: "TN", netSavings: 2950, mechanism: "driver improvement" },
-  AZ: { code: "AZ", netSavings: 2950, mechanism: "defensive driving, no points" },
+  AZ: { code: "AZ", allInCost: 3270, fine: 231, threeYearSurcharge: 3039, netSavings: 2950, mechanism: "defensive driving, no points" },
   OK: { code: "OK", netSavings: 2350, mechanism: "court dismissal + 2-pt credit" },
+  // Cluster states outside the study's published top/bottom-10 tables — figures
+  // from their (study-sourced) cost pages; they don't appear in MOST_EXPENSIVE /
+  // CHEAPEST, only via ticketCostFor() on their pages.
+  NY: { code: "NY", allInCost: 2553, fine: 183, threeYearSurcharge: 2370 },
+  NC: { code: "NC", allInCost: 3938, fine: 203, threeYearSurcharge: 3735 },
 };
 
 /** Ordered code lists for the three study tables (highest → lowest as published). */
