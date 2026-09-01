@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "generate-llms": "npx tsx scripts/generate-llms-full.ts",
-    "prebuild": "npx tsx scripts/verify-notion-boundary.ts && npx tsx scripts/verify-content-standards.ts && npm run generate-llms",
+    "prebuild": "npx tsx scripts/verify-notion-boundary.ts && npx tsx scripts/verify-content-standards.ts && npx tsx scripts/verify-faq-integrity.ts && npm run generate-llms",
     "build": "next build",
     "postbuild": "npx tsx scripts/verify-question-routes.ts && npx tsx scripts/verify-no-internal-leaks.ts",
     "start": "next start",

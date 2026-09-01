@@ -6,6 +6,7 @@ import { getQuestionPages, getQuestionPage, getQuestionBody, getQuestionsForStat
 import { getStateBySlug } from "@/lib/state-utils";
 import { buildArticle, buildBreadcrumbList, buildFaqPage } from "@/lib/structured-data";
 import { QuestionArticle } from "@/components/QuestionArticle";
+import { TicketCostSnapshot } from "@/components/TicketCostSnapshot";
 import type { ReviewBlock } from "@/lib/types";
 
 const SITE = "https://www.trafficschoolpicker.com";
@@ -126,6 +127,13 @@ export default async function QuestionPage({ params }: Props) {
       <header className="max-w-3xl mx-auto px-4 pt-8">
         <h1 className="text-3xl font-bold text-slate-900">{q.h1}</h1>
       </header>
+
+      {/* Canonical cost figures for the cost / worth-it cluster — from the study
+          module, so every surface for a state shows identical numbers. */}
+      {(q.questionSlug === "how-much-does-traffic-school-cost" ||
+        q.questionSlug === "is-traffic-school-worth-it") && (
+        <TicketCostSnapshot stateCode={q.stateCode} stateName={stateName} />
+      )}
 
       <QuestionArticle
         keyFacts={body.keyFacts}

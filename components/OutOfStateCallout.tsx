@@ -12,37 +12,42 @@ const GUIDE_COVERED = new Set([
 ]);
 
 /**
- * "Licensed in another state?" signpost. Every state page is written for that
- * state's licensees; this flags out-of-state drivers (ticketed here on a licence
- * from elsewhere) and routes them to the reference guide — to the state's own
- * section when we cover it, else to the general guide. Rendered near the top of
- * the state hub pages and the question pages.
+ * Out-of-state signpost. Every state page is written for that state's own
+ * license holders; this flags the two out-of-state cases (ticketed here on a
+ * license from elsewhere, or holding this state's license but ticketed
+ * elsewhere) and routes both to the reference guide (to the state's own section
+ * when we cover it, else the general guide). A distinct callout, not a footnote.
  */
 export function OutOfStateCallout({ stateName, stateSlug }: { stateName: string; stateSlug: string }) {
   const covered = GUIDE_COVERED.has(stateSlug);
   const href = covered ? `/out-of-state-ticket#${stateSlug}` : "/out-of-state-ticket";
-  const cta = covered ? `See the ${stateName} section` : "Read the out-of-state guide";
 
   return (
-    <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 sm:px-5 sm:py-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
-        <div className="flex items-start gap-3">
-          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" aria-hidden="true" />
-          <div>
-            <p className="font-semibold text-slate-900">Licensed in another state?</p>
-            <p className="mt-1 text-sm leading-relaxed text-slate-600">
-              This page is written for {stateName} drivers. If your licence is from
-              another state, some of these options may not apply to you.
-            </p>
-          </div>
+    <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 sm:p-6">
+      <div className="flex items-start gap-3">
+        <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" aria-hidden="true" />
+        <div className="min-w-0">
+          <p className="font-semibold text-slate-900">
+            Ticket in {stateName}, license from another state?
+          </p>
+          <p className="mt-1 text-sm leading-relaxed text-slate-600">
+            This page is written for drivers who hold a {stateName} license. If you got the
+            ticket in {stateName} but your license is from another state, different rules
+            decide what reaches your home state&apos;s record and whether a course helps.
+          </p>
+          <Link
+            href={href}
+            className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-700"
+          >
+            Read the out-of-state ticket guide
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+          <p className="mt-3 text-sm text-slate-600">
+            <Link href={href} className="font-medium text-amber-700 hover:underline">
+              {stateName} license, ticket from another state? Same guide, other direction.
+            </Link>
+          </p>
         </div>
-        <Link
-          href={href}
-          className="inline-flex shrink-0 items-center justify-center gap-1.5 self-start whitespace-nowrap rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-700 sm:self-center"
-        >
-          {cta}
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
-        </Link>
       </div>
     </div>
   );

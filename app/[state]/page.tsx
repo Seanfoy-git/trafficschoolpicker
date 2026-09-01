@@ -260,7 +260,7 @@ export default async function StatePage({ params }: Props) {
       <TrustBar lastVerified={stateInfo?.lastVerified} approvalLabel={stateInfo?.approvalLabel} />
 
       {/* Out-of-state signpost — this page is written for {State} licensees; flag
-          drivers ticketed here on an out-of-state licence to the reference guide. */}
+          drivers ticketed here on an out-of-state license to the reference guide. */}
       <section className="pt-6">
         <div className="max-w-5xl mx-auto px-4">
           <OutOfStateCallout stateName={stateMeta.name} stateSlug={stateSlug} />

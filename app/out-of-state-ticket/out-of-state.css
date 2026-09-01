@@ -310,7 +310,7 @@
 .oost .tag.q  { background: var(--flag-w);    color: var(--flag); }
 
 /* On phones the two wide comparison tables become labelled cards — one per state —
-   so the payoff columns ("Non-resident eligible", "Helps a licence…") are visible
+   so the payoff columns ("Non-resident eligible", "Helps a license…") are visible
    without horizontal scrolling. Column labels are injected by position. */
 @media (max-width: 680px) {
   .oost .tw { overflow-x: visible; border: 0; background: transparent; margin: 20px 0 8px; }
@@ -347,7 +347,7 @@
   .oost .t-ticketing tbody td:nth-of-type(1)::before { content: "Programme"; }
   .oost .t-ticketing tbody td:nth-of-type(2)::before { content: "What it does"; }
   .oost .t-ticketing tbody td:nth-of-type(3)::before { content: "Non-resident eligible"; }
-  .oost .t-ticketing tbody td:nth-of-type(4)::before { content: "Helps a licence from elsewhere"; }
+  .oost .t-ticketing tbody td:nth-of-type(4)::before { content: "Helps a license from elsewhere"; }
   .oost .t-home tbody td:nth-of-type(1)::before { content: "Points on out-of-state convictions"; }
   .oost .t-home tbody td:nth-of-type(2)::before { content: "Detail"; }
   .oost .t-home tbody td:nth-of-type(3)::before { content: "Source"; }

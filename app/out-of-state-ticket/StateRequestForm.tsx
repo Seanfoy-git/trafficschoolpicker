@@ -50,7 +50,7 @@ export function StateRequestForm() {
       <div className="req-hd">Your state isn&apos;t here</div>
       <div className="req-body">
         <p>Ten states are covered above. Forty-one jurisdictions are not, and rather than pad the page with guesses we would rather say so.</p>
-        <p>The ten were picked because they are where we have done the deepest work, not because they are the only ones that matter. If your licence came from somewhere else, tell us which one. We work the queue in the order people ask, and we will email you once yours is written.</p>
+        <p>The ten were picked because they are where we have done the deepest work, not because they are the only ones that matter. If your license came from somewhere else, tell us which one. We work the queue in the order people ask, and we will email you once yours is written.</p>
         <form method="post" action="/api/state-request" onSubmit={onSubmit}>
           {/* Honeypot: hidden from people, offered to bots. A filled value = spam. */}
           <div className="hp" aria-hidden="true">

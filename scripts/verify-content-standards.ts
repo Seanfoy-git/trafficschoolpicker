@@ -21,6 +21,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { BLOG_SEO } from "../lib/seo-config";
+import { STATE_TICKET_COST } from "../lib/ticket-cost-study";
 
 const BLOG_DIR = "content/blog";
 const GUIDE_CONTENT = "app/out-of-state-ticket/content.ts";
@@ -78,6 +79,20 @@ if (fs.existsSync(GUIDE_CONTENT)) {
   }
 } else {
   problems.push(`expected reference guide at ${GUIDE_CONTENT} — not found.`);
+}
+
+// ── 5: canonical ticket-cost study internal consistency ─────────────────────
+// Every surface reads these figures, so a mismatch would drift the whole cluster.
+// Where a state carries all three, allInCost must equal fine + threeYearSurcharge.
+for (const [code, c] of Object.entries(STATE_TICKET_COST)) {
+  if (c.allInCost != null && c.fine != null && c.threeYearSurcharge != null) {
+    const sum = c.fine + c.threeYearSurcharge;
+    if (sum !== c.allInCost) {
+      problems.push(
+        `ticket-cost-study ${code}: allInCost ${c.allInCost} != fine ${c.fine} + surcharge ${c.threeYearSurcharge} (${sum}) — reconcile lib/ticket-cost-study.ts.`
+      );
+    }
+  }
 }
 
 // ── report ──────────────────────────────────────────────────────────────────

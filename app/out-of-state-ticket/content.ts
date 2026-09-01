@@ -38,14 +38,14 @@ export const BODY_TOP = `
     </div>
     <div class="row">
       <dt>States where it only credits points</dt>
-      <dd>Ohio, New York, New Jersey, Virginia, Georgia. None of these help a licence issued in another state.</dd>
+      <dd>Ohio, New York, New Jersey, Virginia, Georgia. None of these help a license issued in another state.</dd>
     </div>
     <div class="row">
       <dt>Hard statutory bar</dt>
-      <dd>Texas. The course requires a Texas licence or permit, with a carve-out for active-duty military and their families.</dd>
+      <dd>Texas. The course requires a Texas license or permit, with a carve-out for active-duty military and their families.</dd>
     </div>
     <div class="row">
-      <dt>Open to any valid licence</dt>
+      <dt>Open to any valid license</dt>
       <dd>Arizona, California, Florida</dd>
     </div>
     <div class="row">
@@ -72,12 +72,12 @@ export const BODY_TOP = `
     <div class="step">
       <span class="n">QUESTION 1</span>
       <span class="q">Can you even take the course?</span>
-      <p>Texas says no to you outright. The driving safety course requires a Texas licence or permit, with a carve-out for active-duty military and their families, and a judge cannot waive that part. Georgia is a softer version of the same dead end: you can sit a Georgia course, but the point reduction is administered for licensed Georgia residents, and a non-resident has no Georgia points for it to work on.</p>
+      <p>Texas says no to you outright. The driving safety course requires a Texas license or permit, with a carve-out for active-duty military and their families, and a judge cannot waive that part. Georgia is a softer version of the same dead end: you can sit a Georgia course, but the point reduction is administered for licensed Georgia residents, and a non-resident has no Georgia points for it to work on.</p>
     </div>
     <div class="step">
       <span class="n">QUESTION 2</span>
       <span class="q">Does it stop a conviction being entered?</span>
-      <p>If the court dismisses the charge or withholds adjudication, there is no conviction to send to your home state. If the course instead credits points, it is crediting points against a driving record in a state where you do not hold a licence. That does nothing for you.</p>
+      <p>If the court dismisses the charge or withholds adjudication, there is no conviction to send to your home state. If the course instead credits points, it is crediting points against a driving record in a state where you do not hold a license. That does nothing for you.</p>
     </div>
   </div>
 
@@ -87,9 +87,9 @@ export const BODY_TOP = `
 <section>
   <h2>How a ticket finds its way home</h2>
 
-  <p>Most states belong to the Driver License Compact, an agreement to report convictions of visiting drivers back to whichever state issued the licence. Get a speeding ticket in Virginia on a New Jersey licence, and Virginia tells New Jersey.</p>
+  <p>Most states belong to the Driver License Compact, an agreement to report convictions of visiting drivers back to whichever state issued the license. Get a speeding ticket in Virginia on a New Jersey license, and Virginia tells New Jersey.</p>
 
-  <p>What the home state then does with it is the home state's business. The compact says so directly. The receiving state gives the conduct whatever effect its own law gives it, which is why the same ticket lands very differently depending on where your licence came from.</p>
+  <p>What the home state then does with it is the home state's business. The compact says so directly. The receiving state gives the conduct whatever effect its own law gives it, which is why the same ticket lands very differently depending on where your license came from.</p>
 
   <div class="box red">
     <span class="lb">Correcting a number that is everywhere</span>
@@ -97,9 +97,9 @@ export const BODY_TOP = `
     <p>Ballotpedia still carries the old five and flags its own source as out of date, which is a reasonable guess at where most of the copies came from.</p>
   </div>
 
-  <p>Georgia not being a member matters more than it sounds. A routine Georgia speeding ticket against an out-of-state driver has no compact route home. It is not on the federal Problem Driver Pointer System either, because that system carries licence withdrawals and a short list of serious offences, not ordinary speeding. <span class="cite">49 U.S.C. § 30304</span></p>
+  <p>Georgia not being a member matters more than it sounds. A routine Georgia speeding ticket against an out-of-state driver has no compact route home. It is not on the federal Problem Driver Pointer System either, because that system carries license withdrawals and a short list of serious offenses, not ordinary speeding. <span class="cite">49 U.S.C. § 30304</span></p>
 
-  <p>Two things still reach you from Georgia. Anything serious enough to suspend or revoke a licence goes into the federal pointer system and surfaces the next time you renew. And if you ignore the ticket entirely, Georgia is a member of the separate Non-Resident Violator Compact, which lets it ask your home state to suspend you for failing to appear. So "Georgia doesn't report it" is true of a paid speeding fine and false of everything else.</p>
+  <p>Two things still reach you from Georgia. Anything serious enough to suspend or revoke a license goes into the federal pointer system and surfaces the next time you renew. And if you ignore the ticket entirely, Georgia is a member of the separate Non-Resident Violator Compact, which lets it ask your home state to suspend you for failing to appear. So "Georgia doesn't report it" is true of a paid speeding fine and false of everything else.</p>
 </section>
 
 <section>
@@ -111,7 +111,7 @@ export const BODY_TOP = `
     <table class="t-ticketing">
       <caption>Ticketing state: what the course does, and whether you qualify</caption>
       <thead>
-        <tr><th scope="col">State</th><th scope="col">Programme</th><th scope="col">What it does</th><th scope="col">Non-resident eligible</th><th scope="col">Helps a licence from elsewhere</th></tr>
+        <tr><th scope="col">State</th><th scope="col">Programme</th><th scope="col">What it does</th><th scope="col">Non-resident eligible</th><th scope="col">Helps a license from elsewhere</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -187,34 +187,34 @@ export const BODY_TOP = `
       </tbody>
     </table>
   </div>
-  <p class="tnote">The point-credit programmes work by adjusting that state's own driving record. Some of them have no written residency bar at all, and Virginia expressly admits any resident or non-resident holding a valid Virginia licence. It makes no difference. If your licence came from elsewhere there is no record there for the credit to touch.</p>
+  <p class="tnote">The point-credit programs work by adjusting that state's own driving record. Some of them have no written residency bar at all, and Virginia expressly admits any resident or non-resident holding a valid Virginia license. It makes no difference. If your license came from elsewhere there is no record there for the credit to touch.</p>
 
   <div class="box">
     <span class="lb">The Texas trap</span>
-    <p>Texas is where this goes wrong most often, because Texas has the best outcome of the ten and the hardest door. The course dismisses the charge outright, and the statute says a dismissed charge "may not be part of a person's driving record or used for any purpose." Then the eligibility rule requires a Texas licence or permit. A student from New Jersey at UT Austin reads the court paperwork, sees the dismissal option, and cannot use it.</p>
-    <p>Worth heading off the obvious counterargument. A Texas judge does have discretion under art. 45A.352(c) to grant a course request before final disposition, and that discretion reaches the once-in-12-months rule and the filing deadline. It does not reach the licence requirement. That one holds. <span class="cite">Tex. Code Crim. Proc. arts. 45A.352, 45A.357</span></p>
+    <p>Texas is where this goes wrong most often, because Texas has the best outcome of the ten and the hardest door. The course dismisses the charge outright, and the statute says a dismissed charge "may not be part of a person's driving record or used for any purpose." Then the eligibility rule requires a Texas license or permit. A student from New Jersey at UT Austin reads the court paperwork, sees the dismissal option, and cannot use it.</p>
+    <p>Worth heading off the obvious counterargument. A Texas judge does have discretion under art. 45A.352(c) to grant a course request before final disposition, and that discretion reaches the once-in-12-months rule and the filing deadline. It does not reach the license requirement. That one holds. <span class="cite">Tex. Code Crim. Proc. arts. 45A.352, 45A.357</span></p>
   </div>
 </section>
 
 <section>
   <h2>What your home state does with it</h2>
 
-  <p>Now flip it. The ticket has been reported back. Whether it costs you anything depends entirely on the state that issued your licence, and the spread here is wider than most people expect.</p>
+  <p>Now flip it. The ticket has been reported back. Whether it costs you anything depends entirely on the state that issued your license, and the spread here is wider than most people expect.</p>
 
   <div class="tw">
     <table class="t-home">
       <caption>Home state: points on a conviction that happened elsewhere</caption>
       <thead>
-        <tr><th scope="col">Your licence</th><th scope="col">Points on out-of-state convictions</th><th scope="col">Detail</th><th scope="col">Source</th></tr>
+        <tr><th scope="col">Your license</th><th scope="col">Points on out-of-state convictions</th><th scope="col">Detail</th><th scope="col">Source</th></tr>
       </thead>
       <tbody>
-        <tr><th scope="row">New Jersey</th><td><span class="tag x">Yes, flat 2</span></td><td>Two points for any out-of-state moving violation, whatever the offence was and whatever New Jersey would charge for the same thing at home</td><td class="cite">N.J.A.C. 13:19-10.1, item 55</td></tr>
-        <tr><th scope="row">Virginia</th><td><span class="tag x">Yes</span></td><td>Points assigned to convictions received from any other state, and from Canada and its provinces, if the offence would be reportable in Virginia</td><td class="cite">Va. Code § 46.2-492(B)</td></tr>
+        <tr><th scope="row">New Jersey</th><td><span class="tag x">Yes, flat 2</span></td><td>Two points for any out-of-state moving violation, whatever the offense was and whatever New Jersey would charge for the same thing at home</td><td class="cite">N.J.A.C. 13:19-10.1, item 55</td></tr>
+        <tr><th scope="row">Virginia</th><td><span class="tag x">Yes</span></td><td>Points assigned to convictions received from any other state, and from Canada and its provinces, if the offense would be reportable in Virginia</td><td class="cite">Va. Code § 46.2-492(B)</td></tr>
         <tr><th scope="row">California</th><td><span class="tag x">Yes</span></td><td>Negligent operator points for convictions in other states, DC, Puerto Rico and Canada</td><td class="cite">CA DMV, negligent operator</td></tr>
-        <tr><th scope="row">Florida</th><td><span class="tag x">Yes</span></td><td>The statute is permissive. An out-of-state conviction may be recorded against the Florida record and pointed if the offence is point-assessable</td><td class="cite">Fla. Stat. § 322.27(3)(e)</td></tr>
-        <tr><th scope="row">Georgia</th><td><span class="tag x">Yes</span></td><td>Assessed where the offence would be grounds for assessment if committed in Georgia. Georgia is inconsistent about receiving the data, being outside the compact</td><td class="cite">O.C.G.A. § 40-5-57(b)</td></tr>
+        <tr><th scope="row">Florida</th><td><span class="tag x">Yes</span></td><td>The statute is permissive. An out-of-state conviction may be recorded against the Florida record and pointed if the offense is point-assessable</td><td class="cite">Fla. Stat. § 322.27(3)(e)</td></tr>
+        <tr><th scope="row">Georgia</th><td><span class="tag x">Yes</span></td><td>Assessed where the offense would be grounds for assessment if committed in Georgia. Georgia is inconsistent about receiving the data, being outside the compact</td><td class="cite">O.C.G.A. § 40-5-57(b)</td></tr>
         <tr><th scope="row">New York</th><td><span class="tag y">No, except Canada</span></td><td>DMV states points are not added for convictions in another state or country unless the violation happened in Canada, under a reciprocal agreement</td><td class="cite">NY DMV point system</td></tr>
-        <tr><th scope="row">North Carolina</th><td><span class="tag y">No</span></td><td>The point provisions apply only to violations and convictions that take place within North Carolina. Suspension for a serious out-of-state offence is still possible</td><td class="cite">N.C.G.S. § 20-16(c), 20-16(a)(7)</td></tr>
+        <tr><th scope="row">North Carolina</th><td><span class="tag y">No</span></td><td>The point provisions apply only to violations and convictions that take place within North Carolina. Suspension for a serious out-of-state offense is still possible</td><td class="cite">N.C.G.S. § 20-16(c), 20-16(a)(7)</td></tr>
         <tr><th scope="row">Ohio</th><td><span class="tag y">No points</span></td><td>Points are assessed by the sentencing court and only Ohio courts feed that chain. Read from the statute's structure rather than from any published BMV position</td><td class="cite">O.R.C. §§ 4510.036(B), 4510.61</td></tr>
         <tr><th scope="row">Texas</th><td><span class="tag y">No system</span></td><td>Texas repealed the Driver Responsibility Program in 2019 and has no points. Out-of-state convictions still count toward habitual violator suspension</td><td class="cite">Tex. Transp. Code § 521.292</td></tr>
         <tr><th scope="row">Arizona</th><td><span class="tag q">Unresolved</span></td><td>Nothing in the rule excludes out-of-state convictions, and unlike Ohio it is the Department that assigns Arizona points. Whether it assigns them here is not published anywhere we could find</td><td class="cite">See open questions</td></tr>
@@ -236,7 +236,7 @@ export const BODY_TOP = `
     <div class="st">
       <p class="st-eyebrow">Out-of-state driver's guide</p>
       <div class="st-hd"><h3 id="arizona">Arizona</h3><span class="tag y">Works for you</span></div>
-      <p class="st-verdict"><strong>Good news if you're licensed elsewhere:</strong> Arizona's defensive-driving diversion is open to any valid licence and dismisses the citation outright, so nothing reaches your home state. Finish a Supreme Court-certified course at least 7 days before your court date — the strongest option on this page for a visiting driver.</p>
+      <p class="st-verdict"><strong>Good news if you're licensed elsewhere:</strong> Arizona's defensive-driving diversion is open to any valid license and dismisses the citation outright, so nothing reaches your home state. Finish a Supreme Court-certified course at least 7 days before your court date — the strongest option on this page for a visiting driver.</p>
       <dl>
         <dt>Programme</dt><dd>Defensive driving school, run under Arizona Supreme Court authority</dd>
         <dt>Length</dt><dd>240 to 270 minutes including testing</dd>
@@ -272,18 +272,18 @@ export const BODY_TOP = `
     <div class="st">
       <p class="st-eyebrow">Out-of-state driver's guide</p>
       <div class="st-hd"><h3 id="texas">Texas</h3><span class="tag x">You can't take it</span></div>
-      <p class="st-verdict"><strong>You can't use the Texas course at all</strong> if your licence is from another state — it needs a Texas licence and no judge can waive that. Call the clerk of the court on your citation, ask whether any disposition avoids a conviction and whether you qualify out-of-state; for a serious charge, a Texas lawyer is worth it.</p>
+      <p class="st-verdict"><strong>You can't use the Texas course at all</strong> if your license is from another state — it needs a Texas license and no judge can waive that. Call the clerk of the court on your citation, ask whether any disposition avoids a conviction and whether you qualify out-of-state; for a serious charge, a Texas lawyer is worth it.</p>
       <dl>
         <dt>Programme</dt><dd>Driving safety course approved by TDLR</dd>
         <dt>Length</dt><dd>6 hours</dd>
         <dt>Effect</dt><dd>Charge dismissed, and a dismissed charge may not be part of a driving record or used for any purpose. Insurers may not raise premiums or cancel over it</dd>
         <dt>How often</dt><dd>Once in 12 months</dd>
-        <dt>Who is barred</dt><dd>Anyone without a Texas licence or permit, except active-duty military and their spouses and dependent children. CDL holders, including in a personal vehicle. Speeds of 95 mph or more, or 25 mph over</dd>
+        <dt>Who is barred</dt><dd>Anyone without a Texas license or permit, except active-duty military and their spouses and dependent children. CDL holders, including in a personal vehicle. Speeds of 95 mph or more, or 25 mph over</dd>
         <dt>Cost</dt><dd>Court reimbursement fee capped at $10, plus a records fee, plus course tuition</dd>
         <dt>Citations</dt><dd class="cite">Tex. Code Crim. Proc. arts. 45A.351 to 45A.359</dd>
       </dl>
       <p>If your court paperwork still cites the former article number, it is the same rule, recodified as Art. 45A.352 on 1 January 2025.</p>
-      <p>Senate Bill 296 then changed things again from 1 September 2025. You can now make the written request by email or through a court's own online portal, and where several charges came out of the same incident, each of them is eligible for dismissal on a single course. The court may also charge the $10 fee per eligible offence rather than once.</p>
+      <p>Senate Bill 296 then changed things again from 1 September 2025. You can now make the written request by email or through a court's own online portal, and where several charges came out of the same incident, each of them is eligible for dismissal on a single course. The court may also charge the $10 fee per eligible offense rather than once.</p>
       <p class="more"><a href="/texas/does-traffic-school-remove-points">Texas in more depth: does traffic school remove points there</a></p>
     </div>
 
@@ -297,10 +297,10 @@ export const BODY_TOP = `
         <dt>Effect</dt><dd>The conviction is entered and reported to DMV, then held confidential so no point is assessed and insurers cannot see it</dd>
         <dt>How often</dt><dd>Once in 18 months, and the bar attaches when you elect, not only when you finish</dd>
         <dt>Who is barred</dt><dd>Misdemeanours, alcohol and drug violations, commercial vehicles, speeds more than 25 mph over, and anything carrying more than one point</dd>
-        <dt>Licence needed</dt><dd>A valid driver licence. Rule 4.104 does not say a California one, though § 42005 frames the court's power around California class designations, so treat this as probable rather than settled</dd>
+        <dt>License needed</dt><dd>A valid driver license. Rule 4.104 does not say a California one, though § 42005 frames the court's power around California class designations, so treat this as probable rather than settled</dd>
         <dt>Citations</dt><dd class="cite">Cal. Veh. Code §§ 1803.5, 1808.7, 42005; Cal. Rule of Court 4.104; 13 CCR § 345.30</dd>
       </dl>
-      <p>Since 2011 California traffic school has not been a dismissal. The court still reports the conviction to DMV and DMV still records it, then marks the record confidential. That distinction is the reason we cannot tell you what it does for an out-of-state licence, and it is question three at the bottom of this page.</p>
+      <p>Since 2011 California traffic school has not been a dismissal. The court still reports the conviction to DMV and DMV still records it, then marks the record confidential. That distinction is the reason we cannot tell you what it does for an out-of-state license, and it is question three at the bottom of this page.</p>
       <p class="more"><a href="/california/does-traffic-school-remove-points">California in more depth: does traffic school remove points there</a></p>
     </div>
 
@@ -367,7 +367,7 @@ export const BODY_TOP = `
         <dt>Length</dt><dd>Defensive driving is at least six hours, of which at least four must be classroom</dd>
         <dt>Effect</dt><dd>Defensive driving credits 2 points, once in five years, and only if points are actually on the record. Driver improvement credits up to 3</dd>
         <dt>Suspension</dt><dd>12 points, on a graduated schedule from 30 days upward</dd>
-        <dt>Cost</dt><dd>The driver improvement programme carries a $75 administrative fee to MVC on top of provider fees</dd>
+        <dt>Cost</dt><dd>The driver improvement program carries a $75 administrative fee to MVC on top of provider fees</dd>
         <dt>Citations</dt><dd class="cite">N.J.A.C. 13:21-24.2, 13:21-24.5, 13:19-10.1, 13:19-10.2</dd>
       </dl>
       <p>New Jersey is the harshest home state in this group and the reason is the flat rate. Two points for an out-of-state moving violation regardless of severity, which means a minor infraction in a state you were driving through costs the same as one that would have been minor at home.</p>
@@ -379,24 +379,24 @@ export const BODY_TOP = `
       <div class="st-hd"><h3 id="virginia">Virginia</h3><span class="tag n">No help for you</span></div>
       <p class="st-verdict"><strong>The Virginia clinic does nothing for you</strong> — it only touches a Virginia record you don't have. And take Virginia seriously: reckless driving is a criminal charge here at surprisingly low speeds, so if that's what you're facing, get a Virginia lawyer, not a course.</p>
       <dl>
-        <dt>Programme</dt><dd>Driver improvement clinic. CDL holders have a separate commercial programme</dd>
+        <dt>Programme</dt><dd>Driver improvement clinic. CDL holders have a separate commercial program</dd>
         <dt>Length</dt><dd>8 hours</dd>
         <dt>Effect</dt><dd>Five demerit points subtracted. If you have fewer than five demerits, you get a reduction and safe driving points instead, capped at five</dd>
         <dt>The trade-off</dt><dd>Safe driving points or the statutory insurance premium reduction, either one but not both, once in two years</dd>
         <dt>If a court sends you</dt><dd>The court decides whether you get safe driving points, and without that notification the Department awards none</dd>
-        <dt>Who can attend</dt><dd>Any resident or non-resident holding a valid licence to drive in Virginia may attend voluntarily, with or without accumulated demerits</dd>
+        <dt>Who can attend</dt><dd>Any resident or non-resident holding a valid license to drive in Virginia may attend voluntarily, with or without accumulated demerits</dd>
         <dt>Cost</dt><dd>Capped. The clinic may charge no more than $100</dd>
         <dt>Suspension</dt><dd>18 points in 12 months or 24 in 24 months for drivers 18 and over</dd>
         <dt>Citations</dt><dd class="cite">Va. Code §§ 46.2-492, 46.2-498, 46.2-505, 46.2-506, 38.2-2217</dd>
       </dl>
-      <p>Virginia is the state most likely to turn a routine trip into a criminal matter. Reckless driving is a Class 1 misdemeanour, and it does not take much speed to get there. For an international student with no baseline for how American traffic law works, that is the single most important thing on this page.</p>
+      <p>Virginia is the state most likely to turn a routine trip into a criminal matter. Reckless driving is a Class 1 misdemeanor, and it does not take much speed to get there. For an international student with no baseline for how American traffic law works, that is the single most important thing on this page.</p>
       <p class="more"><a href="/virginia/does-traffic-school-remove-points">Virginia in more depth: does traffic school remove points there</a></p>
     </div>
 
     <div class="st">
       <p class="st-eyebrow">Out-of-state driver's guide</p>
       <div class="st-hd"><h3 id="georgia">Georgia</h3><span class="tag n">No help for you</span></div>
-      <p class="st-verdict"><strong>The Georgia course does nothing for you</strong> — Georgia gives a non-resident no points to reduce in the first place. One quirk in your favour: Georgia is outside the Driver License Compact, so a routine <em>paid</em> speeding fine has no automatic route to your home state — but don't just ignore the ticket, which can trigger a suspension.</p>
+      <p class="st-verdict"><strong>The Georgia course does nothing for you</strong> — Georgia gives a non-resident no points to reduce in the first place. One quirk in your favor: Georgia is outside the Driver License Compact, so a routine <em>paid</em> speeding fine has no automatic route to your home state — but don't just ignore the ticket, which can trigger a suspension.</p>
       <dl>
         <dt>Programme</dt><dd>Driver improvement, which DDS also calls defensive driving</dd>
         <dt>Length</dt><dd>6 hours</dd>
@@ -430,7 +430,7 @@ export const BODY_TOP = `
     <div class="oq">
       <h3>2. Does California's masking stop the report to your home state?</h3>
       <p>This is the most consequential gap on the page. California is a compact member, and the compact provision requires reporting each conviction of a driver from another party state. California's masking statute says the record is confidential and shall not be disclosed to any person except a court. Both are mandatory. Neither mentions the other.</p>
-      <p>The masking statute does lift confidentiality for out-of-state commercial licence holders specifically, which suggests the legislature had out-of-state drivers in mind. That is an argument, not a finding. No agency, court, attorney general opinion or Judicial Council document we found addresses it.</p>
+      <p>The masking statute does lift confidentiality for out-of-state commercial license holders specifically, which suggests the legislature had out-of-state drivers in mind. That is an argument, not a finding. No agency, court, attorney general opinion or Judicial Council document we found addresses it.</p>
       <p>What we can say: masking is documented to protect the California record and the California point count. Its effect on a record in another state is unestablished. Do not assume it works.</p>
       <p class="ask">California DMV, 1-800-777-0133. A public records request is more reliable than a phone call here.<br>Ask for: any written policy or business rule governing whether the Department transmits to another state a conviction recorded as confidential under Veh. Code § 1808.7 for a driver licensed in another compact state.</p>
     </div>
@@ -446,7 +446,7 @@ export const BODY_TOP = `
 
   <div class="box red">
     <span class="lb">What to actually do</span>
-    <p>Call the clerk of the court printed on your citation before you pay anything and before you enrol in anything. Ask two questions. Whether the court offers a disposition that avoids a conviction, and whether you qualify for it holding an out-of-state licence. Those two answers settle your case, and no page on the internet can settle it for you.</p>
+    <p>Call the clerk of the court printed on your citation before you pay anything and before you enroll in anything. Ask two questions. Whether the court offers a disposition that avoids a conviction, and whether you qualify for it holding an out-of-state license. Those two answers settle your case, and no page on the internet can settle it for you.</p>
   </div>
 </section>
 `;
@@ -463,7 +463,7 @@ export const BODY_SOURCES = `
     <li>15 NYCRR Parts 138 and 141; NY DMV Point and Insurance Reduction Program; NY DMV point system; DMV Commissioner's notice of 30 January 2026</li>
     <li>N.J.A.C. 13:21-24.2, 13:21-24.5, 13:19-10.1, 13:19-10.2; NJ MVC driver programs and point schedule</li>
     <li>O.R.C. §§ 4510.036, 4510.037, 4510.61; O.A.C. Ch. 4501-21; Ohio BMV materials</li>
-    <li>O.C.G.A. §§ 40-5-57, 40-5-86; Georgia DDS points and points reduction, driver improvement programme</li>
+    <li>O.C.G.A. §§ 40-5-57, 40-5-86; Georgia DDS points and points reduction, driver improvement program</li>
     <li>N.C.G.S. §§ 20-4.01(4a), 20-4.24, 20-16, 20-24; 19A NCAC 03G .0400; UNC School of Government benchbook; NCDMV</li>
     <li>Va. Code §§ 38.2-2217, 46.2-492(B), 46.2-498, 46.2-505, 46.2-506; Virginia DMV driver improvement, clinics, and point assessment pages</li>
     <li>A.R.S. §§ 28-101, 28-701.02, 28-1852, 28-3392 to 28-3396; A.A.C. R17-4-404 and Table 1; ACJA § 7-205; Arizona Supreme Court defensive driving school instructions</li>
