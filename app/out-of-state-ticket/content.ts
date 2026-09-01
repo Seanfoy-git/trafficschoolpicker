@@ -111,7 +111,7 @@ export const BODY_TOP = `
     <table class="t-ticketing">
       <caption>Ticketing state: what the course does, and whether you qualify</caption>
       <thead>
-        <tr><th scope="col">State</th><th scope="col">Programme</th><th scope="col">What it does</th><th scope="col">Non-resident eligible</th><th scope="col">Helps a license from elsewhere</th></tr>
+        <tr><th scope="col">State</th><th scope="col">Program</th><th scope="col">What it does</th><th scope="col">Non-resident eligible</th><th scope="col">Helps a license from elsewhere</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -238,7 +238,7 @@ export const BODY_TOP = `
       <div class="st-hd"><h3 id="arizona">Arizona</h3><span class="tag y">Works for you</span></div>
       <p class="st-verdict"><strong>Good news if you're licensed elsewhere:</strong> Arizona's defensive-driving diversion is open to any valid license and dismisses the citation outright, so nothing reaches your home state. Finish a Supreme Court-certified course at least 7 days before your court date — the strongest option on this page for a visiting driver.</p>
       <dl>
-        <dt>Programme</dt><dd>Defensive driving school, run under Arizona Supreme Court authority</dd>
+        <dt>Program</dt><dd>Defensive driving school, run under Arizona Supreme Court authority</dd>
         <dt>Length</dt><dd>240 to 270 minutes including testing</dd>
         <dt>Effect</dt><dd>The court dismisses the citation and MVD keeps no record of it</dd>
         <dt>How often</dt><dd>Once in 12 months, measured from the date of the last violation</dd>
@@ -257,7 +257,7 @@ export const BODY_TOP = `
       <div class="st-hd"><h3 id="florida">Florida</h3><span class="tag y">Works for you</span></div>
       <p class="st-verdict"><strong>Florida works for a visiting driver:</strong> electing Basic Driver Improvement within 30 days withholds adjudication, so there's no conviction to report home. The cleanest option here — just don't pay the ticket first, and mind the 30-day deadline.</p>
       <dl>
-        <dt>Programme</dt><dd>Basic Driver Improvement (BDI)</dd>
+        <dt>Program</dt><dd>Basic Driver Improvement (BDI)</dd>
         <dt>Length</dt><dd>4 hours minimum of course content</dd>
         <dt>Effect</dt><dd>Adjudication withheld, no points assessed, civil penalty reduced by 18 per cent</dd>
         <dt>How often</dt><dd>Once in 12 months, and eight times in a lifetime</dd>
@@ -274,7 +274,7 @@ export const BODY_TOP = `
       <div class="st-hd"><h3 id="texas">Texas</h3><span class="tag x">You can't take it</span></div>
       <p class="st-verdict"><strong>You can't use the Texas course at all</strong> if your license is from another state — it needs a Texas license and no judge can waive that. Call the clerk of the court on your citation, ask whether any disposition avoids a conviction and whether you qualify out-of-state; for a serious charge, a Texas lawyer is worth it.</p>
       <dl>
-        <dt>Programme</dt><dd>Driving safety course approved by TDLR</dd>
+        <dt>Program</dt><dd>Driving safety course approved by TDLR</dd>
         <dt>Length</dt><dd>6 hours</dd>
         <dt>Effect</dt><dd>Charge dismissed, and a dismissed charge may not be part of a driving record or used for any purpose. Insurers may not raise premiums or cancel over it</dd>
         <dt>How often</dt><dd>Once in 12 months</dd>
@@ -292,11 +292,11 @@ export const BODY_TOP = `
       <div class="st-hd"><h3 id="california">California</h3><span class="tag q">Unresolved for you</span></div>
       <p class="st-verdict"><strong>Treat this as unresolved.</strong> California masks the conviction on its own record, but whether that stops it reaching your home state is genuinely unsettled — it's one of the open questions below. Don't assume it protects your home record; call the clerk, and if the stakes are high, get advice first.</p>
       <dl>
-        <dt>Programme</dt><dd>Traffic violator school</dd>
+        <dt>Program</dt><dd>Traffic violator school</dd>
         <dt>Length</dt><dd>340 minutes of instruction plus 60 minutes of testing. Online courses are measured by word count instead, at a minimum of 42,500 words</dd>
         <dt>Effect</dt><dd>The conviction is entered and reported to DMV, then held confidential so no point is assessed and insurers cannot see it</dd>
         <dt>How often</dt><dd>Once in 18 months, and the bar attaches when you elect, not only when you finish</dd>
-        <dt>Who is barred</dt><dd>Misdemeanours, alcohol and drug violations, commercial vehicles, speeds more than 25 mph over, and anything carrying more than one point</dd>
+        <dt>Who is barred</dt><dd>Misdemeanors, alcohol and drug violations, commercial vehicles, speeds more than 25 mph over, and anything carrying more than one point</dd>
         <dt>License needed</dt><dd>A valid driver license. Rule 4.104 does not say a California one, though § 42005 frames the court's power around California class designations, so treat this as probable rather than settled</dd>
         <dt>Citations</dt><dd class="cite">Cal. Veh. Code §§ 1803.5, 1808.7, 42005; Cal. Rule of Court 4.104; 13 CCR § 345.30</dd>
       </dl>
@@ -327,7 +327,7 @@ export const BODY_TOP = `
       <div class="st-hd"><h3 id="ohio">Ohio</h3><span class="tag n">No help for you</span></div>
       <p class="st-verdict"><strong>The Ohio course does nothing for you</strong> — it only credits points on an Ohio record you don't have. Whether an Ohio court will instead dismiss or reduce your ticket for a course is up to that court, so call the clerk on your citation before you pay and ask.</p>
       <dl>
-        <dt>Programme</dt><dd>Course of remedial driving instruction, usually sold as the adult remedial or two-point course</dd>
+        <dt>Program</dt><dd>Course of remedial driving instruction, usually sold as the adult remedial or two-point course</dd>
         <dt>Length</dt><dd>Minimum 8 hours</dd>
         <dt>Effect</dt><dd>Two points credited. The conviction is untouched</dd>
         <dt>How often</dt><dd>Once in three years, five times in a lifetime</dd>
@@ -345,7 +345,7 @@ export const BODY_TOP = `
       <div class="st-hd"><h3 id="new-york">New York</h3><span class="tag n">No help for you</span></div>
       <p class="st-verdict"><strong>New York's PIRP does nothing for you</strong> — it only cuts points on a New York record you don't have, and never dismisses the ticket. There's no course-based fix for a visiting driver; if the ticket matters, that's a plea or hearing, which is a lawyer's territory.</p>
       <dl>
-        <dt>Programme</dt><dd>Point and Insurance Reduction Program (PIRP), online version I-PIRP</dd>
+        <dt>Program</dt><dd>Point and Insurance Reduction Program (PIRP), online version I-PIRP</dd>
         <dt>Length</dt><dd>320 minutes, classroom and online alike. Classroom delivery sits under Part 138 and the internet version under Part 141</dd>
         <dt>Effect</dt><dd>Up to 4 points subtracted for suspension maths. DMV states plainly that it does not remove the violation, the conviction, or the points from the record</dd>
         <dt>Insurance</dt><dd>Insurers must cut base premiums 10 per cent a year for three years</dd>
@@ -363,7 +363,7 @@ export const BODY_TOP = `
       <div class="st-hd"><h3 id="new-jersey">New Jersey</h3><span class="tag n">No help for you</span></div>
       <p class="st-verdict"><strong>The New Jersey course does nothing for you</strong> — it only credits points on a New Jersey record you don't have, and New Jersey has no online dismissal at all. Protecting your home record means contesting the charge, which usually means a lawyer.</p>
       <dl>
-        <dt>Programmes</dt><dd>Three separate ones. The voluntary Defensive Driving Course, the Driver Improvement Program triggered by point accumulation, and the Probationary Driver Program. MVC states that defensive driving is not a substitute for driver improvement</dd>
+        <dt>Programs</dt><dd>Three separate ones. The voluntary Defensive Driving Course, the Driver Improvement Program triggered by point accumulation, and the Probationary Driver Program. MVC states that defensive driving is not a substitute for driver improvement</dd>
         <dt>Length</dt><dd>Defensive driving is at least six hours, of which at least four must be classroom</dd>
         <dt>Effect</dt><dd>Defensive driving credits 2 points, once in five years, and only if points are actually on the record. Driver improvement credits up to 3</dd>
         <dt>Suspension</dt><dd>12 points, on a graduated schedule from 30 days upward</dd>
@@ -379,7 +379,7 @@ export const BODY_TOP = `
       <div class="st-hd"><h3 id="virginia">Virginia</h3><span class="tag n">No help for you</span></div>
       <p class="st-verdict"><strong>The Virginia clinic does nothing for you</strong> — it only touches a Virginia record you don't have. And take Virginia seriously: reckless driving is a criminal charge here at surprisingly low speeds, so if that's what you're facing, get a Virginia lawyer, not a course.</p>
       <dl>
-        <dt>Programme</dt><dd>Driver improvement clinic. CDL holders have a separate commercial program</dd>
+        <dt>Program</dt><dd>Driver improvement clinic. CDL holders have a separate commercial program</dd>
         <dt>Length</dt><dd>8 hours</dd>
         <dt>Effect</dt><dd>Five demerit points subtracted. If you have fewer than five demerits, you get a reduction and safe driving points instead, capped at five</dd>
         <dt>The trade-off</dt><dd>Safe driving points or the statutory insurance premium reduction, either one but not both, once in two years</dd>
@@ -398,7 +398,7 @@ export const BODY_TOP = `
       <div class="st-hd"><h3 id="georgia">Georgia</h3><span class="tag n">No help for you</span></div>
       <p class="st-verdict"><strong>The Georgia course does nothing for you</strong> — Georgia gives a non-resident no points to reduce in the first place. One quirk in your favor: Georgia is outside the Driver License Compact, so a routine <em>paid</em> speeding fine has no automatic route to your home state — but don't just ignore the ticket, which can trigger a suspension.</p>
       <dl>
-        <dt>Programme</dt><dd>Driver improvement, which DDS also calls defensive driving</dd>
+        <dt>Program</dt><dd>Driver improvement, which DDS also calls defensive driving</dd>
         <dt>Length</dt><dd>6 hours</dd>
         <dt>Effect</dt><dd>Up to 7 points removed, to not less than zero</dd>
         <dt>How often</dt><dd>Once in five years</dd>
