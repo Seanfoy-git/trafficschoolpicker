@@ -97,7 +97,7 @@ export const BODY_TOP = `
     <p>Ballotpedia still carries the old five and flags its own source as out of date, which is a reasonable guess at where most of the copies came from.</p>
   </div>
 
-  <p>Georgia not being a member matters more than it sounds. A routine Georgia speeding ticket against an out-of-state driver has no compact route home. It is not on the federal Problem Driver Pointer System either, because that system carries license withdrawals and a short list of serious offences, not ordinary speeding. <span class="cite">49 U.S.C. § 30304</span></p>
+  <p>Georgia not being a member matters more than it sounds. A routine Georgia speeding ticket against an out-of-state driver has no compact route home. It is not on the federal Problem Driver Pointer System either, because that system carries license withdrawals and a short list of serious offenses, not ordinary speeding. <span class="cite">49 U.S.C. § 30304</span></p>
 
   <p>Two things still reach you from Georgia. Anything serious enough to suspend or revoke a license goes into the federal pointer system and surfaces the next time you renew. And if you ignore the ticket entirely, Georgia is a member of the separate Non-Resident Violator Compact, which lets it ask your home state to suspend you for failing to appear. So "Georgia doesn't report it" is true of a paid speeding fine and false of everything else.</p>
 </section>
@@ -187,7 +187,7 @@ export const BODY_TOP = `
       </tbody>
     </table>
   </div>
-  <p class="tnote">The point-credit programmes work by adjusting that state's own driving record. Some of them have no written residency bar at all, and Virginia expressly admits any resident or non-resident holding a valid Virginia license. It makes no difference. If your license came from elsewhere there is no record there for the credit to touch.</p>
+  <p class="tnote">The point-credit programs work by adjusting that state's own driving record. Some of them have no written residency bar at all, and Virginia expressly admits any resident or non-resident holding a valid Virginia license. It makes no difference. If your license came from elsewhere there is no record there for the credit to touch.</p>
 
   <div class="box">
     <span class="lb">The Texas trap</span>
@@ -208,13 +208,13 @@ export const BODY_TOP = `
         <tr><th scope="col">Your license</th><th scope="col">Points on out-of-state convictions</th><th scope="col">Detail</th><th scope="col">Source</th></tr>
       </thead>
       <tbody>
-        <tr><th scope="row">New Jersey</th><td><span class="tag x">Yes, flat 2</span></td><td>Two points for any out-of-state moving violation, whatever the offence was and whatever New Jersey would charge for the same thing at home</td><td class="cite">N.J.A.C. 13:19-10.1, item 55</td></tr>
-        <tr><th scope="row">Virginia</th><td><span class="tag x">Yes</span></td><td>Points assigned to convictions received from any other state, and from Canada and its provinces, if the offence would be reportable in Virginia</td><td class="cite">Va. Code § 46.2-492(B)</td></tr>
+        <tr><th scope="row">New Jersey</th><td><span class="tag x">Yes, flat 2</span></td><td>Two points for any out-of-state moving violation, whatever the offense was and whatever New Jersey would charge for the same thing at home</td><td class="cite">N.J.A.C. 13:19-10.1, item 55</td></tr>
+        <tr><th scope="row">Virginia</th><td><span class="tag x">Yes</span></td><td>Points assigned to convictions received from any other state, and from Canada and its provinces, if the offense would be reportable in Virginia</td><td class="cite">Va. Code § 46.2-492(B)</td></tr>
         <tr><th scope="row">California</th><td><span class="tag x">Yes</span></td><td>Negligent operator points for convictions in other states, DC, Puerto Rico and Canada</td><td class="cite">CA DMV, negligent operator</td></tr>
-        <tr><th scope="row">Florida</th><td><span class="tag x">Yes</span></td><td>The statute is permissive. An out-of-state conviction may be recorded against the Florida record and pointed if the offence is point-assessable</td><td class="cite">Fla. Stat. § 322.27(3)(e)</td></tr>
-        <tr><th scope="row">Georgia</th><td><span class="tag x">Yes</span></td><td>Assessed where the offence would be grounds for assessment if committed in Georgia. Georgia is inconsistent about receiving the data, being outside the compact</td><td class="cite">O.C.G.A. § 40-5-57(b)</td></tr>
+        <tr><th scope="row">Florida</th><td><span class="tag x">Yes</span></td><td>The statute is permissive. An out-of-state conviction may be recorded against the Florida record and pointed if the offense is point-assessable</td><td class="cite">Fla. Stat. § 322.27(3)(e)</td></tr>
+        <tr><th scope="row">Georgia</th><td><span class="tag x">Yes</span></td><td>Assessed where the offense would be grounds for assessment if committed in Georgia. Georgia is inconsistent about receiving the data, being outside the compact</td><td class="cite">O.C.G.A. § 40-5-57(b)</td></tr>
         <tr><th scope="row">New York</th><td><span class="tag y">No, except Canada</span></td><td>DMV states points are not added for convictions in another state or country unless the violation happened in Canada, under a reciprocal agreement</td><td class="cite">NY DMV point system</td></tr>
-        <tr><th scope="row">North Carolina</th><td><span class="tag y">No</span></td><td>The point provisions apply only to violations and convictions that take place within North Carolina. Suspension for a serious out-of-state offence is still possible</td><td class="cite">N.C.G.S. § 20-16(c), 20-16(a)(7)</td></tr>
+        <tr><th scope="row">North Carolina</th><td><span class="tag y">No</span></td><td>The point provisions apply only to violations and convictions that take place within North Carolina. Suspension for a serious out-of-state offense is still possible</td><td class="cite">N.C.G.S. § 20-16(c), 20-16(a)(7)</td></tr>
         <tr><th scope="row">Ohio</th><td><span class="tag y">No points</span></td><td>Points are assessed by the sentencing court and only Ohio courts feed that chain. Read from the statute's structure rather than from any published BMV position</td><td class="cite">O.R.C. §§ 4510.036(B), 4510.61</td></tr>
         <tr><th scope="row">Texas</th><td><span class="tag y">No system</span></td><td>Texas repealed the Driver Responsibility Program in 2019 and has no points. Out-of-state convictions still count toward habitual violator suspension</td><td class="cite">Tex. Transp. Code § 521.292</td></tr>
         <tr><th scope="row">Arizona</th><td><span class="tag q">Unresolved</span></td><td>Nothing in the rule excludes out-of-state convictions, and unlike Ohio it is the Department that assigns Arizona points. Whether it assigns them here is not published anywhere we could find</td><td class="cite">See open questions</td></tr>
@@ -283,7 +283,7 @@ export const BODY_TOP = `
         <dt>Citations</dt><dd class="cite">Tex. Code Crim. Proc. arts. 45A.351 to 45A.359</dd>
       </dl>
       <p>If your court paperwork still cites the former article number, it is the same rule, recodified as Art. 45A.352 on 1 January 2025.</p>
-      <p>Senate Bill 296 then changed things again from 1 September 2025. You can now make the written request by email or through a court's own online portal, and where several charges came out of the same incident, each of them is eligible for dismissal on a single course. The court may also charge the $10 fee per eligible offence rather than once.</p>
+      <p>Senate Bill 296 then changed things again from 1 September 2025. You can now make the written request by email or through a court's own online portal, and where several charges came out of the same incident, each of them is eligible for dismissal on a single course. The court may also charge the $10 fee per eligible offense rather than once.</p>
       <p class="more"><a href="/texas/does-traffic-school-remove-points">Texas in more depth: does traffic school remove points there</a></p>
     </div>
 
@@ -367,7 +367,7 @@ export const BODY_TOP = `
         <dt>Length</dt><dd>Defensive driving is at least six hours, of which at least four must be classroom</dd>
         <dt>Effect</dt><dd>Defensive driving credits 2 points, once in five years, and only if points are actually on the record. Driver improvement credits up to 3</dd>
         <dt>Suspension</dt><dd>12 points, on a graduated schedule from 30 days upward</dd>
-        <dt>Cost</dt><dd>The driver improvement programme carries a $75 administrative fee to MVC on top of provider fees</dd>
+        <dt>Cost</dt><dd>The driver improvement program carries a $75 administrative fee to MVC on top of provider fees</dd>
         <dt>Citations</dt><dd class="cite">N.J.A.C. 13:21-24.2, 13:21-24.5, 13:19-10.1, 13:19-10.2</dd>
       </dl>
       <p>New Jersey is the harshest home state in this group and the reason is the flat rate. Two points for an out-of-state moving violation regardless of severity, which means a minor infraction in a state you were driving through costs the same as one that would have been minor at home.</p>
@@ -379,7 +379,7 @@ export const BODY_TOP = `
       <div class="st-hd"><h3 id="virginia">Virginia</h3><span class="tag n">No help for you</span></div>
       <p class="st-verdict"><strong>The Virginia clinic does nothing for you</strong> — it only touches a Virginia record you don't have. And take Virginia seriously: reckless driving is a criminal charge here at surprisingly low speeds, so if that's what you're facing, get a Virginia lawyer, not a course.</p>
       <dl>
-        <dt>Programme</dt><dd>Driver improvement clinic. CDL holders have a separate commercial programme</dd>
+        <dt>Programme</dt><dd>Driver improvement clinic. CDL holders have a separate commercial program</dd>
         <dt>Length</dt><dd>8 hours</dd>
         <dt>Effect</dt><dd>Five demerit points subtracted. If you have fewer than five demerits, you get a reduction and safe driving points instead, capped at five</dd>
         <dt>The trade-off</dt><dd>Safe driving points or the statutory insurance premium reduction, either one but not both, once in two years</dd>
@@ -389,14 +389,14 @@ export const BODY_TOP = `
         <dt>Suspension</dt><dd>18 points in 12 months or 24 in 24 months for drivers 18 and over</dd>
         <dt>Citations</dt><dd class="cite">Va. Code §§ 46.2-492, 46.2-498, 46.2-505, 46.2-506, 38.2-2217</dd>
       </dl>
-      <p>Virginia is the state most likely to turn a routine trip into a criminal matter. Reckless driving is a Class 1 misdemeanour, and it does not take much speed to get there. For an international student with no baseline for how American traffic law works, that is the single most important thing on this page.</p>
+      <p>Virginia is the state most likely to turn a routine trip into a criminal matter. Reckless driving is a Class 1 misdemeanor, and it does not take much speed to get there. For an international student with no baseline for how American traffic law works, that is the single most important thing on this page.</p>
       <p class="more"><a href="/virginia/does-traffic-school-remove-points">Virginia in more depth: does traffic school remove points there</a></p>
     </div>
 
     <div class="st">
       <p class="st-eyebrow">Out-of-state driver's guide</p>
       <div class="st-hd"><h3 id="georgia">Georgia</h3><span class="tag n">No help for you</span></div>
-      <p class="st-verdict"><strong>The Georgia course does nothing for you</strong> — Georgia gives a non-resident no points to reduce in the first place. One quirk in your favour: Georgia is outside the Driver License Compact, so a routine <em>paid</em> speeding fine has no automatic route to your home state — but don't just ignore the ticket, which can trigger a suspension.</p>
+      <p class="st-verdict"><strong>The Georgia course does nothing for you</strong> — Georgia gives a non-resident no points to reduce in the first place. One quirk in your favor: Georgia is outside the Driver License Compact, so a routine <em>paid</em> speeding fine has no automatic route to your home state — but don't just ignore the ticket, which can trigger a suspension.</p>
       <dl>
         <dt>Programme</dt><dd>Driver improvement, which DDS also calls defensive driving</dd>
         <dt>Length</dt><dd>6 hours</dd>
@@ -446,7 +446,7 @@ export const BODY_TOP = `
 
   <div class="box red">
     <span class="lb">What to actually do</span>
-    <p>Call the clerk of the court printed on your citation before you pay anything and before you enrol in anything. Ask two questions. Whether the court offers a disposition that avoids a conviction, and whether you qualify for it holding an out-of-state license. Those two answers settle your case, and no page on the internet can settle it for you.</p>
+    <p>Call the clerk of the court printed on your citation before you pay anything and before you enroll in anything. Ask two questions. Whether the court offers a disposition that avoids a conviction, and whether you qualify for it holding an out-of-state license. Those two answers settle your case, and no page on the internet can settle it for you.</p>
   </div>
 </section>
 `;
@@ -463,7 +463,7 @@ export const BODY_SOURCES = `
     <li>15 NYCRR Parts 138 and 141; NY DMV Point and Insurance Reduction Program; NY DMV point system; DMV Commissioner's notice of 30 January 2026</li>
     <li>N.J.A.C. 13:21-24.2, 13:21-24.5, 13:19-10.1, 13:19-10.2; NJ MVC driver programs and point schedule</li>
     <li>O.R.C. §§ 4510.036, 4510.037, 4510.61; O.A.C. Ch. 4501-21; Ohio BMV materials</li>
-    <li>O.C.G.A. §§ 40-5-57, 40-5-86; Georgia DDS points and points reduction, driver improvement programme</li>
+    <li>O.C.G.A. §§ 40-5-57, 40-5-86; Georgia DDS points and points reduction, driver improvement program</li>
     <li>N.C.G.S. §§ 20-4.01(4a), 20-4.24, 20-16, 20-24; 19A NCAC 03G .0400; UNC School of Government benchbook; NCDMV</li>
     <li>Va. Code §§ 38.2-2217, 46.2-492(B), 46.2-498, 46.2-505, 46.2-506; Virginia DMV driver improvement, clinics, and point assessment pages</li>
     <li>A.R.S. §§ 28-101, 28-701.02, 28-1852, 28-3392 to 28-3396; A.A.C. R17-4-404 and Table 1; ACJA § 7-205; Arizona Supreme Court defensive driving school instructions</li>
