@@ -144,21 +144,21 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   louisiana: {
     title: "Best Online Defensive Driving Louisiana (2026)",
-    description: "Compare Louisiana-approved online defensive driving courses. Dismiss your ticket in most parish courts. Lowest prices.",
+    description: "Compare Louisiana-approved online defensive driving courses. Dismiss a first-offense misdemeanor ticket statewide, once every 2 years (art. 892.1), or earn a 10% insurance discount.",
     h1: "The Best Online Defensive Driving Courses in Louisiana (2026)",
     primaryKeyword: "Louisiana defensive driving online",
     canonicalPath: "/louisiana",
   },
   oklahoma: {
     title: "Best Online Defensive Driving Oklahoma (2026)",
-    description: "Compare Oklahoma-approved online defensive driving courses. Dismiss your traffic ticket. Lowest prices.",
+    description: "Oklahoma's 2-point credit requires an in-person classroom course, not online; any ticket dismissal is up to the court on your citation. Here's what qualifies.",
     h1: "The Best Online Defensive Driving Courses in Oklahoma (2026)",
     primaryKeyword: "Oklahoma defensive driving online",
     canonicalPath: "/oklahoma",
   },
   "new-mexico": {
     title: "Best Online Defensive Driving New Mexico (2026)",
-    description: "Compare New Mexico DMV-approved online defensive driving courses. Dismiss your ticket. Lowest prices.",
+    description: "New Mexico has no statewide MVD program to remove points; dismissal is up to the court on your citation, which may accept a course as a deferral so no points are assessed. Here's what actually helps.",
     h1: "The Best Online Defensive Driving Courses in New Mexico (2026)",
     primaryKeyword: "New Mexico defensive driving online",
     canonicalPath: "/new-mexico",
@@ -312,7 +312,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   oregon: {
     title: "Traffic School in Oregon (2026)",
-    description: "Oregon requires in-person traffic school for most violations. Find DDAC-approved course providers and understand your options.",
+    description: "Oregon has no statewide diversion program. With the court's approval, an approved traffic-safety course (online or classroom) may dismiss a minor violation. Here's what actually helps.",
     h1: "Traffic School in Oregon: What You Need to Know (2026)",
     primaryKeyword: "Oregon traffic school",
     canonicalPath: "/oregon",
