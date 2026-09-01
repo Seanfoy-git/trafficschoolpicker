@@ -125,3 +125,79 @@ deploy fails until these are cleared. So the "deploy after each batch" cadence
 becomes "clear the guard, then deploy green" — safer given Sean's records-ahead-of-
 prose concern. Guard commit is on main but **push is held until the build is
 guard-green** (else main's HEAD deploy would red-fail on the 13 known contradictions).
+
+## 2026-09-01 (cont.) — Task 2a/2b batch: 8 states reconciled, guard down to 1 (GA)
+
+All changes are Notion writes (States DB); staged behind the guard (no deploy yet —
+GA still blocks a green build, see Flag). Fresh-cache validation build confirms each
+fix cleared its guard finding with no new contradiction. Method: verify against a
+first-party source, then set the record to match the state's own already-sourced
+prose (conservative deletion of an overstated claim).
+
+**2a — no statewide program -> Court discretion** (Online Model="Court discretion",
+Online Dismisses Ticket=false, Dismissal Answer="Court-by-court"; KF renders
+"Court-by-court"):
+- **CO** (id 8469…05c8). Scoped to the DISMISSAL overstatement only. Source note:
+  CO has no statewide *dismissal* program (court-by-court); its own intro already
+  says so. **Left its point story alone and FLAGGED it** — HB24-1250 (signed
+  2024-06-04, eff. 2024-08-07, Chapter 391) created a statutory driving-improvement
+  *points-waiver* framework with specifics left to DOR rulemaking, so the record's
+  "reduce 4 points/12mo" claim and the intro's "no points program" line are now BOTH
+  possibly stale and need the DOR rule to pin. Not touched (product-story + unpinnable).
+  Source: leg.colorado.gov/bills/hb24-1250.
+- **HI** (4369…bb9a), **IA** (9cb9…81b1), **MT** (73f9…cd38). Each intro/court-notes
+  already state court-discretion / no statewide dismissal; hours-to-verify.md classes
+  all three NO_STATEWIDE_PROGRAM. Clean overstatement deletions.
+
+**2b — statewide point-reduction -> Point reduction** (Online Model="Point reduction",
+Online Dismisses Ticket=false; KF renders "No, point credit instead"):
+- **ND** (6239…feda). Source: dot.nd.gov — reduce total points by 3, once/12mo; also
+  "in lieu of points" for some ≤5-point violations. Dismissal is court-by-court.
+- **WI** (89c9…d931). Source: docs.legis.wisconsin.gov Trans 101.07 — reduce demerit
+  points by 3, once every 3 years; no statewide dismissal (some courts defer). Its own
+  intro already cited Trans 101.07.
+- **MI** (fd29…cb0a). Point-reduction reframe + two more fixes, all matching MI's own
+  FAQ: Certificate Submission "Driver Submits"->"School Submits" (FAQ: "the school
+  handles state reporting"); corrected the phantom FAQ answer "Driver Improvement
+  Program requires 8 hours" -> BDIC 4 hours (MCL 257.320d; matches KF + FAQ items 4/6).
+  **MI Task 4 still open:** BDIC is invitation-only (SOS mails eligibility) — whether
+  to demote retail cards / go informational is the Task 4 decision (kept cards for now;
+  did not remove monetization).
+
+**2d — frequency dedup:**
+- **VA** (f079…dead30; note's id had a typo — last segment is `816bfdbead30`).
+  FAQ said "Once every 12 months"; record eligibility + Va. Code § 46.2-498 + VA DMV
+  say **once every 24 months** (5 safe-driving points, only once per 2 years). Fixed the
+  FAQ answer to 24 months + added the § 46.2-498 cite. Point/dismissal framing untouched.
+
+**Guard now: 1 finding — georgia only.** => ready for a green build the moment GA is
+resolved.
+
+## FLAGS for Sean / claude-5d (do NOT let me guess these)
+
+1. **GA (BLOCKS the green deploy).** Guard: KF "Ticket dismissal: Yes" vs FAQ "Georgia
+   defensive driving … does not dismiss … reduces active points by up to 7." GA has two
+   tracks (online course -> court nol pros dismissal = the monetized product; DDS 6-hr
+   classroom/Zoom -> point reduction, not online). The honest fix depends on GA's
+   *product story*: is online->dismissal a statewide "Yes" or really court-by-court
+   (the amber callout says "accepted by MANY GA courts … check with your court" — that
+   reads court-by-court)? GA is monetized and NOT in the Task 2 list, so per the STOP
+   rule I did not touch it. **Decision needed:** keep KF "Yes" and relabel the DDS
+   "does not dismiss" content under a non-"dismiss" question, OR move GA to court-
+   discretion. Either changes/【clarifies】the product story -> claude-5d.
+2. **CO point story (HB24-1250).** See 2a above — needs the DOR points-waiver rule to
+   state specifics; intro + Court Notes + Fun Fact are internally inconsistent post-2024.
+3. **Brief absence.** `cc-brief-p10-keyfacts-2026-09` is not in the repo, so this whole
+   continuation ran off hours-to-verify.md + first-party verification, not the brief's
+   pinned URLs/values. If the brief exists, reconcile my 8 records against it before
+   deploy. NC (in the 2a list) did NOT fire the guard and has a real PJC + DMV point-
+   reduction story — left untouched pending the brief.
+
+## Remaining P10 work (unchanged, still open)
+- Task 2 remainder: OH, NY, WV, CA, FL, WA, MS, NH, RI (2b) and AZ, SC, PA, MO, DE, IN
+  (2d) — none currently fire the guard, but their prose is still un-audited.
+- Task 4 card gating (DC two approved providers; MI informational; MN 55+ scope; OK
+  dismissal-only + "DPS"->Service Oklahoma + em-dash; TX card submitter line; the
+  "state-approved" Product template).
+- Task 3 FAQ dedup (51; GA is the first real one) + Task 5 regenerate metas/llms + full
+  verify script + the SEO "2025"->2026 titles noticed on CO/HI/IA/MT.
