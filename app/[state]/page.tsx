@@ -184,7 +184,11 @@ export default async function StatePage({ params }: Props) {
     ? new Set((await getAllSchools()).map((s) => s.slug))
     : new Set<string>();
 
-  const comparisonSchema = showComparison
+  // Washington DC: the national comparison cards are shown for reference only —
+  // DC point removal can be earned ONLY through the two DC DMV-approved providers
+  // (see the DC callout below), so we suppress the Product/Offer markup that would
+  // otherwise assert these cards are the DC-approved course (P10 Task 4).
+  const comparisonSchema = showComparison && stateSlug !== "washington-dc"
     ? buildComparisonItemList(
         tier1Resolved,
         stateMeta.name,
@@ -345,8 +349,12 @@ export default async function StatePage({ params }: Props) {
             <div>
               <p className="font-semibold text-amber-800">Insurance discount only</p>
               <p className="text-sm text-amber-700">
-                Traffic school in {stateMeta.name} is for insurance discounts, not ticket dismissal.
-                Check your eligibility with your court before enrolling.
+                Traffic school in {stateMeta.name} is for an insurance discount, not ticket dismissal.
+                {stateMeta.code === "MN" && (
+                  <> In Minnesota the mandated discount is for drivers age 55 and older who complete an
+                    approved accident-prevention course (Minn. Stat. § 65B.28).</>
+                )}
+                {" "}Confirm the discount with your insurer before enrolling.
               </p>
             </div>
           </div>
@@ -507,6 +515,41 @@ export default async function StatePage({ params }: Props) {
                 accepted for that benefit. The schools listed below are accepted by
                 many Georgia courts for ticket dismissal. Check with your court
                 before enrolling.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* WASHINGTON DC — the answer is the DC DMV's two approved online providers.
+          The national comparison cards below are demoted to reference only: they
+          carry no DC benefit claim and their Product/Offer markup is suppressed
+          (P10 Task 4). Provider list + process sourced to dmv.dc.gov. */}
+      {stateSlug === "washington-dc" && (
+        <section className="py-6 bg-amber-50 border-b border-amber-200">
+          <div className="max-w-5xl mx-auto px-4 flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+            <div>
+              <p className="font-semibold text-amber-800 mb-1">
+                DC point removal runs only through the DC DMV&apos;s two approved providers
+              </p>
+              <p className="text-sm text-amber-700">
+                To remove points in Washington DC you first need approval from a DC DMV
+                hearing examiner, then complete a DC DMV-approved online course within 30
+                days. The DC DMV lists only two approved online providers:{" "}
+                <strong>American Safety Council</strong> and{" "}
+                <strong>Online Traffic School Inc.</strong> (
+                <a
+                  href="https://dmv.dc.gov/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:underline"
+                >
+                  dmv.dc.gov
+                </a>
+                ). The national courses listed below are shown for reference only and are
+                <strong> not valid for DC point removal</strong>; confirm the current
+                approved-provider list with the DC DMV before you pay.
               </p>
             </div>
           </div>

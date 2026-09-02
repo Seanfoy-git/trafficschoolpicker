@@ -299,6 +299,35 @@ llms-full.txt regenerates in prebuild and greps clean.
 - SEO "2025" in Notion SEO Title fields (cosmetic; live metas come from seo-config and
   are 2026). GA price triple labeling is P11.
 
+## 2026-09-01 (cont. 4) — closing four items (claude-5d), P10 CLOSED
+
+Guard green; TypeScript compiles; built-HTML checks all pass.
+
+1. **DC (decision applied):** Product/Offer JSON-LD suppressed for DC
+   (`comparisonSchema` gated on `stateSlug !== "washington-dc"`). Added a DC callout
+   presenting the DC DMV's two approved online providers — **American Safety Council**
+   and **Online Traffic School Inc.** (dmv.dc.gov) — with the hearing-examiner + 30-day
+   process, and the line that the national courses below are reference-only and **not
+   valid for DC point removal**. Deleted the "needs verification" hedge from Research
+   Notes; eligibility restamped September. (DC Product count on built page = 0; both
+   providers + disclaimer render.)
+2. **MN + TX cards:** MN — the "Insurance discount only" banner now carries the 55+
+   scope (Minn. Stat. § 65B.28) and correctly says "confirm with your insurer" (was
+   the Task-1 "check with your court" bug). MN cards themselves carry only generic
+   school pros (no unscoped discount claim). TX — removed the false "same-day court
+   reporting" from the TDLR variant (One Liner + Pros) AND from the Schools-DB base
+   "Best For" that named TX; TX reality is driver-presents-to-court.
+3. **MS:** the last bare "Ticket dismissal: Yes" sitewide is now "Yes, through your
+   county court" (the mechanism), matching every other state.
+4. **Stamps:** MI/MT/NY rewritten fields now carry "Last checked September 2026".
+
+**P10 acceptance criteria met** across two production deploys + this closing batch:
+one-renderer Key Facts/banner/meta; no bare dismissal "Yes" on any point-credit /
+masking / court-discretion state; program-record corrections shipped with cites; the
+CI guard proves-and-fails on a plant; DC/MI render no card claiming the state benefit,
+MN carries the 55+ scope, no Product claims approval in a no-approval state; the six
+truncated eligibility cells render full citations; llms regenerate and grep clean.
+
 ## Remaining P10 work (unchanged, still open)
 - Task 2 remainder: OH, NY, WV, CA, FL, WA, MS, NH, RI (2b) and AZ, SC, PA, MO, DE, IN
   (2d) — none currently fire the guard, but their prose is still un-audited.
