@@ -1791,11 +1791,11 @@ DMV-licensed schools are compared on the California page; the fee stack is on ou
 - **Online accepted:** Yes, statewide, for FLHSMV-approved Basic Driver Improvement courses
 - **The deadline that governs everything:** Elect the course with the clerk within 30 days of the citation
 - **Not eligible at any format:** CDL holders; citations for 30+ mph over the limit
-- **Last verified:** August 2026
+- **Last verified:** September 2026
 
 Yes. Florida approves online Basic Driver Improvement courses at the state level, through FLHSMV, so an approved online course counts in every county; there's no court-by-court lottery on format.
 
-What Florida rations instead is time and turns. The election, telling the clerk you're taking the course, must happen within 30 days of the citation, and blowing that deadline closes the option no matter how eligible the course is. And each election spends one of your once-per-12-months, five-per-lifetime allotment, which is worth checking on your driving record before you commit a marginal ticket to it.
+What Florida rations instead is time and turns. The election, telling the clerk you are taking the course, must happen within 30 days of the citation, and blowing that deadline closes the option no matter how eligible the course is. Each election also spends one of your once-per-12-months, eight-per-lifetime allotment (s. 318.14(9), as amended 2025), which is worth checking on your driving record before you commit a marginal ticket to it.
 
 The exclusions run at any format: commercial license holders can't elect, and a citation for 30 mph or more over the limit is ineligible outright.
 
@@ -1850,7 +1850,7 @@ Every FLHSMV-approved online BDI course we track is compared on the Florida page
 
 - **Basic Driver Improvement, the ticket-election course:** 4 hours, set by the state
 - **Don't confuse it with ADI:** Advanced Driver Improvement runs 8 or 12 hours and serves court orders and license reinstatement, not the standard election
-- **Last verified:** August 2026
+- **Last verified:** September 2026
 
 Four hours, for the course you almost certainly mean. Florida's Basic Driver Improvement, the one you elect within 30 days of a citation, is a 4-hour course by state rule, the same at every FLHSMV-approved school, making it one of the shortest ticket courses in the country.
 
@@ -1858,7 +1858,7 @@ The confusion to avoid is buying the wrong Florida course entirely. Florida also
 
 One clock clarification that relieves people: the famous 30-day deadline is for electing the course with the clerk, not completing it. Elect in time and the completion window runs on the clerk's schedule, with the course itself savable across sittings. Four hours against that window is the easy part; the election deadline is the part that bites.
 
-Every approved online BDI course we track is compared on the Florida page, and the once-per-12-months, five-per-lifetime rationing is on our frequency page.
+Every approved online BDI course we track is compared on the Florida page, and the once-per-12-months, eight-per-lifetime rationing (s. 318.14(9), as amended 2025) is on our frequency page.
 
 **Sources:** FLHSMV BDI/ADI | Fla. Stat. 318.14(9)
 
@@ -1921,17 +1921,17 @@ If you're electing, the full price stack is on our cost page, and every approved
 
 **URL:** https://www.trafficschoolpicker.com/florida/is-traffic-school-worth-it
 
-- **Verdict:** Yes, with the most honest caveat in the series: Florida's return is the most modest of the big states
+- **Verdict:** Yes. Florida's three-year exposure is lower than California's or Texas's, but it is still substantial, so a low-priced course pays for itself many times over
 - **What you spend:** A low-priced course plus fees, typically $40 to $60 all-in beyond the ticket
-- **What it can prevent:** Roughly $930 in three-year insurance exposure (ceiling estimate), up to roughly a 15 to 20x return
-- **The rationing question:** Each use spends one of five lifetime elections
-- **Last verified:** August 2026
+- **What it can prevent:** Roughly $3,966 in three-year insurance exposure (TrafficSchoolPicker true-cost study), a large return on a $40 to $60 course
+- **The rationing question:** Each use spends one of eight lifetime elections (s. 318.14(9), as amended 2025)
+- **Last verified:** September 2026
 
-Yes, but Florida deserves the honest version, because its numbers are different from its neighbors'.
+Yes. Florida's numbers are a little lower than its big neighbors, but the course still pays for itself many times over.
 
-Florida's insurance market punishes a single ticket less than most big states: our data shows a comparatively mild premium-increase percentage, putting three-year exposure on a typical ticket at roughly $930 as a ceiling estimate. The election route, paying the fine plus a 4-hour course and fees, typically costs $40 to $60 beyond the ticket itself, and buys no points, no conviction, and statutory protection against the surcharge, since Florida law bars insurers from raising rates on an election with no points. Up to roughly 15 to 20x on the money. Excellent by any normal standard, and still the smallest multiple among the big states on this site.
+Florida's insurance market punishes a single ticket somewhat less than California or Texas, but our true-cost study still puts the three-year exposure on a typical ticket at about $3,966. The election route, paying the fine plus a 4-hour course and fees, typically costs $40 to $60 beyond the ticket itself, and buys no points, no conviction, and statutory protection against the surcharge, since Florida law bars insurers from raising rates on an election with no points. That is roughly 65 to 100x on the money, a strong return by any normal standard.
 
-Why the modest multiple changes behavior: Florida is the state where the course competes with your lifetime ration. Five elections, ever. On a ticket whose realistic insurance consequence is small, especially for a driver whose carrier tapers or shrugs, spending election three of five is a real cost the sticker price doesn't show. Our rule of thumb: elect without hesitation when points would land on a record that matters, think twice on a marginal ticket late in your election count.
+Why the ration still matters: Florida lets you elect only eight times in a lifetime (s. 318.14(9), as amended 2025; note FLHSMV's own FAQ still shows the old five-election limit, so cite the statute). Because the return is high, elect whenever points would otherwise land on a record that matters. The only time to pause is a very marginal ticket late in your election count, when you may want to save an election for a costlier violation.
 
 The clock either way: elect with the clerk within 30 days or the question answers itself.
 
@@ -2077,21 +2077,21 @@ Pricing sits on our cost page, roughly $20 to $95 depending on school, and every
 
 **URL:** https://www.trafficschoolpicker.com/georgia/is-traffic-school-worth-it
 
-- **Verdict:** Yes when points are the problem; it is not an insurance shield
+- **Verdict:** Yes when points are the problem, and completing the course also earns a mandated insurance discount; it does not hide the conviction from insurers
 - **What you spend:** $20 to $95 and six hours
 - **What it can do:** Up to 7 points off (once every 5 years), and courts can attach up to 20% fine reductions or zero-point orders
-- **What it can't do:** Prevent the roughly $2,100 three-year insurance exposure (ceiling estimate) from a conviction insurers can see
-- **Last verified:** August 2026
+- **What it does not do:** mask the ticket; insurers still see the conviction. It does earn a mandated insurance discount of at least 10 percent for qualifying completion (O.C.G.A. § 33-9-42)
+- **Last verified:** September 2026
 
-Yes, for the right problem. Georgia's course is a points tool, the strongest one in the country, and the mistake is expecting it to be an insurance tool too.
+Yes, for the right problem. Georgia's course is a points tool, the strongest one in the country, and it also earns a mandated insurance discount for completion (O.C.G.A. § 33-9-42); the mistake is expecting it to hide the conviction from insurers, which it does not.
 
 Start with what it does brilliantly. Up to 7 points off your record, once every five years, is a bigger single credit than any other state offers, and for a driver whose total is climbing toward Georgia's 15-points-in-24-months suspension line, a $20 to $95 course that resets most of the ladder is cheap at triple the price. Layer in what courts can attach when resolving a specific case, fine reductions up to 20% and zero-point orders, and the course earns its place in almost any Georgia ticket strategy where the court's open to it.
 
-Now the honest limit. Georgia mandates no insurance discount for course completion, and the standard course doesn't erase the conviction; insurers see the ticket, and our data puts its three-year exposure at roughly $2,100 as a ceiling estimate on a typical citation. A zero-point order from a court can blunt some of that; the once-per-five-years reduction, taken later, doesn't reach back to hide anything. So the worth-it test is simple: if the question is your point total or a court's offer, yes, decisively. If the question is purely your premium, the course isn't the instrument, and nothing in Georgia quite is.
+Now the honest limit. Georgia does mandate an insurance discount of at least 10 percent for qualifying course completion (O.C.G.A. § 33-9-42), but the standard course does not erase the conviction, so insurers still see the ticket. A zero-point order from a court can blunt more of the exposure; the once-per-five-years point reduction, taken later, does not reach back to hide anything. So the worth-it test is simple: if the question is your point total, a court's offer, or the mandated discount, yes, decisively. If you expected the course to hide the ticket from insurers, that is the one thing it does not do. Last checked September 2026.
 
 DDS-certified courses are compared on the Georgia page; the five-year allocation question is on our frequency page.
 
-**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | OCGA 40-5-86 | DDS Court Reference Manual
+**Sources:** Ticket Cost Study: https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket | O.C.G.A. 40-5-86 | O.C.G.A. 33-9-42 | DDS Court Reference Manual | Last checked September 2026
 
 ---
 
@@ -2302,14 +2302,14 @@ Every DMV-approved online PIRP sponsor we track is compared on the New York page
 
 **URL:** https://www.trafficschoolpicker.com/new-york/how-long-does-traffic-school-take
 
-- **Course length:** 6 hours, the DMV's requirement for every approved PIRP and IPIRP course
-- **Last verified:** August 2026
+- **Course length:** 320 minutes (5 hours 20 minutes), the DMV minimum for every approved PIRP and IPIRP course
+- **Last verified:** September 2026
 
-Six hours, whether you take it in a classroom or online through IPIRP, because the number belongs to the DMV's program requirements, not to any sponsor. Every approved course in the state runs the same length, which turns "which course is shortest" into a question with no answer and "which course is cheapest and least painful for six hours" into the real one.
+320 minutes, that is 5 hours and 20 minutes, whether you take it in a classroom or online through IPIRP, because the number belongs to the DMV's program requirements, not to any sponsor (providers often schedule a 6-hour session that includes breaks). Every approved course in the state runs the same minimum length, which turns which course is shortest into a question with no answer and which course is cheapest and least painful into the real one.
 
-Online, the six hours behave like New York wrote them for commuters: progress saves, sittings are yours to schedule, and sponsors break the material into timed sections so the total instruction time meets the DMV's requirement however you slice it. There's no court deadline pressing on you for the standard voluntary use, since no ticket is being dismissed; you're taking it for the point reduction, the 10% insurance discount, or both benefit clocks, and completion simply starts them.
+Online, the 320 minutes behave like New York wrote them for commuters: progress saves, sittings are yours to schedule, and sponsors break the material into timed sections so the total instruction time meets the DMV requirement however you slice it. There is no court deadline pressing on you for the standard voluntary use, since no ticket is being dismissed; you are taking it for the point reduction, the 10% insurance discount, or both benefit clocks, and completion simply starts them.
 
-One timing note worth six hours of your attention: the point reduction applies to violations in the 18 months before completion. Finish the course, then let the benefit do its lookback; a course finished before the points exist reduced nothing.
+One timing note worth your attention: the point reduction applies to violations in the 18 months before completion. Finish the course, then let the benefit do its lookback; a course finished before the points exist reduced nothing.
 
 Every DMV-approved online course we track is compared on the New York page, and the two benefit clocks are laid out on our frequency page.
 
