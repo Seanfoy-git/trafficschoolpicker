@@ -61,3 +61,19 @@ forbids inventing) or a change to the price-resolution fallback logic on a monet
 surface — both belong in the pricing pipeline / Scraper-Rules "Verified Price" workflow
 (see memory: method-first pricing, daily xgrit sync would overwrite an ad-hoc edit).
 **Recommend:** route the one dated price pull + the TX floor through that workflow.
+
+## 2026-09-02 — closeout of the two flags (claude-5d rulings)
+
+1. **Price floors (code, not data):** removed the generic-price fallback in
+   `resolveStateContent` (lib/notion.ts) — a school with no confirmed per-state price
+   now renders "Check website" (price null) instead of its flat national price, so no
+   invented below-floor "from $X". TX Key Facts floor is now **from $25.00** (its
+   confirmed prices), CA $29, NY $24, etc.; card COUNT unchanged (cards still render,
+   just drop from the Product ItemList when price is null). Also softened idrivesafely's
+   base Pros bullet "Lowest price in most states, from $19.95" → "Lowest price in most
+   states" (the last "$19.95" surface; card copy only, tracker/offer untouched). The
+   dated pull to fill real values stays queued for the Verified Price workflow.
+2. **Tennessee:** reclassified in does-traffic-school-remove-points — out of the masking
+   list, into point reduction (4-hour driver-improvement course, once every 4 years,
+   matching /tennessee), with a table row + Tenn. Dept. of Safety source; September stamp
+   already on the post.

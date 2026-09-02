@@ -1126,14 +1126,17 @@ export function resolveStateContent(
     (stateCode ? school.statePrices[stateCode] : undefined) ??
     null;
 
-  // Generic fallback, but ONLY for schools that don't price per state. A school
-  // that DOES vary by state (any per-state column price, e.g. I Drive Safely,
-  // whose real state prices run $19–$49) must not display its flat generic as if
-  // it were the state price — show "Check website" instead. That also drops it
-  // from the Product ItemList (no fabricated Offer). Flat-price schools
-  // (no per-state prices anywhere) keep their generic price as intended.
-  const variesByState = Object.keys(school.statePrices).length > 0;
-  const price = stateVerifiedPrice ?? (variesByState ? null : (school.genericPrice ?? null));
+  // No generic fallback (P11 ruling: omit beats guessed). A displayed price must be
+  // a CONFIRMED per-state value — a variant override, the verified Pricing-DB value,
+  // or a per-state Schools column. A school with no confirmed state-specific price
+  // shows "Check website" rather than its flat national price, which would otherwise
+  // invent a below-floor number (e.g. a $19.95 generic rendering on Texas, whose DSC
+  // statutory floor is $25). "Check website" also drops the card from the Product
+  // ItemList (no fabricated Offer) while the card itself still renders on the page,
+  // so per-page card COUNT is unchanged; only the "from $X" floor tightens to the
+  // confirmed prices. The dated price pull to fill real values runs through the
+  // Verified Price workflow, not here.
+  const price = stateVerifiedPrice ?? null;
 
   // Has Final Exam: variant override → state requirement → true (conservative default)
   const hasFinalExam =
