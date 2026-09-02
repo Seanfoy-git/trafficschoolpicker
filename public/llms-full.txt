@@ -50,7 +50,7 @@ Alaska publishes a list of approved defensive driving courses but does not set a
 
 **URL:** https://www.trafficschoolpicker.com/arizona
 
-Arizona drivers cited for a civil moving violation can complete a Defensive Driving School (DDS) course of 240 to 270 minutes (4 to 4.5 hours) under ACJA § 7-205 and A.R.S. §§ 28-3391 to 28-3399 to dismiss the ticket and keep points off the MVD record. The Arizona Supreme Court regulates the DDS program; eligible drivers can use it once every 12 months from violation date to violation date, must complete the course at least seven days before the scheduled court date, and may dismiss only one violation per citation. CDL holders and drivers cited in commercial vehicles are excluded, as are violations involving a serious-injury or fatal accident and most criminal violations. The all-in cost is the school's course fee plus a court diversion fee that varies by court (Maricopa County roughly $110 to $162), a $24 State Fee, and a $45 state surcharge. DDS is distinct from Traffic Survival School (TSS), the separate 8-hour MVD-mandated remediation course required after certain serious offenses or point accumulation; TSS does not dismiss tickets. Last checked August 2026.
+Arizona drivers cited for a civil moving violation can complete a Defensive Driving School (DDS) course of 240 to 270 minutes (4 to 4.5 hours) under ACJA § 7-205 and A.R.S. §§ 28-3391 to 28-3399 to dismiss the ticket and keep points off the MVD record. The Arizona Supreme Court regulates the DDS program; eligible drivers can use it once every 12 months from violation date to violation date, must complete the course at least seven days before the scheduled court date, and may dismiss only one violation per citation. CDL holders are excluded only when cited in a commercial vehicle; a CDL holder cited in a non-commercial vehicle is eligible (A.R.S. § 28-3392(A)(3), post-2019). Violations involving a serious-injury or fatal accident and most criminal violations are excluded. The all-in cost is the school's course fee plus a court diversion fee that varies by court (Maricopa County roughly $110 to $162), a $24 State Fee, and a $45 state surcharge. DDS is distinct from Traffic Survival School (TSS), the separate 8-hour MVD-mandated remediation course required after certain serious offenses or point accumulation; TSS does not dismiss tickets. Last checked September 2026.
 
 **Source:** ACJA § 7-205(E)(1)(k) (Arizona Supreme Court Defensive Driving School)
 
@@ -147,12 +147,6 @@ Course length is determined by the individual court. The court will provide spec
 
 **Can I do Colorado defensive driving online?**
 Yes — both online and classroom options are available. The court determines whether an online course is acceptable for your case. Confirm with your court before enrolling online.
-
-**Can I do Colorado traffic school online?**
-Yes. Online Colorado traffic school courses are accepted by courts that allow ticket dismissal. Confirm with your specific court before enrolling.
-
-**Does Colorado traffic school dismiss my ticket?**
-Colorado has no statewide ticket dismissal program. Dismissal is court-by-court. With court permission you may be able to dismiss your ticket or prevent points from being added. Colorado does NOT offer a statewide point reduction option via traffic school.
 
 ---
 
@@ -262,7 +256,7 @@ Sometimes. Georgia has no statewide dismissal law, but many solicitors and judge
 
 Hawaii's approach to defensive driving is heavily court-driven. There is no statewide dismissal program. Individual judges have discretion to accept course completion in lieu of the underlying penalty, but this varies widely across islands and jurisdictions. Confirm with your specific court before enrolling. An unapproved course completion doesn't help you if the judge won't accept it.
 
-Approved online courses in Hawaii average about $35, higher than most states due to the limited pool of approved providers. Not available for DUI or serious offenses. Individual carriers may offer voluntary discounts for course completion; Hawaii has no state-mandated discount. Where court dismissal is granted, the return on a course fee is substantial given Hawaii's above-average insurance surcharges after a ticket.
+Approved online courses in Hawaii average about $35, higher than most states due to the limited pool of approved providers. Not available for DUI or serious offenses. Individual carriers may offer voluntary discounts for course completion; Hawaii has no state-mandated discount. Where court dismissal is granted, the return on a course fee is substantial given Hawaii's above-average insurance surcharges after a ticket. Last checked September 2026.
 
 **Last verified:** August 2026
 
@@ -302,7 +296,7 @@ No. Idaho's benefit is a point reduction: completing an approved defensive drivi
 Six hours (IDAPA 39.02.71).
 
 **How often can I reduce points in Idaho?**
-The point reduction follows the schedule set by rule (IDAPA 39.02.71). Confirm your eligibility with the Idaho Transportation Department before you enroll.
+Once every 3 years (IDAPA 39.02.71.400). Confirm eligibility with the Idaho Transportation Department.
 
 ---
 
@@ -555,7 +549,7 @@ Your course provider notifies the Michigan Secretary of State electronically, ty
 **Does Michigan traffic school dismiss my ticket?**
 Michigan’s Basic Driver Improvement Course (BDIC) does not dismiss your ticket. Instead, it allows eligible drivers to avoid points being added to their record for the cited violation. You must receive an eligibility notice from the Michigan Secretary of State (SOS) before you can enroll — you cannot self-select into the program.
 
-**How often can I take the Michigan BDIC?**
+**How long do I have to complete the Michigan BDIC after I am notified?**
 Eligibility is controlled by the Michigan SOS, which mails a notification when you qualify. You must complete the course within 60 days of receiving the eligibility letter. You cannot enroll without this notification.
 
 **Can I do Michigan BDIC online?**
@@ -564,20 +558,8 @@ Yes. Michigan Secretary of State-approved online BDIC courses are available.
 **How long is the Michigan BDIC?**
 The Michigan BDIC is a minimum of 4 hours. Courses cannot legally charge more than $100.
 
-**Can I do Michigan driver improvement online?**
-Yes. Michigan SOS-approved BDIC courses are available fully online, accessible 24/7 from any internet-connected device.
-
-**How long is Michigan driver improvement?**
-The Michigan BDIC is a minimum of 4 hours. All SOS-approved providers use the same 4-hour minimum.
-
 **How often can I do Michigan driver improvement?**
 Michigan's BDIC benefit is available only ONCE IN A LIFETIME — not on a periodic cooldown cycle. Once you have used it, you cannot use it again for any future ticket.
-
-**How long is Michigan traffic school?**
-Michigan's Basic Driver Improvement Course (BDIC) is a minimum of 4 hours, the same in a classroom or online (MCL 257.320d; Michigan SOS). Michigan has no separate 8-hour statewide driver-improvement course.
-
-**Can I do Michigan traffic school online?**
-Yes. Online driver improvement courses are fully approved in Michigan. You can complete the course from home through a state-approved provider.
 
 ---
 
@@ -627,14 +609,14 @@ Four hours (Miss. Code § 63-9-11).
 
 **URL:** https://www.trafficschoolpicker.com/missouri
 
-Missouri does not dismiss tickets through traffic school, but it does allow a point reduction. With the court's approval, completing an approved eight-hour Driver Improvement Program course reduces points on your record (RSMo § 302.302). You must finish within 60 days of the violation, it is available once in any 36-month period, and commercial-license holders are not eligible. Because it needs court approval, ask the court printed on your citation before you enroll. Last checked August 2026.
+Missouri does not dismiss tickets through traffic school, but it does allow a point reduction. With the court's approval, completing an approved eight-hour Driver Improvement Program course means no points are assessed for that conviction (RSMo § 302.302); it does not subtract points already on your record. You must finish within 60 days of the violation, it is available once in any 36-month period, and commercial-license holders are not eligible. Because it needs court approval, ask the court printed on your citation before you enroll. Last checked September 2026.
 
 **Source:** RSMo § 302.302
 
 **Last verified:** August 2026
 
 **Does traffic school dismiss a ticket in Missouri?**
-No. With the court's approval, an approved eight-hour Driver Improvement Program course reduces points on your record (RSMo § 302.302). The conviction still stands.
+No. With the court's approval, an approved eight-hour Driver Improvement Program course means no points are assessed for that conviction (RSMo § 302.302). The conviction still stands, and it does not subtract points already on your record.
 
 **How often can I use the Missouri point reduction?**
 Once in any 36-month period, and you must complete the course within 60 days of the violation (RSMo § 302.302). Commercial-license holders are not eligible.
@@ -814,7 +796,7 @@ Some carriers offer a voluntary discount for completing an approved course. It i
 
 **URL:** https://www.trafficschoolpicker.com/new-york
 
-New York drivers can complete a DMV-approved Point and Insurance Reduction Program (PIRP), also known as the Defensive Driving Course or Accident Prevention Course, to remove up to 4 active points from their record and earn a mandatory 10% auto liability and collision insurance discount for 3 years under NY Insurance Law § 2336. The course is a minimum of 320 minutes (5 hours, 20 minutes) of instruction, whether taken online or in-person, and is available to drivers of all license classes. Point reduction applies only to points accumulated within the 18 months before course completion and is allowed once every 18 months. PIRP does not dismiss tickets and the violation conviction stays on the driving record; it offsets points for the DMV's 11-point/18-month suspension threshold and the Driver Responsibility Assessment fee thresholds. Last checked August 2026.
+New York drivers can complete a DMV-approved Point and Insurance Reduction Program (PIRP), also known as the Defensive Driving Course or Accident Prevention Course, to remove up to 4 active points from their record and earn a mandatory 10% auto liability and collision insurance discount for 3 years under NY Insurance Law § 2336. The course is a minimum of 320 minutes (5 hours, 20 minutes) of instruction, whether taken online or in-person, and is available to drivers of all license classes. Point reduction applies only to points accumulated within the 18 months before course completion and is allowed once every 18 months. PIRP does not dismiss tickets and the violation conviction stays on the driving record; it offsets points only for the DMV's 11-point/18-month suspension threshold. PIRP cannot prevent or reduce the Driver Responsibility Assessment. Last checked August 2026.
 
 **Source:** NY DMV Point & Insurance Reduction Program, 320-minute minimum (dmv.ny.gov)
 
@@ -837,18 +819,6 @@ Your school reports completion electronically to the NY DMV, which automatically
 **Can I do New York PIRP online?**
 Yes. NY DMV-approved online PIRP courses are accepted statewide. The course is not court-ordered — any licensed NY driver can take it voluntarily to earn point reduction and insurance benefits.
 
-**How long is New York traffic school?**
-New York's PIRP is 320 minutes (5 hours, 20 minutes) of instruction. This applies to all approved formats, including fully online courses; providers may schedule a longer session to include breaks.
-
-**How often can I do New York traffic school?**
-You can take New York's PIRP once every 18 months for point reduction. The 18-month period runs from the completion date of your most recent PIRP course.
-
-**Does New York traffic school dismiss my ticket?**
-No. New York's PIRP does not dismiss your ticket — the conviction still appears on your driving record. It reduces up to 4 points from your DMV abstract and qualifies you for a 10% insurance discount for 3 years. Think of it as damage control rather than erasure.
-
-**Can I do New York traffic school online?**
-Yes. New York's PIRP is available fully online through DMV-approved providers. You can complete the course at your own pace from any device.
-
 ---
 
 ## North Carolina
@@ -865,10 +835,10 @@ North Carolina's Prayer for Judgment Continued (PJC) is a common-law remedy uniq
 Not on its own. Dismissal requires prior court permission on a per-case basis, and eligibility depends on the violation, your driving history, and prosecutor policy. Many drivers instead use a Prayer for Judgment Continued (PJC), a separate step where the judge delays entering judgment; for insurance purposes it is limited to once every three years per household.
 
 **How do I reduce points in North Carolina?**
-Point reduction through defensive driving requires 7 or more DMV license points on your record plus a $40 DMV eligibility hearing, and it is available only once every five years.
+By completing an NCDMV-approved Driver Improvement Clinic, which deducts 3 points, available once every 5 years (ncdot.gov).
 
 **How long is the North Carolina course?**
-It depends on the county: Wake and Guilford counties require a 4-hour course; all other North Carolina counties require 8 hours.
+The NCDMV Driver Improvement Clinic curriculum is set by NCDMV; confirm the current length and format with NCDMV or the approved provider before enrolling.
 
 ---
 
@@ -906,7 +876,7 @@ Some North Dakota carriers offer voluntary discounts for approved course complet
 
 **URL:** https://www.trafficschoolpicker.com/ohio
 
-Ohio drivers with 2 to 11 points on their license can complete an 8-hour Adult Remedial Driving Course (sometimes called Defensive Driving) to receive a 2-point credit on their driving record under Ohio Revised Code §4510.037(C). The credit is a buffer rather than a true point removal — the conviction remains on the record, and the credit only offsets points already assessed; it does not dismiss tickets. The option is available once every 3 years and the course must be completed at a state-approved provider. Drivers who accumulate 12 points within any 2-year window face a mandatory 6-month license suspension; the BMV mails a warning letter at 6 points, and the 2-point credit is most useful for drivers in the 6–11 point range trying to avoid that threshold.
+Ohio drivers with 2 to 11 points on their license can complete an 8-hour Adult Remedial Driving Course (sometimes called Defensive Driving) to receive a 2-point credit on their driving record under Ohio Revised Code §4510.037(C). The credit is a buffer rather than a true point removal — the conviction remains on the record, and the credit only offsets points already assessed; it does not dismiss tickets. The option is available once every 3 years, may be granted no more than five times in your lifetime, and the course must be completed at a state-approved provider (ORC 4510.037(C)). Drivers who accumulate 12 points within any 2-year window face a mandatory 6-month license suspension; the BMV mails a warning letter at 6 points, and the 2-point credit is most useful for drivers in the 6–11 point range trying to avoid that threshold. Last checked September 2026.
 
 **Source:** Ohio Adm. Code 4501-21-06 (remedial/driver-safety course)
 
@@ -936,19 +906,19 @@ Completing an in-person, Service Oklahoma-approved defensive driving course cred
 **Last verified:** September 2026
 
 **How long is Oklahoma defensive driving?**
-Oklahoma DPS-approved defensive driving courses are 6 hours. This applies to all DPS-approved providers.
+Oklahoma defensive driving courses are 6 hours. This applies to all Service Oklahoma-approved providers.
 
 **How often can I do Oklahoma defensive driving?**
-The 2-point DPS reduction can be applied once every 24 months. For court-ordered ticket dismissal, the court sets its own rules.
+The 2-point Service Oklahoma credit can be applied once every 24 months, and only an in-person classroom course qualifies. For court-ordered ticket dismissal, the court sets its own rules.
 
 **Does Oklahoma traffic school dismiss my ticket?**
-Yes. With court approval, completing an Oklahoma defensive driving course can dismiss a moving violation from your record. The course also provides a 2-point reduction on your DPS record.
+With court approval, yes. Completing an Oklahoma defensive driving course can dismiss a moving violation where the court allows it. Separately, an in-person classroom course earns a 2-point credit on your Oklahoma driving record; an online course does not.
 
 **Who submits my certificate in Oklahoma?**
 For Oklahoma City Court, Cleveland Municipal, and Jones Municipal: provider sends certificate to court within 24 hours. For all other courts: certificate is mailed to driver, who must then submit it to the court.
 
 **Can I do Oklahoma defensive driving online?**
-Yes. Online courses are accepted by Oklahoma courts for ticket dismissal. Note: online courses do not qualify for the DPS 2-point reduction — only in-person classroom courses qualify for that benefit.
+Yes. Online courses are accepted by Oklahoma courts for ticket dismissal. Note that online courses do not qualify for the Service Oklahoma 2-point credit; only in-person classroom courses qualify for that benefit.
 
 ---
 
@@ -980,7 +950,7 @@ No. It is for minor moving violations only; DUI, reckless driving, and serious o
 
 **URL:** https://www.trafficschoolpicker.com/pennsylvania
 
-Pennsylvania has no voluntary online course that dismisses a ticket or takes points off your record. When a driver reaches six or more points, or is caught going 31 or more mph over the limit, PennDOT assigns a mandatory Driver Improvement School. Completing that six-hour course is a requirement, not a way to clear a ticket, and it does not remove points. Points come off over time as your record stays clean. Contact PennDOT or the court printed on your citation to learn what applies to you. Last checked August 2026.
+Pennsylvania has no voluntary online course that dismisses a ticket or takes points off your record. When a driver reaches six or more points, or is caught going 31 or more mph over the limit, PennDOT assigns a mandatory Driver Improvement School. Completing that six-hour course is a requirement; on a first accumulation it removes 4 points (PennDOT), but it is not a way to clear a ticket. Points come off over time as your record stays clean. Contact PennDOT or the court printed on your citation to learn what applies to you. Last checked September 2026.
 
 **Source:** PennDOT Driver Improvement School (FS-DIS)
 
@@ -989,13 +959,13 @@ Pennsylvania has no voluntary online course that dismisses a ticket or takes poi
 **Estimated all-in cost of a first speeding ticket:** $1,494 (fine plus a three-year insurance surcharge; 2026 study at https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket)
 
 **Does an online course dismiss a ticket or remove points in Pennsylvania?**
-No. Pennsylvania has no voluntary online course that dismisses a ticket or removes points. PennDOT assigns a mandatory Driver Improvement School to certain drivers, and completing it is a requirement, not a way to clear a ticket.
+No voluntary online course dismisses a ticket or removes points in Pennsylvania. PennDOT assigns a mandatory Driver Improvement School to certain drivers; completing it removes 4 points on a first accumulation, but it is a requirement, not a way to clear a ticket.
 
 **Who has to take the Pennsylvania Driver Improvement School?**
 Drivers who reach six or more points, or who are cited at 31 or more mph over the limit; PennDOT assigns the six-hour course (PennDOT FS-DIS).
 
 **How do points come off my Pennsylvania record?**
-With time and a clean record. No voluntary course removes them. For your ticket, contact PennDOT or the court on your citation.
+With time and a clean record, or, on a first accumulation, by completing the PennDOT-assigned Driver Improvement School, which removes 4 points. No voluntary online course removes them. For your ticket, contact PennDOT or the court on your citation.
 
 ---
 
@@ -1049,6 +1019,9 @@ Only in the National Safety Council classroom or NSC virtual format. General onl
 
 **How many points does the South Carolina course remove?**
 Four points, once, for completing the NSC eight-hour course (S.C. Code § 56-1-770).
+
+**How often can I use the South Carolina point reduction?**
+Once every 3 years (SCDMV; S.C. Code § 56-1-770). Completing the National Safety Council 8-hour course reduces 4 points. Last checked September 2026.
 
 ---
 
@@ -1116,7 +1089,7 @@ Yes. TDLR-approved online defensive driving courses are accepted by Texas courts
 Yes, through a driving safety course (DSC) dismissal under Code of Criminal Procedure art. 45A.352. You request the court's permission, plead guilty or no contest, pay a court fee, and complete a 6-hour DSC within 90 days; the charge is then dismissed and no conviction is reported. Deferred disposition is a different remedy, a court-ordered probation period, so ask the court which one applies.
 
 **How long is Texas defensive driving?**
-Six hours, the shortest state-mandated course length in the country. It is five hours of instruction plus one hour of mandatory breaks.
+Six hours: five hours of instruction plus one hour of mandatory breaks.
 
 **Who submits my certificate to the Texas court?**
 You do. After completing the course you receive a certificate and submit it, with a certified copy of your Texas driving record, to the court by the deadline in your dismissal order (usually 90 days from the plea date).
@@ -1188,7 +1161,7 @@ Virginia operates a unique two-direction point system administered by the DMV: d
 **Estimated all-in cost of a first speeding ticket:** $1,818 (fine plus a three-year insurance surcharge; 2026 study at https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket)
 
 **Does Virginia driver improvement dismiss my ticket?**
-Not by itself. Completing a DMV-approved Driver Improvement Clinic credits 5 safe-driving points OR an insurance discount (you choose one at enrollment, not both), but on its own it does not dismiss the ticket or remove the conviction. Separately, some Virginia courts offer deferred disposition, where the judge may dismiss the charge if you complete an approved course; that is decided court by court, so confirm with the court on your citation.
+Not by itself. Completing a DMV-approved Driver Improvement Clinic credits 5 safe-driving points OR an insurance discount (you choose one at enrollment, not both), but on its own it does not dismiss the ticket or remove the conviction. Separately, some Virginia courts offer deferred disposition, where the judge may dismiss the charge if you complete an approved course; that is decided court by court, so confirm with the court on your citation. Va. Code §§ 46.2-489 and 46.2-498. Last checked September 2026.
 
 **Who submits my certificate in Virginia?**
 Your school submits completion to the Virginia DMV, which processes the 5-point reduction automatically. You submit the certificate to your insurance company separately to receive the discount.
@@ -1253,14 +1226,14 @@ The DC DMV lists two approved online providers for its traffic school: the Ameri
 
 **URL:** https://www.trafficschoolpicker.com/west-virginia
 
-West Virginia offers approved defensive driving courses that can qualify eligible drivers for point reduction or court-approved ticket dismissal. Some in-person format requirements apply for specific relief programs; online completion is accepted in many jurisdictions but not universally. Confirm with the court and West Virginia DMV before enrolling.
+West Virginia's statewide course benefit is a 3-point deduction once every 12 months, and the WV DMV will NOT consider an online course for it (W. Va. Code § 17B-3-6(e)) - it must be completed in person. Whether a course helps with a ticket is otherwise decided court by court. Confirm with the court and the West Virginia DMV before enrolling. Last checked September 2026.
 
 Approved courses in West Virginia run about 8 hours and typically cost $22 to $40. Where court dismissal is granted, the return on a course fee is meaningful given West Virginia's average insurance surcharge patterns. Not available for DUI, reckless driving, or commercial vehicle violations. West Virginia's mountain highway corridors on US 60 and I-64 see a high volume of speeding violations, making the defensive driving option relevant for many drivers.
 
 **Last verified:** August 2026
 
 **Can I take defensive driving online in West Virginia?**
-Yes, in many jurisdictions. West Virginia DMV-approved online defensive driving courses are accepted for court-approved ticket dismissal in many WV courts. Some in-person format requirements apply for specific state-level relief programs.
+Online courses are available, but read the caveats. The WV DMV will not consider an online course for the statewide 3-point deduction, which must be completed in person. For ticket dismissal, whether a court accepts an online course is decided court by court, so confirm with the court on your citation. Last checked September 2026.
 
 **How long is West Virginia defensive driving?**
 Approved courses run about 8 hours.
@@ -1269,10 +1242,10 @@ Approved courses run about 8 hours.
 Course tuition typically runs $22 to $40 for DMV-approved online providers.
 
 **Does West Virginia defensive driving dismiss my ticket?**
-With court approval, yes. Confirm with your specific court before enrolling.
+Only if your court agrees. West Virginia has no statewide dismissal program; it is decided court by court, so confirm with the court on your citation first.
 
 **How often can I take West Virginia defensive driving?**
-Once per 12 months. Individual courts may impose different frequency rules for dismissal purposes.
+The in-person 3-point deduction is available once every 12 months (W. Va. Code § 17B-3-6(e)). For court dismissal, each court sets its own rules.
 
 **Will my West Virginia insurance go down after the course?**
 Some West Virginia carriers offer voluntary discounts for approved course completion. There is no state-mandated discount. Check with your specific insurer before enrolling.

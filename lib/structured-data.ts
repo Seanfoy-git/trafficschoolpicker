@@ -152,21 +152,31 @@ function buildProductDescription(
   resolved: ResolvedSchoolContent,
   stateName: string,
   price: number | null,
-  courseHours: string | null
+  courseHours: string | null,
+  hasApproval: boolean
 ): string {
   // Duration is a STATE fact and appears only when the state has a sourced value
   // (courseHours). No per-school hours (Package 4): unsourced states carry no
   // duration rather than a fabricated per-school number.
-  const approval =
-    resolved.approvalBodyShort && resolved.approvalBodyShort !== "State Approved"
-      ? `${resolved.approvalBodyShort}-approved`
-      : "state-approved";
-  let lead = `${school.name}'s ${approval} online traffic school course for ${stateName}`;
+  //
+  // The "approved" claim derives from the program model (P10 Task 4): in
+  // court-discretion states there is no statewide approval program, so the
+  // description must not call the course "state-approved" — a course is accepted
+  // by a court on its own terms, not approved by the state.
+  const approval = !hasApproval
+    ? ""
+    : resolved.approvalBodyShort && resolved.approvalBodyShort !== "State Approved"
+      ? `${resolved.approvalBodyShort}-approved `
+      : "state-approved ";
+  let lead = `${school.name}'s ${approval}online traffic school course for ${stateName}`;
   if (courseHours) lead += ` (${courseHours})`;
   if (price !== null) lead += `, $${price.toFixed(2)}`;
   if (school.mobileApp) lead += `, with a mobile app`;
 
-  return `${lead}. Read our independent review and compare ${stateName}-approved online courses.`;
+  const compare = hasApproval
+    ? `compare ${stateName}-approved online courses`
+    : `compare online courses for ${stateName}`;
+  return `${lead}. Read our independent review and ${compare}.`;
 }
 
 function buildProduct(
@@ -174,7 +184,8 @@ function buildProduct(
   stateName: string,
   stateSlug: string,
   reviewSlugs: ReadonlySet<string>,
-  courseHours: string | null
+  courseHours: string | null,
+  hasApproval: boolean
 ): ProductSchema {
   const url = productUrl(school.slug, stateSlug, reviewSlugs);
   const price = displayedPrice(school, resolved);
@@ -185,7 +196,7 @@ function buildProduct(
     // Array form: Google accepts repeated image values; the card genuinely
     // represents the school being marked up (name + rating + branding).
     image: [schoolImageUrl(school.slug)],
-    description: buildProductDescription(school, resolved, stateName, price, courseHours),
+    description: buildProductDescription(school, resolved, stateName, price, courseHours, hasApproval),
     url,
     brand: { "@type": "Brand", name: school.name },
   };
@@ -224,7 +235,8 @@ export function buildComparisonItemList(
   stateSlug: string,
   reviewSlugs: ReadonlySet<string>,
   year: number,
-  courseHours: string | null
+  courseHours: string | null,
+  hasApproval = true
 ): ItemListSchema {
   // Omit any school with no displayed price ("Check website") from the ItemList
   // entirely, rather than emit a Product node with no Offer. A node with neither
@@ -239,7 +251,7 @@ export function buildComparisonItemList(
     itemListElement: priced.map((s, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      item: buildProduct(s, stateName, stateSlug, reviewSlugs, courseHours),
+      item: buildProduct(s, stateName, stateSlug, reviewSlugs, courseHours, hasApproval),
     })),
   };
 }

@@ -239,6 +239,66 @@ All meta descriptions for the 9 rewritten in `lib/seo-config.ts` (the live sourc
 Notion SEO fields don't render yet — Task 5). SEO "2025" in Notion SEO Title fields is
 cosmetic until Task 5 regenerates metas from the model.
 
+## 2026-09-01 (cont. 3) — Phase B: Task 2 remainder + Tasks 3/4/5 (guard green, grep-zero clean)
+
+Second deploy batch. Fresh-cache build: all guards green, TypeScript compiles.
+Built-HTML grep-zero acceptance criteria ALL pass: `reduce points by 4`=0,
+`17B-3-5`(WV)=0, `accepted statewide`(GA/WV)=0, `offsets…Responsibility Assessment`
+(NY)=0, `Wake and Guilford`(NC)=0, `adds points`(MS)=0, `shortest state-mandated`
+(TX)=0, `Iowa DOT-approved`=0, OK `DPS`=0, OH `14 points`=0 (stripped from 3 school
+variants + 1 state-req note). Positives: WV `17B-3-6` present; CO Product no longer
+claims "state-approved"; CA KF "Masked, not dismissed (CVC 1808.7)"; MI Product
+count=0 (cards gone); llms-full clean.
+
+**Task 2c/2d + 2b remainder (Notion):**
+- **2d:** AZ (CDL eligible in non-commercial vehicle, § 28-3392(A)(3)); SC (added
+  once/3yr frequency, NSC classroom-or-virtual); PA (DIS removes 4 pts on first
+  accumulation); MO ("no points assessed for that conviction", not "reduces points");
+  DE + IN (cert → School Submits; IN once/3yr, BMV posts 7-14 days); ID (once/3yr,
+  IDAPA 39.02.71.400).
+- **2b:** OH (→point-reduction, True Cost cite 4501.11→4510.037(C), lifetime cap 5);
+  NY (deleted DRA-offset claim, →point-reduction double benefit, FAQ deduped 9→5);
+  WV (→court-discretion, online NOT point-reduction, 17B-3-5→17B-3-6(e)); MS (deleted
+  "adds points"); CA (KF masking via CVC 1808.7); FL (KF withheld-adjudication, fixed
+  "first eligible" + Research-Notes "BDI=dismissal"); WA (deleted contradictory
+  insurance-only Notes line); RI (→court-discretion); NH (meta+title honest, deny
+  online).
+- **2c:** OK (FAQ DPS→Service Oklahoma, em dash removed, 2-point credit scoped to
+  classroom-only); TX (deleted "shortest…in the country" superlative; cert stays
+  Driver Submits per 45A.356 — correct). LA/OR/NM already resolved earlier.
+- **NC:** removed Wake/Guilford county-length + $40-hearing fabrications; online =
+  insurance discount; dismissal via court permission or PJC; NCDMV 3-point clinic
+  once/5yr (ncdot.gov). KF "No, needs court permission or a PJC".
+
+**Task 4:**
+- **Systemic Product template** (`lib/structured-data.ts`): the "state-approved"
+  claim now derives from the model — court-discretion states (no statewide approval
+  program) drop it. Threaded `hasApproval = onlineStatus !== "Online — court
+  discretion"` through buildComparisonItemList→buildProduct→buildProductDescription.
+- **MI:** informational (Model=Court program only, KY pattern) — cards removed
+  (invitation-only BDIC; retail courses don't substitute). seo title/h1/desc reworked.
+- **OK:** 2-point-credit claims scoped to classroom-only in the FAQ (done above).
+- **MN:** record already correctly 55+ (§ 65B.28); the visible **card benefit line**
+  55+ scope is the one remaining Task-4 item (Schools-DB benefit field) — NOT done.
+- **DC:** FLAGGED for Sean (brief says flag) — present DC DMV's two approved
+  providers vs remove the four national cards + drop their Product JSON-LD + delete
+  the "needs verification" hedge. NOT done (needs the present-vs-remove decision).
+
+**Task 3:** dedup audit across 51 states; fixed the true near-duplicate sets (NY 9→5,
+CO 7→5, MI 10→6). Remaining audit hits were the classifier grouping genuinely
+different questions (eligibility vs mechanism vs cost).
+
+**Task 5:** metas regenerate from `lib/seo-config.ts` (edited for all touched states);
+llms-full.txt regenerates in prebuild and greps clean.
+
+### Still open (for a later pass)
+- **DC card decision** (flagged above).
+- **MN card benefit line** 55+ scope (Schools-DB field).
+- **TX card** "same-day court reporting" line (Schools-DB variant; the record/FAQ are
+  correct — driver presents cert to court, court reports to DPS).
+- SEO "2025" in Notion SEO Title fields (cosmetic; live metas come from seo-config and
+  are 2026). GA price triple labeling is P11.
+
 ## Remaining P10 work (unchanged, still open)
 - Task 2 remainder: OH, NY, WV, CA, FL, WA, MS, NH, RI (2b) and AZ, SC, PA, MO, DE, IN
   (2d) — none currently fire the guard, but their prose is still un-audited.

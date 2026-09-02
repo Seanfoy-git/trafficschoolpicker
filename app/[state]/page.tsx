@@ -185,7 +185,17 @@ export default async function StatePage({ params }: Props) {
     : new Set<string>();
 
   const comparisonSchema = showComparison
-    ? buildComparisonItemList(tier1Resolved, stateMeta.name, stateSlug, reviewSlugs, year, stateInfo?.courseHours ?? null)
+    ? buildComparisonItemList(
+        tier1Resolved,
+        stateMeta.name,
+        stateSlug,
+        reviewSlugs,
+        year,
+        stateInfo?.courseHours ?? null,
+        // No statewide approval program in court-discretion states: the Product
+        // description must not claim the course is "state-approved" (P10 Task 4).
+        onlineStatus !== "Online — court discretion"
+      )
     : null;
 
   // VideoObject for the embedded explainer — emitted only when this state has a

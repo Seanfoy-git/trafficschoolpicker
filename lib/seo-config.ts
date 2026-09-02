@@ -11,7 +11,7 @@ export type PageSeoConfig = {
 export const STATE_SEO: Record<string, PageSeoConfig> = {
   california: {
     title: "Best Online Traffic School in California (2026)",
-    description: "Compare California DMV-approved online traffic schools. Find the lowest price, read real reviews, and enroll today. Court-approved for ticket dismissal.",
+    description: "Compare California DMV-approved online traffic schools. A completed course holds the conviction confidential (masked, not erased) under CVC 1808.7: no point, insurers do not see it.",
     h1: "The Best Online Traffic Schools in California (2026)",
     primaryKeyword: "online traffic school California",
     canonicalPath: "/california",
@@ -101,9 +101,9 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
     canonicalPath: "/nevada",
   },
   michigan: {
-    title: "Best Online Driver Improvement Michigan (2026)",
-    description: "Compare Michigan online Basic Driver Improvement (BDIC) courses. BDIC keeps points off an eligible ticket and is invitation-only via the Secretary of State.",
-    h1: "The Best Online Driver Improvement Courses in Michigan (2026)",
+    title: "Michigan Basic Driver Improvement Course (BDIC): How It Works (2026)",
+    description: "How Michigan's Basic Driver Improvement Course works. BDIC keeps points off an eligible ticket, does not dismiss it, and is invitation-only via the Secretary of State.",
+    h1: "Michigan Traffic School and the Basic Driver Improvement Course (2026)",
     primaryKeyword: "Michigan driver improvement online",
     canonicalPath: "/michigan",
   },
@@ -283,9 +283,9 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
     canonicalPath: "/montana",
   },
   "new-hampshire": {
-    title: "Best Online Defensive Driving New Hampshire (2026)",
-    description: "Compare New Hampshire-approved online defensive driving courses. Earn an insurance discount. Lowest prices.",
-    h1: "The Best Online Defensive Driving Courses in New Hampshire (2026)",
+    title: "New Hampshire Traffic School: What Actually Works (2026)",
+    description: "New Hampshire does not accept online defensive driving for ticket dismissal or point reduction; court-referred programs are in-person only. Know your real options.",
+    h1: "Traffic School in New Hampshire: What Actually Works (2026)",
     primaryKeyword: "New Hampshire defensive driving online",
     canonicalPath: "/new-hampshire",
   },
@@ -298,7 +298,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   "north-carolina": {
     title: "Best Online Defensive Driving North Carolina (2026)",
-    description: "Compare North Carolina-approved online defensive driving courses. Dismiss your traffic ticket. Lowest prices.",
+    description: "Compare North Carolina online defensive driving courses for the insurance discount. Ticket dismissal needs court permission or a PJC, not a course. Lowest prices.",
     h1: "The Best Online Defensive Driving Courses in North Carolina (2026)",
     primaryKeyword: "North Carolina defensive driving online",
     canonicalPath: "/north-carolina",
@@ -326,7 +326,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   "rhode-island": {
     title: "Best Online Defensive Driving Rhode Island (2026)",
-    description: "Compare Rhode Island-approved online defensive driving courses. Reduce points on your record. Lowest prices.",
+    description: "Compare Rhode Island online defensive driving courses. A course can help dismiss a ticket only where the court grants permission, so confirm first. Lowest prices.",
     h1: "The Best Online Defensive Driving Courses in Rhode Island (2026)",
     primaryKeyword: "Rhode Island defensive driving online",
     canonicalPath: "/rhode-island",
@@ -361,7 +361,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   "west-virginia": {
     title: "Best Online Defensive Driving West Virginia (2026)",
-    description: "Compare West Virginia-approved online defensive driving courses. Reduce points on your record. Lowest prices.",
+    description: "Compare West Virginia online defensive driving courses. The statewide 3-point reduction is in-person only; online helps with a ticket only where a court agrees. Lowest prices.",
     h1: "The Best Online Defensive Driving Courses in West Virginia (2026)",
     primaryKeyword: "West Virginia defensive driving online",
     canonicalPath: "/west-virginia",
