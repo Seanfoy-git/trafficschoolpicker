@@ -193,6 +193,52 @@ resolved.
    deploy. NC (in the 2a list) did NOT fire the guard and has a real PJC + DMV point-
    reduction story — left untouched pending the brief.
 
+## 2026-09-01 (cont. 2) — claude-5d decisions applied; brief reconciled; 9 states SHIPPING green
+
+Brief is now in-repo (`research/cc-brief-p10-keyfacts-2026-09.md`). Reconciled the 8
+staged records + GA against it. **Fresh-cache validation build: page-contradiction
+guard GREEN across all 51 states.** Built-HTML grep checks pass: no bare "Ticket
+dismissal: Yes" on the 9; `reduce points by 4`=0; `accepted statewide` on GA=0;
+`Iowa DOT-approved`=0; GA Product schema still present (offer 21 intact); freshness
+stamps present.
+
+**GA (decision #1 applied):** Online Model="Court discretion" (KF renders
+"Court-by-court"), cards STAY, banner carries the confirm-with-court line. FAQ split:
+the dismissal Q now answers "Sometimes. Georgia has no statewide dismissal law…confirm
+with your court first"; the points/length/online Qs scope to the DDS 6-hour classroom
+course (O.C.G.A. § 40-5-86, classroom or live online, self-paced online does not
+qualify). Court Notes reworded off "accepted statewide". Meta (seo-config) stops
+promising statewide dismissal / points-via-online.
+
+**CO (decision #2 applied):** deleted the "4 points/12mo", "accepted statewide",
+"approved by CO DMV", 18-month + 8-hour FAQ answers. NO point-waiver specifics render.
+One body sentence added (Court Notes): HB24-1250 (Ch. 391) directs a course-based
+points waiver, specifics by DOR rulemaking, "Last checked September 2026". Intro/Fun
+Fact/eligibility de-conflicted. Online Removes Points=false.
+
+**Reconciliation notes (where I differed from the brief, primary source won):**
+- **WI:** I had staged Point reduction; the brief (2b) + WisDOT show **no online path**
+  for the 3-point reduction (it runs through technical-college classroom courses,
+  Trans 101.07), so the online product is **court-discretion dismissal**. Corrected
+  Model to "Court discretion"; scoped the point-reduction to classroom; unified the
+  split cite (body § 343.32 → Trans 101.07/WisDOT).
+- **ND:** not in the brief at all. Kept my source-verified change (dot.nd.gov: 3-point
+  reduction once/12mo) → Point reduction. Flag if the brief author intended otherwise.
+- **VA:** cert was already "School Submits" (the stale-build "Driver Submits" was old).
+  Applied the mutually-exclusive benefit (points OR discount) to FAQ item 0; True Cost
+  cite § 46.2-499 → §§ 46.2-489/498 and "18 to 24" → 24 months.
+- **HI/IA/MT:** brief 2a deletions applied (HI: unsourced 8hr gone; IA: all "Iowa
+  DOT-approved online" + 6hr/$20 gone, reframed to no-statewide + the 8hr classroom
+  DIP; MT: dismissal-only fix, matches brief). Metas honestied in seo-config.
+- **MI:** brief 2b applied (dismissal No via point-credit, cert School Submits, phantom
+  8hr FAQ → 4hr BDIC). **MI Task 4 still open:** invitation-only card gating
+  (informational / KY pattern) deferred to Task 4 per claude-5d "don't hold the 9
+  hostage" — MI still shows cards under Point reduction for now.
+
+All meta descriptions for the 9 rewritten in `lib/seo-config.ts` (the live source;
+Notion SEO fields don't render yet — Task 5). SEO "2025" in Notion SEO Title fields is
+cosmetic until Task 5 regenerates metas from the model.
+
 ## Remaining P10 work (unchanged, still open)
 - Task 2 remainder: OH, NY, WV, CA, FL, WA, MS, NH, RI (2b) and AZ, SC, PA, MO, DE, IN
   (2d) — none currently fire the guard, but their prose is still un-audited.

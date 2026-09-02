@@ -46,7 +46,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   georgia: {
     title: "Best Online Defensive Driving Georgia (2026)",
-    description: "Compare Georgia DDS-approved online defensive driving courses. Reduce up to 7 points. Lowest prices and verified reviews.",
+    description: "Compare Georgia online defensive driving courses for ticket dismissal, decided court by court. The DDS 7-point reduction is a separate classroom course.",
     h1: "The Best Online Defensive Driving Courses in Georgia (2026)",
     primaryKeyword: "Georgia defensive driving online",
     canonicalPath: "/georgia",
@@ -67,7 +67,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   virginia: {
     title: "Best Online Driver Improvement Virginia (2026)",
-    description: "Compare Virginia DMV-approved Driver Improvement Clinics online. Reduce 5 demerit points and earn an insurance discount.",
+    description: "Compare Virginia DMV-approved Driver Improvement Clinics online. Choose 5 safe-driving points or an insurance discount, once every 24 months.",
     h1: "The Best Online Driver Improvement Clinics in Virginia (2026)",
     primaryKeyword: "Virginia driver improvement online",
     canonicalPath: "/virginia",
@@ -88,7 +88,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   colorado: {
     title: "Best Online Traffic School Colorado (2026)",
-    description: "Compare court-approved online traffic school courses in Colorado. Mask your ticket from your public record. Lowest prices.",
+    description: "Compare online traffic school courses in Colorado. There is no statewide program; whether a course helps is decided by your court. Lowest prices.",
     h1: "The Best Online Traffic Schools in Colorado (2026)",
     primaryKeyword: "Colorado traffic school online",
     canonicalPath: "/colorado",
@@ -102,7 +102,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   michigan: {
     title: "Best Online Driver Improvement Michigan (2026)",
-    description: "Compare Michigan-approved online Driver Improvement courses. Avoid future points and earn an insurance discount. Lowest prices.",
+    description: "Compare Michigan online Basic Driver Improvement (BDIC) courses. BDIC keeps points off an eligible ticket and is invitation-only via the Secretary of State.",
     h1: "The Best Online Driver Improvement Courses in Michigan (2026)",
     primaryKeyword: "Michigan driver improvement online",
     canonicalPath: "/michigan",
@@ -123,7 +123,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   wisconsin: {
     title: "Best Online Traffic School Wisconsin (2026)",
-    description: "Compare Wisconsin DMV-approved online traffic school courses. Protect your insurance rate. Lowest prices.",
+    description: "Compare Wisconsin online defensive driving courses. Whether a course helps with a ticket is decided court by court, so confirm first. Lowest prices.",
     h1: "The Best Online Traffic Schools in Wisconsin (2026)",
     primaryKeyword: "Wisconsin traffic school online",
     canonicalPath: "/wisconsin",
@@ -221,7 +221,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   hawaii: {
     title: "Best Online Traffic School Hawaii (2026)",
-    description: "Compare Hawaii-approved online traffic school courses. Dismiss your ticket. Lowest prices and verified reviews.",
+    description: "Compare Hawaii online traffic school courses. Ticket relief is judge-by-judge with no statewide program, so confirm with your court. Lowest prices.",
     h1: "The Best Online Traffic Schools in Hawaii (2026)",
     primaryKeyword: "Hawaii traffic school online",
     canonicalPath: "/hawaii",
@@ -235,7 +235,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   iowa: {
     title: "Best Online Defensive Driving Iowa (2026)",
-    description: "Compare Iowa-approved online defensive driving courses. Dismiss your traffic ticket. Lowest prices.",
+    description: "Compare Iowa online defensive driving courses. No statewide dismissal program; courts decide case by case, so confirm with yours. Lowest prices.",
     h1: "The Best Online Defensive Driving Courses in Iowa (2026)",
     primaryKeyword: "Iowa defensive driving online",
     canonicalPath: "/iowa",
@@ -277,7 +277,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   montana: {
     title: "Best Online Defensive Driving Montana (2026)",
-    description: "Compare Montana-approved online defensive driving courses. Reduce points on your record. Lowest prices.",
+    description: "Compare Montana online defensive driving courses. No statewide dismissal or point-reduction program; courts decide case by case. Lowest prices.",
     h1: "The Best Online Defensive Driving Courses in Montana (2026)",
     primaryKeyword: "Montana defensive driving online",
     canonicalPath: "/montana",
@@ -305,7 +305,7 @@ export const STATE_SEO: Record<string, PageSeoConfig> = {
   },
   "north-dakota": {
     title: "Best Online Defensive Driving North Dakota (2026)",
-    description: "Compare North Dakota-approved online defensive driving courses. Earn an insurance premium reduction. Lowest prices.",
+    description: "Compare North Dakota online defensive driving courses. Reduce your record by up to 3 points once every 12 months. Lowest prices.",
     h1: "The Best Online Defensive Driving Courses in North Dakota (2026)",
     primaryKeyword: "North Dakota defensive driving online",
     canonicalPath: "/north-dakota",
