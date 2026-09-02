@@ -58,7 +58,7 @@ export function SchoolCard({
             {school.tspScore != null && (
               <a
                 href="/methodology"
-                className="inline-flex items-baseline gap-1 bg-accent/10 text-accent rounded px-2 py-0.5 text-sm font-bold hover:bg-accent/20 transition-colors"
+                className="inline-flex items-baseline gap-1 bg-accent/10 text-accent-dark rounded px-2 py-0.5 text-sm font-bold hover:bg-accent/20 transition-colors"
                 title="How we score, our independent TSP Score"
               >
                 TSP {school.tspScore.toFixed(1)}
