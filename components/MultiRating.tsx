@@ -20,7 +20,7 @@ function TrendIcon({ trend }: { trend: "up" | "down" | "stable" }) {
     return <TrendingUp className="w-3 h-3 text-green-500" aria-label="Improving" />;
   if (trend === "down")
     return <TrendingDown className="w-3 h-3 text-red-500" aria-label="Declining" />;
-  return <Minus className="w-3 h-3 text-slate-400" aria-label="Stable" />;
+  return <Minus className="w-3 h-3 text-slate-600" aria-label="Stable" />;
 }
 
 const bbbGradeColors: Record<string, string> = {
@@ -109,13 +109,13 @@ export function MultiRating({
             ({r.reviewCount.toLocaleString()})
           </span>
           <TrendIcon trend={r.trend} />
-          <span className="text-xs text-slate-400">{r.platform}</span>
+          <span className="text-xs text-slate-600">{r.platform}</span>
         </a>
       ))}
       {bbb && <BBBBadge bbb={bbb} />}
       {/* Visible attribution when the BBB profile sits under a parent/operator name. */}
       {bbb?.label && (
-        <p className="w-full text-xs text-slate-400">{bbb.label}</p>
+        <p className="w-full text-xs text-slate-600">{bbb.label}</p>
       )}
     </div>
   );
@@ -142,7 +142,7 @@ export function MultiRatingCompact({
             {r.rating.toFixed(1)}
           </span>
           <TrendIcon trend={r.trend} />
-          <span className="text-slate-400">{r.platform}</span>
+          <span className="text-slate-600">{r.platform}</span>
         </div>
       ))}
       {bbb && (

@@ -122,7 +122,7 @@ export default function PrivacyPage() {
                   href="https://tools.google.com/dlpage/gaoptout"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-accent hover:underline"
+                  className="text-accent underline"
                 >
                   opt-out browser add-on
                 </a>
@@ -167,7 +167,7 @@ export default function PrivacyPage() {
               Email{" "}
               <a
                 href="mailto:privacy@trafficschoolpicker.com"
-                className="text-accent hover:underline"
+                className="text-accent underline"
               >
                 privacy@trafficschoolpicker.com
               </a>

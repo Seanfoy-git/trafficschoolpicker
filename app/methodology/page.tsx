@@ -34,7 +34,7 @@ const DIMENSIONS: Dimension[] = [
     icon: Map,
     title: "State fit",
     weight: 15,
-    desc: "How well the course serves your state: whether the content is genuinely built for the state's program rather than a generic national course, and whether completing it actually earns the state's real benefit (dismissal, point credit, or discount) where the school sells it.",
+    desc: "How well the course serves your state: whether the content is built for the state's program rather than a generic national course, and whether completing it actually earns the state's real benefit (dismissal, point credit, or discount) where the school sells it.",
     bands: [
       "5.0 — Holds its own state license or approval and the course is built for that state's program; qualifies for the benefit everywhere it's sold.",
       "4.0–4.5 — State-specific versions per state (correct hours, correct program framing, state-labeled courses); qualifies where sold, with at most minor generic patches.",
@@ -157,7 +157,7 @@ export default function MethodologyPage() {
           <strong>Updated August 2026:</strong> the State coverage dimension is now State
           fit. Coverage rewarded how many states a school sells in, which tells you nothing
           about the course you&apos;ll take in yours. State fit scores what does: whether the
-          course is genuinely built for your state&apos;s program, and whether it earns your
+          course is built for your state&apos;s program, and whether it earns your
           state&apos;s actual benefit where it&apos;s sold. Same 15% weight. Scores were
           re-derived under the new definition on this date.
         </p>

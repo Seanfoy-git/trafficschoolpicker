@@ -29,11 +29,11 @@ export default function TermsPage() {
               TrafficSchoolPicker.com and its content (the &quot;Site&quot;), operated
               by PellucidMedia LLC (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;).
               By using the Site, you agree to these Terms and to our{" "}
-              <Link href="/privacy" className="text-accent hover:underline">
+              <Link href="/privacy" className="text-accent underline">
                 Privacy Policy
               </Link>{" "}
               and{" "}
-              <Link href="/disclaimer" className="text-accent hover:underline">
+              <Link href="/disclaimer" className="text-accent underline">
                 Disclaimer
               </Link>
               . If you do not agree, please do not use the Site.
@@ -52,7 +52,7 @@ export default function TermsPage() {
               acceptance, pricing, and outcomes vary by state, county, and case and
               change over time — verify details with the relevant provider and the
               court on your citation before acting. See our{" "}
-              <Link href="/disclaimer" className="text-accent hover:underline">
+              <Link href="/disclaimer" className="text-accent underline">
                 Disclaimer
               </Link>{" "}
               for details on pricing, offers, and court acceptance.
@@ -106,11 +106,11 @@ export default function TermsPage() {
               We may earn a commission when you click certain links and enroll or
               purchase, at no additional cost to you. This does not influence our
               rankings or reviews. See our{" "}
-              <Link href="/disclaimer" className="text-accent hover:underline">
+              <Link href="/disclaimer" className="text-accent underline">
                 Disclaimer
               </Link>{" "}
               and{" "}
-              <Link href="/methodology" className="text-accent hover:underline">
+              <Link href="/methodology" className="text-accent underline">
                 methodology
               </Link>
               .
@@ -164,7 +164,7 @@ export default function TermsPage() {
               Questions about these Terms? Email{" "}
               <a
                 href="mailto:legal@trafficschoolpicker.com"
-                className="text-accent hover:underline"
+                className="text-accent underline"
               >
                 legal@trafficschoolpicker.com
               </a>

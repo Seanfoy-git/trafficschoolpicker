@@ -37,7 +37,7 @@ export function OutOfStateCallout({ stateName, stateSlug }: { stateName: string;
           </p>
           <Link
             href={href}
-            className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-700"
+            className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-amber-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-800"
           >
             Read the out-of-state ticket guide
             <ArrowRight className="h-4 w-4" aria-hidden="true" />

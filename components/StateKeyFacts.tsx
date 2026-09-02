@@ -44,13 +44,13 @@ export function StateKeyFacts({
   // Online availability — phrased for what's actually true in this state.
   const available =
     status === "Online — ticket dismissal"
-      ? "Yes — for ticket dismissal"
+      ? "Yes, for ticket dismissal"
       : status === "Online — insurance discount only"
         ? "Insurance discount only"
         : status === "Online — court discretion"
-          ? "Yes — but court acceptance varies"
+          ? "Yes, but court acceptance varies"
           : status === "Online — point reduction"
-            ? "Yes — for point reduction"
+            ? "Yes, for point reduction"
             : status === "In-person only"
               ? "In-person only"
               : null; // Court program only / Unknown → omit
@@ -65,7 +65,7 @@ export function StateKeyFacts({
     (status === "Online — ticket dismissal"
       ? "Yes"
       : status === "Online — insurance discount only"
-        ? "No — insurance discount only"
+        ? "No, insurance discount only"
         : status === "Online — point reduction"
           ? "No, point credit instead"
           : status === "Online — court discretion"
@@ -112,7 +112,7 @@ export function StateKeyFacts({
             ))}
           </dl>
           {verified && (
-            <p className="mt-4 text-xs text-slate-400">Last verified {verified}</p>
+            <p className="mt-4 text-xs text-slate-600">Last verified {verified}</p>
           )}
         </div>
       </div>

@@ -301,7 +301,11 @@ export default async function ReviewPage({ params }: Props) {
                   <a href="/methodology" className="text-accent underline">how we score</a>).{" "}
                 </>
               )}
-              {school.bestFor && <>It&apos;s best for {school.bestFor.toLowerCase()}.</>}
+              {school.bestFor && (
+                // P9 B3: lowercase only the first letter for mid-sentence flow, so
+                // state abbreviations (AZ, FL, MI, TX, PA) stay capitalized.
+                <>It&apos;s best for {school.bestFor.charAt(0).toLowerCase() + school.bestFor.slice(1)}.</>
+              )}
             </p>
             {/* FTC affiliate disclosure — visible, above the first monetized CTA (P12). */}
             <p className="mb-3 text-xs text-slate-500">
@@ -321,7 +325,7 @@ export default async function ReviewPage({ params }: Props) {
             <AffiliateButton school={school} />
             {school.ratings.length > 0 || school.bbb ? (
               <div className="mt-4">
-                <p className="text-xs text-slate-400 mb-1">
+                <p className="text-xs text-slate-600 mb-1">
                   Third-party ratings{asOf ? ` (as of ${asOf})` : ""}, attributed:
                 </p>
                 <MultiRating ratings={school.ratings} bbb={school.bbb} layout="vertical" />
@@ -329,17 +333,17 @@ export default async function ReviewPage({ params }: Props) {
             ) : null}
             <ul className="mt-4 space-y-2 text-sm text-slate-600">
               <li className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-slate-400" /> Course length set by your state
+                <Clock className="w-4 h-4 text-slate-600" /> Course length set by your state
               </li>
               {school.stateCodes.length > 0 && (
                 <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-slate-400" />
+                  <CheckCircle className="w-4 h-4 text-slate-600" />
                   {school.stateCodes.includes("all") ? "All 50 states" : `${school.stateCodes.length} states`}
                 </li>
               )}
               {school.moneyBackGuarantee && (
                 <li className="flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-slate-400" /> Money-back guarantee
+                  <Shield className="w-4 h-4 text-slate-600" /> Money-back guarantee
                 </li>
               )}
               {school.website && (

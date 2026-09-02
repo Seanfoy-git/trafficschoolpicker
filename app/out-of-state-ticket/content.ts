@@ -290,7 +290,7 @@ export const BODY_TOP = `
     <div class="st">
       <p class="st-eyebrow">Out-of-state driver's guide</p>
       <div class="st-hd"><h3 id="california">California</h3><span class="tag q">Unresolved for you</span></div>
-      <p class="st-verdict"><strong>Treat this as unresolved.</strong> California masks the conviction on its own record, but whether that stops it reaching your home state is genuinely unsettled — it's one of the open questions below. Don't assume it protects your home record; call the clerk, and if the stakes are high, get advice first.</p>
+      <p class="st-verdict"><strong>Treat this as unresolved.</strong> California masks the conviction on its own record, but whether that stops it reaching your home state is unsettled. It is one of the open questions below. Don't assume it protects your home record; call the clerk, and if the stakes are high, get advice first.</p>
       <dl>
         <dt>Program</dt><dd>Traffic violator school</dd>
         <dt>Length</dt><dd>340 minutes of instruction plus 60 minutes of testing. Online courses are measured by word count instead, at a minimum of 42,500 words</dd>

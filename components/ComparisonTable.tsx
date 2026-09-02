@@ -46,7 +46,7 @@ export function ComparisonTable({
       className="flex items-center gap-1 font-semibold text-slate-700 hover:text-slate-900"
     >
       {label}
-      <ArrowUpDown className={`w-3.5 h-3.5 ${sortBy === sortKey ? "text-accent" : "text-slate-400"}`} />
+      <ArrowUpDown className={`w-3.5 h-3.5 ${sortBy === sortKey ? "text-accent" : "text-slate-600"}`} />
     </button>
   );
 
@@ -100,7 +100,7 @@ export function ComparisonTable({
                       ${school.price.toFixed(2)}
                     </div>
                     {school.originalPrice && (
-                      <div className="text-xs text-slate-400 line-through">
+                      <div className="text-xs text-slate-600 line-through">
                         ${school.originalPrice.toFixed(2)}
                       </div>
                     )}
@@ -123,7 +123,7 @@ export function ComparisonTable({
               </td>
               <td className="py-4 px-4">
                 <span className="flex items-center gap-1 text-slate-700">
-                  <Clock className="w-4 h-4 text-slate-400" />
+                  <Clock className="w-4 h-4 text-slate-600" />
                   By state
                 </span>
               </td>

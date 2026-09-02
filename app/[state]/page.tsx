@@ -387,7 +387,7 @@ export default async function StatePage({ params }: Props) {
       {onlineStatus === "In-person only" && (
         <section className="py-12 bg-white">
           <div className="max-w-3xl mx-auto px-4 text-center">
-            <AlertCircle className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+            <AlertCircle className="w-12 h-12 text-slate-600 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-slate-900 mb-3">
               Online traffic school isn&apos;t available in {stateMeta.name}
             </h2>
@@ -592,7 +592,7 @@ export default async function StatePage({ params }: Props) {
           )}
           <div className="max-w-3xl mx-auto px-4">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">
-              {stateMeta.name} Traffic School — Video Guide
+              {stateMeta.name} Traffic School Video Guide
             </h2>
             <div className="relative w-full overflow-hidden rounded-xl shadow-md" style={{ paddingBottom: "56.25%" }}>
               <iframe
@@ -644,7 +644,7 @@ export default async function StatePage({ params }: Props) {
             </div>
             <p className="mt-6 text-xs text-slate-500 leading-relaxed">
               We independently research and review all schools. Prices are checked
-              periodically and may change or differ at checkout — confirm the
+              periodically and may change or differ at checkout, so confirm the
               current price on the school&apos;s site. We may earn a commission if you
               enroll via our links, at no extra cost to you.
             </p>
@@ -665,7 +665,9 @@ export default async function StatePage({ params }: Props) {
                   <CheckCircle className="w-5 h-5 text-accent" />
                   <h3 className="font-semibold text-slate-900">Online Status</h3>
                 </div>
-                <p className="text-sm text-slate-600">{stateInfo.onlineStatus}</p>
+                {/* P9 B1: the onlineStatus enum keeps its em dash for internal
+                    matching; the display swaps it for a comma so no em dash renders. */}
+                <p className="text-sm text-slate-600">{stateInfo.onlineStatus.replace(" — ", ", ")}</p>
                 {stateInfo.courseHours && (
                   <p className="text-sm text-slate-500 mt-1">
                     Course length: {stateInfo.courseHours}

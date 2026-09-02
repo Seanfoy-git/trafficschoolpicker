@@ -94,7 +94,7 @@ export default async function AdminPage() {
         {/* Actions */}
         <AdminActions />
 
-        <p className="text-xs text-slate-400 mt-6">
+        <p className="text-xs text-slate-600 mt-6">
           Changes in Notion appear automatically within 24 hours via ISR. Use
           the button above to force an immediate update.
         </p>
@@ -133,7 +133,7 @@ function EnvCheck({ label, ok }: { label: string; ok: boolean }) {
         <XCircle className="w-4 h-4 text-red-500" />
       )}
       <span className={ok ? "text-slate-700" : "text-red-700"}>{label}</span>
-      <span className="text-xs text-slate-400">{ok ? "Set" : "Missing"}</span>
+      <span className="text-xs text-slate-600">{ok ? "Set" : "Missing"}</span>
     </div>
   );
 }

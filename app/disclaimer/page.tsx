@@ -106,7 +106,7 @@ export default function DisclaimerPage() {
               of the schools we review. This never changes the price you pay and does
               not influence our editorial rankings, ratings, or reviews, which are
               based on our{" "}
-              <Link href="/methodology" className="text-accent hover:underline">
+              <Link href="/methodology" className="text-accent underline">
                 published methodology
               </Link>
               . This disclosure is made in
@@ -133,16 +133,16 @@ export default function DisclaimerPage() {
               Questions about this disclaimer? Email{" "}
               <a
                 href="mailto:legal@trafficschoolpicker.com"
-                className="text-accent hover:underline"
+                className="text-accent underline"
               >
                 legal@trafficschoolpicker.com
               </a>
               . See also our{" "}
-              <Link href="/terms" className="text-accent hover:underline">
+              <Link href="/terms" className="text-accent underline">
                 Terms of Use
               </Link>{" "}
               and{" "}
-              <Link href="/privacy" className="text-accent hover:underline">
+              <Link href="/privacy" className="text-accent underline">
                 Privacy Policy
               </Link>
               .

@@ -40,7 +40,7 @@ export function DirectoryTable({
           </p>
         </div>
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
           <input
             type="text"
             placeholder="Search schools..."
@@ -87,7 +87,7 @@ export function DirectoryTable({
                       {school.phone}
                     </a>
                   ) : (
-                    <span className="text-slate-400">—</span>
+                    <span className="text-slate-600">—</span>
                   )}
                 </td>
                 <td className="py-3 pl-4">
@@ -96,12 +96,13 @@ export function DirectoryTable({
                       href={school.website}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={`Visit ${school.name}`}
                       className="flex items-center gap-1 text-accent hover:underline"
                     >
                       Visit <ExternalLink className="w-3 h-3" />
                     </a>
                   ) : (
-                    <span className="text-slate-400">—</span>
+                    <span className="text-slate-600">—</span>
                   )}
                 </td>
               </tr>
@@ -117,7 +118,7 @@ export function DirectoryTable({
         </table>
       </div>
 
-      <p className="mt-4 text-xs text-slate-400">
+      <p className="mt-4 text-xs text-slate-600">
         This directory lists all DMV-licensed online schools in {stateName}.
         Schools above have been independently reviewed. Directory listings have
         not.

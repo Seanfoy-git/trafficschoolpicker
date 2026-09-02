@@ -104,7 +104,10 @@ export default async function QuestionPage({ params }: Props) {
   const faqSchema = body.hasQA ? buildFaqPage(extractQA(body.body)) : null;
 
   return (
-    <main>
+    // P9 A2: was <main>, which nested inside the layout's <main className="flex-1">
+    // (duplicate landmark on the 60 topic pages). A plain <div> leaves the layout's
+    // <main> as the single main landmark per page.
+    <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {articleSchema && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
@@ -145,6 +148,6 @@ export default async function QuestionPage({ params }: Props) {
         hubPath={hubPath}
         siblingSlugs={siblingSlugs}
       />
-    </main>
+    </div>
   );
 }

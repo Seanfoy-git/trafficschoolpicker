@@ -121,7 +121,7 @@ export function QuestionArticle({
               </div>
             ))}
           </dl>
-          {verified && <p className="mt-4 text-xs text-slate-400">Last verified {verified}</p>}
+          {verified && <p className="mt-4 text-xs text-slate-600">Last verified {verified}</p>}
         </div>
       )}
 
@@ -150,7 +150,7 @@ export function QuestionArticle({
           <div className="text-sm text-slate-600 space-y-2">
             <ReviewBody blocks={sources} />
           </div>
-          {verified && <p className="mt-3 text-xs text-slate-400">Last verified {verified}</p>}
+          {verified && <p className="mt-3 text-xs text-slate-600">Last verified {verified}</p>}
         </section>
       )}
     </div>

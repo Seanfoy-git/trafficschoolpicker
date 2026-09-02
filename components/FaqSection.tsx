@@ -51,7 +51,7 @@ export function FaqSection({ faqs, stateDisplayName, schemaMinEntries = 4 }: Pro
           >
             <summary className="flex justify-between items-center px-5 py-4 cursor-pointer font-medium text-slate-900 hover:bg-slate-50 transition-colors list-none">
               {faq.question}
-              <span className="ml-4 shrink-0 text-slate-400 group-open:rotate-180 transition-transform">
+              <span className="ml-4 shrink-0 text-slate-600 group-open:rotate-180 transition-transform">
                 <svg
                   className="w-5 h-5"
                   fill="none"

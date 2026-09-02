@@ -109,7 +109,9 @@ export function SchoolsDirectoryTable({ schools }: { schools: School[] }) {
               <SortHeader label="Reviews" keyName="reviewCount" />
               <SortHeader label="Price" keyName="price" />
               <th className="py-3 px-4 text-left font-semibold text-slate-700">States</th>
-              <th className="py-3 px-4"></th>
+              <th className="py-3 px-4">
+                <span className="sr-only">Review</span>
+              </th>
             </tr>
           </thead>
           <tbody>

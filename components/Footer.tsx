@@ -51,7 +51,7 @@ export async function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-3">Popular States</h4>
+            <h2 className="font-semibold mb-3">Popular States</h2>
             <ul className="space-y-1.5 text-sm text-slate-300">
               {popularStates.map((state) => (
                 <li key={state.slug}>
@@ -67,7 +67,7 @@ export async function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-3">Resources</h4>
+            <h2 className="font-semibold mb-3">Resources</h2>
             <ul className="space-y-1.5 text-sm text-slate-300">
               <li>
                 <Link href="/schools" className="hover:text-highlight transition-colors">
@@ -93,17 +93,17 @@ export async function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold mb-3">Legal</h4>
+            <h2 className="font-semibold mb-3">Legal</h2>
             <p className="text-xs text-slate-400 leading-relaxed">
-              TrafficSchoolPicker.com is an independent comparison site — not a
-              traffic school, law firm, court, or government agency — and nothing
+              TrafficSchoolPicker.com is an independent comparison site, not a
+              traffic school, law firm, court, or government agency, and nothing
               here is legal advice. Prices and promotional offers are gathered
               periodically, may change or expire without notice, and can differ
               from a provider&apos;s checkout; always confirm the current price and
               terms on the provider&apos;s own website before purchasing. Whether an
               online course is accepted, dismisses your ticket, or removes points
-              depends on your state and the specific court handling your case —
-              verify with the court listed on your citation before enrolling. We
+              depends on your state and the specific court handling your case.
+              Verify with the court listed on your citation before enrolling. We
               do not guarantee any outcome. We may earn a commission when you enroll
               through our links, at no extra cost to you; this never affects our
               rankings or reviews.
@@ -133,7 +133,7 @@ export async function Footer() {
             discovery path: real root-relative <a href> links on every page. */}
         {linkableStates.length > 0 && (
           <div className="border-t border-slate-700 mt-8 pt-6">
-            <h4 className="font-semibold mb-3">Browse traffic schools by state</h4>
+            <h2 className="font-semibold mb-3">Browse traffic schools by state</h2>
             <ul className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-slate-300">
               {linkableStates.map((state) => (
                 <li key={state.slug}>
@@ -152,7 +152,7 @@ export async function Footer() {
         <div className="border-t border-slate-700 mt-8 pt-6 text-center text-xs text-slate-400">
           &copy; {new Date().getFullYear()} PellucidMedia LLC · TrafficSchoolPicker.com.
           All rights reserved. | <FooterAffiliateNote /> | Prices &amp; offers subject to
-          change — verify on the provider&apos;s site.
+          change; verify on the provider&apos;s site.
         </div>
       </div>
     </footer>

@@ -40,7 +40,7 @@ export default function BlogPage() {
               <p className="text-slate-600 text-sm mb-3">
                 {post.description}
               </p>
-              <div className="flex items-center gap-2 text-xs text-slate-400">
+              <div className="flex items-center gap-2 text-xs text-slate-600">
                 <Calendar className="w-3.5 h-3.5" />
                 <time dateTime={post.publishedAt}>
                   {new Date(post.publishedAt).toLocaleDateString("en-US", {

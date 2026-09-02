@@ -59,7 +59,7 @@ export function SchoolCard({
               <a
                 href="/methodology"
                 className="inline-flex items-baseline gap-1 bg-accent/10 text-accent rounded px-2 py-0.5 text-sm font-bold hover:bg-accent/20 transition-colors"
-                title="How we score — our independent TSP Score"
+                title="How we score, our independent TSP Score"
               >
                 TSP {school.tspScore.toFixed(1)}
                 <span className="text-[10px] font-normal">/5</span>
@@ -72,7 +72,7 @@ export function SchoolCard({
 
           {resolved.oneLiner && (
             <div className="mt-3">
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-600 mb-1">
                 Our take
               </p>
               <p className="text-sm text-slate-600">
@@ -84,19 +84,19 @@ export function SchoolCard({
           <div className="flex flex-wrap gap-4 mt-3 text-sm text-slate-600">
             {courseHours && (
               <span className="flex items-center gap-1">
-                <Clock className="w-4 h-4 text-slate-400" />
+                <Clock className="w-4 h-4 text-slate-600" />
                 {courseHours}
               </span>
             )}
             {resolved.approvalBodyShort !== "State Approved" && (
               <span className="flex items-center gap-1">
-                <CheckCircle className="w-4 h-4 text-slate-400" />
+                <CheckCircle className="w-4 h-4 text-slate-600" />
                 {resolved.approvalBodyShort}-approved
               </span>
             )}
             {school.mobileApp && (
               <span className="flex items-center gap-1">
-                <Smartphone className="w-4 h-4 text-slate-400" />
+                <Smartphone className="w-4 h-4 text-slate-600" />
                 Mobile app
               </span>
             )}
@@ -153,7 +153,7 @@ export function SchoolCard({
               hasActiveOffer && salePrice !== null && salePrice < resolved.price ? (
                 // Live deal: struck regular + current sale + savings.
                 <>
-                  <span className="text-sm text-slate-400 line-through">
+                  <span className="text-sm text-slate-600 line-through">
                     ${resolved.price.toFixed(2)}
                   </span>
                   <div className="text-2xl font-bold text-slate-900">
@@ -166,7 +166,7 @@ export function SchoolCard({
               ) : (
                 <>
                   {originalPrice && (
-                    <span className="text-sm text-slate-400 line-through">
+                    <span className="text-sm text-slate-600 line-through">
                       ${originalPrice.toFixed(2)}
                     </span>
                   )}

@@ -32,7 +32,7 @@ export function SchoolFAQ({
             >
               {faq.question}
               <ChevronDown
-                className={`w-5 h-5 text-slate-400 transition-transform ${
+                className={`w-5 h-5 text-slate-600 transition-transform ${
                   openIndex === i ? "rotate-180" : ""
                 }`}
               />

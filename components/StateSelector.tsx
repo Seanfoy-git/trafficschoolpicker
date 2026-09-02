@@ -25,6 +25,7 @@ export function StateSelector({ size = "lg" }: { size?: "sm" | "lg" }) {
       <select
         onChange={handleChange}
         defaultValue=""
+        aria-label="Choose your state"
         className={`${sizeClasses} pl-10 rounded-lg border border-slate-300 bg-white text-slate-800 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent`}
       >
         <option value="" disabled>
