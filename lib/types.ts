@@ -77,6 +77,25 @@ export type StateInfo = {
   courseHours: string | null;
   hoursSource: string | null;    // primary-source cite (statute/regulator URL)
   hoursVerified: string | null;  // ISO date — powers the hours "Last verified" line
+  // "When a lawyer beats traffic school" block (attorney-referral Play A). One-way
+  // outbound links to researched firms; no affiliate deal, no reciprocity. Null when
+  // the state has no reviewed block, so the section never renders empty. `firms` are
+  // the vetted candidates; `lastReviewed` drives Sean's 90-day re-verify cadence.
+  lawyerBlock: LawyerBlock | null;
+};
+
+// Attorney-referral block ("When a lawyer beats traffic school"). Data-driven so
+// firms and copy are edited in Notion, not code. Rendered only where `firms` is
+// non-empty (graceful degradation on unpopulated states).
+export type LawyerFirm = {
+  name: string;   // firm name
+  url: string;    // firm website (one-way outbound; tracked like an affiliate click)
+  note: string;   // one-line credibility note ("statewide reach", "former state trooper")
+};
+export type LawyerBlock = {
+  disqualifier: string;         // intro sentence: the specific scenario where a lawyer beats the course
+  firms: LawyerFirm[];          // 2-3 firms
+  lastReviewed: string | null;  // ISO date of the last firm re-verification (null = not yet reviewed)
 };
 
 // ─── Traffic Schools DB (editorial + reviews) ───────────────

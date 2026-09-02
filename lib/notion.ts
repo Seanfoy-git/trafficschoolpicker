@@ -10,6 +10,7 @@ import type {
   StateRequirement,
   SchoolStateVariant,
   StateFaqEntry,
+  LawyerBlock,
   ContentStatus,
   ReviewBlock,
   ReviewBlockType,
@@ -272,6 +273,35 @@ function parseStateFaqJson(raw: string, stateCodeForLog?: string): StateFaqEntry
   return out;
 }
 
+// Parse the "Lawyer Block" rich_text JSON for the attorney-referral section. Shape:
+//   {"disqualifier":"…","firms":[{"name":"…","url":"https://…","note":"…"}],"lastReviewed":"YYYY-MM-DD"|null}
+// FAIL-SAFE: returns null on empty/malformed input or when no valid firm rows exist,
+// so the section never renders on an unpopulated or broken state (graceful degrade).
+function parseLawyerBlock(raw: string): LawyerBlock | null {
+  const body = (raw || "").trim().replace(/^lawyerblock:\s*/i, "");
+  if (!body) return null;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(body);
+  } catch {
+    return null;
+  }
+  if (typeof parsed !== "object" || parsed === null) return null;
+  const p = parsed as Record<string, unknown>;
+  const firms = Array.isArray(p.firms)
+    ? p.firms
+        .filter((f): f is Record<string, unknown> => !!f && typeof f === "object")
+        .map((f) => ({ name: String(f.name ?? ""), url: String(f.url ?? ""), note: String(f.note ?? "") }))
+        .filter((f) => f.name && /^https?:\/\//i.test(f.url))
+    : [];
+  if (firms.length === 0) return null;
+  return {
+    disqualifier: String(p.disqualifier ?? ""),
+    firms,
+    lastReviewed: typeof p.lastReviewed === "string" && p.lastReviewed ? p.lastReviewed : null,
+  };
+}
+
 function isContentStatus(value: string | null): value is ContentStatus {
   return value === "Complete" || value === "Partial" || value === "Stub";
 }
@@ -300,6 +330,7 @@ function mapStateInfo(page: PageObjectResponse): StateInfo {
     introParagraph: getFullRichText(page, "Intro Paragraph"),
     trueCostOfATicket: getFullRichText(page, "True Cost of a Ticket").trim() || null,
     stateFaq: parseStateFaqJson(getFullRichText(page, "State FAQ"), getText(page, "Abbreviation")),
+    lawyerBlock: parseLawyerBlock(getFullRichText(page, "Lawyer Block")),
     lastVerified: getDate(page, "Last Verified"),
     contentStatus: isContentStatus(contentStatusRaw) ? contentStatusRaw : null,
     approvalLabel: getText(page, "Approval Label") || null,
