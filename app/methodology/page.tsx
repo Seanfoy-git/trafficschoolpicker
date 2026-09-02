@@ -122,6 +122,10 @@ export default function MethodologyPage() {
             and we may earn a commission when you enroll through one, at no extra cost to
             you. That commission does not affect a school&apos;s TSP Score or where it ranks.
           </p>
+          <p className="text-slate-700 leading-relaxed mb-4">
+            We list schools in TSP Score order, highest first; when two schools tie on
+            score, the lower price ranks first. (Ordering updated September 2026.)
+          </p>
           <ul className="space-y-2">
             {[
               "No school can pay for a higher score or ranking",

@@ -303,6 +303,11 @@ export default async function ReviewPage({ params }: Props) {
               )}
               {school.bestFor && <>It&apos;s best for {school.bestFor.toLowerCase()}.</>}
             </p>
+            {/* FTC affiliate disclosure — visible, above the first monetized CTA (P12). */}
+            <p className="mb-3 text-xs text-slate-500">
+              We may earn a commission if you enroll through our links. It never changes a
+              school&apos;s score or rank.
+            </p>
             <AffiliateButton school={school} />
           </section>
         </div>

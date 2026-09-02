@@ -177,6 +177,29 @@ export default async function StatePage({ params }: Props) {
     resolved: resolveStateContent(school, stateMeta.code, stateReqs, variants),
   }));
 
+  // P12 badges (computed per page, not from the static Notion field): "Top Rated"
+  // on the single highest-scored card (tier1Resolved is already sorted by TSP Score
+  // descending, so it is the first scored one); "Lowest price" on the single cheapest
+  // card by displayed price. A card can carry both.
+  const topRatedId = tier1Resolved.find((x) => x.school.tspScore != null)?.school.id ?? null;
+  let cheapestId: string | null = null;
+  let minDisplayed = Infinity;
+  for (const { school, resolved } of tier1Resolved) {
+    if (resolved.price == null) continue;
+    const disp =
+      school.hasActiveOffer && school.salePrice != null && school.salePrice < resolved.price
+        ? school.salePrice
+        : resolved.price;
+    if (disp < minDisplayed) {
+      minDisplayed = disp;
+      cheapestId = school.id;
+    }
+  }
+  const badgesFor = (id: string): string[] => [
+    ...(id === topRatedId ? ["Top Rated"] : []),
+    ...(id === cheapestId ? ["Lowest price"] : []),
+  ];
+
   // Slugs that have a /reviews/<slug> page. getAllSchools is build-memoized and
   // was already resolved by getSchoolPricingForState above, so this is a cache
   // hit — not an extra Notion query — and drives the Product url fallback.
@@ -599,6 +622,12 @@ export default async function StatePage({ params }: Props) {
       {showComparison && (
         <section className="py-12 bg-white">
           <div className="max-w-5xl mx-auto px-4">
+            {/* FTC affiliate disclosure — visible, ABOVE the first monetized CTA in
+                DOM order (P12). The long-form disclosure stays below the stack. */}
+            <p className="mb-4 text-xs text-slate-500">
+              We may earn a commission if you enroll through our links. It never changes a
+              school&apos;s score or rank.
+            </p>
             <div className="space-y-4">
               {tier1Resolved.map(({ school, resolved }, i) => (
                 <SchoolCard
@@ -609,6 +638,7 @@ export default async function StatePage({ params }: Props) {
                   showProsAndCons
                   stateCode={stateMeta.code}
                   courseHours={stateInfo?.courseHours ?? null}
+                  badges={badgesFor(school.id)}
                 />
               ))}
             </div>

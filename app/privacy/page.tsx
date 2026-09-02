@@ -41,9 +41,12 @@ export default function PrivacyPage() {
               </li>
               <li>
                 <strong>Outbound click data</strong> — when you click a school or
-                affiliate link, we record that a click occurred, which school and
-                state page it came from, and a timestamp, so we can measure which
-                comparisons are useful. We do not attach your name to this.
+                affiliate link, we generate a random per-click identifier (a UUID) and
+                pass it to the affiliate network as a tracking sub-ID so that a
+                resulting enrollment can be attributed to us for commission. We also
+                log that click (the school, the state page it came from, that
+                identifier, and a timestamp) in our own store, which auto-expires
+                after a limited retention period. We do not attach your name to this.
               </li>
               <li>
                 <strong>Information you send us</strong> — if you email us, we receive

@@ -1,20 +1,20 @@
-import { Award, Zap, Star, Trophy, DollarSign } from "lucide-react";
+import { Star, DollarSign } from "lucide-react";
 
+// P12: the only two badges the ordering/price rule produces, computed per page.
+// "Top Rated" renders on the page's highest-scored card; "Lowest price" on the
+// cheapest. No other rating-flavored badges (Best Value / Editor's Choice / etc.).
 const badgeConfig: Record<
   string,
   {
     label: string;
-    icon: typeof Award;
+    icon: typeof Star;
     bg: string;
     text: string;
     border: string;
   }
 > = {
-  "Best Value": { label: "Best Value", icon: Award, bg: "bg-green-100", text: "text-green-800", border: "border-green-200" },
-  Fastest: { label: "Fastest", icon: Zap, bg: "bg-blue-100", text: "text-blue-800", border: "border-blue-200" },
   "Top Rated": { label: "Top Rated", icon: Star, bg: "bg-amber-100", text: "text-amber-800", border: "border-amber-200" },
-  "Editors Choice": { label: "Editor's Choice", icon: Trophy, bg: "bg-purple-100", text: "text-purple-800", border: "border-purple-200" },
-  "Budget Pick": { label: "Budget Pick", icon: DollarSign, bg: "bg-emerald-100", text: "text-emerald-800", border: "border-emerald-200" },
+  "Lowest price": { label: "Lowest price", icon: DollarSign, bg: "bg-emerald-100", text: "text-emerald-800", border: "border-emerald-200" },
 };
 
 export function Badge({ type }: { type: string }) {

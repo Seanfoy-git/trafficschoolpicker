@@ -14,6 +14,7 @@ export function SchoolCard({
   showProsAndCons = false,
   stateCode,
   courseHours = null,
+  badges = [],
 }: {
   school: School | SchoolWithPrice;
   resolved: ResolvedSchoolContent;
@@ -23,6 +24,10 @@ export function SchoolCard({
   // State-level course length (display string), null unless the state's Hours
   // Source is set. There is no per-school hours value. See Package 4.
   courseHours?: string | null;
+  // Badges COMPUTED by the page for this card (P12): "Top Rated" only on the page's
+  // highest-scored card, "Lowest price" only on the cheapest. The static Notion
+  // "Badge" field is no longer rendered — the rule is generator-enforced per page.
+  badges?: string[];
 }) {
   const originalPrice = "originalPrice" in school ? (school as SchoolWithPrice).originalPrice : null;
   const hasActiveOffer = "hasActiveOffer" in school && (school as SchoolWithPrice).hasActiveOffer;
@@ -39,7 +44,9 @@ export function SchoolCard({
               </span>
             )}
             <h3 className="text-lg font-bold text-slate-900">{school.name}</h3>
-            {school.badge && <Badge type={school.badge} />}
+            {badges.map((b) => (
+              <Badge key={b} type={b} />
+            ))}
             {hasActiveOffer && (
               <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2 py-0.5">
                 <Tag className="w-3 h-3" /> Limited-time offer
@@ -66,10 +73,10 @@ export function SchoolCard({
           {resolved.oneLiner && (
             <div className="mt-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">
-                In their own words
+                Our take
               </p>
-              <p className="text-sm text-slate-600 italic">
-                &ldquo;{resolved.oneLiner}&rdquo;
+              <p className="text-sm text-slate-600">
+                {resolved.oneLiner}
               </p>
             </div>
           )}

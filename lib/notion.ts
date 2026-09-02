@@ -573,7 +573,10 @@ function mapSchool(page: PageObjectResponse): School {
       getText(page, "School Name").toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, ""),
     name: getText(page, "School Name"),
     tier,
-    badge: getSelect(page, "Badge") as School["badge"],
+    // P12: badges are computed per page (Top Rated on the top-scored card, Lowest
+    // price on the cheapest) — the static Notion "Badge" field is no longer rendered
+    // and is nulled so a stale value (e.g. "Best Value") can't leak into the payload.
+    badge: null,
     tagline: getText(page, "One Liner"),
     website: getText(page, "Website"),
     affiliateUrl: getText(page, "Affiliate URL"),
@@ -929,18 +932,36 @@ export async function getSchoolPricingForState(
     });
   }
 
-  // Sort: Tier 1 first, then any school with a live offer floats up (a neutral
-  // "current deal" signal — not partner-specific — consistent with our published
-  // "lower prices/promotions rank higher" methodology), then by price (nulls last).
+  // Sort (P12, Sean-signed): Tier 1 first, then by TSP Score DESCENDING; schools with
+  // no score (no review body) sort after scored ones; tie-break by price ascending
+  // (nulls last). This is what /methodology promises — the ranking is the score, not
+  // the price and not a live-offer float.
   return results.sort((a, b) => {
     if (a.tier !== b.tier) return a.tier - b.tier;
-    if (a.hasActiveOffer !== b.hasActiveOffer) return a.hasActiveOffer ? -1 : 1;
-    if (a.price === null && b.price === null) return 0;
-    if (a.price === null) return 1;
-    if (b.price === null) return -1;
-    return a.price - b.price;
+    return bySchoolRank<SchoolWithPrice>((s) => s.price)(a, b);
   });
 }
+
+/** Shared display-ranking comparator (P12): TSP Score descending (nulls last), then
+ *  price ascending (nulls last). Used for state grids and the home Top Picks so every
+ *  place cards render uses the one rule /methodology publishes. */
+export const bySchoolRank =
+  <T extends { tspScore: number | null }>(priceOf: (s: T) => number | null) =>
+  (a: T, b: T): number => {
+    const as = a.tspScore;
+    const bs = b.tspScore;
+    if (as !== bs) {
+      if (as === null) return 1;
+      if (bs === null) return -1;
+      return bs - as;
+    }
+    const ap = priceOf(a);
+    const bp = priceOf(b);
+    if (ap === bp) return 0;
+    if (ap === null) return 1;
+    if (bp === null) return -1;
+    return ap - bp;
+  };
 
 // ─── DIRECTORY (School Directory DB) ────────────────────────
 
@@ -1126,17 +1147,18 @@ export function resolveStateContent(
     (stateCode ? school.statePrices[stateCode] : undefined) ??
     null;
 
-  // No generic fallback (P11 ruling: omit beats guessed). A displayed price must be
-  // a CONFIRMED per-state value — a variant override, the verified Pricing-DB value,
-  // or a per-state Schools column. A school with no confirmed state-specific price
-  // shows "Check website" rather than its flat national price, which would otherwise
-  // invent a below-floor number (e.g. a $19.95 generic rendering on Texas, whose DSC
-  // statutory floor is $25). "Check website" also drops the card from the Product
-  // ItemList (no fabricated Offer) while the card itself still renders on the page,
-  // so per-page card COUNT is unchanged; only the "from $X" floor tightens to the
-  // confirmed prices. The dated price pull to fill real values runs through the
-  // Verified Price workflow, not here.
-  const price = stateVerifiedPrice ?? null;
+  // No generic fallback ON A STATE PAGE (P11 ruling: omit beats guessed). On a state
+  // page (stateCode set) a displayed price must be a CONFIRMED per-state value — a
+  // variant override, the verified Pricing-DB value, or a per-state Schools column —
+  // otherwise the card shows "Check website" rather than a flat national price that
+  // would invent a below-floor number (e.g. a $19.95 generic on Texas, DSC floor $25).
+  // Off a state page (stateCode null, e.g. the home Top Picks), the generic base price
+  // is the school's own starting price, not a false per-state claim, so it renders.
+  // "Check website" also drops the card from the Product ItemList (no fabricated
+  // Offer) while the card still renders, so per-page card COUNT is unchanged. The
+  // dated price pull to fill real per-state values runs through the Verified Price
+  // workflow, not here.
+  const price = stateVerifiedPrice ?? (stateCode === null ? (school.genericPrice ?? null) : null);
 
   // Has Final Exam: variant override → state requirement → true (conservative default)
   const hasFinalExam =

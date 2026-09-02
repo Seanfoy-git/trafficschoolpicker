@@ -1,4 +1,4 @@
-import { ShieldCheck, Users, RefreshCw } from "lucide-react";
+import { ShieldCheck, FileCheck, RefreshCw } from "lucide-react";
 
 const MONTHS = [
   "January", "February", "March", "April", "May", "June",
@@ -29,8 +29,8 @@ export function TrustBar({
     <div className="bg-slate-50 border-y border-slate-200">
       <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-slate-600">
         <span className="flex items-center gap-1.5">
-          <Users className="w-4 h-4 text-accent" />
-          Trusted by 500,000+ drivers
+          <FileCheck className="w-4 h-4 text-accent" />
+          Every claim sourced to the statute or regulator
         </span>
         <span className="flex items-center gap-1.5">
           <ShieldCheck className="w-4 h-4 text-accent" />

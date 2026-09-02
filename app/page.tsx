@@ -4,7 +4,7 @@ import { StateSelector } from "@/components/StateSelector";
 import { TrustBar } from "@/components/TrustBar";
 import { SchoolCard } from "@/components/SchoolCard";
 import { SchoolFAQ, FAQJsonLd } from "@/components/SchoolFAQ";
-import { getAllSchools, getStateRequirements, resolveStateContent, getLinkableStates, getLatestStateVerification } from "@/lib/notion";
+import { getAllSchools, getStateRequirements, resolveStateContent, getLinkableStates, getLatestStateVerification, bySchoolRank } from "@/lib/notion";
 import Link from "next/link";
 import { ArrowRight, Search, BarChart3, MousePointerClick } from "lucide-react";
 
@@ -66,7 +66,32 @@ export default async function HomePage() {
     getLatestStateVerification(),
   ]);
   const emptyVariants = new Map();
-  const topSchools = allSchools.filter((s) => s.tier === 1).slice(0, 3);
+  // P12: Top Picks lead by TSP Score (descending), tie-break price ascending, the
+  // same rule the state grids use. No per-state price on the home page, so the
+  // tie-break reads each school's generic price.
+  const topSchools = [...allSchools]
+    .filter((s) => s.tier === 1)
+    .sort(bySchoolRank<(typeof allSchools)[number]>((s) => s.genericPrice ?? null))
+    .slice(0, 3);
+  // P12 badges on Top Picks: "Top Rated" on the highest-scored (first, already sorted),
+  // "Lowest price" on the cheapest by displayed price.
+  const topResolved = topSchools.map((school) => ({
+    school,
+    resolved: resolveStateContent(school, null, stateReqs, emptyVariants),
+  }));
+  const homeTopRatedId = topResolved.find((x) => x.school.tspScore != null)?.school.id ?? null;
+  let homeCheapestId: string | null = null;
+  let homeMin = Infinity;
+  for (const { school, resolved } of topResolved) {
+    if (resolved.price != null && resolved.price < homeMin) {
+      homeMin = resolved.price;
+      homeCheapestId = school.id;
+    }
+  }
+  const homeBadgesFor = (id: string): string[] => [
+    ...(id === homeTopRatedId ? ["Top Rated"] : []),
+    ...(id === homeCheapestId ? ["Lowest price"] : []),
+  ];
 
   return (
     <>
@@ -136,18 +161,23 @@ export default async function HomePage() {
             <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
               Our Top Picks
             </h2>
-            <p className="text-slate-600 mb-8">
-              Hand-picked by our editorial team based on price, quality, and user
-              satisfaction.
+            <p className="text-slate-600 mb-4">
+              Ranked by our independent TSP Score, highest first (price breaks a tie).
+            </p>
+            {/* FTC affiliate disclosure — visible, ABOVE the first monetized CTA (P12). */}
+            <p className="mb-8 text-xs text-slate-500">
+              We may earn a commission if you enroll through our links. It never changes a
+              school&apos;s score or rank.
             </p>
             <div className="space-y-4">
-              {topSchools.map((school, i) => (
+              {topResolved.map(({ school, resolved }, i) => (
                 <SchoolCard
                   key={school.id}
                   school={school}
-                  resolved={resolveStateContent(school, null, stateReqs, emptyVariants)}
+                  resolved={resolved}
                   rank={i + 1}
                   showProsAndCons
+                  badges={homeBadgesFor(school.id)}
                 />
               ))}
             </div>
