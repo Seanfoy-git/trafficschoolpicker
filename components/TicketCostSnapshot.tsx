@@ -32,7 +32,7 @@ export function TicketCostSnapshot({ stateCode, stateName }: { stateCode: string
         <p className="mt-3 text-xs text-slate-500">
           A typical first-offense 10-over ticket: fine plus estimated three-year insurance
           surcharge.{" "}
-          <a href={`/blog/${TICKET_COST_STUDY.slug}`} className="text-accent hover:underline">
+          <a href={`/blog/${TICKET_COST_STUDY.slug}`} className="text-accent underline">
             See the full study.
           </a>
         </p>

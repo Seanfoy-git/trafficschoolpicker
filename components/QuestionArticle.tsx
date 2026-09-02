@@ -136,7 +136,7 @@ export function QuestionArticle({
       {hubPath && (
         <p className="text-sm text-slate-600">
           For the national overview, see{" "}
-          <a href={hubPath} className="text-accent hover:underline font-medium">
+          <a href={hubPath} className="text-accent underline font-medium">
             does traffic school remove points
           </a>
           .

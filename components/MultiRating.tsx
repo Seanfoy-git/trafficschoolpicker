@@ -105,11 +105,11 @@ export function MultiRating({
           <span className="text-sm font-semibold text-slate-900">
             {r.rating.toFixed(1)}
           </span>
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-slate-700">
             ({r.reviewCount.toLocaleString()})
           </span>
           <TrendIcon trend={r.trend} />
-          <span className="text-xs text-slate-600">{r.platform}</span>
+          <span className="text-xs text-slate-700">{r.platform}</span>
         </a>
       ))}
       {bbb && <BBBBadge bbb={bbb} />}

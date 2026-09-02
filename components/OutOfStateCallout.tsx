@@ -43,7 +43,7 @@ export function OutOfStateCallout({ stateName, stateSlug }: { stateName: string;
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
           <p className="mt-3 text-sm text-slate-600">
-            <Link href={href} className="font-medium text-amber-700 hover:underline">
+            <Link href={href} className="font-medium text-amber-700 underline">
               {stateName} license, ticket from another state? Same guide, other direction.
             </Link>
           </p>

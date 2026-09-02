@@ -86,7 +86,7 @@ export default async function ReviewsHubPage() {
 
                   <Link
                     href={`/reviews/${school.slug}`}
-                    className="inline-flex items-center gap-1 text-sm font-medium text-accent mt-auto pt-4 hover:underline"
+                    className="inline-flex items-center gap-1 text-sm font-medium text-accent mt-auto pt-4 underline"
                   >
                     Read the full {school.name} review <ArrowRight className="w-4 h-4 shrink-0" />
                   </Link>

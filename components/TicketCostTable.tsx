@@ -51,7 +51,7 @@ export function TicketCostTable({
                 <td className={td}>{i + 1}</td>
                 <td className={td}>
                   {meta ? (
-                    <Link href={`/${meta.slug}`} className="text-accent hover:underline font-medium">
+                    <Link href={`/${meta.slug}`} className="text-accent underline font-medium">
                       {meta.name}
                     </Link>
                   ) : (

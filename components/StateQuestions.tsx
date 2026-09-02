@@ -28,7 +28,7 @@ export function StateQuestions({
             <li key={q.questionSlug}>
               <Link
                 href={`/${q.stateSlug}/${q.questionSlug}`}
-                className="text-accent hover:underline font-medium"
+                className="text-accent underline font-medium"
               >
                 {q.h1}
               </Link>

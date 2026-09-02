@@ -32,7 +32,7 @@ export default function AboutPage() {
               price and transparency, state fit, certificate handling, support and
               guarantees, and track record. See the full rubric, the weights, and exactly
               how the score is computed on our{" "}
-              <Link href="/methodology" className="text-accent hover:underline">
+              <Link href="/methodology" className="text-accent underline">
                 scoring methodology
               </Link>{" "}
               page.

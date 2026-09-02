@@ -100,7 +100,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         <Link
           href="/blog"
-          className="inline-flex items-center gap-1 text-sm text-accent hover:underline mb-6"
+          className="inline-flex items-center gap-1 text-sm text-accent underline mb-6"
         >
           <ArrowLeft className="w-4 h-4" /> Back to blog
         </Link>

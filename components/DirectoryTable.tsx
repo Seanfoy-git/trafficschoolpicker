@@ -97,7 +97,7 @@ export function DirectoryTable({
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Visit ${school.name}`}
-                      className="flex items-center gap-1 text-accent hover:underline"
+                      className="flex items-center gap-1 text-accent underline"
                     >
                       Visit <ExternalLink className="w-3 h-3" />
                     </a>

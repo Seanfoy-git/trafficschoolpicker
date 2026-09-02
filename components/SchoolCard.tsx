@@ -180,7 +180,7 @@ export function SchoolCard({
                 href={trackerUrl(school.slug, { stateCode, sourcePageId: school.id }) ?? school.website}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
-                className="text-sm text-slate-500 hover:underline"
+                className="text-sm text-slate-500 underline"
               >
                 Check website &rarr;
               </a>
@@ -195,7 +195,7 @@ export function SchoolCard({
 
           <Link
             href={`/reviews/${school.slug}`}
-            className="text-sm text-accent hover:underline"
+            className="text-sm text-accent underline"
           >
             Read full review &rarr;
           </Link>

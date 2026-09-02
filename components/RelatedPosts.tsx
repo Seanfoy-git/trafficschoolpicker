@@ -30,7 +30,7 @@ export function RelatedPosts({ stateCode, max = 3 }: Props) {
             <li key={slug}>
               <Link
                 href={`/blog/${slug}`}
-                className="group inline-flex items-start gap-2 text-accent font-medium hover:underline"
+                className="group inline-flex items-start gap-2 text-accent font-medium underline"
               >
                 <ArrowRight className="w-4 h-4 mt-1 shrink-0" />
                 <span>{seo.title}</span>

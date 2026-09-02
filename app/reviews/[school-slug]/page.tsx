@@ -352,7 +352,7 @@ export default async function ReviewPage({ params }: Props) {
                     href={trackerUrl(school.slug, { sourcePageId: school.id, src: "review" }) ?? school.website}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
-                    className="flex items-center gap-2 text-accent hover:underline"
+                    className="flex items-center gap-2 text-accent underline"
                   >
                     <ExternalLink className="w-4 h-4" /> Official website
                   </a>
@@ -361,7 +361,7 @@ export default async function ReviewPage({ params }: Props) {
             </ul>
             <a
               href="/methodology"
-              className="mt-4 block text-center text-sm text-accent hover:underline"
+              className="mt-4 block text-center text-sm text-accent underline"
             >
               How we score schools
             </a>

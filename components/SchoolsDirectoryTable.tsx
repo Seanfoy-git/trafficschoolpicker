@@ -82,6 +82,7 @@ export function SchoolsDirectoryTable({ schools }: { schools: School[] }) {
         <select
           value={stateFilter}
           onChange={(e) => setStateFilter(e.target.value)}
+          aria-label="Filter schools by state"
           className="px-4 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-accent/30"
         >
           <option value="">All states</option>
@@ -144,7 +145,7 @@ export function SchoolsDirectoryTable({ schools }: { schools: School[] }) {
                 <td className="py-3 px-4 text-right">
                   <Link
                     href={`/reviews/${school.slug}`}
-                    className="inline-flex items-center gap-1 text-accent text-xs font-semibold hover:underline"
+                    className="inline-flex items-center gap-1 text-accent text-xs font-semibold underline"
                   >
                     Review <ExternalLink className="w-3 h-3" />
                   </Link>

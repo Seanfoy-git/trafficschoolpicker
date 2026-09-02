@@ -15,7 +15,7 @@ function RichText({ runs }: { runs: ReviewRichText[] }) {
           node = (
             <a
               href={run.href}
-              className="text-accent hover:underline"
+              className="text-accent underline"
               {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
             >
               {node}

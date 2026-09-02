@@ -29,7 +29,7 @@ export const BlogMdxComponents: MDXComponents = {
       return (
         <Link
           href={href!}
-          className="text-accent hover:underline font-medium"
+          className="text-accent underline font-medium"
         >
           {children}
         </Link>
@@ -40,7 +40,7 @@ export const BlogMdxComponents: MDXComponents = {
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-accent hover:underline"
+        className="text-accent underline"
       >
         {children}
       </a>

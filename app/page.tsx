@@ -200,7 +200,7 @@ export default async function HomePage() {
           </p>
           <Link
             href="/methodology"
-            className="inline-flex items-center gap-1 text-accent font-semibold hover:underline"
+            className="inline-flex items-center gap-1 text-accent font-semibold underline"
           >
             Read our full methodology <ArrowRight className="w-4 h-4" />
           </Link>

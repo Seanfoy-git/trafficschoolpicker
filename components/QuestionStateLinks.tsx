@@ -21,7 +21,7 @@ export function QuestionStateLinks({ questions }: { questions: QuestionPage[] })
             <li key={q.stateSlug}>
               <Link
                 href={`/${q.stateSlug}/${q.questionSlug}`}
-                className="text-accent hover:underline"
+                className="text-accent underline"
               >
                 {name}
               </Link>

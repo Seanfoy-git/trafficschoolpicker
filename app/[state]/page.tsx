@@ -349,7 +349,7 @@ export default async function StatePage({ params }: Props) {
                   {ticketCost.netSavings ? (
                     <> A state-approved course can avoid about {formatCost(ticketCost.netSavings)} of it.</>
                   ) : null}{" "}
-                  <a href="/blog/true-cost-of-a-traffic-ticket" className="text-accent hover:underline">
+                  <a href="/blog/true-cost-of-a-traffic-ticket" className="text-accent underline">
                     See the 2026 study.
                   </a>
                 </span>
@@ -434,7 +434,7 @@ export default async function StatePage({ params }: Props) {
             <div>
               <p className="font-semibold text-slate-700">Decided court by court</p>
               <p className="text-sm text-slate-600">
-                {stateMeta.name} has no statewide traffic-school program — whether a
+                {stateMeta.name} has no statewide traffic-school program. Whether a
                 course helps with your ticket is decided by the court on your citation.
                 An approved online course can count toward a diversion or dismissal
                 agreement where the court accepts it, so confirm with that court before
@@ -508,7 +508,7 @@ export default async function StatePage({ params }: Props) {
                       href={stateInfo.dmvUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-accent hover:underline"
+                      className="text-accent underline"
                     >
                       {stateMeta.name} approved schools
                     </a>
@@ -534,7 +534,7 @@ export default async function StatePage({ params }: Props) {
               </p>
               <p className="text-sm text-amber-700">
                 Georgia&apos;s DDS point reduction program requires a 6-hour course
-                completed in a classroom or via Zoom — online-only courses are not
+                completed in a classroom or via Zoom. Online-only courses are not
                 accepted for that benefit. The schools listed below are accepted by
                 many Georgia courts for ticket dismissal. Check with your court
                 before enrolling.
@@ -566,7 +566,7 @@ export default async function StatePage({ params }: Props) {
                   href="https://dmv.dc.gov/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-accent hover:underline"
+                  className="text-accent underline"
                 >
                   dmv.dc.gov
                 </a>
@@ -711,7 +711,7 @@ export default async function StatePage({ params }: Props) {
                     href={stateInfo.dmvUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-accent hover:underline flex items-center gap-1"
+                    className="text-sm text-accent underline flex items-center gap-1"
                   >
                     {stateMeta.name} DMV <ExternalLink className="w-3 h-3" />
                   </a>
