@@ -3,6 +3,13 @@ import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
+  images: {
+    // State flags / art are immutable (keyed by a stable path). The optimizer's
+    // default emits `cache-control: max-age=0, must-revalidate`, so Googlebot Image
+    // (16% of crawl requests) re-fetches every variant on every visit. A one-year
+    // minimumCacheTTL makes optimized variants long-lived so those re-fetches stop.
+    minimumCacheTTL: 31536000,
+  },
 };
 
 // Plugins MUST be specified as string names (not imported functions): Next's

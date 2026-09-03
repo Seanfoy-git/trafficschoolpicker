@@ -55,6 +55,14 @@ const STATE_VIDEOS: Record<string, VideoEntry> = {
 };
 
 export const revalidate = 86400;
+// generateStaticParams returns ALL state slugs (getAllStateSlugs), so every valid
+// state is prerendered. dynamicParams=false makes any unknown single-segment path
+// (e.g. /foo) resolve to the STATIC not-found at the routing layer instead of
+// invoking this route dynamically — which would SSR the layout (Footer's Notion
+// fetch) just to notFound(). That dynamic path was the 1.7s uncached 404 in Crawl
+// Stats; this turns those into fast, cacheable static 404s. Mirrors the [question]
+// route, which already sets this.
+export const dynamicParams = false;
 
 type Props = { params: Promise<{ state: string }> };
 

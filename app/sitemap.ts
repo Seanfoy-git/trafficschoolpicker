@@ -115,5 +115,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...statePages, ...blogPages, ...reviewPages, ...questionPages];
+  // Deterministic order. Every lastmod above is content-derived (a Notion "Last
+  // Verified" date, a post's frontmatter date, or a hand-bumped constant) — never
+  // build time. But the Notion query order is NOT stable across builds: getAllSchools
+  // sorts by Rating (ties break in Notion's order) and getQuestionPages is unsorted,
+  // so a no-content-change rebuild could reorder reviewPages/questionPages and produce
+  // a byte-different sitemap.xml. Sorting by URL makes the output byte-stable across
+  // builds; a lastmod only moves when that record's own date moves. Google ignores
+  // URL order in a sitemap.
+  const all = [...staticPages, ...statePages, ...blogPages, ...reviewPages, ...questionPages];
+  all.sort((a, b) => (a.url < b.url ? -1 : a.url > b.url ? 1 : 0));
+  return all;
 }
