@@ -4,11 +4,23 @@ import createMDX from "@next/mdx";
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
   images: {
-    // State flags / art are immutable (keyed by a stable path). The optimizer's
-    // default emits `cache-control: max-age=0, must-revalidate`, so Googlebot Image
-    // (16% of crawl requests) re-fetches every variant on every visit. A one-year
-    // minimumCacheTTL makes optimized variants long-lived so those re-fetches stop.
+    // Governs how long the optimizer caches a transcoded variant before re-encoding
+    // (edge compute saving). Note: on Vercel the CLIENT-facing max-age on /_next/image
+    // stays 0 regardless — the durable client cache is set on the static originals via
+    // headers() below, which is what Googlebot Image (16% of crawl) actually re-fetches.
     minimumCacheTTL: 31536000,
+  },
+  async headers() {
+    return [
+      {
+        // Immutable static art: state flags and the OG cards (public/flags, public/images).
+        // These never change at a given path, but Vercel's default serves them with
+        // `max-age=0, must-revalidate`, so Googlebot Image re-fetches every visit (the OG
+        // cards are 40-67KB each). A one-year immutable cache stops those re-fetches.
+        source: "/:dir(flags|images)/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+    ];
   },
 };
 
