@@ -79,8 +79,15 @@ could reorder the sitemap. **Fix: sort the sitemap by URL** (`app/sitemap.ts`).
   external/historical and will decay as Google learns the 308. Reported, not "fixed".
 - **4c — images.** Bytes per page type: home 0, state hub ~261KB (6 imgs), topic ~68KB
   (1), `/reviews` 0, review page ~53KB (1), `/schools` 0, blog 0. Modest — not a
-  crawl-weight problem. `minimumCacheTTL` fix changes cache-control (re-fetch frequency),
-  not bytes. No oversized originals reachable on-page.
+  crawl-weight problem, and bytes are unchanged (the lever is re-fetch frequency, not
+  size). **Cache headers:** measured that `minimumCacheTTL` alone does NOT fix the
+  client-facing header — Vercel serves `max-age=0, must-revalidate` on `/_next/image`
+  *and* on raw static assets regardless, so Googlebot Image kept re-fetching. Fixed with
+  a `headers()` rule giving the immutable static originals (`/flags/*`, `/images/*` — the
+  latter are the 40–67KB OG cards) `Cache-Control: public, max-age=31536000, immutable`.
+  Verified. (The `/_next/image` client max-age stays 0 — a Vercel platform behavior — but
+  the edge caches it via `x-vercel-cache: HIT`, so no re-transcode.) No oversized
+  originals reachable on-page.
 - **4d — AdsBot 21% (report only).** Explained: an **active Google Ads account**
   (`AW-18090793804` gtag in `app/layout.tsx`) → AdsBot crawls landing pages for policy /
   quality. Expected. **Do not block** (blocking AdsBot disables ad serving). Sean's call.
