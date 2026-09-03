@@ -5,8 +5,19 @@ import { TrustBar } from "@/components/TrustBar";
 import { SchoolCard } from "@/components/SchoolCard";
 import { SchoolFAQ, FAQJsonLd } from "@/components/SchoolFAQ";
 import { getAllSchools, getStateRequirements, resolveStateContent, getLinkableStates, getLatestStateVerification, bySchoolRank } from "@/lib/notion";
+import { getAllPosts } from "@/lib/blog";
 import Link from "next/link";
 import { ArrowRight, Search, BarChart3, MousePointerClick } from "lucide-react";
+
+// Curated homepage blog links (crawl-paths pkg): decision-stage reads for a
+// person who just got a ticket. Slugs, not titles — the title/description render
+// from the MDX frontmatter so this never drifts. A slug that stops existing is
+// silently dropped (filter below), so removing a post can't 404 the homepage.
+const HOME_BLOG_SLUGS = [
+  "traffic-school-vs-paying-ticket",
+  "how-to-dismiss-traffic-ticket-online",
+  "best-online-traffic-schools-2026",
+];
 
 export const revalidate = 86400;
 
@@ -66,6 +77,10 @@ export default async function HomePage() {
     getLatestStateVerification(),
   ]);
   const emptyVariants = new Map();
+  const allPosts = getAllPosts();
+  const homePosts = HOME_BLOG_SLUGS.map((slug) => allPosts.find((p) => p.slug === slug)).filter(
+    (p): p is NonNullable<typeof p> => !!p
+  );
   // P12: Top Picks lead by TSP Score (descending), tie-break price ascending, the
   // same rule the state grids use. No per-state price on the home page, so the
   // tie-break reads each school's generic price.
@@ -229,6 +244,35 @@ export default async function HomePage() {
                 </Link>
               ))}
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* From our blog — server-rendered anchors to decision-stage posts, so the
+          blog cluster is reachable from the homepage (not only via /blog). */}
+      {homePosts.length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="max-w-5xl mx-auto px-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-8 text-center">
+              From our blog
+            </h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              {homePosts.map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  className="block p-5 bg-white rounded-xl border border-slate-200 hover:border-accent hover:shadow-md transition-all"
+                >
+                  <h3 className="text-base font-bold text-slate-900 mb-2">{post.title}</h3>
+                  <p className="text-sm text-slate-600">{post.description}</p>
+                </Link>
+              ))}
+            </div>
+            <p className="mt-8 text-center">
+              <Link href="/blog" className="inline-flex items-center gap-1 text-accent font-semibold underline">
+                Read all articles <ArrowRight className="w-4 h-4" />
+              </Link>
+            </p>
           </div>
         </section>
       )}
