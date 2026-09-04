@@ -22,6 +22,7 @@ import { DirectoryTable } from "@/components/DirectoryTable";
 import { TrustBar } from "@/components/TrustBar";
 import { OutOfStateCallout } from "@/components/OutOfStateCallout";
 import { StateKeyFacts } from "@/components/StateKeyFacts";
+import { LawyerBlock } from "@/components/LawyerBlock";
 import { NearbyStates } from "@/components/NearbyStates";
 import { RelatedPosts } from "@/components/RelatedPosts";
 import { StateQuestions } from "@/components/StateQuestions";
@@ -623,6 +624,17 @@ export default async function StatePage({ params }: Props) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(comparisonSchema) }}
+        />
+      )}
+
+      {/* "When a lawyer beats traffic school" — attorney-referral block (Play A),
+          between the eligibility context above and the school comparison below.
+          Renders only where the state has reviewed firms (graceful degradation). */}
+      {stateInfo?.lawyerBlock && (
+        <LawyerBlock
+          block={stateInfo.lawyerBlock}
+          stateName={stateMeta.name}
+          stateCode={stateMeta.code}
         />
       )}
 
