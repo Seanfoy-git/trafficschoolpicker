@@ -47,98 +47,111 @@ const FIELD = "Lawyer Block";
 type Firm = { name: string; url: string; note: string };
 type Block = { code: string; disqualifier: string; firms: Firm[]; flag?: string };
 
-// ── DRAFT COPY (from research/cc-brief lawyer-block; disqualifiers rewritten
-//    em-dash-free per house style). PASTE VERIFIED URLs into each `url` below. ──
+// ── APPROVED LOAD LIST — research/lawyer-block-approved-2026-09.md (Sean signed
+//    2026-09-04). These are the "suggested per-page picks" (the 2-3 the doc says each
+//    page carries; the remaining vetted firms are outreach rows, not rendered here).
+//    Firm names, metros (note), URLs, and per-state disqualifier lines are VERBATIM
+//    from that doc. The prior researched-not-vetted candidates were discarded.
+//    Listing notes from the doc: Driving Defense Law under Norfolk (HQ; VB is a
+//    service-area page); Corso Law Group under Scottsdale (office; Phoenix is a metro page).
 const BLOCKS: Block[] = [
   {
     code: "TX",
     disqualifier:
-      "If your ticket was 25 or more mph over the limit, you hold a CDL, or this is a second eligible ticket inside the same 12-month window, a Texas court will not accept a driving safety course election. In those cases a lawyer is the better move.",
+      "A course cannot help if you were more than 25 mph over the limit, hold a CDL, used your once-per-12-months dismissal already, or missed the deadline to request the course before your appearance date. Those are the tickets a traffic attorney handles.",
     firms: [
-      { name: "Jack Byno & Associates", url: "", note: "20+ years, former municipal judge, DFW to Hunt County reach" },
-      { name: "Joyner + Joyner", url: "", note: "Statewide reach; focus on CDL, no-license, and failure-to-appear cases" },
+      { name: "Sullo & Sullo, LLP", url: "https://sullolaw.com/traffic-tickets/", note: "Houston" },
+      { name: "Cofer & Connelly, PLLC", url: "https://www.coferconnelly.com/austin-criminal-defense-attorney/traffic-tickets/", note: "Austin" },
+      { name: "Law Offices of Anthony B. Cantrell", url: "https://www.anthonycantrell.com/traffic-violations/", note: "San Antonio" },
     ],
   },
   {
     code: "CA",
     disqualifier:
-      "If you have taken traffic school in the past 18 months, your ticket was more than 25 mph over the limit, it was alcohol or drug related, or you were driving a commercial vehicle, the Vehicle Code section 1808.7(b) masking does not reach it. A lawyer is the better option there.",
+      "Traffic school is off the table if you used it in the past 18 months, hold a commercial license, or the violation was alcohol-related or a serious offense. When masking is not available, fighting the ticket is the remaining move.",
     firms: [
-      { name: "Ticket Crushers, A Law Corporation", url: "", note: "Statewide California reach, 75+ years combined experience" },
-      { name: "FYourTicket", url: "", note: "LA-based, statewide California focus, 10,000+ tickets since 2014" },
+      { name: "Ticket Crushers", url: "https://www.ticketcrusherslaw.com/traffic-ticket/", note: "San Francisco, Sacramento & Los Angeles" },
+      { name: "Crowell Law Offices", url: "https://www.crowelllawoffices.com/criminal-defense/traffic-tickets/", note: "Sacramento" },
+      { name: "Law Office of George Gedulin", url: "https://www.gedulinlaw.com/criminal-defense/traffic-offense/", note: "San Diego" },
     ],
   },
   {
     code: "FL",
     disqualifier:
-      "If you already used a Basic Driver Improvement election in the past 12 months for the same ticket type, you are past the 5-election lifetime cap, or you missed the 30-day election window from the citation date, the course is off the table. A lawyer can still help.",
+      "If you have used your election in the past 12 months, hit the eight-per-lifetime cap, missed the 30-day election window, or the violation is criminal, the course path is closed. That is when a lawyer earns the fee.",
     firms: [
-      { name: "The Ticket Clinic", url: "", note: "Largest traffic ticket firm in the US, Florida statewide" },
-      { name: "Fight Your Ticket", url: "", note: "Statewide Florida; offices in Sarasota, Tampa, Clearwater, and Orlando" },
+      { name: "Moses & Rooth", url: "https://www.mosesandrooth.com/dui-traffic-offenses/orlando-traffic-ticket-lawyer/", note: "Orlando" },
+      { name: "Fernandez Law Group", url: "https://thefernandezlawgroup.com/tampa-traffic-ticket-lawyers/", note: "Tampa" },
+      { name: "Law Offices of Kate Mesic", url: "https://www.mesiclaw.com/criminal-defense/traffic-violations/", note: "Jacksonville" },
     ],
   },
   {
     code: "NY",
     disqualifier:
-      "If you already have 4 or more points from the same violation type this cycle, or your ticket is not PIRP-eligible in the first place, the Point and Insurance Reduction Program will not help. A lawyer can look at the other options.",
+      "PIRP never dismisses the ticket. It reduces points after you are convicted. If the conviction itself is the problem, for your job, your insurance, or a license already near suspension, that is a fight, not a course.",
     firms: [
-      { name: "TicketHelp.com", url: "", note: "Statewide attorney network, Manhattan to the Canadian border" },
-      { name: "trafficticketlawyernewyork.com", url: "", note: "Statewide court coverage: Buffalo, Rochester, Syracuse, and downstate" },
+      { name: "Weiss & Associates, P.C.", url: "https://nytrafficticket.com/traffic-violations-lawyer-nyc/", note: "New York City" },
+      { name: "Arthur L. Pressman", url: "https://www.arthurpressmanlaw.com/criminal-defense/traffic-violations/", note: "Buffalo" },
+      { name: "Sharifov & Associates", url: "https://trafficlawyeronlongisland.com/traffic-violations-long-island/traffic-tickets/", note: "Long Island" },
     ],
   },
   {
     code: "GA",
     disqualifier:
-      "If you already used the 7-point reduction within the past 5 years (O.C.G.A. section 40-5-86), or your violation is not the kind the DDS course covers, the course will not help you. A lawyer is the better call.",
+      "Dismissal in Georgia is decided court by court. If your solicitor will not offer it, the ticket is DUI, aggressive driving, or another serious offense, or a conviction risks your license regardless of points, talk to an attorney first.",
     firms: [
-      { name: "Kohn & Yager (Bubba Head)", url: "", note: "Statewide Georgia network built for out-of-metro cases" },
-      { name: "Scott Fortas", url: "", note: "Coverage across most courts in the state of Georgia" },
+      { name: "Kohn & Yager", url: "https://www.georgiacriminaldefense.com/atlanta-traffic.html", note: "Atlanta" },
+      { name: "Schneider Lerch, LLC", url: "https://www.savannahtriallawyers.com/criminal-defense/traffic-offenses/", note: "Savannah" },
+      { name: "Ward & Spires, LLC", url: "https://www.wardspires.com/criminal-defense/traffic-violations/", note: "Augusta" },
     ],
   },
   {
     code: "OH",
-    flag: "NEEDS SEAN SIGN-OFF — court-discretion framing differs from the other 9 states.",
     disqualifier:
-      "Ohio leaves traffic school acceptance up to the individual court. If your court is a hard no, or you are not sure, a lawyer who knows that specific courtroom is worth more than the course.",
+      "The Ohio course earns a two-point credit. It does not dismiss anything. If the charge is serious or a conviction would push you toward the 12-point suspension, an attorney can do what the course cannot.",
     firms: [
-      { name: "The Ticket Clinic (Ohio)", url: "", note: "National firm's Ohio arm" },
-      { name: "Bartell, Georgalas & Juarez", url: "", note: "Three Ohio offices: Independence, Columbus, and Oxford" },
+      { name: "Riddell Law LLC", url: "https://www.riddelllaw.com/traffic-attorney/", note: "Columbus" },
+      { name: "Patituce & Associates", url: "https://www.patitucelaw.com/traffic-ticket-lawyer-cleveland-ohio/", note: "Cleveland" },
+      { name: "Rittgers Rittgers & Nakajima", url: "https://www.rittgers.com/criminal-defense/vehicle-related-crimes/traffic-violations/", note: "Cincinnati" },
     ],
   },
   {
     code: "NC",
     disqualifier:
-      "North Carolina does not dismiss a ticket automatically; it needs prior court permission on a per-case basis. The DMV point reduction needs 7 or more points and cannot be used more than once every 5 years, and many drivers use a Prayer for Judgment Continued instead, capped once every 3 years per household. A lawyer is the one who knows whether the course, the reduction, or a PJC is the right play for your ticket.",
+      "An online course in North Carolina will not dismiss your ticket or cut points. Dismissal needs the court's permission or a Prayer for Judgment Continued, and deciding when to spend a PJC is exactly what a local attorney is for.",
     firms: [
-      { name: "iTicket.law", url: "", note: "Proprietary statewide court-record lookup, works in any NC county" },
-      { name: "The Ticket Clinic (NC)", url: "", note: "National firm's North Carolina arm" },
+      { name: "Kissling Law", url: "https://www.kisslinglaw.com/areas-of-practice/traffic-tickets/", note: "Raleigh" },
+      { name: "Arnold & Smith PLLC", url: "https://www.arnoldsmithlaw.com/traffic-citations.html", note: "Charlotte" },
+      { name: "Garrett, Walker, Aycoth & Olson", url: "https://www.garrettandwalker.com/traffic-ticket-attorney/", note: "Greensboro" },
     ],
   },
   {
     code: "VA",
     disqualifier:
-      "If your ticket was 20 or more mph over the limit, or over 85 mph regardless of the limit, Virginia charges it as reckless driving, a Class 1 misdemeanor on a different track from ordinary demerit-point speeding. A course will not touch it, so you want a lawyer.",
+      "The Virginia course earns safe driving points or an insurance discount. It never dismisses a ticket, and reckless driving by speed is a criminal charge in Virginia. That charge needs a lawyer, not a course.",
     firms: [
-      { name: "SRIS, P.C.", url: "", note: "Statewide Virginia defense, former state trooper on staff" },
-      { name: "Riley & Wells", url: "", note: "Statewide; US News Best Law Firm, 1,500+ reviews" },
+      { name: "Law Office of Ann Thayer", url: "https://www.thayernovalaw.com/what-we-do/reckless-driving/", note: "Fairfax" },
+      { name: "Riley & Wells", url: "https://www.rileywellslaw.com/richmond-va/reckless-driving-lawyer/", note: "Richmond" },
+      { name: "Driving Defense Law", url: "https://www.drivingdefenselaw.com/virginia-beach-speeding-and-reckless-driving-attorneys/", note: "Norfolk" },
     ],
   },
   {
     code: "NJ",
     disqualifier:
-      "New Jersey only offers a 2-point reduction once every 5 years and never a dismissal. If your real goal is keeping the ticket off your record entirely, you need a lawyer, not a course.",
+      "New Jersey has no course that dismisses a ticket. The online course only trims points you already carry. If the ticket threatens surcharges or your license, fighting it is the only lever.",
     firms: [
-      { name: "Rosenblum Law", url: "", note: "Large, well-known New Jersey traffic firm" },
-      { name: "Michael L. Nichnowitz", url: "", note: "Statewide NJ municipal court representation, CDL focus" },
+      { name: "Peter Michael Law LLC", url: "https://pmlawnj.com/traffic-municipal-court/", note: "Jersey City" },
+      { name: "Ginsberg & O'Connor P.C.", url: "https://www.ginsberglaw.com/municipal-court/traffic-violations/", note: "Cherry Hill" },
     ],
   },
   {
     code: "AZ",
     disqualifier:
-      "If you have taken Defensive Driving School within the past 24 months, or you hold a CDL and were cited in a commercial vehicle (the rule since September 1, 2019), you do not qualify for defensive driving school. A lawyer can help in those cases.",
+      "Defensive driving school is out if you used it in the past 12 months, the citation is criminal speeding or another serious violation, or you hold a CDL and were cited in a commercial vehicle. Those cases belong with an attorney.",
     firms: [
-      { name: "Law Offices of Brandon White", url: "", note: "Statewide reach (Phoenix, Gilbert, Chandler, Mesa, Yuma, Tucson), former AZ trooper" },
-      { name: "Arizona Defense Network", url: "", note: "Broad Arizona traffic ticket presence" },
+      { name: "Feldman Royle", url: "https://www.feldmanroyle.com/criminal-traffic/", note: "Phoenix" },
+      { name: "Law Office of Alec Hanus", url: "https://www.alechanuslaw.com/practice-areas/traffic-charges/", note: "Tucson" },
+      { name: "Corso Law Group", url: "https://www.corsolawgroup.com/phoenix-criminal-traffic-lawyer/", note: "Scottsdale" },
     ],
   },
 ];

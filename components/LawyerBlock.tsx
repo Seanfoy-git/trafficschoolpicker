@@ -69,9 +69,10 @@ export function LawyerBlock({
           </p>
 
           <p className="mt-3 text-xs text-slate-500">
-            These are independent law firms we researched and link to as a courtesy. We
-            have no affiliate or referral arrangement with any of them, and nothing here is
-            legal advice.
+            <span className="font-semibold">How these firms get listed:</span> each is a
+            real firm with an active traffic-ticket practice in {stateName} whose published
+            guidance we read ourselves. No fee, no affiliate relationship, and no ranking or
+            endorsement. Nothing here is legal advice.
           </p>
         </div>
       </div>
