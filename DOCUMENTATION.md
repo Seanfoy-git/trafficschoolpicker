@@ -1,6 +1,6 @@
 # trafficschoolpicker.com — System Documentation
 
-> **Last updated**: 2026-08-14
+> **Last updated**: 2026-09-04
 > **Live site**: https://www.trafficschoolpicker.com
 > **Repo**: https://github.com/Seanfoy-git/trafficschoolpicker
 
@@ -8,6 +8,17 @@ This is the comprehensive reference for the codebase, data model, content
 pipeline, and operational practices behind trafficschoolpicker.com. It covers
 *how* the system works **and the design decisions behind it** — both are
 important when deciding how to extend or modify it.
+
+> **What changed recently (Aug–Sep 2026 packages).** Since the Aug CMS-security
+> work this reference now also covers: **State question pages** (`/{state}/{question}`,
+> §4.10 + §7.2), the **TSP Score** ranking model that replaced Bayesian rating for
+> card ordering (§11), the full **build-guard suite** (prebuild + postbuild, §15.1),
+> the **crawl-efficiency** work — deterministic sitemap, fast static 404s, `410`
+> middleware, and image cache headers (§14 + §15.2), the **"When a lawyer beats traffic
+> school"** attorney-referral block on 10 state hubs (§7.3), and the **build Notion rate
+> limiter + single worker** that stops a 429 storm from soft-404ing a page (§15). If a
+> claim here about ranking, the TrustBar, or badges reads differently from the code, the
+> code wins — flag it.
 
 ---
 
@@ -119,20 +130,31 @@ that is Notion's whole value here.
 ```
 .
 ├── app/                          # Next.js App Router pages
-│   ├── [state]/page.tsx          # Dynamic state page (51 routes: 50 states + DC)
+│   ├── [state]/page.tsx          # Dynamic state page (51 routes: 50 states + DC); dynamicParams=false
+│   ├── [state]/[question]/       # State question pages (/{state}/{question}); dynamicParams=false (§7.2)
+│   ├── reviews/page.tsx          # Reviews hub (makes bare /reviews resolve)
 │   ├── reviews/[school-slug]/    # School detail pages
 │   ├── blog/[slug]/              # MDX blog posts
 │   ├── schools/page.tsx          # Full schools directory
+│   ├── out-of-state-ticket/      # Standing multi-state reference (§7.1)
 │   ├── about/page.tsx            # Methodology page
 │   ├── admin/page.tsx            # Internal admin dashboard
-│   ├── api/                      # Click tracking, deploy hook
-│   ├── layout.tsx                # Root layout with Header/Footer/gtag
+│   ├── api/                      # Click tracking, deploy hook, state-request queue
+│   ├── layout.tsx                # Root layout with Header/Footer/gtag/Org+WebSite JSON-LD
 │   ├── page.tsx                  # Homepage
-│   ├── sitemap.ts                # Generated XML sitemap
+│   ├── sitemap.ts                # Generated XML sitemap (URL-sorted → byte-stable; §14)
 │   └── robots.ts                 # robots.txt
 │
+├── middleware.ts                 # Returns 410 Gone for permanently-removed URLs (exact matcher; §15.2)
+│
 ├── components/                   # React components (server + client)
-│   ├── SchoolCard.tsx            # Tier 1 comparison card
+│   ├── SchoolCard.tsx            # Tier 1 comparison card (TSP Score badge, "Our take", computed badges)
+│   ├── StateKeyFacts.tsx         # Scannable <dl> "Key Facts" summary atop a state page
+│   ├── StateQuestions.tsx        # "Common questions" block → the state's question pages (§14)
+│   ├── QuestionArticle.tsx       # Renders a question page's Key Facts / Body / Sources (§7.2)
+│   ├── TicketCostSnapshot.tsx    # Canonical cost figures on cost/worth-it question pages
+│   ├── OutOfStateCallout.tsx     # "Licensed in another state?" signpost (§7.1)
+│   ├── FooterAffiliateNote.tsx   # Path-scoped footer disclosure (out-of-state guide)
 │   ├── SchoolsDirectoryTable.tsx # /schools sortable table (client)
 │   ├── AffiliateButton.tsx       # CTA, uses buildAffiliateLink
 │   ├── CouponCode.tsx            # Coupon-code chip with copy-to-clipboard
@@ -145,7 +167,7 @@ that is Notion's whole value here.
 │   ├── BlogMdxComponents.tsx     # MDX renderer overrides
 │   ├── ComparisonTable.tsx, RatingStars.tsx, Badge.tsx, etc.
 │   ├── StateSelector.tsx         # Header dropdown
-│   ├── TrustBar.tsx              # "Trusted by" bar under heroes
+│   ├── TrustBar.tsx              # Trust/verification bar under heroes ("Last verified …")
 │   ├── Header.tsx, Footer.tsx
 │
 ├── lib/
@@ -167,17 +189,26 @@ that is Notion's whole value here.
 │
 ├── scripts/
 │   ├── lib/                      # Shared scraper utils + issue tracking
-│   ├── scrape-*.ts               # 10 DMV scrapers (per-state + generic)
+│   ├── scrape-*.ts               # DMV scrapers (per-state + generic) + reviews + prices
 │   ├── scrape-pdf-states.ts      # PDF parsers for OK/MN/WY/RI
-│   ├── scrape-reviews.ts         # Multi-source review aggregator
-│   ├── scrape-prices.ts          # Per-school×state price scraping
 │   ├── enrich-places.ts          # Google Places enrichment
 │   ├── generate-state-variants.ts # Claude editorial generation
-│   ├── populate-state-requirements.ts # Seed State Requirements DB
-│   ├── seed-safe2drive-ca.ts     # Locked variant seed
-│   ├── normalize-ratings.py      # Bayesian normalized rating
-│   ├── generate-llms-full.ts     # Auto-generates llms-full.txt
-│   ├── compare-and-diff.ts       # Diff helper
+│   ├── sync-xgrit-prices.ts      # xgrit pricing API sync (IDS + Aceable; §9.3)
+│   ├── sync-jsonld-prices.ts     # JSON-LD price sync (Improv; weekly)
+│   ├── sync-verified-prices.ts, sync-offer-map.ts, sweep-ids-prices.ts, ... # pricing pipeline (§9.3)
+│   ├── generate-llms-full.ts     # Auto-generates public/llms-full.txt (prebuild)
+│   │                             # ── BUILD GUARDS (§15.1) ──
+│   ├── verify-notion-boundary.ts # prebuild: every NOTION_*_DB resolves to an expected CMS db
+│   ├── verify-content-standards.ts # prebuild: sourcing/affiliate-clean/banned-word checks
+│   ├── verify-faq-integrity.ts   # prebuild: State FAQ JSON well-formed, no dup/contradiction
+│   ├── verify-question-routes.ts # postbuild: emitted question routes == Complete rows
+│   ├── verify-no-internal-leaks.ts # postbuild: no internal/QA/Notion debris in built output
+│   ├── verify-page-contradictions.ts # postbuild: Key Facts and FAQ agree per state
+│   ├── verify-sitemap-200.ts     # postbuild: every sitemap URL prerenders 200 (§14)
+│   ├── verify-crawl-paths.ts     # postbuild: every sitemap URL reachable from / (BFS)
+│   ├── crawl-health.ts           # postbuild: informational crawl-health report (never fails)
+│   ├── live-sweep.ts             # post-deploy: prod security/schema sweep
+│   ├── normalize-ratings.py      # Bayesian rating (legacy; no longer used for ranking — §11)
 │   └── config/                   # State source registry + price source config
 │
 ├── public/
@@ -187,7 +218,11 @@ that is Notion's whole value here.
 │   └── llms-full.txt             # Auto-generated from the States DB (Intro + FAQ JSON)
 │
 ├── .github/workflows/
-│   └── monthly-update.yml        # Monthly scrape + redeploy
+│   ├── monthly-update.yml        # Monthly heavy scrape + redeploy
+│   ├── daily-offers.yml          # Daily price/offer pass + redeploy (§16)
+│   ├── weekly-price-sync.yml     # Weekly JSON-LD price sync
+│   ├── xgrit-price-sync.yml      # xgrit API price sync (IDS + Aceable)
+│   └── offer-map-audit.yml       # Offer-map consistency audit
 │
 ├── DOCUMENTATION.md              # This file
 ├── README.md, AGENTS.md, CLAUDE.md
@@ -201,16 +236,16 @@ that is Notion's whole value here.
 
 ## 4. Data architecture — the Notion databases
 
-Eight content databases (4.1–4.8) feed the frontend, plus one scraper-ops
-database (4.9, Scraper Rules) that drives the price/offer pipeline. Each has a
-clear single responsibility. Database IDs are stored in env vars; the frontend
-reads them at module-init time (see [lib/notion.ts](lib/notion.ts)).
+Content databases (4.1–4.8, plus 4.10 Question Pages) feed the frontend, plus one
+scraper-ops database (4.9, Scraper Rules) that drives the price/offer pipeline.
+Each has a clear single responsibility. Database IDs are stored in env vars; the
+frontend reads them at module-init time (see [lib/notion.ts](lib/notion.ts)).
 
 ### 4.0 CMS access boundary & page-source isolation (security)
 
 As of the **Pellucid CMS migration (Aug 2026)** the databases live in a dedicated
 Notion workspace, read through a **scoped, read-only integration `tsp-site-cms`**
-shared with **only** the "🌐 SITE DATA" page (the nine CMS databases) — never the
+shared with **only** the "🌐 SITE DATA" page (the CMS databases, §4) — never the
 workspace root or any page containing private data. This is the structural control:
 a fetch bug can only ever surface a CMS page, never a private one.
 
@@ -242,7 +277,9 @@ Key fields:
 - **School Name** (title)
 - **Slug** (rich text) — URL identifier, e.g. `safe2drive`
 - **Tier** (select) — `1 - Featured` or `2 - Listed`
-- **Badge** (select) — `Top Rated`, `Editors Choice`, `Best Value`, `Fastest`, `Budget Pick`
+- **Badge** (select) — **legacy / no longer rendered.** As of P12 badges are
+  **computed per page** ("Top Rated" on the highest-TSP-Score card, "Lowest price" on
+  the cheapest by displayed price), not read from this field. See §8 SchoolCard.
 - **State Codes** (rich text) — comma-separated, or `all`. Empty = no state coverage.
 - **Show On Site** (checkbox) — manual kill switch
 - **Status** (select) — `Active` etc.
@@ -260,7 +297,13 @@ Key fields:
 - **Mobile App**, **Money Back Guarantee**, **Certificate Delivery**, **Court Acceptance**, **Completion Time (hrs)**, **Founded**
 - **Price** — generic fallback. Per-state columns: `Price CA`, `Price TX`, `Price FL`, `Price NY`, `Price AZ`, `Price OH`, `Price VA`, `Price NJ`, `Price MI`, `Price WA`, `Price NC`
 - **Last Verified** (date)
-- **Normalized Rating** (number) — Bayesian-corrected score for ranking
+- **TSP Score** — our independent six-dimension rubric score (the weighted mean of six
+  sub-scores), the **only** rating we present as *ours* and the value cards now sort by
+  (§11). Non-null only for schools with an approved written review (all six sub-scores
+  set). Trustpilot/Google numbers are attributed only, never presented as our score.
+- **Normalized Rating** (number) — Bayesian-corrected score. **Legacy: no longer read by
+  the frontend for ranking** (superseded by TSP Score). The Python script still computes
+  it; nothing in `lib/`/`app/`/`components/` consumes it. See §11.
 
 Volume: 12-20 schools (curated).
 
@@ -310,6 +353,8 @@ page). Holds operational facts *and* the per-state page content:
 - **True Cost of a Ticket** (rich text) — prose block rendered between the intro and the school comparison (`StateInfo.trueCostOfATicket`, null when unset)
 - **State FAQ** (rich text) — a JSON array `[{"q":"…","a":"…"}, …]`; the **primary** per-state FAQ source (see §4.7). Long values span multiple 2000-char rich-text segments and are concatenated on read.
 - **Content Status** (select) — `Complete` | `Partial` | `Stub`. The single gate for sitemap + internal links (see §14).
+- **Dismissal Answer** (rich text) — the Key Facts "Ticket dismissal" row renders this verbatim when set; null derives the phrase from `onlineStatus` (P10).
+- **Lawyer Block** (rich text) — JSON (`lawyerblock:` prefix) for the "When a lawyer beats traffic school" block; populated only on the 10 priority states (§7.3). Null → no block.
 - **Last Verified** (date) — drives the "Last verified {Month} {Year}" TrustBar chip
 
 Used for the state hero, intro, True Cost, "State Rules & Requirements", and FAQ
@@ -384,6 +429,26 @@ band), Extract Hint, **Status** (only `Verified` rows are scraped), and **Price
 Locked** (checkbox — suppress the band-check for multi-tier pages while offers
 still run). The scraper falls back to the static `price-sources.ts` list if this
 DB is unset, so a Notion outage can't leave it with zero targets.
+
+### 4.10 Question Pages DB
+Env: `NOTION_QUESTIONS_DB`
+
+Powers the **state question pages** (`/{state}/{question-slug}`, §7.2) — long-tail
+informational pages like `/california/how-long-does-traffic-school-take`. One row per
+(state, question). **Only `Content Status = Complete` rows exist as pages**; anything
+else 404s (the same gate discipline as the States DB).
+
+Key fields: **Title**, **State Code**, **State Slug**, **Question Slug** (these two form
+the URL), **H1**, **Title Tag**, **Meta Description**, **Sources** (primary-source URLs),
+**Last Verified** (date → `Article` `dateModified` + sitemap `lastmod`), **Content
+Status**. The page **body** (Key Facts / Body / Sources) lives in the Notion **page
+blocks**, fetched via `getQuestionBody(id)` and split on `## Key Facts` / `## Body` /
+`## Sources` markers — same page-source isolation as review bodies (§4.0: `pageBelongsTo`
+parent-allowlist, fail-closed to 404).
+
+Two build guards protect this DB's routing: `verify-question-routes.ts` (emitted routes
+== Complete rows) and the general leak/contradiction/sitemap guards (§15.1). Volume: 60
+Complete rows across the 10 priority states as of Sep 2026.
 
 ### Data flow summary
 
@@ -597,8 +662,9 @@ To switch to coupon-code:
 
 | Route | File | Purpose | ISR |
 |---|---|---|---|
-| `/` | [app/page.tsx](app/page.tsx) | Homepage with top 3 Tier 1 schools | 24h |
-| `/[state]` | [app/[state]/page.tsx](app/[state]/page.tsx) | 51 dynamic state pages (50 states + DC) | 24h |
+| `/` | [app/page.tsx](app/page.tsx) | Homepage: top 3 Tier 1 schools + "From our blog" | 24h |
+| `/[state]` | [app/[state]/page.tsx](app/[state]/page.tsx) | 51 dynamic state pages (50 states + DC). **`dynamicParams=false`** — unknown slugs serve the static 404, not a dynamic render (§15.2) | 24h |
+| `/[state]/[question]` | [app/[state]/[question]/page.tsx](app/[state]/[question]/page.tsx) | State question pages (§7.2). One per Question Pages DB Complete row (60 as of Sep 2026). **`dynamicParams=false`** | 24h |
 | `/schools` | [app/schools/page.tsx](app/schools/page.tsx) | Full schools directory (sortable, filterable) | 24h |
 | `/reviews/[school-slug]` | [app/reviews/[school-slug]/page.tsx](app/reviews/[school-slug]/page.tsx) | School detail / review pages | 24h |
 | `/blog` | [app/blog/page.tsx](app/blog/page.tsx) | Blog index | 24h |
@@ -639,6 +705,7 @@ The most complex page. Flow:
    - `onlineStatus` = `deriveOnlineStatus(onlineAllowed, dismissesTicket, insuranceDiscount)`, keyed on the States DB **`Online Dismisses Ticket`** checkbox. Point-reduction states where an online course does **not** itself dismiss the ticket are `NO` → "insurance discount only" (NJ, NY, OH, VA); states with a genuine (even court-discretionary) online-dismissal path stay `YES`. OH + VA were corrected to `NO` on 2026-08-27 to match their question pages.
    - Georgia-specific callout banner (DDS quirks)
    - YouTube video embed if `STATE_VIDEOS[stateSlug]` is configured
+   - **"When a lawyer beats traffic school"** block (`LawyerBlock`) — between the eligibility context and the comparison cards, on the 10 states that have a populated `Lawyer Block` field (§7.3). Renders nothing elsewhere.
    - Tier 1 comparison cards — each gets a `resolved` prop (`resolveStateContent`)
    - State Rules & Requirements, FAQ, **RelatedPosts** (→ blog), **NearbyStates** (→ neighbors), directory
 
@@ -722,6 +789,56 @@ blog post and not under `/blog`: a short, top-level, pasteable URL.
 > Foy's Workspace", `…c5a8-ad0a-…` page ids) is the *old copy* and no longer drives
 > the site — content edits must target the Pellucid pages (`…e794-4352-…`). See §4.0.
 
+### 7.2 State question pages (`/{state}/{question-slug}`)
+
+Long-tail informational pages (e.g. `/texas/how-much-does-traffic-school-cost`) that
+answer one question for one state. They are **citation-only** — no affiliate, tracker,
+or merchant markup ever renders on them (enforced by `live-sweep.ts`). Data model is the
+Question Pages DB (§4.10).
+
+- **Routing:** `app/[state]/[question]/page.tsx`, `dynamicParams = false`. `generateStaticParams`
+  emits one route per Complete Question Pages row; the route guard (§15.1) asserts the
+  emitted routes exactly equal the Complete rows. **Fail-closed:** `getQuestionPage`
+  returns the row only on an exactly-one match (0 or duplicate → `notFound()`), and an
+  empty body 404s — so a Complete-but-empty or duplicated row can't render a shell.
+- **Body:** authored in Notion page blocks, split into **Key Facts** (`<dl>`), **Body**,
+  and **Sources** by `## ` heading markers, rendered by `QuestionArticle`. Cost/worth-it
+  questions also render `TicketCostSnapshot` (canonical cost figures shared with the state
+  page so numbers never drift).
+- **Schema:** `Article` + `BreadcrumbList` always; `FAQPage` only when the body has a real
+  Q&A section (`body.hasQA`). No `Product`/`Offer`/`AggregateRating`. See §14.
+- **Layout landmark:** the page renders a plain `<div>` (not `<main>`) so the layout's
+  single `<main>` stays the only main landmark (P9 accessibility).
+- **Discovery:** the state hub links its own question pages via the **`StateQuestions`**
+  "Common questions" block (§14 internal linking).
+
+### 7.3 "When a lawyer beats traffic school" block (attorney referral)
+
+An editorial block on the 10 priority state hubs (TX, CA, FL, NY, GA, OH, NC, VA, NJ,
+AZ) that names 2-3 traffic-ticket law firms for drivers whose ticket a course can't
+fix (the state's disqualifying scenario). **One-way links only: no affiliate deal, no
+referral fee, no reciprocity** — deliberately distinct from the monetized comparison
+cards.
+
+- **Data model:** a single `Lawyer Block` rich_text field on the States DB (JSON,
+  `lawyerblock:` prefix — same pattern as State FAQ): `{ disqualifier, firms: [{name,
+  url, note}], lastReviewed }`. Parsed by `parseLawyerBlock` in `lib/notion.ts` into
+  `StateInfo.lawyerBlock` (null when unset). Loaded by
+  [scripts/populate-lawyer-block.ts](scripts/populate-lawyer-block.ts) from the signed
+  roster (`research/lawyer-block-approved-2026-09.md`).
+- **Render:** `components/LawyerBlock.tsx` (client) — heading, disqualifier line, firm
+  cards (name + metro), a loop-back-to-eligible-readers closer, and a **"How firms get
+  listed"** note (real firm, active in-state traffic practice, we read their published
+  guidance, no fee/affiliate, no ranking or endorsement). **No scores, rankings, "best"
+  language, or review badges.** A firm with no valid `http(s)` URL is dropped, and a
+  state with zero firms renders nothing (graceful degradation — no empty block on the
+  other 41 states).
+- **Tracking:** each outbound firm link fires `track("lawyer_click", { firm, state })`
+  — same Vercel Analytics mechanism as `affiliate_click`, but the links carry editorial
+  `rel="noopener noreferrer"` (not `sponsored`/`nofollow` — they're not affiliate links).
+- **Cadence:** `lastReviewed` drives a 90-day firm re-verification; firms are vetted
+  (site live, active traffic practice) before listing.
+
 ---
 
 ## 8. Components reference
@@ -730,8 +847,13 @@ blog post and not under `/blog`: a short, top-level, pasteable URL.
 
 | Component | Notes |
 |---|---|
-| `SchoolCard` | Tier 1 card. Reads from `resolved`. Renders one-liner, pros/cons, best-for, price (struck regular + sale + "Save X%" when a live offer undercuts), AffiliateButton, optional CouponCode, link to `/reviews/[slug]`. |
+| `SchoolCard` | Tier 1 card. Reads from `resolved`. Renders the **TSP Score** badge (links to `/methodology`; the only rating shown as ours), an **"Our take"** editorial quote (the one-liner), pros/cons, best-for, price (struck regular + sale + "Save X%" when a live offer undercuts), AffiliateButton, optional CouponCode, link to `/reviews/[slug]`. **Badges are passed in, computed per page** ("Top Rated" = highest TSP Score, "Lowest price" = cheapest) — the static Notion Badge field is not read (P12). |
 | `StateKeyFacts` | Scannable `<dl>` "Key Facts" summary at the top of a state page (snippet/AI-Overview target). Rows render only when present; adapts to `onlineStatus`; returns `null` when empty. |
+| `StateQuestions` | "Common questions" block on a state hub — server-rendered anchors to that state's Complete question pages, anchor text = the question H1. Returns `null` when the state has no question pages (§14). |
+| `QuestionArticle` | Renders a question page's Key Facts (`<dl>`) / Body / Sources from Notion blocks (§7.2). |
+| `TicketCostSnapshot` | Canonical ticket-cost figures on cost/worth-it question pages, shared with the state page so numbers can't drift. |
+| `OutOfStateCallout` | "Licensed in another state?" signpost on state hubs + question pages; deep-links to the out-of-state guide (§7.1). |
+| `LawyerBlock` | "When a lawyer beats traffic school" attorney-referral block (client); firm cards + `lawyer_click` tracking; renders only where the state's `Lawyer Block` field is populated (§7.3). |
 | `ReviewBody` | Renders a school's long-form review (Notion page blocks) as prose on `/reviews/[slug]` — paragraphs, `<h3>`, grouped lists, bold/italic/link marks. |
 | `SchoolsDirectoryTable` | `/schools` table. Client. Sortable, filterable. |
 | `DirectoryTable` | DMV-scraped school list per state. |
@@ -746,8 +868,9 @@ blog post and not under `/blog`: a short, top-level, pasteable URL.
 | Component | Notes |
 |---|---|
 | `Header` | Logo, nav (All Schools / Reviews / How We Rank / Blog), state selector. |
-| `Footer` | Links, affiliate disclosure, copyright. |
-| `TrustBar` | "Trusted by N drivers" strip under heroes. |
+| `Footer` | Links, "Browse by state", affiliate disclosure, copyright. Async server component — reads `getLinkableStates` (deduped with the page's own call). |
+| `FooterAffiliateNote` | Swaps the sitewide affiliate-disclosure sentence for a scoped, accurate note on the `/out-of-state-ticket` path only (§7.1). |
+| `TrustBar` | Strip under heroes. Now three neutral signals: "Every claim sourced to the statute or regulator", an approval/coverage label, and "Last verified {Month} {Year}". The old **"Trusted by 500,000+ drivers"** claim was **removed** (P12 — unsubstantiated). |
 | `StateSelector` | Dropdown — drives the state-page navigation. |
 
 ### FAQ / blog
@@ -893,7 +1016,32 @@ renders.
 
 ---
 
-## 11. Bayesian normalized rating
+## 11. Ranking — the TSP Score (and the legacy Bayesian rating)
+
+### 11.0 TSP Score — the current ranking model (P12)
+
+The **TSP Score** is our independent editorial score and the value cards sort by. It is a
+weighted mean of **six rubric sub-scores** (course experience, price/transparency, state
+fit, certificate handling, support/guarantees, track record), computed in
+`computeTspScore` ([lib/notion.ts](lib/notion.ts)). It is **non-null only when all six
+sub-scores are set** — i.e. the school has an approved written review — so a school
+without a real review simply has no TSP Score and sorts last.
+
+- **It is the only rating we present as *ours*.** Trustpilot/Google/App Store numbers are
+  attributed to their source, never merged into a single "our rating".
+- **Card ordering** uses `bySchoolRank` (exported from `lib/notion.ts`): Tier 1 first,
+  then **TSP Score descending (nulls last)**, then **price ascending** as the tie-break.
+  The homepage, state grids, and `/schools` all use it, so ordering is identical everywhere.
+- **Displayed** as a `TSP x.x/5` badge on `SchoolCard`, linking to `/methodology`.
+- **Per-page badges** derive from this: "Top Rated" on the highest-scored card, "Lowest
+  price" on the cheapest — computed by the page, not read from Notion (§8).
+
+### 11.1 Bayesian normalized rating (legacy)
+
+> **Legacy.** The Bayesian **Normalized Rating** below is **no longer read by the frontend
+> for ranking** — TSP Score (§11.0) replaced it. `normalize-ratings.py` still writes the
+> field, but nothing in `lib/`/`app/`/`components/` consumes it. Kept here as history and
+> in case the score is repurposed.
 
 [scripts/normalize-ratings.py](scripts/normalize-ratings.py) (Python) writes a
 **Normalized Rating** to each Traffic Schools row.
@@ -1036,21 +1184,42 @@ discovers and indexes them. All surfaces gate on the **same** function —
 Status = `Complete`) — so the sitemap and the link graph never diverge:
 - `NearbyStates` — geographic neighbors (`lib/state-adjacency.ts`; DC ↔ MD/VA)
 - `RelatedPosts` / `RelatedStateGuides` — bidirectional state ↔ blog links
-- Footer "Browse by state" + homepage grid
+- `StateQuestions` — a state hub's "Common questions" block → its own Complete question
+  pages (server-rendered anchors, state-named anchor text). This is the primary crawl path
+  into the question-page cluster.
+- Footer "Browse by state" + homepage grid + homepage **"From our blog"** section (server
+  -rendered links to decision-stage posts, so the blog cluster is one click from `/`).
+
+All internal-link surfaces are **server-rendered `<a href>` anchors** (verified by a raw-HTML
+crawl audit and enforced by `verify-crawl-paths.ts`). Diagnosis note (crawl-paths package):
+the "Discovered – not indexed" backlog is **not** a linking defect — the paths exist and every
+sitemap URL is reachable from `/` in ≤2 clicks; the constraint is crawl budget / off-site
+authority. Do not re-scope a linking package to fix indexing.
 
 ### Sitemap (`app/sitemap.ts`)
 
-Generates entries for: homepage, /schools, /about, /blog, the **/reviews hub**,
-every **Complete** state page (gated on `getLinkableStateCodes()` — currently all
-51), all 10 blog posts, and **every Show-On-Site school review page**
-(`/reviews/<slug>`, one per `getAllSchools()` school). Gating state pages on
-`Complete` was the fix for a Google Search Console "Discovered – currently not
-indexed" backlog from submitting thin/templated pages. Priorities: home 1.0,
-state pages 0.9, /schools 0.9, blog 0.7-0.8, /reviews hub 0.7, review pages 0.6,
-about 0.5. Every entry carries a
-**real content `lastModified`** — each state's "Last Verified", each post's
-`updatedAt`, each school's `lastVerified` — never build time (a build-time
-lastmod trains Google to ignore the signal).
+Generates entries for: homepage, /schools, /about, /methodology, /out-of-state-ticket,
+/blog, the **/reviews hub**, every **Complete** state page (gated on
+`getLinkableStateCodes()`), all blog posts, **every Show-On-Site school review page**
+(`/reviews/<slug>`), and **every Complete question page** (`/{state}/{question}` — 60 as
+of Sep 2026, from the Question Pages DB). 142 URLs total. Gating state/question pages on
+`Complete` was the fix for a GSC "Discovered – currently not indexed" backlog from
+submitting thin/templated pages.
+
+- **Real content `lastModified`, never build time** — each state's "Last Verified", each
+  post's `updatedAt`, each school's/question's `lastVerified`. A build-time lastmod trains
+  Google to ignore the signal.
+- **Deterministic order (P16).** The final list is **sorted by URL** before returning.
+  Notion query order isn't stable across builds (schools sort by Rating with ties;
+  questions are unsorted), which would make `sitemap.xml` differ on a no-content-change
+  rebuild. Sorting makes two no-change rebuilds **byte-identical** (Google ignores URL
+  order in a sitemap). Verified by comparing `sitemap.xml` md5 across two builds.
+- **Guarded (§15.1).** `verify-sitemap-200.ts` fails the build if any sitemap URL didn't
+  prerender 200; `verify-crawl-paths.ts` fails it if any sitemap URL isn't reachable from
+  `/` via server-rendered anchors.
+
+Priorities are set but **Google ignores `<priority>` and `<changefreq>`** — don't build a
+priority scheme expecting it to matter.
 
 ### JSON-LD
 
@@ -1108,10 +1277,10 @@ Google Tag (gtag) loaded in `app/layout.tsx` via `next/script` with
 - Build command: `npm run build` (which runs `prebuild` → `generate-llms` first)
 - ISR pages revalidate every 86400s (24h); deploys force a rebuild
 
-### Notion at build time — `memoize` + fail-fast (`lib/notion.ts`)
+### Notion at build time — `memoize` + rate limiter + fail-loud (`lib/notion.ts`)
 
-The build statically renders 51 state pages + reviews + blog, all reading Notion.
-Two rules keep that safe against Notion's ~3 req/sec rate limit:
+The build statically renders 142 pages, all reading Notion. Three rules keep that
+safe against Notion's ~3 req/sec rate limit:
 
 - **Fetch each table once per build.** React `cache()` only dedupes within a
   *single* render, so a naive per-page pattern re-queried every table for all 51
@@ -1123,6 +1292,15 @@ Two rules keep that safe against Notion's ~3 req/sec rate limit:
   across builds, so every deploy still reflects fresh Notion content. **Never add
   a per-page/per-state Notion query to a render path — add fields to a `getAll*`
   fetch and filter in memory.**
+- **Global rate limiter + single worker.** `retryingFetch`
+  ([lib/notion-retry-fetch.ts](lib/notion-retry-fetch.ts)) paces every Notion request
+  start ≥400ms apart (~2.5 req/s), process-wide (active in build + the prebuild
+  scripts; off only on the dev server). And `experimental.cpus: 1` in `next.config.ts`
+  pins static generation to **one worker**, so that one queue governs *all* Notion
+  traffic — the default ~13 workers each burst the shared token independently, which
+  self-inflicted a 429 storm that prerendered a question page as a soft-404 (caught by
+  the sitemap-200 guard). Trade: single-worker static gen is slower (~70s) but safe.
+  **Don't remove `cpus: 1` without a cross-worker limiter, or the storm returns.**
 - **Fail loud, never blank.** `getStateInfo` (and other heavy fetches) run
   through `withNotionRetry` — exponential backoff on transient codes
   (`rate_limited`, 5xx), then rethrow. It does **not** swallow errors to `null`,
@@ -1130,11 +1308,17 @@ Two rules keep that safe against Notion's ~3 req/sec rate limit:
   a rate-limited build once shipped Washington DC as a blank page that way. Now a
   persistent failure **fails the build**, so Vercel keeps the last-good deploy
   live instead of publishing blank pages. `null` means only "no canonical row".
+  Same rule now applies to the question pages: **`getQuestionBody` and
+  `getQuestionPages` throw on a data FETCH failure** rather than swallowing to
+  `null`/`[]`, which used to fall through to `notFound()` and put a soft-404 in the
+  sitemap. `null`/`[]` is reserved for genuine absence (no token, the security
+  parent-check, or the DB unset) — never a transient error.
 
-A healthy build makes ~12 Notion requests and logs zero `rate_limited`. If a
-build starts failing on `rate_limited`, the token's budget is exhausted (usually
-from running many builds/queries in a short window) — let it rest, don't retry in
-a tight loop. See the `notion-query-batching` memory for the full rationale
+A healthy build makes ~12 shared table queries plus one block-body fetch per
+question/review page (~85 total), paced by the limiter, and logs **zero**
+`429`/`rate_limited` lines. If retry-storm lines reappear in the build log, the
+pacing regressed (check `cpus: 1` and the `retryingFetch` limiter) — don't just
+retry into it. See the `notion-query-batching` memory for the full rationale
 (optimize the query layer; do **not** migrate off Notion).
 
 ### Cloudflare DNS
@@ -1148,6 +1332,76 @@ a tight loop. See the `notion-query-batching` memory for the full rationale
 [app/api/admin/deploy/route.ts](app/api/admin/deploy/route.ts) wraps the
 `VERCEL_DEPLOY_HOOK` env var. Used by the GitHub Actions workflow after a
 data refresh, and available as a manual trigger from `/admin`.
+
+---
+
+## 15.1 Build guards (the guard-rail suite)
+
+The build is gated by a chain of guards wired into `prebuild` and `postbuild` in
+`package.json`. **Any non-zero exit fails the Vercel build**, so a regression becomes a
+failed deploy (Vercel keeps the last-good deploy live) rather than shipped-broken content.
+All are **fail-closed**: if a guard can't verify its invariant (unreadable source, etc.),
+it fails rather than passing silently. Each is a standalone `tsx` script in `scripts/`.
+
+### `prebuild` (before `next build`)
+
+| Guard | Asserts | On failure |
+|---|---|---|
+| `verify-notion-boundary.ts` | Every configured `NOTION_*_DB` id resolves to an **expected CMS database**, and the old private hub id 404s. | Build fails (catches an env-id slip that could surface a wrong/private DB). |
+| `verify-content-standards.ts` | SEO wiring present; the reference guide stays affiliate-clean and stamped; new posts carry sourcing; banned words at zero. | Build fails. |
+| `verify-faq-integrity.ts` | Every State FAQ JSON parses; no duplicate or contradictory FAQ questions across the 51 states. | Build fails. |
+| (`generate-llms` runs here too — regenerates `public/llms-full.txt`.) | | |
+
+### `postbuild` (after `next build`, reads `.next/`)
+
+| Guard | Asserts | On failure |
+|---|---|---|
+| `verify-question-routes.ts` | Emitted `/{state}/{question}` routes **exactly equal** the Question Pages DB Complete rows (count + path); sitemap has no non-Complete question URLs. | Build fails (the P0 route-isolation guard). |
+| `verify-no-internal-leaks.ts` | No internal/QA/debris or internal Notion links in the built output. | Build fails. |
+| `verify-page-contradictions.ts` | Per state, the Key Facts block and the FAQ **agree** (no "yes/no" contradiction on dismissal, eligibility, etc.). | Build fails (P10). |
+| `verify-sitemap-200.ts` | Every `<loc>` in the generated sitemap prerendered **200** (detects a URL shipping in the sitemap while serving a build-time `notFound()` — the Florida soft-404 class). Reads the `.meta` status sidecar; no network. | Build fails (P15). |
+| `verify-crawl-paths.ts` | **BFS from `/`** over server-rendered `<a href>` anchors reaches **every** sitemap URL; prints click-depth; flags depth > 3. | Build fails on any orphan (P15). |
+| `crawl-health.ts` | **Informational only** — prints a report (sitemap 200s, bare-apex refs in output, lastmod summary, live TTFB sample). **Never fails the build** (P16). |
+
+### Post-deploy (not part of the build)
+
+- `live-sweep.ts` — run against production: asserts every question + review page has 0
+  tracker/merchant markup (questions), 0 internal Notion links, and correct schema.
+- **axe accessibility sweep** — a full **142-page** axe-core run over the production
+  sitemap on the four systemic rules (color-contrast, link-in-text-block, heading-order,
+  landmark). The standing rule: run the **full** sweep, not a page sample — samples have
+  read clean while a full sweep caught real regressions. Target: **0 violations**.
+
+**When you add a page type or invariant, add/extend the matching guard.** The guards are
+the reason a data condition (a Complete-but-empty row, a sitemapped 404, an orphaned
+cluster) fails a deploy instead of quietly degrading crawl/indexing.
+
+## 15.2 Crawl efficiency (P16)
+
+Fixes that reduce what Googlebot wastes crawl budget on. Measured finding: the site's
+warm HTML TTFB is ~150–220ms (already fast); the high GSC "average response time" was
+**404s, redirects, and cache misses**, not page render time.
+
+- **Fast static 404s.** `app/[state]/page.tsx` and `app/[state]/[question]/page.tsx` set
+  `dynamicParams = false`. Without it, an unknown path SSR'd the route (running the
+  layout's Footer Notion fetch) just to `notFound()` — a ~1.7s **uncached** 404. Now
+  unknown paths serve the **static** not-found (fast, `x-vercel-cache: HIT`).
+  `generateStaticParams` returns *all* valid slugs, so `false` is safe.
+- **`410 Gone` for removed URLs.** `middleware.ts` returns `410` (not `404`) for
+  permanently-gone paths, so Google stops retrying. Scoped by an **exact `matcher`** so
+  the middleware is inert on all live pages (zero added latency). Extend both the `GONE`
+  set and the `matcher` array to retire a URL.
+- **Immutable image cache headers.** `next.config.ts` sets `images.minimumCacheTTL` **and**
+  a `headers()` rule giving static art (`/flags/*`, `/images/*` OG cards) `Cache-Control:
+  public, max-age=31536000, immutable`. Note: on Vercel `minimumCacheTTL` alone does *not*
+  change the client-facing `max-age` on `/_next/image` (stays 0) — the `headers()` rule on
+  the static originals is what actually stops Googlebot-Image re-fetches.
+- **Deterministic sitemap** (see §14) — fewer spurious refresh crawls.
+- **One canonical host.** All generated output uses `www`; apex → www is a 308. There are
+  **zero internal apex references** — apex crawl traffic is external/historical and decays.
+- **Do not** block AdsBot (its ~21% crawl share is the active Google Ads account
+  `AW-18090793804` checking landing pages — blocking it disables ad serving), add a
+  `crawl-delay`, or set sitemap `<priority>`/`<changefreq>` — Google ignores them.
 
 ---
 
@@ -1213,9 +1467,12 @@ Single source of truth: [.env.local.example](.env.local.example)
 | `NOTION_FAQ_DB_ID` | State FAQs DB ID | yes |
 | `NOTION_STATE_REQUIREMENTS_DB` | State Requirements DB ID | yes (else state regulatory facts default) |
 | `NOTION_SCHOOL_VARIANTS_DB` | School State Variants DB ID | yes (else editorial falls back to school defaults) |
+| `NOTION_QUESTIONS_DB` | Question Pages DB ID (§4.10) | yes for the `/{state}/{question}` pages (else zero question pages render) |
+| `NOTION_SCRAPER_RULES_DB` | Scraper Rules DB ID (§4.9) | optional — price scraper falls back to `price-sources.ts` when unset |
 | `NOTION_ISSUES_DB` | scraper issue tracker | optional |
 | `GOOGLE_PLACES_API_KEY` | Places API (New) | yes for review/enrich scripts |
 | `ANTHROPIC_API_KEY` | Claude API key | yes for `generate:variants` script only |
+| `TUNE_API_KEY`, `TUNE_NETWORK_ID` | TUNE (HasOffers) network API — affiliate/offer sync | optional (offer-map/pricing scripts) |
 | `NEXT_PUBLIC_TRACKER_HOST` | direct affiliate tracker base URL | optional — fallback to network URL when unset |
 | `VERCEL_DEPLOY_HOOK` | Vercel build trigger URL | optional |
 
@@ -1324,7 +1581,7 @@ LOC for the CMS alone. The cost: slow queries (~500ms), no JOINs (we
 application-join in TS), and integration setup friction (must connect each
 DB to the integration). Net: solid trade for a small editorial team.
 
-### Why eight Notion DBs instead of one big one
+### Why multiple Notion DBs instead of one big one
 
 Each DB has a single responsibility. State Requirements is shared across all
 schools; baking it into each school row would mean updating 20 records to
@@ -1390,10 +1647,30 @@ the next render would show empty ratings — visually worse than slightly
 stale ratings. The cost is detection: a permanently-broken source needs to
 be flagged via the Issues DB, not by users seeing empty cards.
 
-### Why Bayesian normalization instead of raw ratings for ranking
+### Why cards rank by TSP Score, not by third-party ratings (P12)
 
-Already covered in §11. Short version: 5.0 from 8 reviews shouldn't beat 4.7
-from 30,000.
+Ranking cards by a scraped Trustpilot/Google number means ranking by other people's
+metric — and merging several into one "our rating" misrepresents them. The **TSP Score**
+(§11.0) is our own six-dimension editorial rubric: it is the only score we present as ours,
+it is defensible on `/methodology`, and it only exists for schools we've actually reviewed
+(no review → no score → sorts last). Cards sort TSP Score desc, price asc as tie-break, the
+same rule everywhere via `bySchoolRank`. Per-page badges ("Top Rated", "Lowest price") are
+computed from the same ordering rather than hand-set in Notion, so they can never contradict
+the order shown. The old **Bayesian Normalized Rating** (below) predated the rubric; it is
+kept as legacy but no longer drives ranking.
+
+### Why Bayesian normalization existed (legacy)
+
+Short version: 5.0 from 8 reviews shouldn't beat 4.7 from 30,000. Superseded for ranking
+by the TSP Score; retained only as a computed field (§11.1).
+
+### Why unknown paths return a static 404 (and gone URLs a 410)
+
+`dynamicParams=false` on the `[state]` and `[state]/[question]` routes turns unknown paths
+into a static, cacheable not-found instead of a dynamic render that runs the layout's Notion
+fetch just to `notFound()` — the latter was a 1.7s uncached 404 that ate crawl budget (§15.2).
+`middleware.ts` returns `410` (scoped by exact matcher) for permanently-removed URLs so
+Google stops retrying them, without adding latency to any live page.
 
 ### Why no automated tests
 
@@ -1481,6 +1758,13 @@ same as Massachusetts and Oregon. The site therefore has **51** state pages, not
 
 ### Known issues
 
+- **Indexing / crawl (not a code defect).** GSC "Discovered – currently not indexed" is
+  bound by **crawl budget / off-site authority**, not internal linking or page speed —
+  diagnosed in the crawl-paths + crawl-efficiency packages: every sitemap URL is reachable
+  from `/` in ≤2 clicks and prerenders 200 (both guarded, §15.1), and warm TTFB is
+  ~150–220ms. The levers are off-site authority (outreach) and thin-page substance on the
+  question cluster — neither is a build fix. Re-check GSC ~14 days after any change; don't
+  re-scope a linking/perf package for this.
 - **TN scraper**: `ERR_CONNECTION_RESET` from the state site intermittently.
   Previous data preserved; transient.
 - **UT scraper**: times out. Needs investigation.
@@ -1541,7 +1825,12 @@ same as Massachusetts and Oregon. The site therefore has **51** state pages, not
 | **Locked** | A variant Generation Status meaning "human-verified, never overwrite". |
 | **ISR** | Incremental Static Regeneration. Pages are static but rebuild on a schedule. |
 | **DMV directory** | The DMV-scraped third-party schools listed in the Directory DB. Distinct from the curated Traffic Schools DB. |
-| **Bayesian normalized rating** | `(n × r + 50 × 4.0) / (n + 50)` — smoothed rating used for ranking. |
+| **TSP Score** | Our independent six-dimension rubric score (weighted mean of six sub-scores), the only rating presented as ours and the value cards sort by (§11.0). Non-null only for reviewed schools. |
+| **Bayesian normalized rating** | `(n × r + 50 × 4.0) / (n + 50)` — smoothed rating. **Legacy**: no longer used for ranking (superseded by TSP Score). |
+| **Question page** | A `/{state}/{question}` informational page from the Question Pages DB; citation-only, no affiliate/tracker markup (§7.2). |
+| **Lawyer block** | The "When a lawyer beats traffic school" attorney-referral block on 10 state hubs; one-way links, no affiliate/referral, `lawyer_click` tracked (§7.3). |
+| **Build guard** | A `prebuild`/`postbuild` script that fails the deploy on a broken invariant (boundary, routes, contradictions, sitemap-200, crawl-paths, …). See §15.1. |
+| **Crawl path** | A server-rendered `<a href>` route from `/` to a page; `verify-crawl-paths.ts` asserts every sitemap URL is reachable this way. |
 
 ---
 
@@ -1551,8 +1840,16 @@ same as Massachusetts and Oregon. The site therefore has **51** state pages, not
 # Local dev
 npm run dev
 
-# Build (runs prebuild → generate-llms first)
+# Build (runs prebuild guards → generate-llms → next build → postbuild guards; §15.1)
 npm run build
+
+# Run a build guard on its own (all live in scripts/; postbuild guards read .next/)
+npx tsx scripts/verify-notion-boundary.ts     # prebuild: CMS db ids resolve
+npx tsx scripts/verify-faq-integrity.ts        # prebuild: State FAQ JSON sane
+npx tsx scripts/verify-sitemap-200.ts          # postbuild: every sitemap URL prerendered 200
+npx tsx scripts/verify-crawl-paths.ts          # postbuild: every sitemap URL reachable from /
+npx tsx scripts/crawl-health.ts                # informational crawl-health report
+npx tsx scripts/live-sweep.ts                  # post-deploy prod security/schema sweep
 
 # Scraping (need .env.local with all required vars)
 npm run scrape:ca           # one state
