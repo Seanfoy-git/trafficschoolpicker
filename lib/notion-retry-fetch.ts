@@ -37,11 +37,45 @@ export function isTransient(err: unknown): boolean {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// ── Global build-time rate limiter ──────────────────────────────────────────
+// During `next build`, static generation renders many pages, and each page's
+// Notion fetches would otherwise burst uncoordinated. Notion's public API caps a
+// token at ~3 req/s, so an uncoordinated burst self-inflicts a 429 storm; retrying
+// INTO that storm can starve a page past its 60s budget, which is how a transient
+// 429 became a prerendered soft-404 (caught by the sitemap-200 guard). This spaces
+// EVERY Notion request start to >= MIN_INTERVAL_MS apart, process-wide.
+//
+// Effective globally because the build is pinned to a single static-generation
+// worker (experimental.staticGenerationMinPagesPerWorker in next.config.ts), so this
+// one module-level queue governs all Notion traffic during the build. Gated on the
+// build phase only — runtime/ISR and /admin read Notion unthrottled (sparse traffic).
+const MIN_INTERVAL_MS = 400; // ~2.5 requests/second
+let nextSlotAt = 0;
+let loggedPhase = false;
+async function acquireBuildSlot(): Promise<void> {
+  // Active everywhere EXCEPT the Next dev server (where sub-second page-load latency
+  // matters and traffic is one developer). That covers `next build` static generation,
+  // the prebuild scripts, and prod ISR revalidation — all batchy contexts where pacing
+  // Notion to ~2.5 req/s prevents the self-inflicted 429 storm. Checked at call time.
+  if (process.env.NEXT_PHASE === "phase-development-server") return;
+  if (!loggedPhase) {
+    loggedPhase = true;
+    console.log(`[notion] build rate limiter active (phase=${process.env.NEXT_PHASE ?? "none"})`);
+  }
+  const now = Date.now();
+  const wait = Math.max(0, nextSlotAt - now);
+  // Reserve the next slot for the following caller; concurrent callers queue in
+  // 400ms increments rather than all firing at once.
+  nextSlotAt = Math.max(now, nextSlotAt) + MIN_INTERVAL_MS;
+  if (wait > 0) await sleep(wait);
+}
+
 /** Slots straight into the SDK's `fetch` option (structurally satisfies SupportedFetch). */
 export const retryingFetch: typeof fetch = async (url, init) => {
   let lastErr: unknown;
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     try {
+      await acquireBuildSlot(); // pace request starts to <=2.5/s during the build
       const res = await fetch(url, init);
       if (res.status === 429 && attempt < MAX_ATTEMPTS) {
         const retryAfter = Number(res.headers.get("retry-after")) || 0;

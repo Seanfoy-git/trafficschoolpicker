@@ -763,33 +763,33 @@ const QP_PARENT_IDS = new Set([normId(QUESTIONS_DB)].filter(Boolean));
 const belongsToQuestionsDb = (p: PageObjectResponse): boolean => QP_PARENT_IDS.has(pageParentDbId(p));
 
 // All COMPLETE question rows, once per build. Same gate discipline as state
-// pages: only Content Status === "Complete" exists as a page. Returns [] if the
-// DB is unset or unreachable — the build then renders zero question pages, never a
-// placeholder. FAIL-CLOSED: any query error → [] (no pages), never fallback content.
+// pages: only Content Status === "Complete" exists as a page. Returns [] only when
+// the DB is UNSET (genuine "no question pages configured"). A data FETCH failure
+// (429 storm, network) THROWS — memoized once per build, so a throw fails the whole
+// build loud rather than silently generating zero question routes (which a transient
+// 429 would otherwise do, and which — with getQuestionBody — is how a soft-404 slips
+// into the sitemap). generateStaticParams, the sitemap, and the route guard all read
+// this, so a throw fails every one of them loud, never a quiet empty set.
 export const getQuestionPages = memoize(async (): Promise<QuestionPage[]> => {
   if (!process.env.NOTION_TOKEN || !QUESTIONS_DB) return [];
-  try {
-    const pages = await withNotionRetry(() =>
-      queryAllPages(QUESTIONS_DB, { property: "Content Status", select: { equals: "Complete" } })
-    );
-    return pages
-      .filter(belongsToQuestionsDb) // guard 1: provably a Question Pages row
-      .map((p) => ({
-        id: p.id,
-        title: getText(p, "Title"),
-        stateCode: getText(p, "State Code").toUpperCase(),
-        stateSlug: getText(p, "State Slug").toLowerCase(),
-        questionSlug: getText(p, "Question Slug").toLowerCase(),
-        h1: getText(p, "H1"),
-        titleTag: getFullRichText(p, "Title Tag"),
-        metaDescription: getFullRichText(p, "Meta Description"),
-        lastVerified: getDate(p, "Last Verified"),
-        sources: getFullRichText(p, "Sources"),
-      }))
-      .filter((q) => q.stateSlug && q.questionSlug && q.h1); // guard 2: QP schema present
-  } catch {
-    return []; // fail-closed: no pages, never foreign/placeholder content.
-  }
+  const pages = await withNotionRetry(() =>
+    queryAllPages(QUESTIONS_DB, { property: "Content Status", select: { equals: "Complete" } })
+  );
+  return pages
+    .filter(belongsToQuestionsDb) // guard 1: provably a Question Pages row
+    .map((p) => ({
+      id: p.id,
+      title: getText(p, "Title"),
+      stateCode: getText(p, "State Code").toUpperCase(),
+      stateSlug: getText(p, "State Slug").toLowerCase(),
+      questionSlug: getText(p, "Question Slug").toLowerCase(),
+      h1: getText(p, "H1"),
+      titleTag: getFullRichText(p, "Title Tag"),
+      metaDescription: getFullRichText(p, "Meta Description"),
+      lastVerified: getDate(p, "Last Verified"),
+      sources: getFullRichText(p, "Sources"),
+    }))
+    .filter((q) => q.stateSlug && q.questionSlug && q.h1); // guard 2: QP schema present
 });
 
 // Exactly-one-row lookup. 0 matches OR >1 (a duplicate) → null → the route 404s.
@@ -812,9 +812,12 @@ export async function getQuestionsForState(stateSlug: string): Promise<QuestionP
 const QUESTION_BODY_TYPES = new Set<ReviewBlockType>([
   "paragraph", "heading_2", "heading_3", "bulleted_list_item", "numbered_list_item",
 ]);
-// FAIL-CLOSED: returns null on ANY fetch error (missing token, 429 after retries,
-// network) so the route 404s rather than rendering partial/absent content. Called
-// ONLY with a page id from a parent+schema-validated getQuestionPages row.
+// null is reserved for genuine absence: no token, or a page that fails the
+// parent-source security check. A data FETCH failure (429 storm, network) instead
+// THROWS — a failed prerender keeps the last-good deploy live, whereas swallowing it
+// to null would fall through to notFound() and prerender a sitemap URL as a soft-404
+// (exactly the transient-429 → sitemap-404 the guard caught). Called ONLY with a page
+// id from a parent+schema-validated getQuestionPages row.
 export const getQuestionBody = cache(async (pageId: string): Promise<QuestionBody | null> => {
   if (!process.env.NOTION_TOKEN) return null;
   // GUARD (incident symptom was foreign content under a valid route): confirm the
@@ -835,8 +838,9 @@ export const getQuestionBody = cache(async (pageId: string): Promise<QuestionBod
       }
       cursor = res.has_more ? (res.next_cursor ?? undefined) : undefined;
     } while (cursor);
-  } catch {
-    return null; // fail-closed → route 404s.
+  } catch (err) {
+    // FAIL LOUD: a fetch failure must fail the build for this page, never soft-404.
+    throw new Error(`getQuestionBody: Notion fetch failed for page ${pageId}: ${(err as Error)?.message ?? String(err)}`);
   }
 
   const keyFacts: QuestionKeyFact[] = [];
