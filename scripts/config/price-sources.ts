@@ -50,28 +50,20 @@ export const priceTargets: PriceTarget[] = [
 
   // ─── DriversEd.com ──────────────────────────────────
   {
-    // NOTE: all three driversed URLs below currently return HTTP 404 (site
-    // restructured its URL scheme) — the scraper flags them as "Dead URL".
-    // They need updating to DriversEd's current pricing pages; low priority
-    // while DriversEd has no monetizable affiliate link (WS3).
+    // URLs re-verified 2026-09-24 (P17): the old /traffic-school/<state>/ scheme is
+    // 404. DriversEd sells no Florida BDI on its own site (its Florida page sends
+    // ticket customers to partner I Drive Safely), so there is no FL target; the
+    // Pricing row records "checked, no price published" instead.
     schoolSlug: "driversed",
     state: "CA",
-    url: "https://www.driversed.com/traffic-school/california/",
+    url: "https://www.driversed.com/california/traffic-school/",
     method: "dom",
     selector: null,
-    notes: "CA pricing — typically $29.99",
   },
   {
     schoolSlug: "driversed",
     state: "TX",
-    url: "https://www.driversed.com/defensive-driving/texas/",
-    method: "dom",
-    selector: null,
-  },
-  {
-    schoolSlug: "driversed",
-    state: "FL",
-    url: "https://www.driversed.com/traffic-school/florida/",
+    url: "https://www.driversed.com/texas/defensive-driving/",
     method: "dom",
     selector: null,
   },

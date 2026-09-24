@@ -31,11 +31,15 @@ export function StateKeyFacts({
   stateInfo,
   lowestPrice,
   year,
+  compact = false,
 }: {
   stateName: string;
   stateInfo: StateInfo | null;
   lowestPrice: number | null;
   year: number;
+  // P17: the comparison-first layout renders the same rows as a compact two-column
+  // strip with no heading, so the comparison table is the first H2 after the H1.
+  compact?: boolean;
 }) {
   if (!stateInfo) return null;
   const status = stateInfo.onlineStatus;
@@ -91,6 +95,29 @@ export function StateKeyFacts({
   if (facts.length === 0) return null;
 
   const verified = stateInfo.lastVerified ? verifiedLabel(stateInfo.lastVerified) : null;
+
+  if (compact) {
+    return (
+      <section aria-label={`${stateName} traffic school key facts`} className="bg-white">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-600 mb-1">
+              Key facts ({year})
+            </p>
+            <dl className="grid gap-x-6 sm:grid-cols-2">
+              {facts.map((f) => (
+                <div key={f.label} className="flex flex-col py-1 sm:flex-row sm:gap-2">
+                  <dt className="text-sm font-semibold text-slate-600 shrink-0 after:content-[':']">{f.label}</dt>
+                  <dd className="text-sm text-slate-900">{f.value}</dd>
+                </div>
+              ))}
+            </dl>
+            {verified && <p className="mt-1 text-xs text-slate-600">Rules last verified {verified}</p>}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-8 bg-white border-b border-slate-100">

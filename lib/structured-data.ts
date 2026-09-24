@@ -1,4 +1,5 @@
 import type { SchoolWithPrice, ResolvedSchoolContent } from "@/lib/types";
+import type { StateComparison } from "@/lib/comparison";
 
 /**
  * Product/Offer/AggregateRating/ItemList JSON-LD for the state comparison grids.
@@ -86,7 +87,7 @@ interface BrandSchema {
 interface ProductSchema {
   "@type": "Product";
   name: string;
-  image: string[];
+  image?: string[];
   description: string;
   url: string;
   brand: BrandSchema;
@@ -96,7 +97,11 @@ interface ProductSchema {
 interface ListItemSchema {
   "@type": "ListItem";
   position: number;
-  item: ProductSchema;
+  item?: ProductSchema;
+  // P17: an unpriced comparison row is listed by name + url (no Product node), so
+  // ItemList order still equals table order without a Product that has no Offer.
+  name?: string;
+  url?: string;
 }
 
 export interface ItemListSchema {
@@ -253,6 +258,67 @@ export function buildComparisonItemList(
       position: i + 1,
       item: buildProduct(s, stateName, stateSlug, reviewSlugs, courseHours, hasApproval),
     })),
+  };
+}
+
+/**
+ * P17 ItemList for the comparison TABLE: one ListItem per table row, in table order.
+ * A priced row is a Product whose Offer.price is exactly the rendered price string
+ * (sans "$"); an unpriced row is a plain named ListItem (no Product, no Offer, no
+ * invented price). Tier 2 rows carry no aggregateRating and no image (we hold no
+ * branded asset for them). No hasMerchantReturnPolicy / shippingDetails (P7).
+ */
+export function buildComparisonTableItemList(opts: {
+  comparison: StateComparison;
+  tier1: Map<string, SchemaSchool>; // keyed by school slug
+  stateName: string;
+  stateSlug: string;
+  reviewSlugs: ReadonlySet<string>;
+  courseHours: string | null;
+  hasApproval: boolean;
+  heading: string;
+}): ItemListSchema {
+  const { comparison: c, stateName, stateSlug, reviewSlugs, courseHours, hasApproval } = opts;
+  const stateUrl = `${SITE}/${stateSlug}`;
+  const approval = !hasApproval
+    ? ""
+    : c.regulator && c.regulator !== "state"
+      ? `${c.regulator}-approved `
+      : "state-approved ";
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: opts.heading,
+    itemListElement: c.rows.map((r, i) => {
+      const position = i + 1;
+      const t1 = r.slug ? opts.tier1.get(r.slug) : undefined;
+      const url = r.slug ? productUrl(r.slug, stateSlug, reviewSlugs) : stateUrl;
+      if (r.price === null) return { "@type": "ListItem", position, name: r.name, url };
+      const product: ProductSchema = t1
+        ? {
+            ...buildProduct(t1, stateName, stateSlug, reviewSlugs, courseHours, hasApproval),
+            name: `${r.name} (${stateName} ${c.programNoun})`,
+          }
+        : {
+            "@type": "Product",
+            name: `${r.name} (${stateName} ${c.programNoun})`,
+            description:
+              `${r.name}'s ${approval}online ${c.programNoun} course for ${stateName}` +
+              `${courseHours ? ` (${courseHours})` : ""}, ${r.priceText}, as listed on the school's own site. ` +
+              `Compare ${c.count} online ${c.programNounPlural} in ${stateName}.`,
+            url,
+            brand: { "@type": "Brand", name: r.name },
+          };
+      // Offer price mirrors the table cell exactly (the card price for tier 1).
+      product.offers = {
+        "@type": "Offer",
+        price: r.price.toFixed(2),
+        priceCurrency: "USD",
+        availability: "https://schema.org/InStock",
+        url: product.url,
+      };
+      return { "@type": "ListItem", position, item: product };
+    }),
   };
 }
 

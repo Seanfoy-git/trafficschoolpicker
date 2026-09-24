@@ -76,12 +76,21 @@ export type StateInfo = {
   // per-school hours field; every hour claim sitewide reads this. See Package 4.
   courseHours: string | null;
   hoursSource: string | null;    // primary-source cite (statute/regulator URL)
+  hoursSourceUrl: string | null; // P17: linkable URL for hoursSource (comparison table course-length cell)
   hoursVerified: string | null;  // ISO date — powers the hours "Last verified" line
   // "When a lawyer beats traffic school" block (attorney-referral Play A). One-way
   // outbound links to researched firms; no affiliate deal, no reciprocity. Null when
   // the state has no reviewed block, so the section never renders empty. `firms` are
   // the vetted candidates; `lastReviewed` drives Sean's 90-day re-verify cadence.
   lawyerBlock: LawyerBlock | null;
+  // P17: the program noun the comparison H1/title/method statement use ("traffic
+  // school", "defensive driving course"), read from the States DB "Program Name"
+  // field; pluralized with a trailing "s". Null → the comparison layout's copy
+  // can't be generated, so the state keeps its pre-P17 layout.
+  programName: string | null;
+  // P17: one-sentence program benefit for the generated meta description
+  // (States DB "Benefit Summary"); dropped first when the meta runs over 160 chars.
+  benefitSummary: string | null;
 };
 
 // Attorney-referral block ("When a lawyer beats traffic school"). Data-driven so
@@ -176,6 +185,13 @@ export type SchoolWithPrice = School & {
                                      // floats the card to the top of the state list
   salePrice: number | null;          // current promo price to display struck-against the
                                      // regular; non-null only while hasActiveOffer is true
+  // P17 price provenance for the Pricing-DB row: the school page the price was read
+  // from and the day it was read. A comparison-table price renders only when both
+  // are set. Checked-with-no-price (priceChecked set, pricingPrice null) means we
+  // looked and the site publishes no price.
+  priceSourceUrl: string | null;
+  priceChecked: string | null;       // ISO date (YYYY-MM-DD)
+  priceIncludesFees: boolean;        // price is an all-in figure with mandatory school fees folded in
 };
 
 // ─── State Requirements DB ──────────────────────────────────
@@ -203,6 +219,11 @@ export type StateRequirement = {
   terminologyNotes: string;
   sourceUrl: string;
   lastVerified: string | null;
+  // P17: primary sources for the program-wide comparison facts. A table cell falls
+  // back to the state rule ONLY when its source URL is set (never unsourced).
+  finalExamSourceUrl: string | null;
+  timersSourceUrl: string | null;
+  reportingSourceUrl: string | null;
 };
 
 // ─── School State Variants DB ───────────────────────────────
@@ -223,7 +244,17 @@ export type SchoolStateVariant = {
   hasFinalExamOverride: 'Yes' | 'No' | null;
   generationNotes: string;
   lastGenerated: string | null;
+  // P17 per-school comparison facts, each read from the school's own page (URL).
+  // Final exam pairs with hasFinalExamOverride above.
+  timers: YesNo | null;
+  timersSourceUrl: string | null;
+  finalExamSourceUrl: string | null;
+  completionReporting: CompletionReporting | null;
+  reportingSourceUrl: string | null;
 };
+
+export type YesNo = 'Yes' | 'No';
+export type CompletionReporting = 'School reports' | 'Driver submits';
 
 // ─── Resolved state content (frontend) ──────────────────────
 
@@ -237,7 +268,14 @@ export type ResolvedSchoolContent = {
 
   // Price
   price: number | null;
-  priceDisplay: string;              // '$24.95' or 'Check website' — always a string
+  priceDisplay: string;              // '$24.95', or the no-price label (PRICE_NOT_PUBLISHED / SEE_PRICE_ON_SITE)
+  // P17: where the displayed price was read and when. Set only when the price came
+  // from a Pricing-DB row carrying both a source URL and a checked date; a table
+  // cell prices a row only when this is set.
+  priceSource: { url: string; checked: string; includesFees: boolean } | null;
+  // P17: true when the Pricing-DB row records that we checked the school's page and
+  // it publishes no price (checked date set, price empty).
+  priceCheckedUnpublished: boolean;
 
   // Regulatory — structural facts about this state
   officialTerm: string;
@@ -267,6 +305,20 @@ export type DirectorySchool = {
   onlineAvailable: boolean;
   source: string;                // "CA DMV"
   lastScraped: string | null;
+  // P17 Tier 2 comparison data (set only on rows we priced from the school's own
+  // site). displayName is the brand the site shows; the licensed DBA stays in name.
+  displayName: string | null;
+  price: number | null;
+  priceSourceUrl: string | null;
+  priceChecked: string | null;   // ISO date
+  priceNote: string | null;
+  priceIncludesFees: boolean;
+  timers: YesNo | null;
+  timersSourceUrl: string | null;
+  finalExam: YesNo | null;
+  finalExamSourceUrl: string | null;
+  completionReporting: CompletionReporting | null;
+  reportingSourceUrl: string | null;
 };
 
 // ─── Review page body (Notion page block content) ───────────

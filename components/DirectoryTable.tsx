@@ -32,7 +32,7 @@ export function DirectoryTable({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
         <div>
           <h2 className="text-xl font-bold text-slate-900">
-            All {schools.length} DMV-licensed online traffic schools in{" "}
+            All <span data-count="directory">{schools.length}</span> DMV-licensed online traffic schools in{" "}
             {stateName}
           </h2>
           <p className="text-sm text-slate-500 mt-1">

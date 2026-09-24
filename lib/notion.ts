@@ -12,6 +12,8 @@ import type {
   StateFaqEntry,
   LawyerBlock,
   ContentStatus,
+  YesNo,
+  CompletionReporting,
   ReviewBlock,
   ReviewBlockType,
   ReviewRichText,
@@ -337,6 +339,8 @@ function mapStateInfo(page: PageObjectResponse): StateInfo {
     dismissalAnswer: getText(page, "Dismissal Answer") || null,
     administeringBody: getSelect(page, "Administering Body"),
     noPartnerOffer: getCheckbox(page, "No Partner Offer"),
+    programName: getText(page, "Program Name").trim() || null,
+    benefitSummary: getFullRichText(page, "Benefit Summary").trim() || null,
     // Course length: single source. courseHours is null unless Hours Source is
     // set, so an unsourced value can never render anywhere (Package 4).
     ...(() => {
@@ -345,6 +349,7 @@ function mapStateInfo(page: PageObjectResponse): StateInfo {
         hoursSource,
         courseHours: hoursSource ? (getText(page, "Course Hours").trim() || null) : null,
         hoursVerified: getDate(page, "Hours Verified"),
+        hoursSourceUrl: hoursSource ? (getText(page, "Hours Source URL") || null) : null,
       };
     })(),
   };
@@ -879,6 +884,9 @@ type PricingInfo = {
   hasActiveOffer: boolean;
   salePrice: number | null;
   offerSeen: string | null;   // ISO date the scraper last confirmed the offer (null = manual)
+  priceSourceUrl: string | null;
+  priceChecked: string | null;
+  priceIncludesFees: boolean;
 };
 
 // A scraper-set offer is only live while it keeps being re-confirmed: once "Offer
@@ -920,6 +928,9 @@ const getAllPricingByState = memoize(
           hasActiveOffer: getCheckbox(pp, "Active Offer"),
           salePrice: getNumber(pp, "Sale Price"),
           offerSeen: getDate(pp, "Offer Seen"),
+          priceSourceUrl: getText(pp, "Price Source URL") || null,
+          priceChecked: getDate(pp, "Price Checked"),
+          priceIncludesFees: getCheckbox(pp, "Price Includes Fees"),
         });
       }
     } catch {
@@ -964,6 +975,9 @@ export async function getSchoolPricingForState(
       priceNote: pricing?.priceNote || null,
       hasActiveOffer: offerLive,
       salePrice: offerLive ? (pricing?.salePrice ?? null) : null,
+      priceSourceUrl: pricing?.priceSourceUrl ?? null,
+      priceChecked: pricing?.priceChecked ?? null,
+      priceIncludesFees: pricing?.priceIncludesFees ?? false,
     });
   }
 
@@ -1000,6 +1014,10 @@ export const bySchoolRank =
 
 // ─── DIRECTORY (School Directory DB) ────────────────────────
 
+const yesNo = (v: string | null): YesNo | null => (v === "Yes" || v === "No" ? v : null);
+const reportingValue = (v: string | null): CompletionReporting | null =>
+  v === "School reports" || v === "Driver submits" ? v : null;
+
 function mapDirectorySchool(page: PageObjectResponse): DirectorySchool {
   return {
     id: page.id,
@@ -1012,6 +1030,18 @@ function mapDirectorySchool(page: PageObjectResponse): DirectorySchool {
     onlineAvailable: getCheckbox(page, "Online Available"),
     source: getSelect(page, "Source") || getText(page, "Source") || "State DMV",
     lastScraped: getDate(page, "Date Scraped"),
+    displayName: getText(page, "Display Name").trim() || null,
+    price: getNumber(page, "Price"),
+    priceSourceUrl: getText(page, "Price Source URL") || null,
+    priceChecked: getDate(page, "Price Checked"),
+    priceNote: getText(page, "Price Note") || null,
+    priceIncludesFees: getCheckbox(page, "Price Includes Fees"),
+    timers: yesNo(getSelect(page, "Timers")),
+    timersSourceUrl: getText(page, "Timers Source URL") || null,
+    finalExam: yesNo(getSelect(page, "Final Exam")),
+    finalExamSourceUrl: getText(page, "Final Exam Source URL") || null,
+    completionReporting: reportingValue(getSelect(page, "Completion Reporting")),
+    reportingSourceUrl: getText(page, "Reporting Source URL") || null,
   };
 }
 
@@ -1054,6 +1084,12 @@ export function getConsForState(school: School | SchoolWithPrice, stateCode: str
 
 // ─── PRICE HELPER ───────────────────────────────────────────
 
+// P17 no-price labels. "Check website" is retired sitewide (postbuild guard): a row
+// we checked whose site shows no price says so; a row we have not checked yet says
+// only where to look, never that the site publishes nothing.
+export const PRICE_NOT_PUBLISHED = "Price not published on site";
+export const SEE_PRICE_ON_SITE = "See price on site";
+
 export function getEffectiveAffiliateUrl(school: SchoolWithPrice): string {
   return school.stateAffiliateUrl || school.affiliateUrl || school.website;
 }
@@ -1063,7 +1099,7 @@ export function getPriceDisplay(
 ): { amount: number | null; display: string } {
   return {
     amount: school.price,
-    display: school.price !== null ? `$${school.price.toFixed(2)}` : "Check website",
+    display: school.price !== null ? `$${school.price.toFixed(2)}` : SEE_PRICE_ON_SITE,
   };
 }
 
@@ -1093,6 +1129,9 @@ function mapStateRequirement(page: PageObjectResponse): StateRequirement {
     terminologyNotes: getText(page, "Terminology Notes"),
     sourceUrl: getText(page, "Source URL"),
     lastVerified: getDate(page, "Last Verified"),
+    finalExamSourceUrl: getText(page, "Final Exam Source URL") || null,
+    timersSourceUrl: getText(page, "Timers Source URL") || null,
+    reportingSourceUrl: getText(page, "Reporting Source URL") || null,
   };
 }
 
@@ -1132,6 +1171,11 @@ function mapSchoolVariant(page: PageObjectResponse): SchoolStateVariant {
     hasFinalExamOverride: getSelect(page, "Has Final Exam Override") as SchoolStateVariant["hasFinalExamOverride"],
     generationNotes: getText(page, "Generation Notes"),
     lastGenerated: getDate(page, "Last Generated"),
+    timers: yesNo(getSelect(page, "Timers")),
+    timersSourceUrl: getText(page, "Timers Source URL") || null,
+    finalExamSourceUrl: getText(page, "Final Exam Source URL") || null,
+    completionReporting: reportingValue(getSelect(page, "Completion Reporting")),
+    reportingSourceUrl: getText(page, "Reporting Source URL") || null,
   };
 }
 
@@ -1195,6 +1239,20 @@ export function resolveStateContent(
   // workflow, not here.
   const price = stateVerifiedPrice ?? (stateCode === null ? (school.genericPrice ?? null) : null);
 
+  // P17 provenance: a price is SOURCED only when it came from the Pricing-DB row
+  // (not a variant override or the legacy per-state column) and that row records
+  // the page it was read from and the day. The comparison table prices a row only
+  // when this is set; the card keeps rendering the resolved price as before.
+  const sp = "pricingPrice" in school ? (school as SchoolWithPrice) : null;
+  const fromPricingRow =
+    sp !== null && sp.pricingPrice !== null && variant?.priceOverride == null && price === sp.pricingPrice;
+  const priceSource =
+    fromPricingRow && sp.priceSourceUrl && sp.priceChecked
+      ? { url: sp.priceSourceUrl, checked: sp.priceChecked, includesFees: sp.priceIncludesFees }
+      : null;
+  const priceCheckedUnpublished =
+    price === null && sp !== null && sp.pricingPrice === null && !!sp.priceChecked && !!sp.priceSourceUrl;
+
   // Has Final Exam: variant override → state requirement → true (conservative default)
   const hasFinalExam =
     variant?.hasFinalExamOverride === "Yes" ? true :
@@ -1211,7 +1269,9 @@ export function resolveStateContent(
 
     // Price
     price,
-    priceDisplay: price !== null ? `$${price.toFixed(2)}` : "Check website",
+    priceDisplay: price !== null ? `$${price.toFixed(2)}` : priceCheckedUnpublished ? PRICE_NOT_PUBLISHED : SEE_PRICE_ON_SITE,
+    priceSource,
+    priceCheckedUnpublished,
 
     // Regulatory — structural facts from state requirements
     officialTerm: state?.officialTerm ?? "Traffic School",

@@ -42,7 +42,7 @@ async function schoolIdMap(): Promise<Map<string, string>> {
   return map;
 }
 
-async function existingRow(slug: string, code: string): Promise<{ id: string | null; price: number | null; activeOffer: boolean; salePrice: number | null; school: string | null }> {
+async function existingRow(slug: string, code: string): Promise<{ id: string | null; price: number | null; activeOffer: boolean; salePrice: number | null; school: string | null; checked?: string | null; sourceUrl?: string | null }> {
   const res = await notion.databases.query({ database_id: PRICING_DB, filter: { property: "Label", title: { equals: `${slug}-${code}` } }, page_size: 1 });
   const r = res.results[0] as any;
   if (!r) return { id: null, price: null, activeOffer: false, salePrice: null, school: null };
@@ -52,8 +52,16 @@ async function existingRow(slug: string, code: string): Promise<{ id: string | n
     activeOffer: r.properties?.["Active Offer"]?.checkbox ?? false,
     salePrice: r.properties?.["Sale Price"]?.number ?? null,
     school: r.properties?.["School"]?.relation?.[0]?.id ?? null,
+    checked: r.properties?.["Price Checked"]?.date?.start ?? null,
+    sourceUrl: r.properties?.["Price Source URL"]?.url ?? null,
   };
 }
+
+// P17 provenance: the comparison table prices a row only when the Pricing row says
+// WHERE the price was read (the school's own state page) and WHEN (today, on every
+// successful read). Query strings are tracking noise, not part of the page.
+const TODAY = new Date().toISOString().slice(0, 10);
+const cleanUrl = (u: string) => u.split("?")[0].split("#")[0];
 
 async function main() {
   if (!PRICING_DB) { console.error("NOTION_PRICING_DB not set"); process.exit(1); }
@@ -84,6 +92,8 @@ async function main() {
         School: { relation: [{ id: schoolId }] },
         Price: { number: current },
         Approved: { checkbox: true },
+        "Price Source URL": { url: cleanUrl(targets.get(code)!) },
+        "Price Checked": { date: { start: TODAY } },
       };
       let clearedOffer = false;
       if (ex.activeOffer || ex.salePrice != null) {
@@ -92,7 +102,8 @@ async function main() {
         props["Offer Seen"] = { date: null };
         clearedOffer = true;
       }
-      const same = !!ex.id && ex.price === current && ex.school === schoolId && !clearedOffer;
+      const provenanceSame = ex.checked === TODAY && ex.sourceUrl === cleanUrl(targets.get(code)!);
+      const same = !!ex.id && ex.price === current && ex.school === schoolId && !clearedOffer && provenanceSame;
       const action = !ex.id ? "CREATE" : same ? "unchanged" : "UPDATE";
       console.log(`${code} | [${prices.join(",")}] | $${current} | ${action}${clearedOffer ? "  clear offer" : ""}`);
       if (action !== "unchanged") ops.push({ label: `${slug}-${code}`, id: ex.id, props });

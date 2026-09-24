@@ -19,7 +19,7 @@
 import { config } from "dotenv";
 config({ path: ".env.local" });
 import { makeNotionClient } from "./lib/notion-client";
-import { resolveBrandTargets, fetchStatePrices, resolvePrice, withBrowser } from "./lib/ids-pricing";
+import { resolveBrandTargets, fetchStatePrices, resolvePrice, withBrowser, CHECKOUT_ADJUST } from "./lib/ids-pricing";
 
 const WRITE = process.argv.includes("--write");
 const CI = process.argv.includes("--ci"); // write + emit xgrit-price-sync.json; issue only on flags/drift
@@ -43,7 +43,7 @@ async function schoolIdMap(): Promise<Map<string, string>> {
   return map;
 }
 
-async function existingRow(slug: string, code: string): Promise<{ id: string | null; price: number | null; original: number | null; activeOffer: boolean; salePrice: number | null; school: string | null }> {
+async function existingRow(slug: string, code: string): Promise<{ id: string | null; price: number | null; original: number | null; activeOffer: boolean; salePrice: number | null; school: string | null; checked?: string | null; sourceUrl?: string | null }> {
   const res = await notion.databases.query({ database_id: PRICING_DB, filter: { property: "Label", title: { equals: `${slug}-${code}` } }, page_size: 1 });
   const r = res.results[0] as any;
   if (!r) return { id: null, price: null, original: null, activeOffer: false, salePrice: null, school: null };
@@ -54,8 +54,16 @@ async function existingRow(slug: string, code: string): Promise<{ id: string | n
     activeOffer: r.properties?.["Active Offer"]?.checkbox ?? false,
     salePrice: r.properties?.["Sale Price"]?.number ?? null,
     school: r.properties?.["School"]?.relation?.[0]?.id ?? null,
+    checked: r.properties?.["Price Checked"]?.date?.start ?? null,
+    sourceUrl: r.properties?.["Price Source URL"]?.url ?? null,
   };
 }
+
+// P17 provenance: the comparison table prices a row only when the Pricing row says
+// WHERE the price was read (the school's own state page) and WHEN (today, on every
+// successful read). Query strings are tracking noise, not part of the page.
+const TODAY = new Date().toISOString().slice(0, 10);
+const cleanUrl = (u: string) => u.split("?")[0].split("#")[0];
 
 async function main() {
   if (!PRICING_DB || !SCHOOLS_DB) { console.error("NOTION_PRICING_DB / NOTION_SCHOOLS_DB not set"); process.exit(1); }
@@ -78,12 +86,19 @@ async function main() {
         if (r.current == null) { flaggedAll.push({ brand, code, status: r.status, options: r.options, note: r.note }); continue; }
         if ((r as any).drift) driftsAll.push({ brand, code, drift: (r as any).drift });
 
+        // P17: apply any verified checkout truth (conditional promo -> course-only
+        // price; mandatory checkout fee -> all-in price) before anything is written.
+        const adj = CHECKOUT_ADJUST[brand]?.[code];
+        if (adj?.basis === "regular") r.current = r.regular;
+        // The struck "was" figure stays the course's own regular price.
+        if (adj?.addFee) r.current = +(r.current + adj.addFee).toFixed(2);
+
         const ex = await existingRow(brand, code);
         // Struck regular: prefer the API's. If the API collapsed it but an existing
         // offer-model row carried the true regular in its Price field, recover it.
         let regular = r.regular;
         if (!(regular > r.current + 0.01) && ex.price != null && ex.price > r.current + 0.01) regular = ex.price;
-        const setOriginal = regular > r.current + 0.01;
+        const setOriginal = adj?.basis !== "regular" && regular > r.current + 0.01;
 
         const props: any = {
           Label: { title: [{ text: { content: `${brand}-${code}` } }] },
@@ -93,7 +108,17 @@ async function main() {
           Approved: { checkbox: true },
         };
         if (setOriginal) props["Original Price"] = { number: regular };
+        const sourceUrl = cleanUrl(targets.get(code)!);
+        props["Price Source URL"] = { url: sourceUrl };
+        props["Price Checked"] = { date: { start: TODAY } };
         if (r.status === "pinned" && r.note) props["Price Note"] = { rich_text: [{ text: { content: `${LABEL[brand] ?? brand} ${r.note}` } }] };
+        if (adj) {
+          const base = r.status === "pinned" && r.note ? `${LABEL[brand] ?? brand} ${r.note}. ` : "";
+          props["Price Note"] = { rich_text: [{ text: { content: `${base}${adj.note} (checkout verified ${adj.verified})` } }] };
+        }
+        props["Price Includes Fees"] = { checkbox: !!adj?.addFee };
+        // A conditional promo is not a struck "was" price: the course-only price is the price.
+        if (adj?.basis === "regular") props["Original Price"] = { number: null };
 
         // ROBUST MODEL: current lives in Price (+ struck Original Price), NOT the offer
         // mechanism. Clear any Active Offer so no "limited-time" badge shows and the
@@ -109,7 +134,8 @@ async function main() {
         const priceSame = ex.price === r.current;
         const origSame = (ex.original ?? null) === (setOriginal ? regular : (ex.original ?? null));
         const relSame = ex.school === schoolId; // a wrong/missing relation must force a rewrite
-        const same = !!ex.id && priceSame && origSame && relSame && !clearedOffer;
+        const provenanceSame = ex.checked === TODAY && ex.sourceUrl === sourceUrl;
+        const same = !!ex.id && priceSame && origSame && relSame && !clearedOffer && provenanceSame;
         const action = !ex.id ? "CREATE" : same ? "unchanged" : "UPDATE";
         const flags = [clearedOffer ? "clear offer" : "", (r as any).drift ? `⚠ ${(r as any).drift}` : ""].filter(Boolean).join("  ");
         console.log(`${code} | ${ex.price ?? "—"} -> $${r.current}${setOriginal ? ` | reg $${regular}` : " | —"} | ${r.status} | ${action}${flags ? "  " + flags : ""}`);
