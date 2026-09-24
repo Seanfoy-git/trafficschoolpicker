@@ -152,7 +152,36 @@ export default function MethodologyPage() {
           behind.
         </p>
 
+        <h2 className="text-2xl font-bold text-slate-900 mb-3 mt-10">
+          How we check prices
+        </h2>
+        <p className="text-slate-600 leading-relaxed mb-4">
+          Each state page opens with a comparison table. Every price in it is read from the
+          school&apos;s own state course page, and the row links that page with the day we
+          checked it. We record the price a new visitor pays that day. Where the school&apos;s
+          page states a mandatory school fee at checkout, the table shows the all-in figure
+          and marks it with an asterisk. Court fees are separate and never included. Where a
+          school&apos;s page shows no price, the row says so and links the page; we never
+          fill a price from a coupon site, a review site or a guess.
+        </p>
+        <p className="text-slate-600 leading-relaxed mb-4">
+          The table lists the schools we have reviewed first, in TSP Score order, then other
+          state-licensed online schools we could price, lowest price first. Those extra rows
+          carry no TSP Score because we have not reviewed them.
+        </p>
+        <p className="text-slate-600 leading-relaxed">
+          When we say a state&apos;s courses cost &ldquo;from&rdquo; a figure, that figure is
+          the lowest price among all the priced rows in that state&apos;s comparison table.
+          The same number appears in the page&apos;s key facts, its search description, its
+          structured data and our llms.txt file.
+        </p>
+
         <h2 className="text-2xl font-bold text-slate-900 mb-3 mt-10">Changelog</h2>
+        <p className="text-slate-600 leading-relaxed mb-4">
+          <strong>Updated September 2026:</strong> state pages now lead with a priced
+          comparison table, and the &ldquo;from&rdquo; price is the lowest priced row in that
+          table (see How we check prices).
+        </p>
         <p className="text-slate-600 leading-relaxed">
           <strong>Updated August 2026:</strong> the State coverage dimension is now State
           fit. Coverage rewarded how many states a school sells in, which tells you nothing

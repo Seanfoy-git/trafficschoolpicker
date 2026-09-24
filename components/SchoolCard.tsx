@@ -182,7 +182,7 @@ export function SchoolCard({
                 rel="noopener noreferrer nofollow"
                 className="text-sm text-slate-500 underline"
               >
-                Check website &rarr;
+                {resolved.priceDisplay} &rarr;
               </a>
             )}
           </div>

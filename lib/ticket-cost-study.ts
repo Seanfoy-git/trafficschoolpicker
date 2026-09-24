@@ -31,6 +31,13 @@ export const TICKET_COST_STUDY = {
     "FinanceBuzz (fines, updated October 2025); CarInsurance.com using Quadrant Information Services (surcharges, June 25 2026); corroborated by Liberty Mutual, ValuePenguin, U.S. News, NerdWallet, Bankrate, Forbes Advisor, Experian, and The Zebra.",
 } as const;
 
+/** P17 Task 6b: the three-year surcharge is a rate-data ESTIMATE, not a state
+ *  figure. Every sentence that states a surcharge (or an all-in figure built on
+ *  one) carries this label so it is never read as an official number. The same
+ *  wording is used in the States DB "True Cost of a Ticket" prose. */
+export const SURCHARGE_ESTIMATE_LABEL =
+  "an estimate from CarInsurance.com and Quadrant Information Services rate data, not a state figure; your insurer's actual surcharge varies";
+
 export const STATE_TICKET_COST: Record<string, StateTicketCost> = {
   // Most expensive (all-in) — several also carry a savings figure
   MI: { code: "MI", allInCost: 8742, netSavings: 8600, mechanism: "Basic Driver Improvement masks points" },

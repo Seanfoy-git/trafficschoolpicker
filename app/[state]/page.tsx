@@ -1,17 +1,24 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getLinkableStates, getQuestionsForState } from "@/lib/notion";
 import {
-  getSchoolPricingForState,
-  getStateInfo,
-  getDirectoryForState,
-  getStateRequirements,
-  getSchoolVariantsForState,
-  resolveStateContent,
-  getLinkableStates,
-  getAllSchools,
-  getQuestionsForState,
-} from "@/lib/notion";
-import { buildComparisonItemList, buildVideoObject, buildBreadcrumbList, lowestDisplayedPrice, type VideoEntry } from "@/lib/structured-data";
+  buildComparisonItemList,
+  buildComparisonTableItemList,
+  buildVideoObject,
+  buildBreadcrumbList,
+  lowestDisplayedPrice,
+  type VideoEntry,
+} from "@/lib/structured-data";
+import { loadStateData, noPriceLabel, ONLINE_COMPARISON_STATUSES } from "@/lib/state-page-data";
+import {
+  comparisonH1,
+  comparisonH2,
+  comparisonSubhead,
+  comparisonTitle,
+  comparisonMetaDescription,
+  methodStatement,
+} from "@/lib/comparison";
+import { SURCHARGE_ESTIMATE_LABEL } from "@/lib/ticket-cost-study";
 import { STATE_SEO } from "@/lib/seo-config";
 import { ticketCostFor, formatCost } from "@/lib/ticket-cost-study";
 import { getNotionStateFaqs } from "@/lib/notion-faqs";
@@ -22,6 +29,7 @@ import { DirectoryTable } from "@/components/DirectoryTable";
 import { TrustBar } from "@/components/TrustBar";
 import { OutOfStateCallout } from "@/components/OutOfStateCallout";
 import { StateKeyFacts } from "@/components/StateKeyFacts";
+import { StateComparisonTable } from "@/components/StateComparisonTable";
 import { LawyerBlock } from "@/components/LawyerBlock";
 import { NearbyStates } from "@/components/NearbyStates";
 import { RelatedPosts } from "@/components/RelatedPosts";
@@ -79,6 +87,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Per-state OG card (public/images/states/<slug>.png) — real 1200x630 asset.
   const ogImage = `https://www.trafficschoolpicker.com/images/states/${stateMeta.slug}.png`;
 
+  // P17: comparison-layout states phrase the title/H1 as the reader's question and
+  // generate the meta from the table's own data (count, price range).
+  const data = await loadStateData(stateSlug);
+  if (data?.comparison) {
+    const c = data.comparison;
+    const year = new Date().getFullYear();
+    const title = comparisonTitle(c, stateMeta.name, year);
+    const h1 = comparisonH1(c, stateMeta.name);
+    const description = comparisonMetaDescription(c, stateMeta.name, stateMeta.code, data.stateInfo?.benefitSummary ?? null);
+    const canonical = `https://www.trafficschoolpicker.com/${stateMeta.slug}`;
+    return {
+      title,
+      description,
+      alternates: { canonical },
+      openGraph: { title: h1, description, url: canonical, siteName: "TrafficSchoolPicker", type: "website", images: [ogImage] },
+      twitter: { card: "summary_large_image", title: h1, description, images: [ogImage] },
+    };
+  }
+
   const seo = STATE_SEO[stateSlug];
   if (!seo) {
     return {
@@ -119,16 +146,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function StatePage({ params }: Props) {
   const { state: stateSlug } = await params;
-  const stateMeta = getStateBySlug(stateSlug);
-  if (!stateMeta) notFound();
+  const data = await loadStateData(stateSlug);
+  if (!data) notFound();
+  const { stateMeta, stateInfo, directory, tier1, tier1Resolved, showComparison, noPartnerOffer, onlineStatus, comparison, allSchools } = data;
 
-  const [schools, stateInfo, directory, notionFaqs, stateReqs, variants, linkableStates, stateQuestions] = await Promise.all([
-    getSchoolPricingForState(stateMeta.code),
-    getStateInfo(stateMeta.code),
-    getDirectoryForState(stateMeta.name),
+  const [notionFaqs, linkableStates, stateQuestions] = await Promise.all([
     getNotionStateFaqs(stateSlug),
-    getStateRequirements(),
-    getSchoolVariantsForState(stateMeta.code),
     getLinkableStates(),
     getQuestionsForState(stateSlug),
   ]);
@@ -145,55 +168,41 @@ export default async function StatePage({ params }: Props) {
       : notionFaqs;
 
   const seo = STATE_SEO[stateSlug];
-  const onlineStatus = stateInfo?.onlineStatus ?? "Unknown";
-  // State grids are Tier 1 only. Tier 2 schools appear in the /schools directory only.
-  const tier1 = schools.filter((s) => s.tier === 1);
   const year = new Date().getFullYear();
   // States that show the comparison grid get an "online traffic schools" H1;
   // court-program / in-person states get a neutral one (they sell no online course).
-  const onlineComparisonStatus =
-    onlineStatus === "Online — ticket dismissal" ||
-    onlineStatus === "Online — insurance discount only" ||
-    onlineStatus === "Online — court discretion" ||
-    onlineStatus === "Online — point reduction";
-  const h1 =
-    seo?.h1 ??
-    (onlineComparisonStatus
-      ? `Online Traffic Schools in ${stateMeta.name} (${year})`
-      : `Traffic School in ${stateMeta.name}`);
+  // P17 comparison-layout states ask the reader's question instead.
+  const h1 = comparison
+    ? comparisonH1(comparison, stateMeta.name)
+    : seo?.h1 ??
+      (ONLINE_COMPARISON_STATUSES.has(onlineStatus)
+        ? `Online Traffic Schools in ${stateMeta.name} (${year})`
+        : `Traffic School in ${stateMeta.name}`);
 
-  // The comparison grid (and its Product/ItemList schema) render only for online
-  // states that actually have tier-1 schools — the single gate shared below.
-  // noPartnerOffer suppresses it even where the program exists (we list no offer):
-  // the driver is pointed at the official approved-school list + directory instead.
-  const noPartnerOffer = stateInfo?.noPartnerOffer ?? false;
   // Canonical ticket-cost figure (published states only) — the exact same number
   // the study blog and llms show, read from the single source. Null where the
   // study publishes no per-state figure; we never invent one.
   const ticketCost = ticketCostFor(stateMeta.code);
-  const showComparison =
-    !noPartnerOffer &&
-    (onlineStatus === "Online — ticket dismissal" ||
-      onlineStatus === "Online — insurance discount only" ||
-      onlineStatus === "Online — court discretion" ||
-      onlineStatus === "Online — point reduction") &&
-    tier1.length > 0;
 
-  // Resolve each tier-1 school's per-state content once and share it between the
-  // cards and the JSON-LD, so the schema price can never drift from the card price.
-  const tier1Resolved = tier1.map((school) => ({
-    school,
-    resolved: resolveStateContent(school, stateMeta.code, stateReqs, variants),
-  }));
+  // P17: on comparison-layout pages the card must never show a price the table
+  // calls unsourced, so a card whose price has no recorded source + checked date
+  // renders the same no-price label as its table row (omit beats unsourced).
+  const tier1Cards = comparison
+    ? tier1Resolved.map(({ school, resolved }) =>
+        resolved.priceSource
+          ? { school, resolved }
+          : { school, resolved: { ...resolved, price: null, priceDisplay: noPriceLabel(resolved) } }
+      )
+    : tier1Resolved;
 
   // P12 badges (computed per page, not from the static Notion field): "Top Rated"
-  // on the single highest-scored card (tier1Resolved is already sorted by TSP Score
+  // on the single highest-scored card (tier1Cards is already sorted by TSP Score
   // descending, so it is the first scored one); "Lowest price" on the single cheapest
   // card by displayed price. A card can carry both.
-  const topRatedId = tier1Resolved.find((x) => x.school.tspScore != null)?.school.id ?? null;
+  const topRatedId = tier1Cards.find((x) => x.school.tspScore != null)?.school.id ?? null;
   let cheapestId: string | null = null;
   let minDisplayed = Infinity;
-  for (const { school, resolved } of tier1Resolved) {
+  for (const { school, resolved } of tier1Cards) {
     if (resolved.price == null) continue;
     const disp =
       school.hasActiveOffer && school.salePrice != null && school.salePrice < resolved.price
@@ -212,15 +221,26 @@ export default async function StatePage({ params }: Props) {
   // Slugs that have a /reviews/<slug> page. getAllSchools is build-memoized and
   // was already resolved by getSchoolPricingForState above, so this is a cache
   // hit — not an extra Notion query — and drives the Product url fallback.
-  const reviewSlugs = showComparison
-    ? new Set((await getAllSchools()).map((s) => s.slug))
+  const reviewSlugs = showComparison || comparison
+    ? new Set(allSchools.map((s) => s.slug))
     : new Set<string>();
 
   // Washington DC: the national comparison cards are shown for reference only —
   // DC point removal can be earned ONLY through the two DC DMV-approved providers
   // (see the DC callout below), so we suppress the Product/Offer markup that would
   // otherwise assert these cards are the DC-approved course (P10 Task 4).
-  const comparisonSchema = showComparison && stateSlug !== "washington-dc"
+  const comparisonSchema = comparison
+    ? buildComparisonTableItemList({
+        comparison,
+        tier1: new Map(tier1Cards.map((x) => [x.school.slug, x])),
+        stateName: stateMeta.name,
+        stateSlug,
+        reviewSlugs,
+        courseHours: stateInfo?.courseHours ?? null,
+        hasApproval: onlineStatus !== "Online — court discretion",
+        heading: comparisonH2(comparison, stateMeta.name),
+      })
+    : showComparison && stateSlug !== "washington-dc"
     ? buildComparisonItemList(
         tier1Resolved,
         stateMeta.name,
@@ -255,18 +275,19 @@ export default async function StatePage({ params }: Props) {
     { name: stateMeta.name, path: `/${stateSlug}` },
   ]);
 
-  // Lowest visible card price for the Key Facts "Typical cost" — only when the
-  // comparison grid actually renders, so we never show a price for a state whose
-  // cards aren't shown. Reuses the exact per-card/Offer price so it can't drift.
-  const lowestPrice = showComparison ? lowestDisplayedPrice(tier1Resolved) : null;
+  // Key Facts "Typical cost" = the minimum of all priced comparison rows (P17 Task
+  // 6a, documented on /methodology): the table's rows where the table renders, the
+  // cards elsewhere. The same figure feeds the meta range, the JSON-LD Offers and
+  // llms.txt, so no surface can show a different floor. Null when nothing is priced
+  // or no comparison renders — we never show a price for a state with no rows.
+  const lowestPrice = comparison
+    ? comparison.minPrice
+    : showComparison
+      ? lowestDisplayedPrice(tier1Resolved)
+      : null;
 
-  return (
+  const heroBlock = (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-
       {/* HERO */}
       <section className="bg-primary text-white py-12 md:py-16">
         <div className="max-w-5xl mx-auto px-4">
@@ -285,14 +306,19 @@ export default async function StatePage({ params }: Props) {
             </h1>
           </div>
           {/* Counts are computed from what the page actually renders: tier-1 cards in
-              the grid (showComparison already accounts for noPartnerOffer + status),
-              plus real DMV-directory rows. Never the raw pricing set, which includes
-              tier-2 schools the grid doesn't show. */}
+              the grid (showComparison already accounts for noPartnerOffer + status).
+              The "from N" figure is the directory row count, the same number the
+              directory heading prints (P17 Task 5a: one source of truth). */}
           {showComparison && (
             <p className="text-lg text-slate-300 max-w-3xl">
               Comparing {tier1.length} reviewed option
               {tier1.length !== 1 ? "s" : ""}
-              {directory.length > 0 && <> from {tier1.length + directory.length} {stateMeta.name}-approved online schools</>}
+              {directory.length > 0 && (
+                <>
+                  {" "}from <span data-count="directory">{directory.length}</span> {stateMeta.name}-approved online
+                  schools
+                </>
+              )}
             </p>
           )}
           {!showComparison && onlineStatus === "Online — insurance discount only" && (
@@ -303,8 +329,16 @@ export default async function StatePage({ params }: Props) {
         </div>
       </section>
 
+    </>
+  );
+  const trustBlock = (
+    <>
       <TrustBar lastVerified={stateInfo?.lastVerified} approvalLabel={stateInfo?.approvalLabel} />
 
+    </>
+  );
+  const outOfStateBlock = (
+    <>
       {/* Out-of-state signpost — this page is written for {State} licensees; flag
           drivers ticketed here on an out-of-state license to the reference guide. */}
       <section className="pt-6">
@@ -313,6 +347,10 @@ export default async function StatePage({ params }: Props) {
         </div>
       </section>
 
+    </>
+  );
+  const keyFactsBlock = (
+    <>
       {/* KEY FACTS — scannable at-a-glance summary; the first substantive content
           on the page (targets featured snippets / AI Overviews / LLM extraction).
           The deeper "State Rules & Requirements" section stays lower down. */}
@@ -323,6 +361,10 @@ export default async function StatePage({ params }: Props) {
         year={year}
       />
 
+    </>
+  );
+  const introBlock = (
+    <>
       {/* INTRO PARAGRAPH — state-specific lead-in for SEO uniqueness.
           Empty string is a deliberate signal that this state isn't populated yet;
           render nothing rather than a placeholder so we don't add boilerplate text. */}
@@ -336,6 +378,10 @@ export default async function StatePage({ params }: Props) {
         </section>
       )}
 
+    </>
+  );
+  const trueCostBlock = (
+    <>
       {/* TRUE COST OF A TICKET — state-specific explainer on the real financial
           impact (fine + insurance hike + surcharges), between the intro lead-in
           and the school comparison. Renders only when the field is populated. */}
@@ -354,7 +400,7 @@ export default async function StatePage({ params }: Props) {
                 </span>
                 <span className="text-sm text-slate-600">
                   estimated all-in cost of a first speeding ticket in {stateMeta.name}
-                  {" "}(fine plus a three-year insurance surcharge).
+                  {" "}(fine plus a three-year insurance surcharge, {SURCHARGE_ESTIMATE_LABEL}).
                   {ticketCost.netSavings ? (
                     <> A state-approved course can avoid about {formatCost(ticketCost.netSavings)} of it.</>
                   ) : null}{" "}
@@ -373,6 +419,10 @@ export default async function StatePage({ params }: Props) {
         </section>
       )}
 
+    </>
+  );
+  const bannersBlock = (
+    <>
       {/* STATUS BANNERS */}
       {onlineStatus === "Online — insurance discount only" && (
         <section className="py-6 bg-amber-50 border-b border-amber-200">
@@ -588,6 +638,10 @@ export default async function StatePage({ params }: Props) {
         </section>
       )}
 
+    </>
+  );
+  const videoBlock = (
+    <>
       {/* STATE VIDEO EXPLAINER — its own section + H2 is the "watch page" the
           VideoObject schema below points at (fixes the Search Console "Video
           isn't on a watch page" flag). */}
@@ -616,6 +670,10 @@ export default async function StatePage({ params }: Props) {
         </section>
       )}
 
+    </>
+  );
+  const schemaBlock = (
+    <>
       {/* Product/Offer/AggregateRating/ItemList JSON-LD for the comparison grid —
           server-rendered into the initial HTML, gated on the same condition as the
           cards so prices/ratings in the markup always match what's visible. The
@@ -627,6 +685,10 @@ export default async function StatePage({ params }: Props) {
         />
       )}
 
+    </>
+  );
+  const lawyerBlock = (
+    <>
       {/* "When a lawyer beats traffic school" — attorney-referral block (Play A),
           between the eligibility context above and the school comparison below.
           Renders only where the state has reviewed firms (graceful degradation). */}
@@ -638,6 +700,10 @@ export default async function StatePage({ params }: Props) {
         />
       )}
 
+    </>
+  );
+  const cardsBlock = (
+    <>
       {/* TIER 1 COMPARISON CARDS — only for online states */}
       {showComparison && (
         <section className="py-12 bg-white">
@@ -649,7 +715,7 @@ export default async function StatePage({ params }: Props) {
               school&apos;s score or rank.
             </p>
             <div className="space-y-4">
-              {tier1Resolved.map(({ school, resolved }, i) => (
+              {tier1Cards.map(({ school, resolved }, i) => (
                 <SchoolCard
                   key={school.id}
                   school={school}
@@ -672,6 +738,45 @@ export default async function StatePage({ params }: Props) {
         </section>
       )}
 
+    </>
+  );
+  const reviewedBlock = (
+    <>
+      {/* REVIEWED IN DETAIL — the P12 cards, unchanged content and order, now under
+          their own H2 below the comparison table. The short disclosure sits above the
+          table (the first monetized link); the long-form one stays below the stack. */}
+      {showComparison && (
+        <section className="py-12 bg-white">
+          <div className="max-w-5xl mx-auto px-4">
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">Reviewed in detail</h2>
+            <div className="space-y-4">
+              {tier1Cards.map(({ school, resolved }, i) => (
+                <SchoolCard
+                  key={school.id}
+                  school={school}
+                  resolved={resolved}
+                  rank={i + 1}
+                  showProsAndCons
+                  stateCode={stateMeta.code}
+                  courseHours={stateInfo?.courseHours ?? null}
+                  badges={badgesFor(school.id)}
+                />
+              ))}
+            </div>
+            <p className="mt-6 text-xs text-slate-500 leading-relaxed">
+              We independently research and review all schools. Prices are checked
+              periodically and may change or differ at checkout, so confirm the
+              current price on the school&apos;s site. We may earn a commission if you
+              enroll via our links, at no extra cost to you.
+            </p>
+          </div>
+        </section>
+      )}
+
+    </>
+  );
+  const restBlock = (
+    <>
       {/* STATE INFO */}
       {stateInfo && (
         <section className="py-12 bg-white">
@@ -793,6 +898,122 @@ export default async function StatePage({ params }: Props) {
           )}
         </div>
       </section>
+    </>
+  );
+  const heroP17Block = (
+    <>
+      {/* HERO (P17) — the reader's question as the H1, then the generated count
+          line. Both counts are data: N = table rows rendered, D = directory rows. */}
+      <section className="bg-primary text-white py-10 md:py-14">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="flex items-center gap-5 mb-3">
+            <Image
+              src={`/flags/${stateSlug}.png`}
+              alt={`${stateMeta.name} state flag`}
+              width={80}
+              height={53}
+              className="hidden md:block rounded shadow-md border border-white/20 object-cover shrink-0"
+            />
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{h1}</h1>
+          </div>
+          {comparison && (
+            <p className="text-lg text-slate-300 max-w-3xl">{comparisonSubhead(comparison)}</p>
+          )}
+          {comparison && comparison.directoryCount > 0 && (
+            <p className="mt-1 text-sm text-slate-300 max-w-3xl">
+              Drawn from <span data-count="directory">{comparison.directoryCount}</span> schools on the official{" "}
+              {comparison.regulator} approved list, all shown in the directory below.
+            </p>
+          )}
+        </div>
+      </section>
+    </>
+  );
+  const leadP17Block = (
+    <>
+      {/* METHOD + KEY FACTS + DISCLOSURE — the only content between the H1 and the
+          comparison table (P17 Task 2a). */}
+      {comparison && (
+        <section className="pt-6 pb-4 bg-white">
+          <div className="max-w-6xl mx-auto px-4">
+            <p className="text-base text-slate-700 leading-relaxed max-w-4xl">
+              {methodStatement(comparison, stateMeta.name, stateMeta.code, stateInfo)}
+            </p>
+          </div>
+        </section>
+      )}
+      <StateKeyFacts
+        stateName={stateMeta.name}
+        stateInfo={stateInfo}
+        lowestPrice={lowestPrice}
+        year={year}
+        compact
+      />
+      {comparison?.hasMonetizedLink && (
+        <div className="bg-white pt-4">
+          {/* FTC affiliate disclosure — visible, ABOVE the first monetized link in DOM
+              order, which is now the comparison table (P12 wording, unchanged). */}
+          <p className="max-w-6xl mx-auto px-4 text-xs text-slate-600">
+            We may earn a commission if you enroll through our links. It never changes a
+            school&apos;s score or rank.
+          </p>
+        </div>
+      )}
+      {comparison && (
+        <StateComparisonTable
+          comparison={comparison}
+          heading={comparisonH2(comparison, stateMeta.name)}
+          stateName={stateMeta.name}
+        />
+      )}
+    </>
+  );
+
+  const breadcrumbScript = (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+    />
+  );
+
+  // P17 comparison-first order: H1, method statement, compact Key Facts, the
+  // disclosure, the table, then the reviewed cards; everything else moves down
+  // unchanged. Every other state keeps the pre-P17 order exactly.
+  if (comparison) {
+    return (
+      <>
+        {breadcrumbScript}
+        {heroP17Block}
+        {leadP17Block}
+        {schemaBlock}
+        {reviewedBlock}
+        {trustBlock}
+        {outOfStateBlock}
+        {introBlock}
+        {bannersBlock}
+        {trueCostBlock}
+        {videoBlock}
+        {lawyerBlock}
+        {restBlock}
+      </>
+    );
+  }
+
+  return (
+    <>
+      {breadcrumbScript}
+      {heroBlock}
+      {trustBlock}
+      {outOfStateBlock}
+      {keyFactsBlock}
+      {introBlock}
+      {trueCostBlock}
+      {bannersBlock}
+      {videoBlock}
+      {schemaBlock}
+      {lawyerBlock}
+      {cardsBlock}
+      {restBlock}
     </>
   );
 }

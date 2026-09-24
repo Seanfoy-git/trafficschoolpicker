@@ -155,6 +155,24 @@ export const PINS: Record<string, Record<string, Pin>> = {
   },
 };
 
+// P17 checkout truths the pricing API does not carry, each verified at the school's
+// own checkout on the date given. The comparison table must show the price a new
+// visitor actually pays: a promo that is conditional on another purchase is not that
+// price, and a mandatory fee the checkout adds is part of it. Re-verify on drift.
+export type CheckoutAdjust = { basis?: "regular"; addFee?: number; note: string; verified: string };
+export const CHECKOUT_ADJUST: Record<string, Record<string, CheckoutAdjust>> = {
+  aceable: {
+    FL: {
+      basis: "regular",
+      note: "Course-only price. The $5.94 promo on the page applies only when enrolling in an auto-renewing Allstate Roadside subscription ($5/month after the first month).",
+      verified: "2026-09-24",
+    },
+  },
+  idrivesafely: {
+    TX: { addFee: 3, note: "Includes the $3.00 Texas Required Admin Fee the checkout adds.", verified: "2026-09-24" },
+  },
+};
+
 export type Resolved =
   | { status: "auto" | "pinned"; current: number; regular: number; options: Product[]; note?: string; drift?: string }
   | { status: "multi-unpinned" | "pin-missing" | "none"; current: null; regular: null; options: Product[]; note?: string };

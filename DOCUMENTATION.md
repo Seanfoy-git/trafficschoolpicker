@@ -321,6 +321,7 @@ where price differs from the global default. Each row has:
 - **Approved** (checkbox) — gate
 - **Active Offer** (checkbox), **Sale Price** (number), **Offer Seen** (date) — live-promo fields set by the daily offer pass (§9.3). A scraper-set sale auto-expires after a TTL keyed on `Offer Seen`; a manual offer (no `Offer Seen`) is honored indefinitely.
 - **Price Scrape Status** (select) — `OK` / `Needs Review` / `Blocked` / `Dead URL`, set by the scraper's quarantine logic.
+- **Price Source URL** (url), **Price Checked** (date), **Price Includes Fees** (checkbox) — P17 provenance. The school page the price was read from, the day it was read, and whether the price is the all-in total the school states, mandatory school fees included (the table marks those with `*`). The xgrit and JSON-LD syncs stamp both on every successful read. A row with **Price Checked** + **Price Source URL** but an empty **Price** records "we looked; the site publishes no price" (the row then reads *Price not published on site*). The comparison table prices a tier-1 row **only** when the price came from this row and both provenance fields are set.
 
 The price waterfall in the resolver is:
 `variant.priceOverride → pricing DB → school.statePrices[STATE] → school.genericPrice → null`
@@ -334,6 +335,14 @@ per school-state combination. Populated by the DMV scrapers monthly.
 
 Fields: School Name, License Number, Phone, Address, Website, Online Available,
 Source, State, Date Scraped.
+
+P17 Tier 2 comparison fields (set only on rows priced from the school's own site):
+**Display Name** (the brand the site shows; the licensed DBA stays in School Name),
+**Price**, **Price Source URL**, **Price Checked**, **Price Note**, **Price Includes
+Fees**, and the per-school facts **Timers** / **Final Exam** (Yes/No) and
+**Completion Reporting** (School reports / Driver submits), each with its own
+`… Source URL`. A fact without its source URL is never rendered. Written by
+`scripts/apply-comparison-data.ts` from a reviewed plan.
 
 Volume: ~2,200 schools across 22 states.
 
@@ -678,7 +687,29 @@ To switch to coupon-code:
 
 ### State page (`app/[state]/page.tsx`)
 
-The most complex page. Flow:
+**P17 comparison-first layout** (rollout-gated by `P17_LAYOUT_STATES` in
+`lib/comparison.ts`: CA, TX, FL, AZ first; a state also needs its States DB
+**Program Name** set). One pure builder, `buildStateComparison`, feeds the page, its
+metadata, the ItemList JSON-LD and the llms generator (via `lib/state-page-data.ts`
+`loadStateData`), so the row count, price range and "Prices verified" date agree
+everywhere. Order: question H1 ("Which online {program} should I use in {State}?")
++ generated subhead → method statement → compact Key Facts strip (no heading, same
+values) → P12 disclosure (only when a monetized link is on the page) → **H2 Compare N
+online {programs} in {State}** (`StateComparisonTable`, a real `<table>`) → **H2
+Reviewed in detail** (the P12 cards, unchanged) → TrustBar, out-of-state callout,
+intro, banners, True Cost, video, lawyer block, rules, FAQ, questions, guides,
+nearby states, directory. Rows: tier 1 = the rendered cards (tracker-linked, priced
+only from a sourced Pricing row; the card shows the same no-price label when not);
+tier 2 = up to 20 priced Directory rows, price ascending, linked direct with
+`nofollow` (+`sponsored` where the Schools DB records an affiliate network). Every
+fact cell links its source or reads "Not stated"; program-rule fallbacks (course
+length, timers, final exam, reporting) render only when the program record carries
+the rule's source URL (States DB **Hours Source URL**; State Requirements **Final
+Exam / Timers / Reporting Source URL**). "from $X" everywhere = the minimum of all
+priced rows (documented on /methodology). Every other state keeps the legacy order
+below.
+
+The most complex page. Flow (legacy layout):
 
 1. `generateStaticParams()` returns all 51 state slugs (from `STATE_LIST` in `lib/state-utils.ts`)
 2. `generateMetadata()` reads from `STATE_SEO` map, falls back to a generic title
@@ -1359,6 +1390,7 @@ it fails rather than passing silently. Each is a standalone `tsx` script in `scr
 | `verify-question-routes.ts` | Emitted `/{state}/{question}` routes **exactly equal** the Question Pages DB Complete rows (count + path); sitemap has no non-Complete question URLs. | Build fails (the P0 route-isolation guard). |
 | `verify-no-internal-leaks.ts` | No internal/QA/debris or internal Notion links in the built output. | Build fails. |
 | `verify-page-contradictions.ts` | Per state, the Key Facts block and the FAQ **agree** (no "yes/no" contradiction on dismissal, eligibility, etc.). | Build fails (P10). |
+| `verify-comparison-first.ts` | P17 layout states: the comparison H2 is the first H2 after the H1 and precedes True Cost; ≥80% of table rows priced (logs unpriced rows); H1 begins "Which online"; no Texas row under $25.00. Every state page: the hero "from N" and directory "All N" counts (both `data-count="directory"`) agree. Every built page: no "Check website". | Build fails (P17). |
 | `verify-sitemap-200.ts` | Every `<loc>` in the generated sitemap prerendered **200** (detects a URL shipping in the sitemap while serving a build-time `notFound()` — the Florida soft-404 class). Reads the `.meta` status sidecar; no network. | Build fails (P15). |
 | `verify-crawl-paths.ts` | **BFS from `/`** over server-rendered `<a href>` anchors reaches **every** sitemap URL; prints click-depth; flags depth > 3. | Build fails on any orphan (P15). |
 | `crawl-health.ts` | **Informational only** — prints a report (sitemap 200s, bare-apex refs in output, lastmod summary, live TTFB sample). **Never fails the build** (P16). |
