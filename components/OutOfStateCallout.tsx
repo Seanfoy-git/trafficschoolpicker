@@ -18,9 +18,13 @@ const GUIDE_COVERED = new Set([
  * elsewhere) and routes both to the reference guide (to the state's own section
  * when we cover it, else the general guide). A distinct callout, not a footnote.
  */
+/** The guide URL for a state: its own section when covered, else the general guide. */
+export function outOfStateGuideHref(stateSlug: string): string {
+  return GUIDE_COVERED.has(stateSlug) ? `/out-of-state-ticket#${stateSlug}` : "/out-of-state-ticket";
+}
+
 export function OutOfStateCallout({ stateName, stateSlug }: { stateName: string; stateSlug: string }) {
-  const covered = GUIDE_COVERED.has(stateSlug);
-  const href = covered ? `/out-of-state-ticket#${stateSlug}` : "/out-of-state-ticket";
+  const href = outOfStateGuideHref(stateSlug);
 
   return (
     <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 sm:p-6">

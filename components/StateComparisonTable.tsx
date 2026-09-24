@@ -38,7 +38,7 @@ function shortDay(iso: string | null): string | null {
   return `${d} ${m.slice(0, 3)} ${y}`;
 }
 
-function PriceCell({ r }: { r: ComparisonRow }) {
+function PriceCell({ r, feesId }: { r: ComparisonRow; feesId: string }) {
   if (r.price === null) {
     return (
       <a href={r.sourceUrl} target="_blank" rel={relFor(r.sourceUrl)} className="text-sm text-slate-700 underline">
@@ -51,7 +51,7 @@ function PriceCell({ r }: { r: ComparisonRow }) {
       {r.priceText}
       {r.priceIncludesFees && (
         <sup>
-          <a href="#compare-fees" className="text-accent underline" aria-label="All-in price, see note below the table">
+          <a href={`#${feesId}`} className="text-accent underline" aria-label="All-in price, see note below the table">
             *
           </a>
         </sup>
@@ -62,31 +62,46 @@ function PriceCell({ r }: { r: ComparisonRow }) {
 
 export function StateComparisonTable({
   comparison: c,
+  rows,
   heading,
+  intro,
+  idPrefix = "compare",
   stateName,
 }: {
   comparison: StateComparison;
+  // The rows this table shows (P17 split: the reviewed schools in the first table,
+  // the other priced licensed schools in a second one below the cards).
+  rows: ComparisonRow[];
   heading: string;
+  intro?: string;
+  // "compare" for the first table (the guard anchors on id="compare-heading").
+  idPrefix?: string;
   stateName: string;
 }) {
+  const headingId = `${idPrefix}-heading`;
+  const feesId = `${idPrefix}-fees`;
+  const anyFees = rows.some((r) => r.priceIncludesFees);
+  // A table of unreviewed schools has no TSP Scores; drop the column, not blank it.
+  const showScore = rows.some((r) => r.tspScore != null);
   const th = "px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-700 whitespace-nowrap";
   const td = "px-3 py-3 align-top text-sm text-slate-700";
   return (
-    <section id="compare" aria-labelledby="compare-heading" className="py-8 bg-white">
+    <section id={idPrefix} aria-labelledby={headingId} className="py-8 bg-white">
       <div className="max-w-6xl mx-auto px-4">
-        <h2 id="compare-heading" className="text-2xl font-bold text-slate-900 mb-4">
+        <h2 id={headingId} className="text-2xl font-bold text-slate-900 mb-4">
           {heading}
         </h2>
+        {intro && <p className="-mt-2 mb-4 text-sm text-slate-600 max-w-4xl">{intro}</p>}
         <div
           className="relative overflow-x-auto rounded-lg border border-slate-200"
           role="region"
-          aria-labelledby="compare-heading"
+          aria-labelledby={headingId}
           tabIndex={0}
         >
           <table className="min-w-[56rem] w-full border-collapse">
             <caption className="sr-only">
-              Online schools in {stateName} compared on price, course length, timers, final exam, completion
-              reporting and TSP Score, with the source each row was verified from.
+              Online schools in {stateName} compared on price, course length, timers, final exam and completion
+              reporting{showScore ? ", with our TSP Score" : ""}, and the source each row was verified from.
             </caption>
             <thead className="bg-slate-50 border-b border-slate-200">
               <tr>
@@ -96,12 +111,12 @@ export function StateComparisonTable({
                 <th scope="col" className={th}>Timers</th>
                 <th scope="col" className={th}>Final exam</th>
                 <th scope="col" className={th}>Completion reporting</th>
-                <th scope="col" className={th}>TSP Score</th>
+                {showScore && <th scope="col" className={th}>TSP Score</th>}
                 <th scope="col" className={th}>Source</th>
               </tr>
             </thead>
             <tbody>
-              {c.rows.map((r) => (
+              {rows.map((r) => (
                 <tr
                   key={r.key}
                   className="border-b border-slate-100 last:border-b-0"
@@ -116,7 +131,7 @@ export function StateComparisonTable({
                     </a>
                   </th>
                   <td className={`${td} whitespace-nowrap`}>
-                    <PriceCell r={r} />
+                    <PriceCell r={r} feesId={feesId} />
                   </td>
                   <td className={td}>
                     <FactCell c={r.courseLength} />
@@ -130,16 +145,18 @@ export function StateComparisonTable({
                   <td className={`${td} whitespace-nowrap`}>
                     <FactCell c={r.reporting} />
                   </td>
+                  {showScore && (
                   <td className={td}>
-                    {r.tspScore != null ? (
-                      <Link href="/methodology" className="font-semibold text-accent underline">
-                        {r.tspScore.toFixed(1)}
-                        <span className="sr-only"> out of 5</span>
-                      </Link>
-                    ) : (
-                      <span className="sr-only">Not reviewed</span>
-                    )}
-                  </td>
+                      {r.tspScore != null ? (
+                        <Link href="/methodology" className="font-semibold text-accent underline">
+                          {r.tspScore.toFixed(1)}
+                          <span className="sr-only"> out of 5</span>
+                        </Link>
+                      ) : (
+                        <span className="sr-only">Not reviewed</span>
+                      )}
+                    </td>
+                  )}
                   <td className={`${td} whitespace-nowrap`}>
                     <a href={r.sourceUrl} target="_blank" rel={relFor(r.sourceUrl)} className="text-accent underline">
                       School page
@@ -153,8 +170,8 @@ export function StateComparisonTable({
             </tbody>
           </table>
         </div>
-        {c.anyFeesFolded && (
-          <p id="compare-fees" className="mt-3 text-xs text-slate-600">
+        {anyFees && (
+          <p id={feesId} className="mt-3 text-xs text-slate-600">
             * All-in price: the school&apos;s own page states this is the total you pay, with any mandatory
             school fee (certificate, processing or state fee) included. Court fees are separate.
           </p>
