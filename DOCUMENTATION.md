@@ -694,9 +694,12 @@ metadata, the ItemList JSON-LD and the llms generator (via `lib/state-page-data.
 `loadStateData`), so the row count, price range and "Prices verified" date agree
 everywhere. Order: question H1 ("Which online {program} should I use in {State}?")
 + generated subhead → method statement → compact Key Facts strip (no heading, same
-values) → P12 disclosure (only when a monetized link is on the page) → **H2 Compare N
-online {programs} in {State}** (`StateComparisonTable`, a real `<table>`) → **H2
-Reviewed in detail** (the P12 cards, unchanged) → TrustBar, out-of-state callout,
+values) → P12 disclosure (only when a monetized link is on the page) → **H2 Compare
+the k online {programs} we reviewed in {State}** (`StateComparisonTable`, a real
+`<table>`, tier-1 rows only) → "Before you pick a course" strip (`SituationStrip`:
+out-of-state guide + `#lawyer` jump) → **H2 Reviewed in detail** (the P12 cards,
+unchanged) → **H2 Other {State} {regulator}-approved {programs} we priced** (the tier-2
+rows, second table; split agreed with Sean 24 Sep 2026) → TrustBar, out-of-state callout,
 intro, banners, True Cost, video, lawyer block, rules, FAQ, questions, guides,
 nearby states, directory. Rows: tier 1 = the rendered cards (tracker-linked, priced
 only from a sourced Pricing row; the card shows the same no-price label when not);

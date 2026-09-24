@@ -28,7 +28,7 @@ export function LawyerBlock({
   if (!block.firms.length) return null;
 
   return (
-    <section className="py-8 bg-white border-b border-slate-100">
+    <section id="lawyer" className="py-8 bg-white border-b border-slate-100 scroll-mt-4">
       <div className="max-w-3xl mx-auto px-4">
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-6">
           <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900 mb-3">

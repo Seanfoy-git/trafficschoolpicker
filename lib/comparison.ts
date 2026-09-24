@@ -291,6 +291,16 @@ export function comparisonH2(c: StateComparison, stateName: string): string {
   return `Compare ${c.count} online ${c.programNounPlural} in ${stateName}`;
 }
 
+/** First table when the page has reviewed cards: the reviewed schools only. */
+export function reviewedTableHeading(c: StateComparison, stateName: string, k: number): string {
+  return `Compare the ${k} online ${k === 1 ? c.programNoun : c.programNounPlural} we reviewed in ${stateName}`;
+}
+
+/** Second table, below the cards: licensed schools we priced but have not reviewed. */
+export function otherTableHeading(c: StateComparison, stateName: string, stateCode: string): string {
+  return `Other ${stateName} ${regulatorAfterStateName(c.regulator, stateCode)}-approved ${c.programNounPlural} we priced`;
+}
+
 /** Who completion reaches: the administering agency where the record names one, else the court. */
 function submitter(stateInfo: StateInfo | null): string {
   const body = stateInfo?.administeringBody;

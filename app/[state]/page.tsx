@@ -17,6 +17,8 @@ import {
   comparisonTitle,
   comparisonMetaDescription,
   methodStatement,
+  reviewedTableHeading,
+  otherTableHeading,
 } from "@/lib/comparison";
 import { SURCHARGE_ESTIMATE_LABEL } from "@/lib/ticket-cost-study";
 import { STATE_SEO } from "@/lib/seo-config";
@@ -30,6 +32,7 @@ import { TrustBar } from "@/components/TrustBar";
 import { OutOfStateCallout } from "@/components/OutOfStateCallout";
 import { StateKeyFacts } from "@/components/StateKeyFacts";
 import { StateComparisonTable } from "@/components/StateComparisonTable";
+import { SituationStrip } from "@/components/SituationStrip";
 import { LawyerBlock } from "@/components/LawyerBlock";
 import { NearbyStates } from "@/components/NearbyStates";
 import { RelatedPosts } from "@/components/RelatedPosts";
@@ -280,6 +283,13 @@ export default async function StatePage({ params }: Props) {
   // cards elsewhere. The same figure feeds the meta range, the JSON-LD Offers and
   // llms.txt, so no surface can show a different floor. Null when nothing is priced
   // or no comparison renders — we never show a price for a state with no rows.
+  // P17 split (Sean, 24 Sep): when the page has reviewed cards, the first table is the
+  // reviewed schools only and the unreviewed priced schools follow the cards in a
+  // second table. A page with no reviewed cards (Arizona) keeps one table.
+  const reviewedRows = comparison ? comparison.rows.filter((r) => r.tier === 1) : [];
+  const firstTableRows = comparison ? (reviewedRows.length ? reviewedRows : comparison.rows) : [];
+  const otherRows = comparison && reviewedRows.length ? comparison.rows.filter((r) => r.tier === 2) : [];
+
   const lowestPrice = comparison
     ? comparison.minPrice
     : showComparison
@@ -962,12 +972,38 @@ export default async function StatePage({ params }: Props) {
       {comparison && (
         <StateComparisonTable
           comparison={comparison}
-          heading={comparisonH2(comparison, stateMeta.name)}
+          rows={firstTableRows}
+          heading={
+            otherRows.length
+              ? reviewedTableHeading(comparison, stateMeta.name, firstTableRows.length)
+              : comparisonH2(comparison, stateMeta.name)
+          }
           stateName={stateMeta.name}
+        />
+      )}
+      {comparison && (
+        <SituationStrip
+          stateName={stateMeta.name}
+          stateSlug={stateSlug}
+          hasLawyerBlock={!!stateInfo?.lawyerBlock?.firms.length}
         />
       )}
     </>
   );
+
+  // P17 split: the licensed schools we priced but have not reviewed get their own
+  // table below the reviewed cards, lowest price first.
+  const otherTableBlock =
+    comparison && otherRows.length ? (
+      <StateComparisonTable
+        comparison={comparison}
+        rows={otherRows}
+        idPrefix="compare-more"
+        heading={otherTableHeading(comparison, stateMeta.name, stateMeta.code)}
+        intro="We have not reviewed these schools. Each price was read from the school's own site; lowest price first."
+        stateName={stateMeta.name}
+      />
+    ) : null;
 
   const breadcrumbScript = (
     <script
@@ -987,6 +1023,7 @@ export default async function StatePage({ params }: Props) {
         {leadP17Block}
         {schemaBlock}
         {reviewedBlock}
+        {otherTableBlock}
         {trustBlock}
         {outOfStateBlock}
         {introBlock}
