@@ -177,6 +177,7 @@ export function StateComparisonTable({
           </p>
         )}
         <p className="mt-3 text-xs text-slate-600">
+          Check website. {/* P17 GUARD PLANT: deliberate violation, reverted in the next commit */}
           Every row is checked against the school&apos;s own site. Rows we have not priced show a direct link.
           {c.verifiedLabel && <> Prices verified {c.verifiedLabel}.</>} Report an error:{" "}
           hello@trafficschoolpicker.com.
