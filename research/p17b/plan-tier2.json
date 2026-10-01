@@ -1,0 +1,1007 @@
+[
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "bd79e794-4352-8370-9706-81548396c792",
+  "props": {
+   "Display Name": "ABC Drive Safe",
+   "Price": 25,
+   "Price Source URL": "https://trafficschoolnv.com/nevada-traffic-school-5hr-english/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "5-hour online course; same $25 for court, DMV point-reduction and insurance versions. Site notes Nevada may require a notarized affidavit (not a school fee).",
+   "Price Includes Fees": false,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://trafficschoolnv.com/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "bf39e794-4352-8284-bc28-017e7e88e4b9",
+  "props": {
+   "Display Name": "ABC Drive Safe",
+   "Price": 25,
+   "Price Source URL": "https://trafficschoolnv.com/nevada-traffic-school-5hr-english/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "5-hour online course; same $25 for court, DMV point-reduction and insurance versions. Site notes Nevada may require a notarized affidavit (not a school fee).",
+   "Price Includes Fees": false,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://trafficschoolnv.com/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "b0d9e794-4352-8230-9f6b-81d4e0aa60c8",
+  "props": {
+   "Display Name": "ABC Therapy",
+   "Price": 19.95,
+   "Price Source URL": "https://abctherapy.courteducation.com/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Online course sold via ABC Therapy online education site (linked as Online Courses from abctherapy.net, run by LRS Systems). Site: \"There are no hidden fees or extra costs with your class. What you see is what you pay.\"",
+   "Price Includes Fees": true
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "ed59e794-4352-83a7-b362-017c74c4b007",
+  "props": {
+   "Display Name": "ABC Therapy",
+   "Price": 19.95,
+   "Price Source URL": "https://abctherapy.courteducation.com/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Online course sold via ABC Therapy online education site (linked as Online Courses from abctherapy.net, run by LRS Systems). Site: \"There are no hidden fees or extra costs with your class. What you see is what you pay.\"",
+   "Price Includes Fees": true
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "2a29e794-4352-83a2-9a6d-019813fefbf2",
+  "props": {
+   "Display Name": "TrafficSchoolToGo",
+   "Price": 13.95,
+   "Price Source URL": "https://www.trafficschooltogo.com/nevada/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "American Safety Council brand. Course details page: \"lowest traffic school prices in Nevada with absolutely no hidden fees\". Optional rush certificate delivery excluded.",
+   "Price Includes Fees": true,
+   "Timers": "Yes",
+   "Timers Source URL": "https://www.trafficschooltogo.com/nevada/traffic-school-faqs/",
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://www.trafficschooltogo.com/nevada/traffic-school-faqs/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.trafficschooltogo.com/nevada/traffic-school-faqs/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "3b49e794-4352-833f-9095-81b5979d05fc",
+  "props": {
+   "Display Name": "BOSS Court Education",
+   "Price": 29.99,
+   "Price Source URL": "https://bosscourteducation.com/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Listed as \"Traffic Safety 5 Hours\" (online, log in/out as needed).",
+   "Price Includes Fees": false,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://bosscourteducation.com/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "c769e794-4352-8332-85ce-811fb1deab34",
+  "props": {
+   "Display Name": "Driver Education Center",
+   "Price": 24,
+   "Price Source URL": "https://1stdui.com/nevada-traffic-school/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "nvtraffic.com redirects to 1stdui.com/nevada-traffic-school/ (Shaw Driving Education Center). Page states \"No Hidden Fees\".",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://1stdui.com/nevada-traffic-school/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://1stdui.com/nevada-traffic-school/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "f319e794-4352-82b6-bf05-812369268278",
+  "props": {
+   "Display Name": "LRS Systems",
+   "Price": 19.95,
+   "Price Source URL": "https://www.lrssystems.com/class",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Online class catalog; same price for court and DMV versions.",
+   "Price Includes Fees": false
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "cbf9e794-4352-82b6-bf30-01bb9f4daa84",
+  "props": {
+   "Display Name": "Traffic School Online",
+   "Price": 29.97,
+   "Price Source URL": "https://trafficschoolonline.com/state/nevada-traffic-school",
+   "Price Checked": "2026-10-01",
+   "Price Note": "onlinetrafficschool.com redirects to trafficschoolonline.com. Point Reduction and Ticket Dismissal 5-hour courses both $29.97. Homepage: \"We never trick you with add-on fees.\" Optional express certificate delivery excluded.",
+   "Price Includes Fees": true,
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://trafficschoolonline.com/state/nevada-traffic-school"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "e7e9e794-4352-831a-949f-814b79e582e0",
+  "props": {
+   "Display Name": "Safe2Drive",
+   "Price": 13.95,
+   "Price Source URL": "https://www.safe2drive.com/nevada-traffic-school.aspx",
+   "Price Checked": "2026-10-01",
+   "Price Note": "\"Free Completion Processing\". NV DMV requires a notarized affidavit before certificate issues (notary cost is outside the school).",
+   "Price Includes Fees": false,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://www.safe2drive.com/nevada-traffic-school.aspx",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.safe2drive.com/nevada-traffic-school.aspx"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "a649e794-4352-83d2-977a-813f12c0bcc2",
+  "props": {
+   "Display Name": "Traffic101",
+   "Price": 19.95,
+   "Price Source URL": "https://www.trafficschool101.com/how-much-t101.php",
+   "Price Checked": "2026-10-01",
+   "Price Note": "traffic101.com redirects to trafficschool101.com. Price page: \"Processing and Shipping FREE\"; homepage: \"no hidden fees\".",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://www.trafficschool101.com/how-much-t101.php"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "4b79e794-4352-839e-adc6-011b47d00a6c",
+  "props": {
+   "Display Name": "IMPROV",
+   "Price": 37.95,
+   "Price Source URL": "https://www.myimprov.com/defensive-driving/new-york/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Includes the $8.00 DMV fee the checkout adds. was $69.95 on site (struck). Page says \"+ DMV Fee\"; checkout adds \"DMV Certificate Fee $8.00\" (checkout total $37.95). DMV fee excluded per method; optional audio upgrade $4.99 excluded.",
+   "Price Includes Fees": true,
+   "Final Exam": "No",
+   "Final Exam Source URL": "https://www.myimprov.com/defensive-driving/new-york/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.myimprov.com/defensive-driving/new-york/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "f889e794-4352-834a-a7c6-81833a5eaa54",
+  "props": {
+   "Display Name": "IMPROV",
+   "Price": 37.95,
+   "Price Source URL": "https://www.myimprov.com/defensive-driving/new-york/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Includes the $8.00 DMV fee the checkout adds. was $69.95 on site (struck). Page says \"+ DMV Fee\"; checkout adds \"DMV Certificate Fee $8.00\" (checkout total $37.95). DMV fee excluded per method; optional audio upgrade $4.99 excluded.",
+   "Price Includes Fees": true,
+   "Final Exam": "No",
+   "Final Exam Source URL": "https://www.myimprov.com/defensive-driving/new-york/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.myimprov.com/defensive-driving/new-york/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "3839e794-4352-82c0-a04b-01cc412e8113",
+  "props": {
+   "Display Name": "AARP Smart Driver",
+   "Price": 38,
+   "Price Source URL": "https://www.aarpdriversafety.org/pricing/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Includes the $5.00 DMV fee the checkout adds. Non-member price $33 (AARP members $30). Plus $5.00 NY DMV completion-reporting fee (excluded per method) = $38 total for non-members. Price shown on pricing page when New York is selected in the state filter (embedded page data: originalPrice 33, discountPrice 30 member).",
+   "Price Includes Fees": true
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "3709e794-4352-82c9-80b9-81143d762ea3",
+  "props": {
+   "Display Name": "AARP Smart Driver",
+   "Price": 30,
+   "Price Source URL": "https://www.aarpdriversafety.org/pricing/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Non-member price $30 (AARP members $27). Shown on pricing page after selecting New Jersey in the state filter; embedded page data lists productFees 0.",
+   "Price Includes Fees": false
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "4659e794-4352-82a5-b1a5-01d2b9165700",
+  "props": {
+   "Display Name": "AARP Smart Driver",
+   "Price": 30,
+   "Price Source URL": "https://www.aarpdriversafety.org/pricing/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Non-member price $30 (AARP members $27). Shown on pricing page after selecting New Jersey in the state filter; embedded page data lists productFees 0.",
+   "Price Includes Fees": false
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "2939e794-4352-822e-890c-01786346cc62",
+  "props": {
+   "Display Name": "National Traffic Safety Institute (NTSI)",
+   "Price": 24.95,
+   "Price Source URL": "https://ntsi.com/new-york/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Registration page shows Course Fee 24.95 and Total $24.95 before optional Audio Read-Along ($4.95, excluded).",
+   "Price Includes Fees": true,
+   "Final Exam": "No",
+   "Final Exam Source URL": "https://ntsi.com/new-york/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "9949e794-4352-8245-9a26-017a5e1bc192",
+  "props": {
+   "Display Name": "National Traffic Safety Institute (NTSI)",
+   "Price": 24.95,
+   "Price Source URL": "https://ntsi.com/new-york/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Registration page shows Course Fee 24.95 and Total $24.95 before optional Audio Read-Along ($4.95, excluded).",
+   "Price Includes Fees": true,
+   "Final Exam": "No",
+   "Final Exam Source URL": "https://ntsi.com/new-york/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "d209e794-4352-828b-9480-01f195e0bd01",
+  "props": {
+   "Display Name": "TicketSchool",
+   "Price": 24.95,
+   "Price Source URL": "https://ticketschool.com/courses/new-york-defensive-driving-online/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Driver Training Associates (DTA) brand. Page: \"TOTAL COST $24.95 No Hidden Fees\"; certificate mailed at no extra cost; optional overnight shipping excluded.",
+   "Price Includes Fees": true,
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://ticketschool.com/courses/new-york-defensive-driving-online/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "e4f9e794-4352-83b4-b1d5-01f8fd87189d",
+  "props": {
+   "Display Name": "TicketSchool",
+   "Price": 24.95,
+   "Price Source URL": "https://ticketschool.com/courses/new-york-defensive-driving-online/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Driver Training Associates (DTA) brand. Page: \"TOTAL COST $24.95 No Hidden Fees\"; certificate mailed at no extra cost; optional overnight shipping excluded.",
+   "Price Includes Fees": true,
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://ticketschool.com/courses/new-york-defensive-driving-online/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "2e59e794-4352-82a6-949a-81036cb759da",
+  "props": {
+   "Display Name": "SafeMotorist",
+   "Price": 24.95,
+   "Price Source URL": "https://www.safemotorist.com/new-york/defensive-driving/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "American Safety Council. Cart total $24.95 (no added fees); optional upgrades/rush shipping excluded.",
+   "Price Includes Fees": true,
+   "Final Exam": "No",
+   "Final Exam Source URL": "https://www.safemotorist.com/new-york/defensive-driving/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.safemotorist.com/new-york/defensive-driving/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "80d9e794-4352-83f5-893c-018d6f591c5a",
+  "props": {
+   "Display Name": "American Safety Institute",
+   "Price": 31.95,
+   "Price Source URL": "https://americansafetyinstitute.com/ny-defensive-driving-course-online-pirp/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Includes the $8.00 DMV fee the checkout adds. bigappletrafficschool.com redirects to americansafetyinstitute.com NY page. Page says \"+DMV Fee\"; checkout adds \"DMV Processing Fee $8.00\" (total $31.95). DMV fee excluded per method; standard shipping free; optional audio/overnight excluded.",
+   "Price Includes Fees": true,
+   "Final Exam": "No",
+   "Final Exam Source URL": "https://americansafetyinstitute.com/ny-defensive-driving-course-online-pirp/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://americansafetyinstitute.com/ny-defensive-driving-course-online-pirp/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "a359e794-4352-8352-b5f3-81cd093525e6",
+  "props": {
+   "Display Name": "American Safety Institute",
+   "Price": 31.95,
+   "Price Source URL": "https://americansafetyinstitute.com/ny-defensive-driving-course-online-pirp/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Includes the $8.00 DMV fee the checkout adds. bigappletrafficschool.com redirects to americansafetyinstitute.com NY page. Page says \"+DMV Fee\"; checkout adds \"DMV Processing Fee $8.00\" (total $31.95). DMV fee excluded per method; standard shipping free; optional audio/overnight excluded.",
+   "Price Includes Fees": true,
+   "Final Exam": "No",
+   "Final Exam Source URL": "https://americansafetyinstitute.com/ny-defensive-driving-course-online-pirp/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://americansafetyinstitute.com/ny-defensive-driving-course-online-pirp/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "1ca9e794-4352-82a6-987f-0143791a3427",
+  "props": {
+   "Display Name": "New York Safety Program",
+   "Price": 23.95,
+   "Price Source URL": "https://www.247defensivedriving.com/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Online course is sold at 247defensivedriving.com (linked from nysp.com \"Enroll For Online Classes\"). FAQ: \"We have no hidden fees\"; optional express delivery and audio/driving-record upgrades excluded.",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://www.247defensivedriving.com/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.247defensivedriving.com/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "0949e794-4352-8368-a942-81da1150c688",
+  "props": {
+   "Display Name": "New York Safety Program",
+   "Price": 23.95,
+   "Price Source URL": "https://www.247defensivedriving.com/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Online course is sold at 247defensivedriving.com (linked from nysp.com \"Enroll For Online Classes\"). FAQ: \"We have no hidden fees\"; optional express delivery and audio/driving-record upgrades excluded.",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://www.247defensivedriving.com/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.247defensivedriving.com/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "c819e794-4352-8350-a6dc-012ce7a06e13",
+  "props": {
+   "Display Name": "Empire Safety Council",
+   "Price": 44.95,
+   "Price Source URL": "https://course.empiresafetycouncil.com/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Promo-code price $34.95 is conditional (code entered on registration form) and not used. Homepage: \"State DMV Fee ($8.00) INCLUDED\" and \"Narrated Audio Class INCLUDED\".",
+   "Price Includes Fees": true
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "f809e794-4352-834e-85f0-018a56b1b72d",
+  "props": {
+   "Display Name": "Empire Safety Council",
+   "Price": 44.95,
+   "Price Source URL": "https://course.empiresafetycouncil.com/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Promo-code price $34.95 is conditional (code entered on registration form) and not used. Homepage: \"State DMV Fee ($8.00) INCLUDED\" and \"Narrated Audio Class INCLUDED\".",
+   "Price Includes Fees": true
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "5159e794-4352-8385-a026-814cb546cee8",
+  "props": {
+   "Display Name": "12 Dollar School Online",
+   "Price": 12,
+   "Price Source URL": "http://www.12dollarschoolonline.com/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "FAQ: \"The cost is only $12. There are no additional costs or surcharges for taking the course.\"",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "http://www.12dollarschoolonline.com/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "http://www.12dollarschoolonline.com/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "2d59e794-4352-82a8-8476-01d9f432a37a",
+  "props": {
+   "Display Name": "Fun & Cheap",
+   "Price": 47.95,
+   "Price Source URL": "http://www.funandcheaponline.com/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "$37.95 only with promo code SV10 (conditional, not used). Page: \"One price. Nothing is added at the payment page.\"",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "http://www.funandcheaponline.com/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "http://www.funandcheaponline.com/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "6e29e794-4352-82b2-9a33-01e2e2ae5d9e",
+  "props": {
+   "Display Name": "DriveSafe",
+   "Price": 24.95,
+   "Price Source URL": "https://drivesafe.us/new-jersey/defensive-driving-course.html",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Pricing section: \"All-inclusive, no hidden fees.\"",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://drivesafe.us/new-jersey/defensive-driving-course.html"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "0b59e794-4352-829c-a611-8104c682f339",
+  "props": {
+   "Display Name": "Quick and Cheap Online",
+   "Price": 5,
+   "Price Source URL": "http://www.quickandcheaponline.com/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "\"$5, ALL IN\"; standard mailed certificate and MVC reporting included. Optional next-business-day email certificate (+$5) excluded.",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "http://www.quickandcheaponline.com/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "http://www.quickandcheaponline.com/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "01f9e794-4352-830d-9769-811fdda3f912",
+  "props": {
+   "Display Name": "IMPROV",
+   "Price": 24.95,
+   "Price Source URL": "https://www.myimprov.com/defensive-driving/new-jersey/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "was $29.95 on site (struck). Checkout total $24.95 with no added fees.",
+   "Price Includes Fees": true,
+   "Final Exam": "No",
+   "Final Exam Source URL": "https://www.myimprov.com/defensive-driving/new-jersey/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.myimprov.com/defensive-driving/new-jersey/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "ef99e794-4352-833c-8fb1-81f2646cccda",
+  "props": {
+   "Display Name": "SafeMotorist",
+   "Price": 20,
+   "Price Source URL": "https://www.safemotorist.com/new-jersey/defensive-driving/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "American Safety Council. Cart Total $20.00 (no added fees); optional study guide/Premier Pass excluded.",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://www.safemotorist.com/new-jersey/defensive-driving/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.safemotorist.com/new-jersey/defensive-driving/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "f799e794-4352-8342-8261-01b82f4dcda5",
+  "props": {
+   "Display Name": "Safe2Drive",
+   "Price": 19.95,
+   "Price Source URL": "https://www.safe2drive.com/new-jersey-defensive-driving.aspx",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Defensive Driving (Point Reduction) course, all ages. Separate 55+ Mature Driver course is $15.95 (not used). \"All-Inclusive\" per page.",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://www.safe2drive.com/new-jersey-defensive-driving.aspx",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.safe2drive.com/new-jersey-defensive-driving.aspx"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "9a99e794-4352-828b-8faf-816e951a51a4",
+  "props": {
+   "Display Name": "Safe2Drive",
+   "Price": 19.95,
+   "Price Source URL": "https://www.safe2drive.com/new-jersey-defensive-driving.aspx",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Defensive Driving (Point Reduction) course, all ages. Separate 55+ Mature Driver course is $15.95 (not used). \"All-Inclusive\" per page.",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://www.safe2drive.com/new-jersey-defensive-driving.aspx",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.safe2drive.com/new-jersey-defensive-driving.aspx"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "ab59e794-4352-83de-b47f-81dc0641afdd",
+  "props": {
+   "Display Name": "Driving School of America",
+   "Price": 13.95,
+   "Price Source URL": "https://www.dsoamerica.com/state/NJ",
+   "Price Checked": "2026-10-01",
+   "Price Note": "All-ages New Jersey Defensive Driving Course. Separate 55+ Mature Defensive Driver Course is $10.00 (not used). \"Final Price, No Hidden Fees\".",
+   "Price Includes Fees": true
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "93d9e794-4352-8389-b9a3-010b512450be",
+  "props": {
+   "Display Name": "Driving School of America",
+   "Price": 13.95,
+   "Price Source URL": "https://www.dsoamerica.com/state/NJ",
+   "Price Checked": "2026-10-01",
+   "Price Note": "All-ages New Jersey Defensive Driving Course. Separate 55+ Mature Defensive Driver Course is $10.00 (not used). \"Final Price, No Hidden Fees\".",
+   "Price Includes Fees": true
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "b429e794-4352-834f-a677-01e9bcf3703c",
+  "props": {
+   "Display Name": "National Traffic Safety Institute (NTSI)",
+   "Price": 24.95,
+   "Price Source URL": "https://ntsi.com/new-jersey/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Page: \"No deceptive or hidden fees. $24.95 is the total cost!\"",
+   "Price Includes Fees": true
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "5149e794-4352-837a-99cd-016dd19afab8",
+  "props": {
+   "Display Name": "National Traffic Safety Institute (NTSI)",
+   "Price": 24.95,
+   "Price Source URL": "https://ntsi.com/new-jersey/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Page: \"No deceptive or hidden fees. $24.95 is the total cost!\"",
+   "Price Includes Fees": true
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "f4a9e794-4352-8319-ab81-810a25512092",
+  "props": {
+   "Display Name": "National Safety Council",
+   "Price": 24.95,
+   "Price Source URL": "https://www.drivesafe.com/new-jersey-online-defensive-driving-course/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Course fully narrated (no narration fee).",
+   "Price Includes Fees": false
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "dab9e794-4352-83c7-ad39-81fb95bca120",
+  "props": {
+   "Display Name": "National Safety Council",
+   "Price": 24.95,
+   "Price Source URL": "https://www.drivesafe.com/new-jersey-online-defensive-driving-course/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Course fully narrated (no narration fee).",
+   "Price Includes Fees": false
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "c1b9e794-4352-83d6-b2a2-01d902c65c52",
+  "props": {
+   "Display Name": "American Safety Institute",
+   "Price": 19.95,
+   "Price Source URL": "https://americansafetyinstitute.com/6-hour-new-jersey-defensive-driving-course/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Page: \"What you see is what you pay, with no extra charges or surprise costs.\" Optional audio narration excluded.",
+   "Price Includes Fees": true
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "fd89e794-4352-82a3-9d11-8173d8ea875b",
+  "props": {
+   "Display Name": "Cheap Defensive Driving School",
+   "Price": 29.95,
+   "Price Source URL": "http://www.cheapdefensivedrivingschool.com/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "\"Your $29.95 covers the course, the exam, the NJMVC filing and your mailed certificate.\"",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "http://www.cheapdefensivedrivingschool.com/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "http://www.cheapdefensivedrivingschool.com/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "79a9e794-4352-82af-92cb-01240565362a",
+  "props": {
+   "Display Name": "Driving University",
+   "Price": 47,
+   "Price Source URL": "https://www.drivinguniversity.com/new-jersey-online-traffic-school-defensive-driving/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "FAQ: \"There are no additional costs or surcharges for taking the course.\" Optional express/overnight certificate ($55.00) excluded.",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://www.drivinguniversity.com/new-jersey-online-traffic-school-defensive-driving/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.drivinguniversity.com/new-jersey-online-traffic-school-defensive-driving/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "0a39e794-4352-8202-bfa6-816869ef4a20",
+  "props": {
+   "Display Name": "iNeedAClass.com",
+   "Price": 83.44,
+   "Price Source URL": "https://www.ineedaclass.com/online-virginia-dmv-approved-driver-improvement-course",
+   "Price Checked": "2026-10-01",
+   "Price Note": "$80.00 course fee + $3.44 electronic transaction fee",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://www.ineedaclass.com/online-virginia-dmv-approved-driver-improvement-course"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "8579e794-4352-8316-9bb3-01208a7c4de1",
+  "props": {
+   "Display Name": "Go The Speed Limit",
+   "Price": 80,
+   "Price Source URL": "https://gothespeedlimit.com/shop/virginia-driver-improvement-course/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Product page states: There are no additional fees related to this course.",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://gothespeedlimit.com/shop/virginia-driver-improvement-course/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "51d9e794-4352-8267-8fe8-017a01ca329b",
+  "props": {
+   "Display Name": "A & A 1 A ACAR Driver Clinic",
+   "Price": 60,
+   "Price Source URL": "http://acarclinic.com",
+   "Price Checked": "2026-10-01",
+   "Price Note": "acarclinic.com redirects to its NationalOnlineLearning-hosted storefront (va-drivercourses.com); FAQ: The cost of the course is $60.00",
+   "Price Includes Fees": false,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://www.va-drivercourses.com/modHelp/menuItem.php?menuID=466&returnLink=%2Fdefault.php"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "fd29e794-4352-828a-914e-81339b13900f",
+  "props": {
+   "Display Name": "A Plus Driving School",
+   "Price": 65,
+   "Price Source URL": "https://www.vadrivingcourses.com/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Course hosted on NationalOnlineLearning platform (va-drivercourses.com school=208); its FAQ: The cost of the course is $65.",
+   "Price Includes Fees": false,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://www.va-drivercourses.com/modHelp/menuItem.php?menuID=1326&returnLink=%2Fdefault.php"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "2819e794-4352-8231-871b-0115e96b7829",
+  "props": {
+   "Display Name": "10/10 Driving School of Fredericksburg",
+   "Price": 100,
+   "Price Source URL": "http://www.1010drivingschool.com/services",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Services page notes *Prices subject to change",
+   "Price Includes Fees": false
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "5399e794-4352-8367-a868-81de130d4765",
+  "props": {
+   "Display Name": "A Fresh Start Driving Academy",
+   "Price": 75,
+   "Price Source URL": "https://www.afsdriving.com/onlinedriversed",
+   "Price Checked": "2026-10-01",
+   "Price Note": "",
+   "Price Includes Fees": false
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "c189e794-4352-82a2-8a1b-0146341f0b19",
+  "props": {
+   "Display Name": "A+ Above All Defensive Driving (Shenandoah Valley Driving School)",
+   "Price": 100,
+   "Price Source URL": "https://www.cognitoforms.com/ShenandoahValleyDrivingSchool/OnlineDDC8",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Price shown on the school's own Pay Now form (Cognito Forms) linked from its online 8-hour page",
+   "Price Includes Fees": false
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "4879e794-4352-83b2-89dc-013902b1e041",
+  "props": {
+   "Display Name": "A1A Driver Improvement Clinics",
+   "Price": 89.99,
+   "Price Source URL": "https://a1adriverimprovementclinics.com/on-line-class/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Online registration form shows the same Price Of The Class with the Online option selected (site redirects to a1adriverimprovementclinics.com)",
+   "Price Includes Fees": false,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://a1adriverimprovementclinics.com/on-line-class/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "a469e794-4352-83d8-a0ea-011d692262f8",
+  "props": {
+   "Display Name": "ABC Driving Improvement",
+   "Price": 74.99,
+   "Price Source URL": "https://www.abcdrivingcourse.com/8-hour-online-driving-course-payment",
+   "Price Checked": "2026-10-01",
+   "Price Note": "was $89.99 on site (struck through); page states No hidden fees",
+   "Price Includes Fees": false,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://www.abcdrivingcourse.com/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.abcdrivingcourse.com/8-hour-online-driving-course-payment"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "b2c9e794-4352-83bf-b454-816e9115663a",
+  "props": {
+   "Display Name": "ADJ Driver Improvement Center",
+   "Price": 65,
+   "Price Source URL": "https://www.adjdriverimprovement.com/classes/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Flat fee; site states no taxes and no extra certificate or processing fees",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://www.adjdriverimprovement.com/classes/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "0569e794-4352-82c8-b6e6-81dff763f62f",
+  "props": {
+   "Display Name": "All The Classes VA",
+   "Price": 69,
+   "Price Source URL": "https://www.alltheclassesva.com/store/p/online-driver-improvement-course-8hrs",
+   "Price Checked": "2026-10-01",
+   "Price Note": "$44 class + $25 non-refundable processing fee",
+   "Price Includes Fees": true
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "ff99e794-4352-8250-a028-81b8f30fb02b",
+  "props": {
+   "Display Name": "Alpha Driving School",
+   "Price": 65,
+   "Price Source URL": "https://alpha-driving-school.com/courses/driver-improvement",
+   "Price Checked": "2026-10-01",
+   "Price Note": "",
+   "Price Includes Fees": false,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://alpha-driving-school.com/courses/driver-improvement"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "2879e794-4352-8398-89a2-812b0491c8cc",
+  "props": {
+   "Display Name": "Axis Driving Courses",
+   "Price": 69.95,
+   "Price Source URL": "https://www.axisdrivingcourses.com/course/online-8-hour-driver-improvement-clinic-virginia/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "was $100.00 on site (struck through); homepage states No Hidden Fees",
+   "Price Includes Fees": false
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "03b9e794-4352-82f9-85e1-81a2d3531f6b",
+  "props": {
+   "Display Name": "Axis Driving Academy",
+   "Price": 100,
+   "Price Source URL": "https://axisdrivingacademy.com/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Site states all online courses must be paid in full and a contract returned before the training link is emailed",
+   "Price Includes Fees": false
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "fcc9e794-4352-831d-9a7b-8194f87c3e67",
+  "props": {
+   "Display Name": "DriveSafeToday",
+   "Price": 34.95,
+   "Price Source URL": "https://www.drivesafetoday.com/courses/virginia",
+   "Price Checked": "2026-10-01",
+   "Price Note": "$24.95 course + $10.00 DMV fee shown on every Virginia course option",
+   "Price Includes Fees": true
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "cc39e794-4352-831e-abd0-817ba8f9a272",
+  "props": {
+   "Display Name": "DriveClear",
+   "Price": 25.99,
+   "Price Source URL": "https://driveclear.net/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Site states one flat price with no processing fees; optional Rush Delivery ($3.99) and Study Guide ($2.99) add-ons excluded",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://driveclear.net/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "ffd9e794-4352-83f0-8df5-015c7847f078",
+  "props": {
+   "Display Name": "Driver Improvement Program of Virginia",
+   "Price": 79.99,
+   "Price Source URL": "http://www.dipofva.com",
+   "Price Checked": "2026-10-01",
+   "Price Note": "dipofva.com redirects to its NationalOnlineLearning-hosted storefront (va-drivercourses.com); price stated in that storefront's FAQ",
+   "Price Includes Fees": false,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "http://www.dipofva.com"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "60b9e794-4352-83c3-95a2-81823ccb5b8d",
+  "props": {
+   "Display Name": "Blackstone Driving School",
+   "Price": 49.99,
+   "Price Source URL": "https://blackstonedrivingschool.com/course/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Classroom version listed separately at $95.00",
+   "Price Includes Fees": false
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "3749e794-4352-824c-a318-0140e4f7073b",
+  "props": {
+   "Display Name": "Dinwiddie Driving School",
+   "Price": 70,
+   "Price Source URL": "https://www.dinwiddiedrivingschool.com/driver-improvement",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Onsite class is $75.00",
+   "Price Includes Fees": false
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "38a9e794-4352-8381-ab2b-81e616ba60fa",
+  "props": {
+   "Display Name": "Fun Driving Clinic",
+   "Price": 29.95,
+   "Price Source URL": "http://www.fundrivingclinic.com/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Site states price covers course, exam, certificate and DMV reporting; nothing added at checkout",
+   "Price Includes Fees": true,
+   "Timers": "Yes",
+   "Timers Source URL": "http://www.fundrivingclinic.com/",
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "http://www.fundrivingclinic.com/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "http://www.fundrivingclinic.com/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "6a89e794-4352-8311-8b73-819006cdfb02",
+  "props": {
+   "Display Name": "Easy Driver Improvement",
+   "Price": 30,
+   "Price Source URL": "https://cart.virginiaonlinedriverimprovement.com/cart/?productId=4cfb8258-327e-4995-843f-02b777deaca9",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Cart total $30.00 with no fees added; optional Study Guide (+$7.95) and Premier Pass (+$3.95) add-ons excluded",
+   "Price Includes Fees": true,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://www.virginiaonlinedriverimprovement.com/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.virginiaonlinedriverimprovement.com/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "3fd9e794-4352-82c1-921a-01f2cb6f2446",
+  "props": {
+   "Display Name": "IMPROV",
+   "Price": 39.95,
+   "Price Source URL": "https://www.myimprov.com/defensive-driving/virginia/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "was $49.95 on site (struck through)",
+   "Price Includes Fees": false,
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.myimprov.com/defensive-driving/virginia/"
+  }
+ },
+ {
+  "op": "update",
+  "db": "directory",
+  "pageId": "8b99e794-4352-82b9-8643-0128428cba75",
+  "props": {
+   "Display Name": "High Five Driving School",
+   "Price": 99,
+   "Price Source URL": "https://highfivedrive.com/online-driver-improvement-clinic/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "",
+   "Price Includes Fees": false,
+   "Final Exam": "Yes",
+   "Final Exam Source URL": "https://highfivedrive.com/online-driver-improvement-clinic/"
+  }
+ }
+]

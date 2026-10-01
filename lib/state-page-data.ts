@@ -72,6 +72,7 @@ export async function loadStateData(stateSlug: string) {
     });
     if (usesComparisonLayout(stateSlug, stateInfo, built)) comparison = built;
   }
-  return { stateMeta, stateInfo, directory, tier1, tier1Resolved, showComparison, noPartnerOffer, onlineStatus, comparison, allSchools };
+  const stateReq = stateReqs.get(stateMeta.code);
+  return { stateReq, stateMeta, stateInfo, directory, tier1, tier1Resolved, showComparison, noPartnerOffer, onlineStatus, comparison, allSchools };
 }
 

@@ -339,7 +339,10 @@ function mapStateInfo(page: PageObjectResponse): StateInfo {
     dismissalAnswer: getText(page, "Dismissal Answer") || null,
     administeringBody: getSelect(page, "Administering Body"),
     noPartnerOffer: getCheckbox(page, "No Partner Offer"),
-    programName: getText(page, "Program Name").trim() || null,
+    // P17: the short noun for the comparison H1 ("defensive driving course"). A
+    // dedicated field, because "Program Name" holds the program's descriptive name.
+    programName: getText(page, "Program Noun").trim() || null,
+    regulatorShort: getText(page, "Regulator Short").trim() || null,
     benefitSummary: getFullRichText(page, "Benefit Summary").trim() || null,
     // Course length: single source. courseHours is null unless Hours Source is
     // set, so an unsourced value can never render anywhere (Package 4).

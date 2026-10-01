@@ -688,8 +688,11 @@ To switch to coupon-code:
 ### State page (`app/[state]/page.tsx`)
 
 **P17 comparison-first layout** (rollout-gated by `P17_LAYOUT_STATES` in
-`lib/comparison.ts`: CA, TX, FL, AZ first; a state also needs its States DB
-**Program Name** set). One pure builder, `buildStateComparison`, feeds the page, its
+`lib/comparison.ts`: CA, TX, FL, AZ, DE, ID, MO, NV, NJ, VA as of 1 Oct 2026; the
+other card states are on a documented STOP list in `research/p17-progress.md`). A
+state also needs its States DB **Program Noun** ("defensive driving course"); the
+approval claim reads from **Regulator Short** (else the State Requirements short name;
+if neither, the copy makes no "-approved" claim). One pure builder, `buildStateComparison`, feeds the page, its
 metadata, the ItemList JSON-LD and the llms generator (via `lib/state-page-data.ts`
 `loadStateData`), so the row count, price range and "Prices verified" date agree
 everywhere. Order: question H1 ("Which online {program} should I use in {State}?")

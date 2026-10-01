@@ -170,6 +170,8 @@ export const CHECKOUT_ADJUST: Record<string, Record<string, CheckoutAdjust>> = {
   },
   idrivesafely: {
     TX: { addFee: 3, note: "Includes the $3.00 Texas Required Admin Fee the checkout adds.", verified: "2026-09-24" },
+    NY: { addFee: 8, note: "Includes the $8.00 NY DMV Processing Fee the checkout adds.", verified: "2026-09-28" },
+    VA: { addFee: 5, note: "Includes the $5.00 State Certificate Fee the checkout adds.", verified: "2026-09-28" },
   },
 };
 

@@ -282,7 +282,7 @@ export function buildComparisonTableItemList(opts: {
   const stateUrl = `${SITE}/${stateSlug}`;
   const approval = !hasApproval
     ? ""
-    : c.regulator && c.regulator !== "state"
+    : c.regulator
       ? `${c.regulator}-approved `
       : "state-approved ";
   return {
