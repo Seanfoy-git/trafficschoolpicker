@@ -1,0 +1,152 @@
+{
+ "DE": {
+  "noun": "defensive driving course",
+  "tier1": {
+   "drivesafeonline": {
+    "price": 19.95,
+    "url": "https://www.drivesafeonline.org/delaware/defensive-driving-courses/"
+   },
+   "trafficschoolonline": {
+    "price": 14.95,
+    "url": "https://www.trafficschoolonline.com/enroll/delaware/safe-driving/delptsins"
+   },
+   "gototrafficschool": {
+    "price": 14.95,
+    "url": "https://registration.gototrafficschool.com/course-selection/?st=DE"
+   },
+   "idrivesafely": {
+    "price": 16,
+    "checkout": 16
+   }
+  }
+ },
+ "ID": {
+  "noun": "defensive driving course",
+  "tier1": {
+   "drivesafeonline": {
+    "price": 24.95,
+    "url": "https://www.drivesafeonline.org/idaho/"
+   },
+   "trafficschoolonline": {
+    "price": 29.97,
+    "url": "https://www.trafficschoolonline.com/state/idaho-defensive-driving/"
+   },
+   "gototrafficschool": {
+    "price": 22,
+    "url": "https://registration.gototrafficschool.com/course-selection/?st=ID",
+    "note": "$17 + $5 cheapest certificate delivery"
+   },
+   "idrivesafely": {
+    "price": 19,
+    "checkout": 19
+   }
+  }
+ },
+ "MO": {
+  "noun": "driver improvement course",
+  "tier1": {
+   "drivesafeonline": {
+    "price": 24.95,
+    "url": "https://www.drivesafeonline.org/missouri/driver-improvement-program/",
+    "fees": true
+   },
+   "trafficschoolonline": {
+    "price": 29.97,
+    "url": "https://www.trafficschoolonline.com/state/missouri-driver-improvement/"
+   },
+   "gototrafficschool": {
+    "price": 29.95,
+    "url": "https://registration.gototrafficschool.com/course-selection/?st=MO",
+    "note": "$24.95 + $5 delivery"
+   },
+   "idrivesafely": {
+    "price": 19.95,
+    "checkout": 19.95
+   }
+  }
+ },
+ "NV": {
+  "noun": "traffic safety course",
+  "tier1": {
+   "drivesafeonline": {
+    "price": 24.95,
+    "url": "https://www.drivesafeonline.org/nevada/traffic-safety-course/",
+    "fees": true
+   },
+   "trafficschoolonline": {
+    "price": 29.97,
+    "url": "https://www.trafficschoolonline.com/enroll/nevada/safe-driving"
+   },
+   "gototrafficschool": {
+    "price": 24.95,
+    "url": "https://registration.gototrafficschool.com/course-selection/?st=NV"
+   },
+   "idrivesafely": {
+    "price": 19,
+    "checkout": 19
+   }
+  }
+ },
+ "NJ": {
+  "noun": "defensive driving course",
+  "tier1": {
+   "drivesafeonline": {
+    "price": null,
+    "url": "https://www.drivesafeonline.org/new-jersey/defensive-driving-course/",
+    "note": "page contradicted itself ($34.95 vs $28.95) on 28 Sep"
+   },
+   "trafficschoolonline": {
+    "price": 29.97,
+    "url": "https://www.trafficschoolonline.com/enroll/new-jersey/safe-driving"
+   },
+   "gototrafficschool": {
+    "price": 24.95,
+    "url": "https://registration.gototrafficschool.com/course-selection/?st=NJ",
+    "note": "$19.95 + $5; checkout course text says for drivers ordered by a court — confirm it is the MVC-approved DDP"
+   },
+   "idrivesafely": {
+    "price": 29,
+    "checkout": 29
+   }
+  }
+ },
+ "NY": {
+  "noun": "defensive driving course (PIRP)",
+  "tier1": {
+   "gototrafficschool": {
+    "price": 48.95,
+    "url": "https://registration.gototrafficschool.com/course-selection/?st=NY"
+   },
+   "idrivesafely": {
+    "price": 24,
+    "checkout": 32,
+    "note": "+$8 NY DMV Processing Fee at checkout"
+   }
+  }
+ },
+ "VA": {
+  "noun": "driver improvement clinic",
+  "tier1": {
+   "drivesafeonline": {
+    "price": 64.95,
+    "url": "https://www.drivesafeonline.org/virginia/driver-improvement/",
+    "fees": true,
+    "note": "$54.95 + $10 VA state certificate fee"
+   },
+   "trafficschoolonline": {
+    "price": 44.95,
+    "url": "https://www.trafficschoolonline.com/enroll/virginia/safe-driving"
+   },
+   "gototrafficschool": {
+    "price": 33.99,
+    "url": "https://registration.gototrafficschool.com/course-selection/?st=VA",
+    "note": "$28.99 + $5 electronic delivery (only option)"
+   },
+   "idrivesafely": {
+    "price": 49,
+    "checkout": 54,
+    "note": "+$5 State Certificate Fee at checkout"
+   }
+  }
+ }
+}

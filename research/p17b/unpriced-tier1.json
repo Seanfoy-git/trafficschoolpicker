@@ -1,0 +1,42 @@
+[
+ {
+  "label": "drivesafeonline-NJ",
+  "url": "https://www.drivesafeonline.org/new-jersey/defensive-driving-course/",
+  "reason": "Page contradicts itself: $34.95 (x3) vs 'all for just $28.95'; checkout total needs an account."
+ },
+ {
+  "label": "gototrafficschool-NJ",
+  "url": "https://registration.gototrafficschool.com/course-selection/?st=NJ",
+  "reason": "Cannot confirm the $19.95 checkout course is the NJ MVC-approved Defensive Driving Program (2-point reduction): checkout text targets court-ordered drivers; state page says 'Motor Vehicle Commission Approved' but no explicit point-reduction claim."
+ },
+ {
+  "label": "driversed-DE",
+  "url": "https://www.driversed.com/delaware/traffic-school/",
+  "reason": "sells no course of its own here; sends buyers to I Drive Safely"
+ },
+ {
+  "label": "driversed-ID",
+  "url": "https://www.driversed.com/idaho/",
+  "reason": "sells no course of its own here; sends buyers to I Drive Safely"
+ },
+ {
+  "label": "driversed-MO",
+  "url": "https://www.driversed.com/missouri/",
+  "reason": "sells no course of its own here; sends buyers to I Drive Safely"
+ },
+ {
+  "label": "driversed-NV",
+  "url": "https://www.driversed.com/nevada/",
+  "reason": "sells no course of its own here; sends buyers to I Drive Safely"
+ },
+ {
+  "label": "driversed-NJ",
+  "url": "https://www.driversed.com/new-jersey/",
+  "reason": "sells no course of its own here; sends buyers to I Drive Safely"
+ },
+ {
+  "label": "driversed-VA",
+  "url": "https://www.driversed.com/virginia/",
+  "reason": "sells no course of its own here; sends buyers to I Drive Safely"
+ }
+]

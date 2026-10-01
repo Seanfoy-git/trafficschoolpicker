@@ -1,0 +1,91 @@
+[
+ {
+  "op": "update",
+  "db": "states",
+  "pageId": "6dc9e794-4352-8288-80a5-0102815eb75a",
+  "props": {
+   "Program Noun": "defensive driving course",
+   "Regulator Short": "Delaware DMV",
+   "Hours Source URL": "https://regulations.delaware.gov/AdminCode/title2/2000/2200/2224.shtml"
+  }
+ },
+ {
+  "op": "update",
+  "db": "states",
+  "pageId": "3349e794-4352-82da-ac94-017b6d07428e",
+  "props": {
+   "Program Noun": "defensive driving course",
+   "Regulator Short": "Idaho Transportation Department",
+   "Hours Source URL": "https://adminrules.idaho.gov/rules/current/39/390271.pdf"
+  }
+ },
+ {
+  "op": "update",
+  "db": "states",
+  "pageId": "8479e794-4352-836e-8e0b-8171e967ec8f",
+  "props": {
+   "Program Noun": "driver improvement course",
+   "Regulator Short": "Missouri Safety Center",
+   "Hours Source URL": "https://revisor.mo.gov/main/OneSection.aspx?section=302.302"
+  }
+ },
+ {
+  "op": "update",
+  "db": "states",
+  "pageId": "5979e794-4352-835a-bce0-0137c0605049",
+  "props": {
+   "Program Noun": "traffic safety course",
+   "Regulator Short": "Nevada DMV",
+   "Hours Source URL": "https://www.leg.state.nv.us/NAC/NAC-483.html"
+  }
+ },
+ {
+  "op": "update",
+  "db": "states",
+  "pageId": "e809e794-4352-8299-b645-0116d98e4fe2",
+  "props": {
+   "Program Noun": "defensive driving course",
+   "Regulator Short": "NJ MVC",
+   "Benefit Summary": "Completing a New Jersey MVC-approved defensive driving course can take 2 points off your record once every 5 years and earns an auto insurance discount for 3 years, but it does not dismiss the ticket (N.J.S.A. 39:5-30.9; N.J.A.C. 11:3-24.4).",
+   "Hours Source URL": "https://www.law.cornell.edu/regulations/new-jersey/N-J-A-C-13-21-24-5"
+  }
+ },
+ {
+  "op": "update",
+  "db": "states",
+  "pageId": "3309e794-4352-82c3-9838-818b9dc1be4d",
+  "props": {
+   "Program Noun": "defensive driving course",
+   "Regulator Short": "NY DMV",
+   "Benefit Summary": "Completing a NY DMV-approved PIRP course takes up to 4 points off your total for suspension purposes (once every 18 months) and earns a 10% auto insurance discount for 3 years, but it does not dismiss the ticket or remove the conviction from your record (15 NYCRR 131.5; Insurance Law § 2336).",
+   "Hours Source URL": "https://dmv.ny.gov/forms/cr141.pdf"
+  }
+ },
+ {
+  "op": "update",
+  "db": "reqs",
+  "pageId": "8ad9e794-4352-8254-90e1-0180d0c5f4a9",
+  "props": {
+   "Reporting Source URL": "https://dmv.ny.gov/forms/cr141.pdf"
+  }
+ },
+ {
+  "op": "update",
+  "db": "states",
+  "pageId": "f079e794-4352-8278-b41d-816bfdbead30",
+  "props": {
+   "Program Noun": "driver improvement clinic",
+   "Regulator Short": "Virginia DMV",
+   "Benefit Summary": "Voluntarily finishing a DMV-licensed driver improvement clinic takes 5 demerit points off your record (or adds safe driving points if you have fewer than 5) or earns an auto-insurance premium reduction, your choice of one, no more than once every two years, and it does not dismiss the ticket (Va. Code § 46.2-498).",
+   "Hours Source URL": "https://www.dmv.virginia.gov/licenses-ids/improvement/pcbased"
+  }
+ },
+ {
+  "op": "update",
+  "db": "reqs",
+  "pageId": "5a19e794-4352-8286-9dac-01ba0de0ec3e",
+  "props": {
+   "Reporting Source URL": "https://www.dmv.virginia.gov/sites/default/files/forms/dic551.pdf"
+  }
+ }
+]

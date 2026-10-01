@@ -1,0 +1,536 @@
+[
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "drivesafeonline:DE",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.drivesafeonline.org/delaware/defensive-driving-courses/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.drivesafeonline.org/delaware/defensive-driving-courses/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "drivesafeonline-DE",
+  "schoolSlug": "drivesafeonline",
+  "props": {
+   "Price": 19.95,
+   "Price Source URL": "https://www.drivesafeonline.org/delaware/defensive-driving-courses/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Page price. Registration (my.drivesafeonline.org) requires creating an account (email/password) before any total is shown, so checkout total not verified. Page says the price includes the completion certificate ('full access to our defensive driving video course and your completion certificate') but has no 'no hidden fees'/total statement.",
+   "Price Includes Fees": false,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "drivesafeonline:ID",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.drivesafeonline.org/idaho/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "drivesafeonline-ID",
+  "schoolSlug": "drivesafeonline",
+  "props": {
+   "Price": 24.95,
+   "Price Source URL": "https://www.drivesafeonline.org/idaho/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Page price. Page says 'Certificate delivery options are available' (unspecified cost); registration requires creating an account before any total is shown, so a delivery fee could not be ruled out.",
+   "Price Includes Fees": false,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "drivesafeonline:MO",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.drivesafeonline.org/missouri/driver-improvement-program/",
+   "Completion Reporting": "Driver submits",
+   "Reporting Source URL": "https://www.drivesafeonline.org/missouri/driver-improvement-program/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "drivesafeonline-MO",
+  "schoolSlug": "drivesafeonline",
+  "props": {
+   "Price": 24.95,
+   "Price Source URL": "https://www.drivesafeonline.org/missouri/driver-improvement-program/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "'No hidden fees' stated on page; price includes completion certificate.",
+   "Price Includes Fees": true,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "drivesafeonline:NV",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.drivesafeonline.org/nevada/traffic-safety-course/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "drivesafeonline-NV",
+  "schoolSlug": "drivesafeonline",
+  "props": {
+   "Price": 24.95,
+   "Price Source URL": "https://www.drivesafeonline.org/nevada/traffic-safety-course/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "'No Hidden Fees' stated. Same $24.95 for the 'Reduce Points' (DMV) option. Nevada requires a notarized affidavit after the course before the certificate issues (notary cost is the driver's, not a school fee).",
+   "Price Includes Fees": true,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "drivesafeonline:NJ",
+  "props": {
+   "Timers": "No",
+   "Timers Source URL": "https://www.drivesafeonline.org/new-jersey/defensive-driving-course/",
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.drivesafeonline.org/new-jersey/defensive-driving-course/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "drivesafeonline:VA",
+  "props": {
+   "Timers": "No",
+   "Timers Source URL": "https://www.drivesafeonline.org/virginia/driver-improvement/",
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.drivesafeonline.org/virginia/driver-improvement/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "drivesafeonline-VA",
+  "schoolSlug": "drivesafeonline",
+  "props": {
+   "Price": 64.95,
+   "Price Source URL": "https://www.drivesafeonline.org/virginia/driver-improvement/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "$54.95 course + $10 VA state certificate fee (mandatory, stated on page) = $64.95 all-in. Page offers a Safe Driving Points (voluntary, VA licence) option.",
+   "Price Includes Fees": true,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "trafficschoolonline:DE",
+  "props": {
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.trafficschoolonline.com/state/delaware-defensive-driving/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "trafficschoolonline-DE",
+  "schoolSlug": "trafficschoolonline",
+  "props": {
+   "Price": 14.95,
+   "Price Source URL": "https://www.trafficschoolonline.com/state/delaware-defensive-driving/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Course card and guest checkout both show $14.95 (\"Total due $14.95\"); the same page FAQ still says $24.97, which is stale. Checkout total used.",
+   "Price Includes Fees": false,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "trafficschoolonline:ID",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://trafficschoolonline.com/enroll/idaho/safe-driving",
+   "Completion Reporting": "Driver submits",
+   "Reporting Source URL": "https://www.trafficschoolonline.com/state/idaho-defensive-driving/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "trafficschoolonline-ID",
+  "schoolSlug": "trafficschoolonline",
+  "props": {
+   "Price": 29.97,
+   "Price Source URL": "https://www.trafficschoolonline.com/state/idaho-defensive-driving/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "FAQ states all-inclusive, no hidden fees. Enroll page (Idaho 3 Point Credit) also shows $29.97.",
+   "Price Includes Fees": true,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "trafficschoolonline:MO",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.trafficschoolonline.com/state/missouri-driver-improvement/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "trafficschoolonline-MO",
+  "schoolSlug": "trafficschoolonline",
+  "props": {
+   "Price": 29.97,
+   "Price Source URL": "https://www.trafficschoolonline.com/state/missouri-driver-improvement/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Guest checkout (county/court selected, no account, no payment) showed 'Missouri Driver Improvement Course $29.97 ... Total due $29.97'. Site banner: 'No Hidden Fees' / 'One price. No surprises at checkout'.",
+   "Price Includes Fees": true,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "trafficschoolonline:NV",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://trafficschoolonline.com/enroll/nevada/safe-driving",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.trafficschoolonline.com/state/nevada-traffic-school/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "trafficschoolonline-NV",
+  "schoolSlug": "trafficschoolonline",
+  "props": {
+   "Price": 29.97,
+   "Price Source URL": "https://www.trafficschoolonline.com/state/nevada-traffic-school/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Point Reduction Course ('add 3 good points or remove 3 bad points'; requires NV licence). FAQ: '$29.97, including certificate processing'. Enroll page 'Nevada DMV 3 Point Credit' shows $29.97. Express delivery ($20-$43) is optional and only for court paper certificates. Recorded URL www.trafficschoolonline.com/enroll/nevada/safe-driving 404s; non-www trafficschoolonline.com/enroll/nevada/safe-driving works.",
+   "Price Includes Fees": true,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "trafficschoolonline:NJ",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.trafficschoolonline.com/state/new-jersey-defensive-driving/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.trafficschoolonline.com/state/new-jersey-defensive-driving/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "trafficschoolonline-NJ",
+  "schoolSlug": "trafficschoolonline",
+  "props": {
+   "Price": 29.97,
+   "Price Source URL": "https://www.trafficschoolonline.com/state/new-jersey-defensive-driving/",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Guest checkout (no account, no payment) showed 'New Jersey Point Reduction Course $29.97 ... Total due $29.97'. Site banner 'No Hidden Fees'.",
+   "Price Includes Fees": true,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "trafficschoolonline:VA",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://trafficschoolonline.com/enroll/virginia/safe-driving",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.trafficschoolonline.com/state/virginia-driver-improvement/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "trafficschoolonline-VA",
+  "schoolSlug": "trafficschoolonline",
+  "props": {
+   "Price": 44.95,
+   "Price Source URL": "https://trafficschoolonline.com/enroll/virginia/safe-driving",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Safe Driving Points option ('five good points'); enroll page (Virginia Voluntary 5 Safe Driving Points) shows $44.95. Site banner 'No Hidden Fees'; no state certificate fee mentioned.",
+   "Price Includes Fees": true,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "gototrafficschool:DE",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.gototrafficschool.com/state/delaware-online-defensive-driving",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.gototrafficschool.com/state/delaware-online-defensive-driving"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "gototrafficschool-DE",
+  "schoolSlug": "gototrafficschool",
+  "props": {
+   "Price": 14.95,
+   "Price Source URL": "https://registration.gototrafficschool.com/course-selection/?st=DE",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Registration cart for 'Delaware - Defensive Driving Program' shows Shipping 'US Mail (Free 7-10 business days) FREE', TOTAL $14.95. Optional upgrades (read-along, notification, unlimited attempts, same-day processing) excluded.",
+   "Price Includes Fees": true,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "gototrafficschool:ID",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://registration.gototrafficschool.com/course-selection/?st=ID"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "gototrafficschool-ID",
+  "schoolSlug": "gototrafficschool",
+  "props": {
+   "Price": 22,
+   "Price Source URL": "https://registration.gototrafficschool.com/course-selection/?st=ID",
+   "Price Checked": "2026-10-01",
+   "Price Note": "$17.00 course + $5.00 US Mail certificate delivery (cheapest delivery option; no free option offered) = $22.00 cart total.",
+   "Price Includes Fees": true,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "gototrafficschool:MO",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.gototrafficschool.com/state/missouri-online-driver-improvement",
+   "Completion Reporting": "Driver submits",
+   "Reporting Source URL": "https://www.gototrafficschool.com/state/missouri-online-driver-improvement"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "gototrafficschool-MO",
+  "schoolSlug": "gototrafficschool",
+  "props": {
+   "Price": 29.95,
+   "Price Source URL": "https://registration.gototrafficschool.com/course-selection/?st=MO",
+   "Price Checked": "2026-10-01",
+   "Price Note": "$24.95 course + $5.00 US Mail certificate delivery (cheapest; no free option) = $29.95 cart total. Course requires court permission (as MO DIP does). Checked with Boone County / Columbia Municipal Court.",
+   "Price Includes Fees": true,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "gototrafficschool:NV",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.gototrafficschool.com/state/nevada-online-traffic-school"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "gototrafficschool-NV",
+  "schoolSlug": "gototrafficschool",
+  "props": {
+   "Price": 24.95,
+   "Price Source URL": "https://registration.gototrafficschool.com/course-selection/?st=NV",
+   "Price Checked": "2026-10-01",
+   "Price Note": "Cart shows free US Mail delivery; TOTAL $24.95 (checked Clark County / Las Vegas Justice Court; same course & price for Washoe / Reno Justice Court).",
+   "Price Includes Fees": true,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "gototrafficschool:NJ",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://registration.gototrafficschool.com/course-selection/?st=NJ"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "gototrafficschool:VA",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.gototrafficschool.com/state/virginia-online-driver-improvement",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.gototrafficschool.com/state/virginia-online-driver-improvement"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "gototrafficschool-VA",
+  "schoolSlug": "gototrafficschool",
+  "props": {
+   "Price": 33.99,
+   "Price Source URL": "https://registration.gototrafficschool.com/course-selection/?st=VA",
+   "Price Checked": "2026-10-01",
+   "Price Note": "'Virginia - Safe Driving Points' $28.99 + $5.00 Electronic certificate delivery (only option) = $33.99 cart total.",
+   "Price Includes Fees": true,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "idrivesafely:ID",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.idrivesafely.com/traffic-school/idaho/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.idrivesafely.com/traffic-school/idaho/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "idrivesafely:MO",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.idrivesafely.com/driver-improvement/missouri/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "idrivesafely:NJ",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.idrivesafely.com/defensive-driving/new-jersey/online/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.idrivesafely.com/defensive-driving/new-jersey/online/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "variants",
+  "name": "idrivesafely:VA",
+  "props": {
+   "Has Final Exam Override": "Yes",
+   "Final Exam Source URL": "https://www.idrivesafely.com/driver-improvement/virginia/",
+   "Completion Reporting": "School reports",
+   "Reporting Source URL": "https://www.idrivesafely.com/driver-improvement/virginia/"
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "driversed-DE",
+  "schoolSlug": "driversed",
+  "props": {
+   "Price": null,
+   "Price Source URL": "https://www.driversed.com/delaware/traffic-school/",
+   "Price Checked": "2026-09-28",
+   "Price Note": "No course of its own for this state: the page sends ticket buyers to partner I Drive Safely (\"Provided by our partner company I Drive Safely\").",
+   "Price Includes Fees": false,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "driversed-ID",
+  "schoolSlug": "driversed",
+  "props": {
+   "Price": null,
+   "Price Source URL": "https://www.driversed.com/idaho/",
+   "Price Checked": "2026-09-28",
+   "Price Note": "No course of its own for this state: the page sends ticket buyers to partner I Drive Safely (\"Provided by our partner company I Drive Safely\").",
+   "Price Includes Fees": false,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "driversed-MO",
+  "schoolSlug": "driversed",
+  "props": {
+   "Price": null,
+   "Price Source URL": "https://www.driversed.com/missouri/",
+   "Price Checked": "2026-09-28",
+   "Price Note": "No course of its own for this state: the page sends ticket buyers to partner I Drive Safely (\"Provided by our partner company I Drive Safely\").",
+   "Price Includes Fees": false,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "driversed-NV",
+  "schoolSlug": "driversed",
+  "props": {
+   "Price": null,
+   "Price Source URL": "https://www.driversed.com/nevada/",
+   "Price Checked": "2026-09-28",
+   "Price Note": "No course of its own for this state: the page sends ticket buyers to partner I Drive Safely (\"Provided by our partner company I Drive Safely\").",
+   "Price Includes Fees": false,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "driversed-NJ",
+  "schoolSlug": "driversed",
+  "props": {
+   "Price": null,
+   "Price Source URL": "https://www.driversed.com/new-jersey/",
+   "Price Checked": "2026-09-28",
+   "Price Note": "No course of its own for this state: the page sends ticket buyers to partner I Drive Safely (\"Provided by our partner company I Drive Safely\").",
+   "Price Includes Fees": false,
+   "Approved": true
+  }
+ },
+ {
+  "op": "upsert",
+  "db": "pricing",
+  "label": "driversed-VA",
+  "schoolSlug": "driversed",
+  "props": {
+   "Price": null,
+   "Price Source URL": "https://www.driversed.com/virginia/",
+   "Price Checked": "2026-09-28",
+   "Price Note": "No course of its own for this state: the page sends ticket buyers to partner I Drive Safely (\"Provided by our partner company I Drive Safely\").",
+   "Price Includes Fees": false,
+   "Approved": true
+  }
+ }
+]

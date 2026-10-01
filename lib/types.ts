@@ -88,6 +88,10 @@ export type StateInfo = {
   // field; pluralized with a trailing "s". Null → the comparison layout's copy
   // can't be generated, so the state keeps its pre-P17 layout.
   programName: string | null;
+  // P17: short name of the body that approves online courses for this benefit
+  // ("Indiana BMV"), from the States DB "Regulator Short". Null → the State
+  // Requirements short name, and if that is missing too, copy makes no approval claim.
+  regulatorShort: string | null;
   // P17: one-sentence program benefit for the generated meta description
   // (States DB "Benefit Summary"); dropped first when the meta runs over 160 chars.
   benefitSummary: string | null;

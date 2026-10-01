@@ -68,6 +68,10 @@ const cleanUrl = (u: string) => u.split("?")[0].split("#")[0];
 async function main() {
   if (!PRICING_DB || !SCHOOLS_DB) { console.error("NOTION_PRICING_DB / NOTION_SCHOOLS_DB not set"); process.exit(1); }
   const ids = await schoolIdMap();
+  // Fail loudly: getAllSchools() returns [] on any Notion error (e.g. a stale token
+  // in the CI secrets), and the sync then "skips" every brand and exits green. That
+  // hid a dead sync for five weeks (Sep 2026). Zero schools is never a valid state.
+  if (ids.size === 0) throw new Error("No schools returned from Notion: check NOTION_TOKEN / NOTION_SCHOOLS_DB (the run would otherwise skip every brand and pass).");
 
   const ops: Array<{ label: string; id: string | null; props: any }> = [];
   const flaggedAll: Array<{ brand: string; code: string; status: string; options: any[]; note?: string }> = [];

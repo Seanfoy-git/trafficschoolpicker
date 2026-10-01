@@ -932,7 +932,7 @@ export default async function StatePage({ params }: Props) {
           {comparison && comparison.directoryCount > 0 && (
             <p className="mt-1 text-sm text-slate-300 max-w-3xl">
               Drawn from <span data-count="directory">{comparison.directoryCount}</span> schools on the official{" "}
-              {comparison.regulator} approved list, all shown in the directory below.
+              {comparison.regulator ?? "state"} approved list, all shown in the directory below.
             </p>
           )}
         </div>
@@ -947,7 +947,7 @@ export default async function StatePage({ params }: Props) {
         <section className="pt-6 pb-4 bg-white">
           <div className="max-w-6xl mx-auto px-4">
             <p className="text-base text-slate-700 leading-relaxed max-w-4xl">
-              {methodStatement(comparison, stateMeta.name, stateMeta.code, stateInfo)}
+              {methodStatement(comparison, stateMeta.name, stateMeta.code, stateInfo, data.stateReq)}
             </p>
           </div>
         </section>

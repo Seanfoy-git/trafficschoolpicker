@@ -26,3 +26,19 @@ Task 1b's pricing pass for the other 45 card states has not run yet. It runs wit
 second PR, after the four-state PR is reviewed. Until then, those states keep the
 pre-P17 layout, and their cards show "See price on site" where no confirmed price
 exists (the old "Check website" label is retired sitewide).
+
+## Sitewide PR (1 October 2026): unpriced tier-1 rows
+
+Checked on each school's own page (28 September, re-verified 1 October 2026).
+Evidence: `research/p17b/result-tier1.json`.
+
+| School | State | URL checked | Why there is no price | Row shows |
+|---|---|---|---|---|
+| DriversEd.com | DE, ID, MO, NV, NJ, VA | driversed.com/<state>/ | Sells no course of its own in these states. Every state page sends ticket buyers to partner I Drive Safely ("Provided by our partner company I Drive Safely"). | Price not published on site |
+| DriveSafe Online | NJ | drivesafeonline.org/new-jersey/defensive-driving-course/ | The page contradicts itself ($34.95 three times vs "all for just $28.95"), and the checkout total needs an account. | See price on site |
+| GoToTrafficSchool | NJ | registration.gototrafficschool.com/course-selection/?st=NJ | The only NJ checkout course ($19.95 + $5 mail) is described as for drivers "ordered by a court". We can't confirm it is the MVC-approved Defensive Driving Program that earns the 2-point reduction. | See price on site |
+
+### To fill by hand
+- **DriveSafe Online NJ:** check out and record the all-in total.
+- **GoToTrafficSchool NJ:** confirm with the school whether the $19.95 course is the MVC point-reduction program. If yes, record $24.95 all-in ($19.95 + $5 cheapest delivery).
+- **DriversEd.com:** not a pricing gap. It sells no course of its own in these six states, so whether it should keep a card there is an editorial question for P12.

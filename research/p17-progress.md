@@ -349,3 +349,110 @@ I restored the file and it passed with exit 0.
      "schools" (528 rows, about 40 real sites).
    - Texas's directory is TDLR driving-school licences, not DSC course providers.
    - The directory heading says "DMV-licensed" on TX, FL and AZ.
+
+---
+
+# Sitewide PR (P17 GO, 1 October 2026)
+
+Sean signed off the pilot on 28 September. Every card state was assessed against the
+STOP conditions. **Six states ship on the comparison-first layout: Delaware, Idaho,
+Missouri, Nevada, New Jersey, Virginia.** They join CA, TX, FL and AZ, for 10 in all.
+Every other card state is held back with a stated reason (STOP list below); the guard
+was not weakened for any of them.
+
+## STOP list (left on the pre-P17 layout)
+
+| State(s) | STOP reason |
+|---|---|
+| CO, GA, HI, IA, KS, MT, NM, OK, OR, RI, WV, WI, WY, WA | No statewide program or approving body; court-by-court (WA: court-granted deferred finding). "N X-approved schools compared" would be false. |
+| AL, AR, CT, MN | The only statewide program is a mature-driver (55+/60+) insurance discount; a "which online traffic school" table would misframe it. |
+| SD | Program record: "No statewide traffic-school program". |
+| DC | Only the two DC DMV providers qualify; our national cards are "not valid for DC point removal". |
+| SC | NSC-only course; No Partner Offer; one directory row. |
+| LA | Primary sources: the OMV-approval route (R.S. 32:402.2) was repealed in 2011; only individual courts approve. Online not addressed. |
+| MS | Miss. Code § 63-9-11 requires a court-approved course; Miss. AG Op. 07-00091 says instruction must be "by a human being". |
+| NC | No state-approved online course; the only state points course is the DMV's own invitation-only clinic (G.S. 20-16(c)). |
+| UT | DLD accepts only Utah Safety Council / National Safety Council courses (R708-3-3(1)). |
+| IN, NE, OH | Most or all of our reviewed schools are not on the state's approved list (NE: none of five; IN: only IDS; OH: none under their names). |
+| ND | I Drive Safely (a monetized card) is not on North Dakota's approved list. |
+| AK, TN | Framing holds, but only 2 of 5 reviewed schools sell the approved course and there are no online directory rows: 40%, under the guard's 80%. |
+| NY | Framing holds, but 2 of 5 reviewed schools sell PIRP; with 8 priced directory schools that is 10 of 13 rows (77%), under 80%. |
+
+## Fields populated (all with source URL and day-level date)
+- **States DB:** new `Program Noun` and `Regulator Short` fields. The descriptive
+  `Program Name` is no longer used for the H1. Noun, regulator and Hours Source URL
+  are set for the six states; Benefit Summary for NJ and VA (they were empty).
+- **State Requirements:** a Reporting Source URL for NY and VA, only where the
+  record says the school reports. NJ's record says "Driver Submits", which the
+  statute contradicts, so no source is cited (P10 flag).
+- **Pricing DB (tier 1):** 16 priced rows (DriveSafe Online, Traffic School
+  Online, GoToTrafficSchool) plus 6 "checked, no price" DriversEd rows. I Drive
+  Safely is synced, with new checkout adjustments NY +$8 and VA +$5.
+- **Directory DB (tier 2):** NV 11, NJ 19, VA 23 rows stored (NY 14 stored, but
+  NY doesn't ship). Rendered tier-2 rows: NV 8, NJ 14, VA 20 (one per school site).
+- **Variants DB:** per-school timers / final exam / reporting, each with a source URL.
+
+## Rows per state
+
+| State | Rows | Tier 1 priced | Tier 2 | Priced share | Range |
+|---|---|---|---|---|---|
+| Delaware | 5 | 4 of 5 | 0 | 80% | $14.95 to $19.95 |
+| Idaho | 5 | 4 of 5 | 0 | 80% | $19.00 to $29.97 |
+| Missouri | 5 | 4 of 5 | 0 | 80% | $19.95 to $29.97 |
+| Nevada | 13 | 4 of 5 | 8 | 92% | $13.95 to $29.99 |
+| New Jersey | 19 | 2 of 5 | 14 | 84% | $5.00 to $47.95 |
+| Virginia | 25 | 4 of 5 | 20 | 96% | $25.99 to $99.00 |
+
+Delaware, Idaho and Missouri sit exactly at 80% because DriversEd sells nothing of
+its own there. Any further loss of a price fails the guard, which is the intent.
+The rendered tables and every "Not stated" cell are in `research/p17b/rendered-tables.md`.
+
+## Omitted (priced but not published)
+- **Guardian Angel (VA):** injected spam link on the homepage.
+- **Ameer (VA):** the listing doesn't say the course is online.
+- **AKJ (VA):** the price is "starting at" only.
+- **urldefense.com (NJ):** the directory link is a mail-scanner wrapper.
+- **New York Safety Council (NY):** the same product as SafeMotorist.
+- **Urban Traffic School (NV):** coupon-only price.
+- **Fun & Cheap (NJ) promo:** the $37.95 needs a code, so $47.95 is used.
+- **Traffic School Online DE:** published at $14.95. The FAQ says $24.97, but the
+  card and the guest checkout both say "Total due $14.95".
+
+## The four owed proofs
+1. **Guard:** plant commit `43f9afe` failed its Vercel build. Redeploy
+   `trafficschoolpicker-c2etutfjq`, 2026-09-28T18:14:28Z:
+   `❌ comparison-first guard: 4 problem(s): arizona/california/florida/texas: (c) "Check website" appears on the page`,
+   then `npm run build exited with 1`. Revert commit `9d82f99` (the log is in its
+   message) built green.
+2. **Florida 5b (live grep, 28 Sep):** 0 hits each for the FLHSMV junk strings,
+   "CyberAcitve", "FL-BDI" and the duplicated "Driver Improvement Schools".
+   "Cyberactive (Miami-Dade Citations Only)" appears; the directory lists 51.
+3. **5a counts (live, all 51 + DC):** hero `data-count="directory"` equals the
+   directory heading on every state that has both; 0 mismatches. The llms.txt
+   count lines are now generated from the same directory rows (2,425 schools across
+   23 states), replacing the hand-written "2,000+ across 18 states".
+4. **ItemList == table:** `scripts/check-itemlist-order.ts` reports "order + prices
+   identical" on all 10 layout states in the local build. It is re-run on the
+   preview and on production for this PR.
+
+## Found along the way (flag for Sean)
+- **The daily xgrit sync has written nothing since at least 1 September.** The
+  GitHub Actions Notion secrets (NOTION_TOKEN and every NOTION_*_DB) date from
+  1 May, before the 25 August workspace move. `getAllSchools()` swallows the error,
+  so every run "skips" every brand and exits green. The weekly JSON-LD sync and the
+  offers scraper share the secrets. This PR makes both syncs fail loudly on zero
+  schools; the secrets themselves still need updating (awaiting Sean's go-ahead).
+- **The `tsp-site-cms` token can write**, although the incident doc calls it read-only.
+- **Program-record errors (P10, not changed here):**
+  - Reporting is "Driver Submits" in AK, NE, NJ and TN, where the regulator says
+    the school reports.
+  - NJ and VA are marked "insurance discount only", but NJ gives 2 points off and
+    VA up to 5 safe-driving points.
+  - Statute cites are wrong for DE (2224 → 2208), IN, MO, NV and TN.
+  - Eligibility text is out of date for DE, LA, MS, NE, NJ, NV, OH and VA.
+- **P12 card questions:**
+  - DriversEd.com sells no course of its own in any of these states (it sends
+    buyers to I Drive Safely).
+  - I Drive Safely's cart pre-ticks a $14.95 instant certificate (removable) in
+    16 states.
+  - IDS Ohio is a court-ordered course, not the BMV point-reduction course.

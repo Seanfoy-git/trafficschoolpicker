@@ -29,7 +29,14 @@ import { buildAffiliateLink } from "./affiliate";
 // Rollout gate (P17 brief: four states first, the rest only after Sean reviews
 // them). A state also needs its States DB "Program Name" set, since the H1, title
 // and method statement are generated from it.
-export const P17_LAYOUT_STATES: ReadonlySet<string> = new Set(["california", "texas", "florida", "arizona"]);
+export const P17_LAYOUT_STATES: ReadonlySet<string> = new Set([
+  // Pilot (PR #60/#61, signed off by Sean 28 Sep 2026).
+  "california", "texas", "florida", "arizona",
+  // Sitewide PR: the card states whose program record supports the table framing and
+  // whose rows reach the guard's 80% priced bar on sourced data. Every other card
+  // state is listed, with its reason, in research/p17-progress.md (STOP list).
+  "delaware", "idaho", "missouri", "nevada", "new-jersey", "virginia",
+]);
 
 export const TIER2_MAX = 20;
 // Tex. Educ. Code § 1001.352 (HB 3012, eff. 1 Sep 2025): no Texas driving safety
@@ -77,7 +84,9 @@ export type StateComparison = {
   verifiedLabel: string | null;
   programNoun: string;
   programNounPlural: string;
-  regulator: string;
+  /** Short name of the approving body, or null when no statewide body approves
+   *  courses for this benefit (then no copy claims "-approved"). */
+  regulator: string | null;
   /** Directory row count — the single source for every "{D} schools" count. */
   directoryCount: number;
   hasMonetizedLink: boolean;
@@ -111,9 +120,16 @@ export function hostOf(url: string | null | undefined): string | null {
   }
 }
 
-/** "CA DMV" after "California" reads "California CA DMV"; drop the leading code. */
-export function regulatorAfterStateName(regulator: string, stateCode: string): string {
-  return regulator.replace(new RegExp(`^${stateCode}\\s+`), "");
+/** "CA DMV" or "Indiana BMV" after the state name reads "California CA DMV" /
+ *  "Indiana Indiana BMV"; drop the leading code or state name. */
+export function regulatorAfterStateName(regulator: string, stateCode: string, stateName = ""): string {
+  const lead = stateName ? `(?:${stateCode}|${stateName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})` : stateCode;
+  return regulator.replace(new RegExp(`^${lead}\\s+`), "");
+}
+
+/** "California DMV-approved " after a state name, or "" when no body approves courses. */
+function approvedAfterState(c: StateComparison, stateName: string, stateCode: string): string {
+  return c.regulator ? `${regulatorAfterStateName(c.regulator, stateCode, stateName)}-approved ` : "";
 }
 
 /** Price shown for a tier-1 row: identical to the card (and its Offer). */
@@ -263,7 +279,7 @@ export function buildStateComparison(input: {
     verifiedLabel: verifiedIso ? dayLabel(verifiedIso) : null,
     programNoun: noun,
     programNounPlural: `${noun}s`,
-    regulator: stateReq?.approvalBodyShort || "state",
+    regulator: stateInfo?.regulatorShort || stateReq?.approvalBodyShort || null,
     directoryCount: directory.length,
     hasMonetizedLink: rows.some((r) => r.monetized),
     anyFeesFolded: priced.some((r) => r.priceIncludesFees),
@@ -284,7 +300,9 @@ export function comparisonTitle(c: StateComparison, stateName: string, year: num
 
 export function comparisonSubhead(c: StateComparison): string {
   const date = c.verifiedLabel ? ` Prices verified ${c.verifiedLabel}.` : "";
-  return `${c.count} ${c.regulator}-approved schools compared on price and rules.${date}`;
+  return c.regulator
+    ? `${c.count} ${c.regulator}-approved schools compared on price and rules.${date}`
+    : `${c.count} schools compared on price and rules.${date}`;
 }
 
 export function comparisonH2(c: StateComparison, stateName: string): string {
@@ -298,26 +316,35 @@ export function reviewedTableHeading(c: StateComparison, stateName: string, k: n
 
 /** Second table, below the cards: licensed schools we priced but have not reviewed. */
 export function otherTableHeading(c: StateComparison, stateName: string, stateCode: string): string {
-  return `Other ${stateName} ${regulatorAfterStateName(c.regulator, stateCode)}-approved ${c.programNounPlural} we priced`;
+  return `Other ${stateName} ${approvedAfterState(c, stateName, stateCode)}${c.programNounPlural} we priced`;
 }
 
-/** Who completion reaches: the administering agency where the record names one, else the court. */
-function submitter(stateInfo: StateInfo | null): string {
+/** Who completion reaches: the administering agency where the record names one,
+ *  else the agency in the State Requirements delivery value ("To MVC", "Electronic
+ *  to DMV"), else the court. */
+function submitter(stateInfo: StateInfo | null, stateReq?: StateRequirement): string {
   const body = stateInfo?.administeringBody;
-  return body && /^(DMV|BMV|MVA|DPS)$/.test(body) ? body : "court";
+  if (body && /^(DMV|BMV|MVA|DPS)$/.test(body)) return body;
+  const m = stateReq?.certificateDelivery?.match(/\b(DMV|MVC|BMV|MVA|DPS)\b/);
+  return m ? m[1] : "court";
 }
 
-export function methodStatement(c: StateComparison, stateName: string, stateCode: string, stateInfo: StateInfo | null): string {
-  const reg = regulatorAfterStateName(c.regulator, stateCode);
+export function methodStatement(
+  c: StateComparison,
+  stateName: string,
+  stateCode: string,
+  stateInfo: StateInfo | null,
+  stateReq?: StateRequirement
+): string {
   const date = c.verifiedLabel ? ` Prices verified ${c.verifiedLabel}.` : "";
   return (
-    `We compared ${c.count} ${stateName} ${reg}-approved online ${c.programNounPlural} on price, course length, ` +
-    `timers, final exam and how completion reaches the ${submitter(stateInfo)}, using each school's own site.${date}`
+    `We compared ${c.count} ${stateName} ${approvedAfterState(c, stateName, stateCode)}online ${c.programNounPlural} on price, course length, ` +
+    `timers, final exam and how completion reaches the ${submitter(stateInfo, stateReq)}, using each school's own site.${date}`
   );
 }
 
 export function comparisonMetaDescription(c: StateComparison, stateName: string, stateCode: string, benefit: string | null): string {
-  const reg = regulatorAfterStateName(c.regulator, stateCode);
+  const appr = approvedAfterState(c, stateName, stateCode);
   const range =
     c.minPrice !== null && c.maxPrice !== null
       ? c.minPrice === c.maxPrice
@@ -325,15 +352,15 @@ export function comparisonMetaDescription(c: StateComparison, stateName: string,
         : ` (${formatPrice(c.minPrice)} to ${formatPrice(c.maxPrice)})`
       : "";
   const facts = `compared on price${range}, course length, timers, exam and reporting`;
-  const base = `${c.count} ${stateName} ${reg}-approved online ${c.programNounPlural} ${facts}, each fact linked to the school's own page.`;
+  const base = `${c.count} ${stateName} ${appr}online ${c.programNounPlural} ${facts}, each fact linked to the school's own page.`;
   // Cap at 160 characters. The brief's template first; drop the benefit phrase
   // first, then shorten the least load-bearing words, one step at a time, keeping
   // the count, the state, the program and the price range to the last.
   const candidates = [
     benefit ? `${base} ${benefit}` : null,
     base,
-    `${c.count} ${stateName} ${reg}-approved online ${c.programNounPlural} ${facts}, each linked to its source.`,
-    `${c.count} ${stateName} ${reg}-approved ${c.programNounPlural} ${facts}, each linked to its source.`,
+    `${c.count} ${stateName} ${appr}online ${c.programNounPlural} ${facts}, each linked to its source.`,
+    `${c.count} ${stateName} ${appr}${c.programNounPlural} ${facts}, each linked to its source.`,
     `${c.count} ${stateName} online ${c.programNounPlural} ${facts}, each linked to its source.`,
     `${c.count} ${stateName} online ${c.programNounPlural} ${facts}.`,
   ].filter((x): x is string => x !== null);
