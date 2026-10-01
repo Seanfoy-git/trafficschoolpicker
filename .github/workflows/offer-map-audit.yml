@@ -11,6 +11,13 @@ on:
     - cron: "0 14 * * *" # daily 14:00 UTC (after the daily-offers price pass)
   workflow_dispatch:
 
+# One Notion-writing job at a time across every workflow in this repo: the jobs
+# share one Notion integration's rate limit and each can fire the deploy hook.
+# Queue, never cancel, so an in-flight sync always finishes its writes.
+concurrency:
+  group: notion-writes
+  cancel-in-progress: false
+
 jobs:
   audit:
     runs-on: ubuntu-latest
