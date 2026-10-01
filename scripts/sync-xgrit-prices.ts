@@ -81,8 +81,10 @@ async function main() {
   // when that is lower. Unreadable rules must stop the run: proceeding would overwrite
   // the very prices the rules protect.
   const rules = await fetchVerifiedRules(notion);
-  if (process.env.NOTION_SCRAPER_RULES_DB && rules.length === 0) {
-    throw new Error("Scraper Rules DB returned no Verified rules (unshared or unreadable): refusing to run, as it would overwrite Verified prices.");
+  // Unconditional: an unset NOTION_SCRAPER_RULES_DB also reads as "no rules", which
+  // silently fell back to overwriting Verified prices on 1 Oct 2026.
+  if (rules.length === 0) {
+    throw new Error("Scraper Rules DB returned no Verified rules (env NOTION_SCRAPER_RULES_DB unset, or the DB unshared/unreadable): refusing to run, as it would overwrite Verified prices.");
   }
   const verified = new Map(
     rules.filter((x) => x.verifiedPrice != null).map((x) => [`${x.schoolSlug}-${x.state}`, x.verifiedPrice as number])
