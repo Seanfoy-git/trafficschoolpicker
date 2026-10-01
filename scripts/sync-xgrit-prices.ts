@@ -20,6 +20,7 @@ import { config } from "dotenv";
 config({ path: ".env.local" });
 import { makeNotionClient } from "./lib/notion-client";
 import { resolveBrandTargets, fetchStatePrices, resolvePrice, withBrowser, CHECKOUT_ADJUST } from "./lib/ids-pricing";
+import { fetchVerifiedRules } from "./config/scraper-rules";
 
 const WRITE = process.argv.includes("--write");
 const CI = process.argv.includes("--ci"); // write + emit xgrit-price-sync.json; issue only on flags/drift
@@ -43,7 +44,7 @@ async function schoolIdMap(): Promise<Map<string, string>> {
   return map;
 }
 
-async function existingRow(slug: string, code: string): Promise<{ id: string | null; price: number | null; original: number | null; activeOffer: boolean; salePrice: number | null; school: string | null; checked?: string | null; sourceUrl?: string | null }> {
+async function existingRow(slug: string, code: string): Promise<{ id: string | null; price: number | null; original: number | null; activeOffer: boolean; salePrice: number | null; school: string | null; checked?: string | null; sourceUrl?: string | null; offerSeen?: string | null }> {
   const res = await notion.databases.query({ database_id: PRICING_DB, filter: { property: "Label", title: { equals: `${slug}-${code}` } }, page_size: 1 });
   const r = res.results[0] as any;
   if (!r) return { id: null, price: null, original: null, activeOffer: false, salePrice: null, school: null };
@@ -56,6 +57,7 @@ async function existingRow(slug: string, code: string): Promise<{ id: string | n
     school: r.properties?.["School"]?.relation?.[0]?.id ?? null,
     checked: r.properties?.["Price Checked"]?.date?.start ?? null,
     sourceUrl: r.properties?.["Price Source URL"]?.url ?? null,
+    offerSeen: r.properties?.["Offer Seen"]?.date?.start ?? null,
   };
 }
 
@@ -72,6 +74,19 @@ async function main() {
   // in the CI secrets), and the sync then "skips" every brand and exits green. That
   // hid a dead sync for five weeks (Sep 2026). Zero schools is never a valid state.
   if (ids.size === 0) throw new Error("No schools returned from Notion: check NOTION_TOKEN / NOTION_SCHOOLS_DB (the run would otherwise skip every brand and pass).");
+
+  // Verified-ruled rows (Sean, 1 Oct 2026): where the Scraper Rules DB holds a Verified
+  // rule for a brand-state, its Verified Price owns the Pricing row's Price. This sync
+  // never overwrites it; it only writes the live checkout price as a Sale Price offer
+  // when that is lower. Unreadable rules must stop the run: proceeding would overwrite
+  // the very prices the rules protect.
+  const rules = await fetchVerifiedRules(notion);
+  if (process.env.NOTION_SCRAPER_RULES_DB && rules.length === 0) {
+    throw new Error("Scraper Rules DB returned no Verified rules (unshared or unreadable): refusing to run, as it would overwrite Verified prices.");
+  }
+  const verified = new Map(
+    rules.filter((x) => x.verifiedPrice != null).map((x) => [`${x.schoolSlug}-${x.state}`, x.verifiedPrice as number])
+  );
 
   const ops: Array<{ label: string; id: string | null; props: any }> = [];
   const flaggedAll: Array<{ brand: string; code: string; status: string; options: any[]; note?: string }> = [];
@@ -98,6 +113,27 @@ async function main() {
         if (adj?.addFee) r.current = +(r.current + adj.addFee).toFixed(2);
 
         const ex = await existingRow(brand, code);
+
+        const ruled = verified.get(`${brand}-${code}`);
+        if (ruled != null) {
+          const sourceUrl = cleanUrl(targets.get(code)!);
+          if (!ex.id) { console.log(`${code} | verified $${ruled} (Scraper Rules owns this row; none exists yet) | skip`); continue; }
+          const discounted = r.current < ruled - 0.01;
+          const props: any = { "Price Source URL": { url: sourceUrl }, "Price Checked": { date: { start: TODAY } } };
+          if (discounted) {
+            props["Active Offer"] = { checkbox: true };
+            props["Sale Price"] = { number: r.current };
+            props["Offer Seen"] = { date: { start: TODAY } };
+          }
+          const same =
+            ex.checked === TODAY && ex.sourceUrl === sourceUrl &&
+            (!discounted || (ex.activeOffer && ex.salePrice === r.current && ex.offerSeen === TODAY));
+          console.log(`${code} | verified $${ruled} kept | checkout $${r.current}${discounted ? ` -> Sale Price $${r.current}` : " (no discount)"} | ${r.status} | ${same ? "unchanged" : "UPDATE"} (Verified rule)`);
+          if (!same) ops.push({ label: `${brand}-${code}`, id: ex.id, props });
+          await new Promise((res) => setTimeout(res, 300));
+          continue;
+        }
+
         // Struck regular: prefer the API's. If the API collapsed it but an existing
         // offer-model row carried the true regular in its Price field, recover it.
         let regular = r.regular;

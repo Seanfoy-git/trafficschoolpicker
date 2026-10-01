@@ -5,6 +5,13 @@ on:
     - cron: "0 9 1 * *" # 1st of each month, 9am UTC
   workflow_dispatch: # Allow manual trigger
 
+# One Notion-writing job at a time across every workflow in this repo: the jobs
+# share one Notion integration's rate limit and each can fire the deploy hook.
+# Queue, never cancel, so an in-flight sync always finishes its writes.
+concurrency:
+  group: notion-writes
+  cancel-in-progress: false
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
