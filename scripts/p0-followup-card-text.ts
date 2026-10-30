@@ -19,6 +19,16 @@
  *     Cons are out of scope (DriveSafe Online's "Not available in all 50
  *     states" is accurate and stays).
  *
+ * 2d. Two Traffic Schools rows the site doesn't render (a second DriversEd.com
+ *     row and "[ARCHIVED DUP] iDriveSafely") are archived only if no row in any
+ *     other database relates to them: Notion relations from School Pricing,
+ *     School State Variants, School Directory and Affiliate Programs, and the
+ *     slug text the variants join on. Affiliate Programs isn't shared with the
+ *     site token; pass --affiliate-programs-db=<id> with a token that can read
+ *     it. Anything related, or anything that can't be checked, means no archive:
+ *     their "all 50 states" pros and One Liner text are deleted instead, and the
+ *     relations are listed.
+ *
  * Variant rows are the ones the site renders (getSchoolVariantsForState). Each
  * change is made only when the current text matches exactly.
  */
@@ -48,7 +58,40 @@ const ALL50: Record<string, string | null> = {
   "Among the most widely accepted online traffic schools, available in all 50 states":
     "National online provider. Check it's approved for your state's program before you buy.",
 };
-const ALL50_RE = /all 50 states/i;
+const ALL50_RE = /all[- ]50[- ]states?/i;
+
+// 2d: rows the site doesn't render (from the first dry run), matched by page id AND title.
+const UNUSED_ROWS = [
+  { id: "9149e794-4352-823d-bfef-81bb0d1554d8", title: "DriversEd.com" },
+  { id: "5e39e794-4352-837c-930c-016f6befff47", title: "[ARCHIVED DUP] iDriveSafely" },
+];
+const AFFILIATE_DB = process.argv.find((a) => a.startsWith("--affiliate-programs-db="))?.split("=")[1] ?? null;
+const norm = (id: string) => id.replace(/-/g, "");
+
+/** Every Notion relation into the Traffic Schools DB that points at `pageId`, across the databases we can read. */
+async function relationsTo(pageId: string): Promise<{ found: string[]; unchecked: string[] }> {
+  const schoolsDb = norm(process.env.NOTION_SCHOOLS_DB!);
+  const dbs: Array<[string, string | undefined]> = [
+    ["School Pricing", process.env.NOTION_PRICING_DB],
+    ["School State Variants", process.env.NOTION_SCHOOL_VARIANTS_DB],
+    ["School Directory", process.env.NOTION_DIRECTORY_DB],
+    ["Affiliate Programs", AFFILIATE_DB ?? undefined],
+  ];
+  const found: string[] = [];
+  const unchecked: string[] = [];
+  for (const [name, id] of dbs) {
+    if (!id) { unchecked.push(`${name}: no database id (not shared with this token; pass --affiliate-programs-db=<id>)`); continue; }
+    let schema;
+    try { schema = await notion.databases.retrieve({ database_id: id }); } catch (e) { unchecked.push(`${name}: can't read (${(e as { code?: string }).code ?? e})`); continue; }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    for (const [prop, def] of Object.entries((schema as any).properties) as [string, any][]) {
+      if (def.type !== "relation" || norm(def.relation.database_id) !== schoolsDb) continue;
+      const r = await notion.databases.query({ database_id: id, filter: { property: prop, relation: { contains: pageId } } });
+      for (const row of r.results as PageObjectResponse[]) found.push(`${name} > ${title(row)} (page ${row.id}) via "${prop}"`);
+    }
+  }
+  return { found, unchecked };
+}
 
 /** Pending list edits per page+field, so several edits to one Pros field become one write. */
 const pending = new Map<string, { pageId: string; db: string; page: string; field: string; raw: string; items: string[]; join: (x: string[]) => string; notes: string[] }>();
@@ -93,9 +136,42 @@ async function main() {
     e.notes.push(newPro === null ? `delete ${JSON.stringify(oldPro)}` : `${JSON.stringify(oldPro)} -> ${JSON.stringify(newPro)}`);
   }
 
+  // 2d: archive the two unused rows only if nothing relates to them.
+  const unusedIds = new Set<string>();
+  for (const u of UNUSED_ROWS) {
+    const page = (await notion.pages.retrieve({ page_id: u.id })) as PageObjectResponse;
+    const t = title(page);
+    if (t !== u.title) { skips.push({ db: SDB, page: u.id, field: "(row)", reason: `title is not ${JSON.stringify(u.title)}`, found: t }); continue; }
+    unusedIds.add(u.id);
+    const name = `${t} (page ${u.id})`;
+    const { found, unchecked } = await relationsTo(u.id);
+    const slug = fullText(page, "Slug") ?? "";
+    if (slug) {
+      const v = await notion.databases.query({ database_id: process.env.NOTION_SCHOOL_VARIANTS_DB!, filter: { property: "School Slug", rich_text: { equals: slug } } });
+      if (v.results.length) found.push(`School State Variants: ${v.results.length} row(s) with School Slug "${slug}" (the slug the live ${slug} row also carries)`);
+    }
+    if (!found.length && !unchecked.length) {
+      changes.push({ db: SDB, page: name, pageId: u.id, field: "(archive row)", current: "row present (no relations found in any database)", next: "archived (Notion trash, 30 days)", property: {}, archive: true });
+      continue;
+    }
+    for (const f of found) flags.push({ db: SDB, page: name, field: "(relation)", note: "relates to this row, so it is not archived", found: f });
+    for (const x of unchecked) flags.push({ db: SDB, page: name, field: "(relation check)", note: "couldn't be checked, so the row is not archived", found: x });
+    // Fallback: delete its "all 50 states" pros and One Liner text.
+    const pros = fullText(page, "Pros") ?? "";
+    if (ALL50_RE.test(pros)) {
+      const e = listEdit(u.id, SDB, name, "Pros", pros);
+      for (const item of [...e.items]) if (ALL50_RE.test(item)) { e.items.splice(e.items.indexOf(item), 1); e.notes.push(`delete ${JSON.stringify(item)}`); }
+    }
+    const ol = fullText(page, "One Liner") ?? "";
+    if (ALL50_RE.test(ol)) changes.push({ db: SDB, page: name, pageId: u.id, field: "One Liner", current: ol, next: "", property: { "One Liner": { rich_text: [] } } });
+    const bf = fullText(page, "Best For") ?? "";
+    if (ALL50_RE.test(bf)) flags.push({ db: SDB, page: name, field: "Best For", note: "coverage claim outside the reviewed fields (Pros, One Liner); unchanged", found: bf });
+  }
+
   // 2c: scan every row of both DBs.
   const scan = async (dbId: string, dbName: string) => {
     for (const page of await queryAll(dbId)) {
+      if (unusedIds.has(page.id)) continue; // handled by 2d
       const name = `${title(page)} (page ${page.id})`;
       const fields = Object.keys(page.properties).filter((f) => /^Pros\b|^One Liner$|^Best For$/.test(f));
       for (const field of fields) {
