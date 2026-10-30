@@ -8,6 +8,8 @@
  * A protected preview works too: set VERCEL_AUTOMATION_BYPASS_SECRET and pass
  * --base=<preview URL>. Exits 1 if any check fails.
  */
+export {}; // a module, so its helpers don't collide with other top-level scripts
+
 const arg = (k: string) => process.argv.find((a) => a.startsWith(`--${k}=`))?.split("=").slice(1).join("=");
 const BASE = (arg("base") ?? "http://localhost:3000").replace(/\/$/, "");
 const TASKS = new Set((arg("task") ?? "1,2,3").split(","));
