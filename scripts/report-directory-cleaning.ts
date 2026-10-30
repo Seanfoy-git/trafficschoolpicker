@@ -31,15 +31,15 @@ import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoint
 import { APPLY, assertWritable, fullText, notion } from "./lib/notion-edit";
 
 const KEEP_RICHER = process.argv.includes("--keep-richer");
-import { cleanDirectory, cleanName, directoryListLabel, licenceFromName, PLACEHOLDER_LICENSE } from "../lib/directory-filter";
+import { cleanDirectory, cleanName, directoryListLabel, licenceFromName, PLACEHOLDER_LICENSE, richness } from "../lib/directory-filter";
 import { getAllStateSlugs, getStateBySlug } from "../lib/state-utils";
 import type { DirectorySchool } from "../lib/types";
 
-/** PR #69's reviewed removal counts. */
+/** Reviewed removal counts (Sean, 30 Oct 2026: PR #69's table plus AZ +1, NV +2, ND +1). */
 const EXPECTED_REMOVED: Record<string, number> = {
-  Arizona: 239, Connecticut: 2, Georgia: 9, Maryland: 11, Nevada: 43, "New Jersey": 3, "New York": 4, Virginia: 51, Washington: 7,
+  Arizona: 240, Connecticut: 2, Georgia: 9, Maryland: 11, Nevada: 45, "New Jersey": 3, "New York": 4, "North Dakota": 1, Virginia: 51, Washington: 7,
 };
-const EXPECTED_TOTAL = 369;
+const EXPECTED_TOTAL = 373;
 
 type Row = DirectorySchool & { page: PageObjectResponse };
 
@@ -106,11 +106,17 @@ async function main() {
     console.log(`${st.name} | ${rows.length} | ${kept.length} | ${removed.length} | ${[...by].map(([k, v]) => `${k} ${v}`).join(", ") || "-"} | All ${kept.length} ${label.noun} (${label.source})`);
     if ((EXPECTED_REMOVED[st.name] ?? 0) !== removed.length) mismatches.push(`${st.name}: ${removed.length} removed, PR #69 table says ${EXPECTED_REMOVED[st.name] ?? 0}`);
 
-    // a. archive; the reviewed rule for duplicates is "keep the first".
+    // a. archive. Duplicates: the richer row is kept (price + source, then phone), else the first.
     const order = new Map(rows.map((r, i) => [r.id, i]));
+    const byId = new Map(rows.map((r) => [r.id, r]));
+    const why = (r: Row) => [r.price != null && r.priceSourceUrl ? `price $${r.price} + source` : "no price+source", r.phone?.trim() ? "phone" : "no phone"].join(", ");
     for (const x of removed) {
-      if (x.keptId && (order.get(x.keptId) ?? 0) > (order.get(x.id) ?? 0)) {
-        keepNotFirst.push(`${st.name}: would keep ${JSON.stringify(rows[order.get(x.keptId)!].name)} (richer) over the first, ${JSON.stringify(x.name)} (${x.license})`);
+      if (x.keptId) {
+        const k = byId.get(x.keptId)!, d = byId.get(x.id)!;
+        const firstKept = (order.get(x.keptId) ?? 0) < (order.get(x.id) ?? 0);
+        const rule = richness(k) > richness(d) ? "richer" : "first (tie)";
+        console.log(`KEEP     ${st.name} | ${x.reason} ${x.license} | keep ${JSON.stringify(k.name.slice(0, 60))} [${why(k)}; ${firstKept ? "first" : "later"} row] over ${JSON.stringify(d.name.slice(0, 60))} [${why(d)}] -> ${rule}`);
+        if (!firstKept) keepNotFirst.push(`${st.name}: keeps ${JSON.stringify(k.name)} [${why(k)}] over the first, ${JSON.stringify(d.name)} [${why(d)}]`);
       }
       archive.push({ id: x.id, state: st.name, reason: x.reason, name: x.name });
     }
@@ -186,7 +192,8 @@ async function main() {
     if (!KEEP_RICHER) for (const k of keepNotFirst) console.error(`  keep-first conflict: ${k} (rerun with --keep-richer to keep the richer row)`);
     process.exit(1);
   }
-  console.log("\ncounts match PR #69's table (AZ 239, CT 2, GA 9, MD 11, NV 43, NJ 3, NY 4, VA 51, WA 7; total 369).");
+  console.log(`\ncounts match the reviewed table (${Object.entries(EXPECTED_REMOVED).map(([k, v]) => `${k} ${v}`).join(", ")}; total ${EXPECTED_TOTAL}).`);
+  if (keepNotFirst.length) console.log(`keeps that are not the first row (--keep-richer): \n  ${keepNotFirst.join("\n  ")}`);
 
   if (!APPLY) return;
   const first = archive[0]?.id ?? [...updates.keys()][0];

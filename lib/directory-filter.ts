@@ -141,15 +141,20 @@ export interface CleanResult {
   removed: { reason: JunkReason | "duplicate license" | "duplicate name"; name: string; license: string; id: string; keptId?: string }[];
 }
 
-/** How much a row carries: of two duplicates, the richer one is kept (it may hold the verified price). */
-function richness(r: DirectorySchool): number {
-  return (r.price != null ? 8 : 0) + (r.priceSourceUrl ? 4 : 0) + (r.website ? 2 : 0) + (r.phone ? 1 : 0);
+/**
+ * Which of two duplicates is kept (Sean, 30 Oct 2026): a row with a price AND a
+ * price source beats one without; next, a row with a phone beats one without;
+ * otherwise the first is kept (a tie never replaces it).
+ */
+export function richness(r: Pick<DirectorySchool, "price" | "priceSourceUrl" | "phone">): number {
+  return (r.price != null && r.priceSourceUrl ? 2 : 0) + (r.phone?.trim() ? 1 : 0);
 }
 
 /**
  * Drop junk rows and de-duplicate on license number within the state (on the
  * name and website where the license is a placeholder). Of each duplicate set
- * the richest row is kept, in the position of the first.
+ * the richer row (richness) is kept, in the position of the first; on a tie,
+ * the first.
  */
 export function cleanDirectory(rows: DirectorySchool[]): CleanResult {
   const removed: CleanResult["removed"] = [];
