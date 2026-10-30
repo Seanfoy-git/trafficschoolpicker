@@ -16,6 +16,8 @@ const TASKS = new Set((arg("task") ?? "1,2,3").split(","));
 const headers: Record<string, string> = { "user-agent": "Mozilla/5.0 (verify-p0-followup)" };
 if (process.env.VERCEL_AUTOMATION_BYPASS_SECRET) headers["x-vercel-protection-bypass"] = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
 
+const MO_DISMISSAL =
+  "No. If the court orders it, finishing an approved eight-hour driver-improvement course within 60 days of your conviction means no points are assessed for that violation (RSMo § 302.302). The conviction still stands. Once in any 36 months; not for commercial-license holders or violations in a commercial vehicle.";
 const VA_DISMISSAL =
   "Not by itself. The clinic earns a 5-point credit or, if your insurer offers one, a premium reduction. You choose one, once every two years. Virginia law bars a judge from reducing or dismissing a charge because of a clinic only for CDL holders and commercial-vehicle offenses (Va. Code § 46.2-505(B)); for everyone else it's the judge's call.";
 
@@ -67,7 +69,7 @@ async function task1() {
   const kf = va.match(/Ticket dismissal\s+(.{0,400})/);
   ok(!!kf && kf[1].startsWith(VA_DISMISSAL), "/virginia Key Facts 'Ticket dismissal' row is the 1c text");
   ok(va.includes(`Does it dismiss your ticket? ${VA_DISMISSAL}`), "/virginia banner shows the 1c text");
-  for (const s of ["never dismisses", "allows either dismissal", "accepted statewide", "lasts 3 years", "Insurance discount only"]) {
+  for (const s of ["never dismisses", "allows either dismissal", "accepted statewide", "lasts 3 years", "Insurance discount only", "24x", "$45 to $75", "carrier risk scoring"]) {
     const onPage = hits(va, new RegExp(s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
     const inLlms = hits(llms, new RegExp(s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
     ok(onPage.length === 0 && inLlms.length === 0, `"${s}" absent from /virginia and the llms files${onPage.length + inLlms.length ? `: ${[...onPage, ...inLlms].slice(0, 3).join(" … ")}` : ""}`);
@@ -79,8 +81,17 @@ async function task1() {
   const elsewhere = hits(full.replace(vaSection, ""), /accepted statewide/i);
   if (elsewhere.length) console.log(`INFO  "accepted statewide" outside Virginia in llms-full.txt (not part of this task): ${elsewhere.map((h) => h.trim().slice(0, 100)).join(" … ")}`);
   const mo = visible(await get("/missouri"));
-  const moAt = mo.indexOf("Does it dismiss your ticket?");
-  console.log(`INFO  /missouri banner: ${moAt >= 0 ? around(mo, moAt, 120) : "(fixed point-reduction copy)"}`);
+  ok(mo.includes(`Does it dismiss your ticket? ${MO_DISMISSAL}`), "/missouri banner shows the M1 text");
+  const mokf = mo.match(/Ticket dismissal\s+(.{0,400})/);
+  ok(!!mokf && mokf[1].startsWith(MO_DISMISSAL), "/missouri Key Facts 'Ticket dismissal' row is the M1 text");
+  // "60 days of the violation" nowhere on the site or in the llms files.
+  const phrase: string[] = [];
+  for (const path of [...(await sitemapPaths()), "/llms.txt", "/llms-full.txt"]) {
+    let t: string;
+    try { t = path.startsWith("/llms") ? await get(path) : visible(await get(path)); } catch { continue; }
+    for (const h of hits(t, /60 days of the violation/i)) phrase.push(`${path}: …${h.trim()}…`);
+  }
+  ok(phrase.length === 0, `"60 days of the violation" appears nowhere${phrase.length ? `\n      ${phrase.slice(0, 8).join("\n      ")}` : ""}`);
 }
 
 async function task2() {

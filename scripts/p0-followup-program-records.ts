@@ -14,8 +14,12 @@
  *  - Va. Code § 46.2-505 (court use of a clinic; CDL bar in (B)); § 19.2-298.02 (deferred disposition);
  *    § 38.2-2217(B) (insurer reduction)
  *  - NJ MVC driver programs https://www.nj.gov/mvc/license/driverprograms.htm
+ *  - V1 (round 2): Va. Code § 46.2-498(A) (12 demerit points in 12 months or 18 in 24 -> DMV-ordered clinic)
+ *  - M1/M2 (round 2): RSMo § 302.302, version effective 28 Aug 2026: the course "shall be completed within
+ *    sixty days of the date of conviction" https://revisor.mo.gov/main/OneSection.aspx?section=302.302
  */
-import { APPLY, applyAll, changes, fullText, getPage, printPlan, richText, skips } from "./lib/notion-edit";
+import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { APPLY, applyAll, assertWritable, changes, flags, fullText, getPage, notion, printPlan, richText, skips } from "./lib/notion-edit";
 import { getStateInfo } from "../lib/notion";
 
 const DB = "States DB";
@@ -32,6 +36,23 @@ const VA_TRUE_COST_OLD =
   "Virginia's Driver Improvement Clinic (Va. Code §§ 46.2-489 and 46.2-498) allows either dismissal (court-discretionary) or a 5 safe-driving-point credit, available once every 24 months.";
 const VA_TRUE_COST_NEW =
   "Virginia's Driver Improvement Clinic (Va. Code § 46.2-498) earns a 5-point credit or an insurance reduction, your choice, once every two years. It does not dismiss the ticket; whether a judge takes it into account is up to the court (Va. Code § 46.2-505).";
+
+// V1 (round 2). Virginia True Cost: the three sentences after the 1d sentence.
+const V1_OLD1 = "Course tuition typically runs $45 to $75.";
+const V1_OLD2 = "Where the court allows dismissal, the return on a $75 course is roughly 24x against the avoided $1,700 surcharge.";
+const V1_OLD3 = "Even where dismissal is unavailable, the 5-point safe-driving credit is one of the more generous point mechanisms in the country and materially helps carrier risk scoring at renewal.";
+const V1_NEW =
+  "If a judge dismisses the charge because you did a clinic, there's no conviction for your insurer to surcharge. If not, the clinic doesn't remove the conviction; its 5-point credit matters most if you're near the totals that make DMV order a clinic: 12 demerit points in 12 months, or 18 in 24 (Va. Code § 46.2-498(A)).";
+
+// M1 (round 2). Missouri Dismissal Answer: the whole field.
+const MO_DISMISSAL_OLD = "No, no points added for that conviction";
+const MO_DISMISSAL_NEW =
+  "No. If the court orders it, finishing an approved eight-hour driver-improvement course within 60 days of your conviction means no points are assessed for that violation (RSMo § 302.302). The conviction still stands. Once in any 36 months; not for commercial-license holders or violations in a commercial vehicle.";
+
+// M2 (round 2). Missouri's 60-day clock runs from the conviction.
+const MO_PHRASE_OLD = "within 60 days of the violation";
+const MO_PHRASE_NEW = "within 60 days of the conviction";
+const MO_PHRASE_NEAR = /(60|sixty) days (of|from|after) (the )?(date of )?(the )?violation/gi;
 
 // 1e. Virginia Lawyer Block disqualifier (also changed in scripts/populate-lawyer-block.ts).
 export const VA_DISQUALIFIER_OLD =
@@ -99,11 +120,29 @@ async function main() {
       const da = fullText(page, "Dismissal Answer") ?? "";
       changes.push({ db: DB, page: name, pageId: info.id, field: "Dismissal Answer", current: da, next: VA_DISMISSAL, property: { "Dismissal Answer": { rich_text: richText(VA_DISMISSAL) } } });
 
-      // 1d
+      // 1d, then V1 on the result; every True Cost change carries the final text (one write).
       const tc = fullText(page, "True Cost of a Ticket") ?? "";
-      const tcNew = replaceOnce(tc, VA_TRUE_COST_OLD, VA_TRUE_COST_NEW);
-      if (tcNew === null) skips.push({ db: DB, page: name, field: "True Cost of a Ticket", reason: "the reviewed OLD sentence is not in the field exactly once", found: tc });
-      else changes.push({ db: DB, page: name, pageId: info.id, field: "True Cost of a Ticket", current: VA_TRUE_COST_OLD, next: VA_TRUE_COST_NEW, property: { "True Cost of a Ticket": { rich_text: richText(tcNew) } } });
+      let tcText = tc;
+      const tcChanges: typeof changes = [];
+      const d1 = replaceOnce(tcText, VA_TRUE_COST_OLD, VA_TRUE_COST_NEW);
+      if (d1 === null) skips.push({ db: DB, page: name, field: "True Cost of a Ticket (1d)", reason: "the reviewed OLD sentence is not in the field exactly once", found: tc });
+      else { tcText = d1; tcChanges.push({ db: DB, page: name, pageId: info.id, field: "True Cost of a Ticket (1d)", current: VA_TRUE_COST_OLD, next: VA_TRUE_COST_NEW, property: {} }); }
+      // V1 OLD 1: delete the sentence and the space before it.
+      const o1 = replaceOnce(tcText, ` ${V1_OLD1}`, "") ?? replaceOnce(tcText, V1_OLD1, "");
+      if (o1 === null) skips.push({ db: DB, page: name, field: "True Cost of a Ticket (V1, OLD 1)", reason: "OLD 1 is not in the field exactly once", found: tcText });
+      else { tcText = o1.replace(/ +\n/g, "\n"); tcChanges.push({ db: DB, page: name, pageId: info.id, field: "True Cost of a Ticket (V1, delete OLD 1)", current: V1_OLD1, next: "(deleted)", property: {} }); }
+      // V1 OLD 2 + OLD 3: replaced together, so they must be adjacent.
+      const o23 = replaceOnce(tcText, `${V1_OLD2} ${V1_OLD3}`, V1_NEW);
+      if (o23 === null) {
+        const found = [V1_OLD2, V1_OLD3].map((x) => `${tcText.includes(x) ? "present" : "MISSING"}: ${x.slice(0, 50)}…`).join(" | ");
+        skips.push({ db: DB, page: name, field: "True Cost of a Ticket (V1, OLD 2 + OLD 3)", reason: "OLD 2 followed by OLD 3 is not in the field exactly once", found: `${found} || field: ${tcText}` });
+      } else { tcText = o23; tcChanges.push({ db: DB, page: name, pageId: info.id, field: "True Cost of a Ticket (V1, OLD 2 + OLD 3)", current: `${V1_OLD2} ${V1_OLD3}`, next: V1_NEW, property: {} }); }
+      for (const c of tcChanges) c.property = { "True Cost of a Ticket": { rich_text: richText(tcText) } };
+      changes.push(...tcChanges);
+      if (tcChanges.length) {
+        const rest = tcText.split(/(?<=[.!?])\s+/).filter((x) => /strong move regardless/i.test(x));
+        for (const r of rest) flags.push({ db: DB, page: name, field: "True Cost of a Ticket", note: "left as is (outside V1); an opinion with no source", found: r });
+      }
 
       // 1e: edited inside the raw JSON so firms and every other key stay byte-for-byte.
       const lb = fullText(page, "Lawyer Block") ?? "";
@@ -153,10 +192,137 @@ async function main() {
     }
   }
 
-  printPlan("P0 follow-up Task 1: Virginia and New Jersey program records");
+  await missouri();
+  const blockChanges = await questionPages();
+
+  printPlan("P0 follow-up Task 1: Virginia and New Jersey program records; Missouri (round 2)");
+  for (const b of blockChanges) {
+    console.log(`CHANGE  Question Pages > ${b.page} > block ${b.blockId} (${b.type})`);
+    console.log(`  current: ${JSON.stringify(b.before)}`);
+    console.log(`  new:     ${JSON.stringify(b.after)}\n`);
+  }
+  if (blockChanges.length) console.log(`${blockChanges.length} Question Pages block change(s).`);
   // FAQ changes that share one field write carry an empty payload; applyAll merges each page's payloads into one write.
   await applyAll();
-  if (APPLY) console.log("\nApplied. Rebuild and check /virginia, /new-jersey and the regenerated llms files.");
+  if (APPLY && blockChanges.length) {
+    if (!changes.length) await assertWritable(blockChanges[0].pageId);
+    for (const b of blockChanges) {
+      await notion.blocks.update({ block_id: b.blockId, [b.type]: { rich_text: b.richText } } as never);
+      console.log(`  ✓ wrote Question Pages > ${b.page} > block ${b.blockId}`);
+      await new Promise((r) => setTimeout(r, 350));
+    }
+  }
+  if (APPLY) console.log("\nApplied. Rebuild and check /virginia, /new-jersey, /missouri and the regenerated llms files.");
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
+
+/** M1 + M2 on Missouri's canonical States row. */
+async function missouri() {
+  const info = await getStateInfo("MO");
+  if (!info) { skips.push({ db: DB, page: "MO", field: "(row)", reason: "no canonical States row", found: "" }); return; }
+  const page = await getPage(info.id);
+  const name = `${info.name} (MO, page ${info.id})`;
+
+  // M1
+  const da = fullText(page, "Dismissal Answer") ?? "";
+  if (da === MO_DISMISSAL_OLD) changes.push({ db: DB, page: name, pageId: info.id, field: "Dismissal Answer", current: da, next: MO_DISMISSAL_NEW, property: { "Dismissal Answer": { rich_text: richText(MO_DISMISSAL_NEW) } } });
+  else skips.push({ db: DB, page: name, field: "Dismissal Answer", reason: `current text is not ${JSON.stringify(MO_DISMISSAL_OLD)}`, found: da });
+
+  // M2: every text field on the row.
+  for (const [field, prop] of Object.entries(page.properties)) {
+    if (prop.type !== "rich_text" && prop.type !== "title") continue;
+    if (field === "Dismissal Answer") continue; // M1 replaces the whole field
+    const text = fullText(page, field) ?? "";
+    const n = text.split(MO_PHRASE_OLD).length - 1;
+    if (n > 0) {
+      const next = text.split(MO_PHRASE_OLD).join(MO_PHRASE_NEW);
+      changes.push({ db: DB, page: name, pageId: info.id, field: `${field} (M2, ${n} hit${n > 1 ? "s" : ""})`, current: excerpt(text, MO_PHRASE_OLD), next: excerpt(next, MO_PHRASE_NEW), property: { [field]: prop.type === "title" ? { title: richText(next) } : { rich_text: richText(next) } } });
+    }
+    for (const m of text.replaceAll(MO_PHRASE_OLD, "").matchAll(MO_PHRASE_NEAR)) flags.push({ db: DB, page: name, field, note: "a near variant of the phrase; not changed", found: excerpt(text, m[0]) });
+  }
+
+  // Legacy FAQ DB (not rendered for Missouri, which has a State FAQ): report only.
+  if (process.env.NOTION_FAQ_DB_ID) {
+    const rows = await queryAll(process.env.NOTION_FAQ_DB_ID);
+    for (const r of rows) for (const field of Object.keys(r.properties)) {
+      const t = fullText(r, field) ?? "";
+      if (t.includes(MO_PHRASE_OLD) || /60 days of the violation/i.test(t)) flags.push({ db: "State FAQ Facts (legacy FAQ DB)", page: `${titleOf(r)} (page ${r.id})`, field, note: "legacy FAQ DB, not rendered where a State FAQ exists; not changed", found: excerpt(t, "60 days of the violation") });
+    }
+  }
+}
+
+type BlockChange = { page: string; pageId: string; blockId: string; type: string; before: string; after: string; richText: unknown[] };
+
+/** M2 across the Question Pages DB: properties and page blocks. Missouri pages are changed; any other state's hit is flagged. */
+async function questionPages(): Promise<BlockChange[]> {
+  const out: BlockChange[] = [];
+  const db = process.env.NOTION_QUESTIONS_DB;
+  if (!db) { flags.push({ db: "Question Pages", page: "-", field: "-", note: "NOTION_QUESTIONS_DB not set; not searched", found: "" }); return out; }
+  for (const page of await queryAll(db)) {
+    const isMO = (fullText(page, "State Code") ?? "").trim().toUpperCase() === "MO" || (fullText(page, "State Slug") ?? "").trim() === "missouri";
+    const name = `${titleOf(page)} [${fullText(page, "State Slug") ?? "?"}] (page ${page.id})`;
+    for (const [field, prop] of Object.entries(page.properties)) {
+      if (prop.type !== "rich_text" && prop.type !== "title") continue;
+      const text = fullText(page, field) ?? "";
+      if (!text.includes(MO_PHRASE_OLD)) continue;
+      if (!isMO) { flags.push({ db: "Question Pages", page: name, field, note: "not a Missouri page; not changed", found: excerpt(text, MO_PHRASE_OLD) }); continue; }
+      const next = text.split(MO_PHRASE_OLD).join(MO_PHRASE_NEW);
+      changes.push({ db: "Question Pages", page: name, pageId: page.id, field: `${field} (M2)`, current: excerpt(text, MO_PHRASE_OLD), next: excerpt(next, MO_PHRASE_NEW), property: { [field]: prop.type === "title" ? { title: richText(next) } : { rich_text: richText(next) } } });
+    }
+    // Blocks (one level of children too, for list items).
+    const stack: string[] = [page.id];
+    while (stack.length) {
+      const parent = stack.shift()!;
+      let cursor: string | undefined;
+      do {
+        const r = await notion.blocks.children.list({ block_id: parent, start_cursor: cursor, page_size: 100 });
+        for (const b of r.results as Array<Record<string, unknown> & { id: string; type: string; has_children?: boolean }>) {
+          if (b.has_children && parent === page.id) stack.push(b.id);
+          const body = b[b.type] as { rich_text?: Array<{ plain_text: string; type: string; text?: { content: string; link: unknown } }> } | undefined;
+          const rt = body?.rich_text;
+          if (!rt?.length) continue;
+          const whole = rt.map((x) => x.plain_text).join("");
+          if (!whole.includes(MO_PHRASE_OLD)) continue;
+          if (!isMO) { flags.push({ db: "Question Pages", page: name, field: `block ${b.id}`, note: "not a Missouri page; not changed", found: excerpt(whole, MO_PHRASE_OLD) }); continue; }
+          // Replace inside the text segment(s) that hold the whole phrase, keeping each segment's annotations and link.
+          let ok = true;
+          const next = rt.map((seg) => {
+            if (seg.type !== "text" || !seg.text) return seg;
+            if (!seg.text.content.includes(MO_PHRASE_OLD)) return seg;
+            const content = seg.text.content.split(MO_PHRASE_OLD).join(MO_PHRASE_NEW);
+            return { ...seg, text: { ...seg.text, content }, plain_text: content };
+          });
+          if (next.map((x) => (x as { plain_text: string }).plain_text).join("").includes(MO_PHRASE_OLD)) ok = false;
+          if (!ok) { skips.push({ db: "Question Pages", page: name, field: `block ${b.id}`, reason: "the phrase spans formatting segments; not changed", found: excerpt(whole, MO_PHRASE_OLD) }); continue; }
+          // The API takes {type, text, annotations} segments; plain_text/href are read-only.
+          const payload = next.map((x) => { const { plain_text: _p, href: _h, ...rest } = x as Record<string, unknown>; void _p; void _h; return rest; });
+          out.push({ page: name, pageId: page.id, blockId: b.id, type: b.type, before: excerpt(whole, MO_PHRASE_OLD), after: excerpt(next.map((x) => (x as { plain_text: string }).plain_text).join(""), MO_PHRASE_NEW), richText: payload });
+        }
+        cursor = r.has_more ? (r.next_cursor ?? undefined) : undefined;
+      } while (cursor);
+    }
+  }
+  return out;
+}
+
+async function queryAll(dbId: string): Promise<PageObjectResponse[]> {
+  const out: PageObjectResponse[] = [];
+  let cursor: string | undefined;
+  do {
+    const r = await notion.databases.query({ database_id: dbId, start_cursor: cursor, page_size: 100 });
+    out.push(...(r.results as PageObjectResponse[]));
+    cursor = r.has_more ? (r.next_cursor ?? undefined) : undefined;
+  } while (cursor);
+  return out;
+}
+const titleOf = (p: PageObjectResponse) => {
+  const t = Object.entries(p.properties).find(([, v]) => v.type === "title")?.[0];
+  return (t && fullText(p, t)) || p.id;
+};
+/** ~100 characters around the first occurrence of `needle`. */
+function excerpt(text: string, needle: string): string {
+  const i = text.indexOf(needle);
+  if (i < 0) return text.slice(0, 160);
+  return `${i > 60 ? "…" : ""}${text.slice(Math.max(0, i - 60), i + needle.length + 60)}${i + needle.length + 60 < text.length ? "…" : ""}`;
+}
