@@ -85,7 +85,8 @@ export function junkReason(rawName: string | null | undefined): JunkReason | nul
  * lines under the name that are a URL or domain, a phone number, a street
  * address or a licence id ("Safe2Drive\n  www.safe2drive.com", Nevada's
  * name + address + phone + TSS number), and a phone number glued to the end
- * ("ND Safety Council 701-223-6372"). Other extra lines, such as New York's
+ * ("ND Safety Council 701-223-6372") or a URL glued to the end ("Garden State
+ * Safety Council www.GardenStateSafetyCouncil.com"). Other extra lines, such as New York's
  * "(Internet course)", are kept, joined with a space. A brand that is its own
  * domain ("DriversEd.com") is left alone.
  */
@@ -100,6 +101,7 @@ export function cleanName(raw: string): string {
   return kept
     .join(" ")
     .replace(/\s+\(?\d{3}\)?[\s.-]*\d{3}[\s.-]\d{4}$/, "")
+    .replace(/\s+(https?:\/\/\S+|www\.\S+)$/i, "")
     .replace(/\s+/g, " ")
     .trim();
 }
