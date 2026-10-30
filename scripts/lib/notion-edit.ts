@@ -7,11 +7,13 @@
  */
 import { config } from "dotenv";
 config({ path: ".env.local" });
-import { Client, APIResponseError } from "@notionhq/client";
+import { APIResponseError } from "@notionhq/client";
+import { makeNotionClient } from "./notion-client";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 
 export const APPLY = process.argv.includes("--apply");
-export const notion = new Client({ auth: process.env.NOTION_TOKEN });
+// Retries 429 (honouring Retry-After) and transient network errors, like the scrapers.
+export const notion = makeNotionClient();
 
 /** The whole of a rich_text / title property, every segment joined (the site's getText reads only the first). */
 export function fullText(page: PageObjectResponse, field: string): string | null {
@@ -22,8 +24,12 @@ export function fullText(page: PageObjectResponse, field: string): string | null
   if (p.type === "checkbox") return String(p.checkbox);
   if (p.type === "url" || p.type === "phone_number" || p.type === "email") return p[p.type] ?? "";
   if (p.type === "number") return p.number == null ? "" : String(p.number);
+  if (p.type === "multi_select") return (p.multi_select ?? []).map((o: { name: string }) => o.name).join(", ");
+  if (p.type === "date") return p.date?.start ?? "";
+  const v = p[p.type];
+  if (!Array.isArray(v)) return "";
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (p[p.type] ?? []).map((t: any) => t.plain_text ?? "").join("");
+  return v.map((t: any) => t.plain_text ?? "").join("");
 }
 
 /** A string as rich_text segments of at most 2,000 characters (the Notion API limit per segment). */
