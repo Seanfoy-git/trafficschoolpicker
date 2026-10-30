@@ -5,6 +5,7 @@
  */
 
 import { config } from "dotenv";
+import { junkReason } from "../../lib/directory-filter";
 config({ path: ".env.local" });
 import { makeNotionClient } from "./notion-client";
 import { logIssue } from "./issues";
@@ -55,8 +56,24 @@ export async function syncToNotion(
   const TODAY = new Date().toISOString().split("T")[0];
   let created = 0, updated = 0;
 
+  // Same validation the site renders through (lib/directory-filter, P0 30 Oct 2026):
+  // never write a URL, UI label, agency name or empty card as a school, and only
+  // one row per license number.
+  const seenLicense = new Set<string>();
   for (const school of scraped) {
-    if (!school.name || school.name.length < 2) continue;
+    const junk = junkReason(school.name);
+    if (junk) {
+      console.log(`  skip (${junk}): ${JSON.stringify(school.name)}`);
+      continue;
+    }
+    const lic = (school.licenseNumber || "").trim().toUpperCase();
+    if (lic && !/^[A-Z]{2}-(APPROVED|[A-Z]{2,5})$/.test(lic)) {
+      if (seenLicense.has(lic)) {
+        console.log(`  skip (duplicate license ${lic}): ${JSON.stringify(school.name)}`);
+        continue;
+      }
+      seenLicense.add(lic);
+    }
 
     const properties: any = {
       "School Name": { title: [{ text: { content: school.name } }] },

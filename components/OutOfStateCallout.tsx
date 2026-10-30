@@ -35,9 +35,7 @@ export function OutOfStateCallout({ stateName, stateSlug }: { stateName: string;
             Ticket in {stateName}, license from another state?
           </p>
           <p className="mt-1 text-sm leading-relaxed text-slate-600">
-            This page is written for drivers who hold a {stateName} license. If you got the
-            ticket in {stateName} but your license is from another state, different rules
-            decide what reaches your home state&apos;s record and whether a course helps.
+            {`This page is written for drivers who hold a ${stateName} license. If you got the ticket in ${stateName} but your license is from another state, different rules decide what reaches your home state's record and whether a course helps.`}
           </p>
           <Link
             href={href}

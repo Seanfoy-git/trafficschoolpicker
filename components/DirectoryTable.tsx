@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Search, ExternalLink, Phone } from "lucide-react";
 import type { DirectorySchool } from "@/lib/types";
+import { directoryListLabel } from "@/lib/directory-filter";
 
 export function DirectoryTable({
   schools,
@@ -27,16 +28,18 @@ export function DirectoryTable({
       })
     : schools;
 
+  // The header names the real list and never calls classroom clinics online schools.
+  const list = directoryListLabel(stateName, schools);
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
         <div>
           <h2 className="text-xl font-bold text-slate-900">
-            All <span data-count="directory">{schools.length}</span> DMV-licensed online traffic schools in{" "}
-            {stateName}
+            All <span data-count="directory">{schools.length}</span> {`${list.noun} in ${stateName}`}
           </h2>
           <p className="text-sm text-slate-500 mt-1">
-            Source: Official {stateName} DMV records{lastScraped ? ` · Last verified ${lastScraped}` : ""}
+            {`Source: ${list.source}${lastScraped ? ` · Last verified ${lastScraped}` : ""}`}
           </p>
         </div>
         <div className="relative">

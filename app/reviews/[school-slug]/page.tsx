@@ -338,7 +338,9 @@ export default async function ReviewPage({ params }: Props) {
               {school.stateCodes.length > 0 && (
                 <li className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-slate-600" />
-                  {school.stateCodes.includes("all") ? "All 50 states" : `${school.stateCodes.length} states`}
+                  {/* "all" in the Traffic Schools States field means "sold widely", not approved in every
+                      state; the state pages decide where a course qualifies (P0, 30 Oct 2026). */}
+                  {school.stateCodes.includes("all") ? "Most states, check your state page" : `${school.stateCodes.length} states`}
                 </li>
               )}
               {school.moneyBackGuarantee && (

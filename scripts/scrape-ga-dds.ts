@@ -60,7 +60,8 @@ async function scrape(): Promise<ScrapedSchool[]> {
             phone,
             address,
             website: "",
-            onlineAvailable: true,
+            // DDS Driver Improvement Clinics are certified classroom clinics, not online schools (P0, 30 Oct 2026).
+            onlineAvailable: false,
             notes: "Driver Improvement Clinic",
           });
         }
