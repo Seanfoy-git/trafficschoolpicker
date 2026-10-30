@@ -46,6 +46,8 @@ export type Change = {
   next: string;
   /** The Notion property payload to write. */
   property: Record<string, unknown>;
+  /** Archive the page (Notion trash, recoverable for 30 days) instead of writing properties. */
+  archive?: boolean;
 };
 export type Skip = { db: string; page: string; field: string; reason: string; found: string };
 export type Flag = { db: string; page: string; field: string; note: string; found: string };
@@ -98,6 +100,12 @@ export async function applyAll() {
   const byPage = new Map<string, Change[]>();
   for (const c of changes) byPage.set(c.pageId, [...(byPage.get(c.pageId) ?? []), c]);
   for (const [pageId, cs] of byPage) {
+    if (cs.some((c) => c.archive)) {
+      await notion.pages.update({ page_id: pageId, archived: true });
+      for (const c of cs) console.log(`  ✓ archived ${c.db} > ${c.page}`);
+      await new Promise((r) => setTimeout(r, 350));
+      continue;
+    }
     const properties = Object.assign({}, ...cs.map((c) => c.property));
     await notion.pages.update({ page_id: pageId, properties });
     for (const c of cs) console.log(`  ✓ wrote ${c.db} > ${c.page} > ${c.field}`);
