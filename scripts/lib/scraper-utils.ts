@@ -77,7 +77,8 @@ export async function syncToNotion(
 
     const properties: any = {
       "School Name": { title: [{ text: { content: school.name } }] },
-      "License Number": { rich_text: [{ text: { content: school.licenseNumber || `${stateCode}-approved` } }] },
+      // No licence scraped: leave the field empty, never a "{STATE}-approved" placeholder (P0 follow-up).
+      "License Number": { rich_text: school.licenseNumber ? [{ text: { content: school.licenseNumber } }] : [] },
       Phone: { rich_text: [{ text: { content: school.phone } }] },
       Address: { rich_text: [{ text: { content: school.address } }] },
       State: { select: { name: stateName } },

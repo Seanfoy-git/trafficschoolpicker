@@ -47,6 +47,7 @@ const UI_LABELS = [
   "home",
   "location",
   "locations",
+  "school information",
 ];
 
 /**
@@ -80,19 +81,62 @@ export function junkReason(rawName: string | null | undefined): JunkReason | nul
 }
 
 /**
+ * A school name with scrape debris taken off (P0 follow-up, 30 Oct 2026):
+ * lines under the name that are a URL or domain, a phone number, a street
+ * address or a licence id ("Safe2Drive\n  www.safe2drive.com", Nevada's
+ * name + address + phone + TSS number), and a phone number glued to the end
+ * ("ND Safety Council 701-223-6372"). Other extra lines, such as New York's
+ * "(Internet course)", are kept, joined with a space. A brand that is its own
+ * domain ("DriversEd.com") is left alone.
+ */
+const URLISH = /^(https?:\/\/|www\.)\S*$|^[\w.-]+\.(com|org|net|edu|us|gov|info|biz)(\/\S*)?$/i;
+const PHONE = /^\(?\d{3}\)?[\s.-]*\d{3}[\s.-]\d{4}$/;
+const ADDRESS = /^\d+\s+\S.*\b(st|street|rd|road|ave|avenue|blvd|boulevard|suite|ste|dr|drive|way|ln|lane|hwy|highway|pkwy|parkway|pl|place|ct|court|cir|circle)\b|^[A-Za-z .'-]+,\s*[A-Z]{2}\s+\d{5}(-\d{4})?$/i;
+const LICENCE_LINE = /^TSS\d+/i;
+export function cleanName(raw: string): string {
+  const lines = raw.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  if (!lines.length) return raw.trim();
+  const kept = [lines[0], ...lines.slice(1).filter((l) => !(URLISH.test(l) || PHONE.test(l) || ADDRESS.test(l) || LICENCE_LINE.test(l)))];
+  return kept
+    .join(" ")
+    .replace(/\s+\(?\d{3}\)?[\s.-]*\d{3}[\s.-]\d{4}$/, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
  * License numbers the scrapers fill in when the list has none (e.g. "VA-DIC",
  * "TX-approved"): shared by many rows, so they can't identify a school.
  */
+export const PLACEHOLDER_LICENSE = /^[A-Z]{2}-(approved|[A-Z]{2,5})$/;
+
+/**
+ * A licence number scraped into the name (Nevada: "…\n TSS000047687\n …"),
+ * used as the row's licence when the License Number field holds only a
+ * placeholder. Two locations of one school carry different numbers, so they
+ * stay two rows.
+ */
+export function licenceFromName(raw: string): string | null {
+  return raw.match(/\bTSS\d{6,}/i)?.[0].toUpperCase() ?? null;
+}
+
+/** The licence a row is identified and shown by: the field, else one found in the name; placeholders count as none. */
+export function effectiveLicence(r: { licenseNumber: string; name: string }): string {
+  const lic = r.licenseNumber.trim();
+  if (lic && !PLACEHOLDER_LICENSE.test(lic)) return lic;
+  return licenceFromName(r.name) ?? "";
+}
 function isPlaceholderLicense(license: string, counts: Map<string, number>): boolean {
   const l = license.trim();
   if (!l) return true;
-  if (/^[A-Z]{2}-(approved|[A-Z]{2,5})$/.test(l)) return true;
+  if (PLACEHOLDER_LICENSE.test(l)) return true;
   return (counts.get(l.toUpperCase()) ?? 0) > 5;
 }
 
 export interface CleanResult {
+  /** Kept rows, names cleaned (cleanName) and placeholder licences blanked. */
   rows: DirectorySchool[];
-  removed: { reason: JunkReason | "duplicate license" | "duplicate name"; name: string; license: string }[];
+  removed: { reason: JunkReason | "duplicate license" | "duplicate name"; name: string; license: string; id: string; keptId?: string }[];
 }
 
 /** How much a row carries: of two duplicates, the richer one is kept (it may hold the verified price). */
@@ -108,34 +152,41 @@ function richness(r: DirectorySchool): number {
 export function cleanDirectory(rows: DirectorySchool[]): CleanResult {
   const removed: CleanResult["removed"] = [];
   const counts = new Map<string, number>();
-  for (const r of rows) counts.set(r.licenseNumber.trim().toUpperCase(), (counts.get(r.licenseNumber.trim().toUpperCase()) ?? 0) + 1);
+  for (const r of rows) counts.set(effectiveLicence(r).toUpperCase(), (counts.get(effectiveLicence(r).toUpperCase()) ?? 0) + 1);
   const at = new Map<string, number>();
   const kept: DirectorySchool[] = [];
   for (const r of rows) {
     const reason = junkReason(r.name);
     if (reason) {
-      removed.push({ reason, name: r.name, license: r.licenseNumber });
+      removed.push({ reason, name: r.name, license: r.licenseNumber, id: r.id });
       continue;
     }
-    const placeholder = isPlaceholderLicense(r.licenseNumber, counts);
+    const lic = effectiveLicence(r);
+    const placeholder = isPlaceholderLicense(lic, counts);
     const key = placeholder
-      ? `name:${r.name.toLowerCase().replace(/[^a-z0-9]/g, "")}|${(r.website ?? "").toLowerCase().replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}`
-      : `license:${r.licenseNumber.trim().toUpperCase()}`;
+      ? `name:${cleanName(r.name).toLowerCase().replace(/[^a-z0-9]/g, "")}|${(r.website ?? "").toLowerCase().replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}`
+      : `license:${lic.toUpperCase()}`;
     const i = at.get(key);
     if (i !== undefined) {
       const dupReason = placeholder ? "duplicate name" : "duplicate license";
       if (richness(r) > richness(kept[i])) {
-        removed.push({ reason: dupReason, name: kept[i].name, license: kept[i].licenseNumber });
+        removed.push({ reason: dupReason, name: kept[i].name, license: kept[i].licenseNumber, id: kept[i].id, keptId: r.id });
         kept[i] = r;
       } else {
-        removed.push({ reason: dupReason, name: r.name, license: r.licenseNumber });
+        removed.push({ reason: dupReason, name: r.name, license: r.licenseNumber, id: r.id, keptId: kept[i].id });
       }
       continue;
     }
     at.set(key, kept.length);
     kept.push(r);
   }
-  return { rows: kept, removed };
+  // Display: debris off the name, and no placeholder shown as if it were a licence.
+  const cleaned = kept.map((r) => ({
+    ...r,
+    name: cleanName(r.name),
+    licenseNumber: effectiveLicence(r),
+  }));
+  return { rows: cleaned, removed };
 }
 
 /**
