@@ -20,6 +20,8 @@ export function fullText(page: PageObjectResponse, field: string): string | null
   if (!p) return null;
   if (p.type === "select") return p.select?.name ?? "";
   if (p.type === "checkbox") return String(p.checkbox);
+  if (p.type === "url" || p.type === "phone_number" || p.type === "email") return p[p.type] ?? "";
+  if (p.type === "number") return p.number == null ? "" : String(p.number);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (p[p.type] ?? []).map((t: any) => t.plain_text ?? "").join("");
 }
