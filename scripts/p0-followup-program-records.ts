@@ -54,6 +54,10 @@ const MO_PHRASE_OLD = "within 60 days of the violation";
 const MO_PHRASE_NEW = "within 60 days of the conviction";
 const MO_PHRASE_NEAR = /(60|sixty) days (of|from|after) (the )?(date of )?(the )?violation/gi;
 
+// M3 (round 3, optional). Missouri intro: the last-checked date.
+const MO_CHECKED_OLD = "Last checked September 2026.";
+const MO_CHECKED_NEW = "Last checked October 2026.";
+
 // 1e. Virginia Lawyer Block disqualifier (also changed in scripts/populate-lawyer-block.ts).
 export const VA_DISQUALIFIER_OLD =
   "The Virginia course earns safe driving points or an insurance discount. It never dismisses a ticket, and reckless driving by speed is a criminal charge in Virginia. That charge needs a lawyer, not a course.";
@@ -229,16 +233,22 @@ async function missouri() {
   if (da === MO_DISMISSAL_OLD) changes.push({ db: DB, page: name, pageId: info.id, field: "Dismissal Answer", current: da, next: MO_DISMISSAL_NEW, property: { "Dismissal Answer": { rich_text: richText(MO_DISMISSAL_NEW) } } });
   else skips.push({ db: DB, page: name, field: "Dismissal Answer", reason: `current text is not ${JSON.stringify(MO_DISMISSAL_OLD)}`, found: da });
 
-  // M2: every text field on the row.
+  // M2: every text field on the row (M3 too, on the intro: one write of the final text).
   for (const [field, prop] of Object.entries(page.properties)) {
     if (prop.type !== "rich_text" && prop.type !== "title") continue;
     if (field === "Dismissal Answer") continue; // M1 replaces the whole field
     const text = fullText(page, field) ?? "";
     const n = text.split(MO_PHRASE_OLD).length - 1;
-    if (n > 0) {
-      const next = text.split(MO_PHRASE_OLD).join(MO_PHRASE_NEW);
-      changes.push({ db: DB, page: name, pageId: info.id, field: `${field} (M2, ${n} hit${n > 1 ? "s" : ""})`, current: excerpt(text, MO_PHRASE_OLD), next: excerpt(next, MO_PHRASE_NEW), property: { [field]: prop.type === "title" ? { title: richText(next) } : { rich_text: richText(next) } } });
+    let next = n > 0 ? text.split(MO_PHRASE_OLD).join(MO_PHRASE_NEW) : text;
+    const fieldChanges: typeof changes = [];
+    if (n > 0) fieldChanges.push({ db: DB, page: name, pageId: info.id, field: `${field} (M2, ${n} hit${n > 1 ? "s" : ""})`, current: excerpt(text, MO_PHRASE_OLD), next: excerpt(next, MO_PHRASE_NEW), property: {} });
+    if (field === "Intro Paragraph") {
+      const m3 = replaceOnce(next, MO_CHECKED_OLD, MO_CHECKED_NEW);
+      if (m3 === null) skips.push({ db: DB, page: name, field: "Intro Paragraph (M3)", reason: `${JSON.stringify(MO_CHECKED_OLD)} is not in the field exactly once`, found: text.match(/Last (checked|verified)[^.]*\./i)?.[0] ?? text.slice(-160) });
+      else { next = m3; fieldChanges.push({ db: DB, page: name, pageId: info.id, field: "Intro Paragraph (M3)", current: MO_CHECKED_OLD, next: MO_CHECKED_NEW, property: {} }); }
     }
+    for (const c of fieldChanges) c.property = { [field]: prop.type === "title" ? { title: richText(next) } : { rich_text: richText(next) } };
+    changes.push(...fieldChanges);
     for (const m of text.replaceAll(MO_PHRASE_OLD, "").matchAll(MO_PHRASE_NEAR)) flags.push({ db: DB, page: name, field, note: "a near variant of the phrase; not changed", found: excerpt(text, m[0]) });
   }
 

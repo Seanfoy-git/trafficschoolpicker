@@ -47,6 +47,27 @@ function hits(t: string, needle: RegExp): string[] {
   for (const m of t.matchAll(new RegExp(needle.source, needle.flags.includes("g") ? needle.flags : needle.flags + "g"))) out.push(around(t, m.index ?? 0));
   return out;
 }
+/**
+ * Read every page in `paths`, text-only for HTML. Returns the texts and every
+ * path that couldn't be read, so a scan never passes by skipping pages.
+ */
+async function readAll(paths: string[]): Promise<{ texts: Map<string, string>; failed: string[] }> {
+  const texts = new Map<string, string>();
+  const failed: string[] = [];
+  for (const path of paths) {
+    try {
+      texts.set(path, path.startsWith("/llms") ? await get(path) : visible(await get(path)));
+    } catch (e) {
+      failed.push(`${path} (${(e as Error).message})`);
+    }
+  }
+  return { texts, failed };
+}
+function reportRead(label: string, total: number, failed: string[]) {
+  console.log(`INFO  ${label}: read ${total - failed.length} of ${total} pages${failed.length ? `; could not read:\n      ${failed.join("\n      ")}` : ""}`);
+  ok(failed.length === 0, `${label}: every page read (${total - failed.length}/${total})`);
+}
+
 /** Every page path in the sitemap. */
 async function sitemapPaths(): Promise<string[]> {
   const sm = await get("/sitemap.xml");
@@ -84,13 +105,12 @@ async function task1() {
   ok(mo.includes(`Does it dismiss your ticket? ${MO_DISMISSAL}`), "/missouri banner shows the M1 text");
   const mokf = mo.match(/Ticket dismissal\s+(.{0,400})/);
   ok(!!mokf && mokf[1].startsWith(MO_DISMISSAL), "/missouri Key Facts 'Ticket dismissal' row is the M1 text");
-  // "60 days of the violation" nowhere on the site or in the llms files.
+  // "60 days of the violation" nowhere on the site or in the llms files; every page must be read.
   const phrase: string[] = [];
-  for (const path of [...(await sitemapPaths()), "/llms.txt", "/llms-full.txt"]) {
-    let t: string;
-    try { t = path.startsWith("/llms") ? await get(path) : visible(await get(path)); } catch { continue; }
-    for (const h of hits(t, /60 days of the violation/i)) phrase.push(`${path}: …${h.trim()}…`);
-  }
+  const paths60 = [...(await sitemapPaths()), "/llms.txt", "/llms-full.txt"];
+  const read60 = await readAll(paths60);
+  reportRead('"60 days of the violation" scan', paths60.length, read60.failed);
+  for (const [path, t] of read60.texts) for (const h of hits(t, /60 days of the violation/i)) phrase.push(`${path}: …${h.trim()}…`);
   ok(phrase.length === 0, `"60 days of the violation" appears nowhere${phrase.length ? `\n      ${phrase.slice(0, 8).join("\n      ")}` : ""}`);
 }
 
@@ -99,9 +119,9 @@ async function task2() {
   const allowed = /National providers often list all 50 states in their marketing/i;
   const pages = [...(await sitemapPaths()), "/llms.txt", "/llms-full.txt"];
   let bad: string[] = [];
-  for (const p of pages) {
-    let t: string;
-    try { t = p.startsWith("/llms") ? await get(p) : visible(await get(p)); } catch { continue; }
+  const read50 = await readAll(pages);
+  reportRead('"all 50 states" scan', pages.length, read50.failed);
+  for (const [p, t] of read50.texts) {
     for (const h of hits(t, /all 50 states/i)) {
       const okLine = allowed.test(h) && (p === "/maine" || p === "/new-hampshire" || p.startsWith("/llms"));
       if (!okLine) bad.push(`${p}: …${h}…`);
