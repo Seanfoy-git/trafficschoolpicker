@@ -185,6 +185,33 @@ async function main() {
         else found.push(`School State Variants: ${v.results.length} row(s) with School Slug "${slug}", and no live Traffic Schools row carries that slug`);
       }
     }
+    // Affiliate Programs names schools in a text field, not a relation (Sean, 2 Nov 2026).
+    // A row naming this school counts only if no live Traffic Schools row carries that
+    // name; if one does, the programme is the live school's (same rule as the slug).
+    if (AFFILIATE_DB) {
+      const bare = t.replace(/^\[ARCHIVED DUP\]\s*/i, "").trim();
+      const keys = [...new Set([bare, slug].filter(Boolean).map((x) => x.toLowerCase().replace(/[^a-z0-9]/g, "")))];
+      let rows: PageObjectResponse[] = [];
+      try { rows = await queryAll(AFFILIATE_DB); } catch (e) { unchecked.push(`Affiliate Programs: can't read (${(e as { code?: string }).code ?? e})`); }
+      const naming = rows.filter((r) => Object.keys(r.properties).some((f) => {
+        const v = (fullText(r, f) ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        return v && keys.some((k) => k.length >= 5 && v.includes(k));
+      }));
+      if (naming.length) {
+        const liveRows = (await notion.databases.query({
+          database_id: process.env.NOTION_SCHOOLS_DB!,
+          filter: { and: [{ property: "Status", select: { equals: "Active" } }, { property: "Show On Site", checkbox: { equals: true } }] },
+        })).results as PageObjectResponse[];
+        const norm = (x: string) => x.toLowerCase().replace(/[^a-z0-9]/g, "");
+        const carriesName = (r: PageObjectResponse) => keys.includes(norm(title(r))) || keys.includes(norm(fullText(r, "Slug") ?? ""));
+        const live = liveRows.filter((r) => r.id !== u.id && carriesName(r));
+        const list = naming.map((r) => `${title(r)} (page ${r.id})`).join("; ");
+        if (live.length) console.log(`INFO    ${name}: Affiliate Programs rows naming this school belong to the live row ${title(live[0])} (page ${live[0].id}); not counted: ${list}`);
+        else found.push(`Affiliate Programs: ${naming.length} row(s) name this school in text, and no live Traffic Schools row carries that name: ${list}`);
+      } else {
+        console.log(`INFO    ${name}: no Affiliate Programs row names this school (${rows.length} rows read)`);
+      }
+    }
     if (!found.length && !unchecked.length) {
       changes.push({ db: SDB, page: name, pageId: u.id, field: "(archive row)", current: "row present (no relations found in any database)", next: "archived (Notion trash, 30 days)", property: {}, archive: true });
       continue;
