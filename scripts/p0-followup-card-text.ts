@@ -32,6 +32,7 @@
  * Variant rows are the ones the site renders (getSchoolVariantsForState). Each
  * change is made only when the current text matches exactly.
  */
+import { readFileSync } from "node:fs";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { APPLY, applyAll, changes, flags, fullText, notion, printPlan, richText, skips, splitList } from "./lib/notion-edit";
 import { getSchoolVariantsForState } from "../lib/notion";
@@ -66,6 +67,29 @@ const UNUSED_ROWS = [
   { id: "5e39e794-4352-837c-930c-016f6befff47", title: "[ARCHIVED DUP] iDriveSafely" },
 ];
 const AFFILIATE_DB = process.argv.find((a) => a.startsWith("--affiliate-programs-db="))?.split("=")[1] ?? null;
+
+/**
+ * Affiliate Programs stays off the site token (read-only, scoped to site data
+ * since the August incident). The check runs only with the write token used
+ * for --apply, passed in the environment:
+ *   NOTION_TOKEN=<write token> npx tsx scripts/p0-followup-card-text.ts --affiliate-programs-db=<id>
+ * If NOTION_TOKEN is still the site token from .env.local, stop.
+ */
+function assertNotSiteToken() {
+  if (!AFFILIATE_DB) return;
+  let siteToken: string | undefined;
+  try {
+    const env = readFileSync(".env.local", "utf8").match(/^\s*NOTION_TOKEN\s*=\s*(.*)\s*$/m);
+    siteToken = env?.[1].replace(/^["']|["']$/g, "");
+  } catch { /* no .env.local: nothing to compare against */ }
+  if (!process.env.NOTION_TOKEN || (siteToken && process.env.NOTION_TOKEN === siteToken)) {
+    console.error(
+      "STOP: --affiliate-programs-db must run with the write token, never the site token in .env.local.\n" +
+        "  NOTION_TOKEN=<write token> npx tsx scripts/p0-followup-card-text.ts --affiliate-programs-db=<id> [--apply]",
+    );
+    process.exit(2);
+  }
+}
 const norm = (id: string) => id.replace(/-/g, "");
 
 /** Every Notion relation into the Traffic Schools DB that points at `pageId`, across the databases we can read. */
@@ -120,6 +144,7 @@ const title = (p: PageObjectResponse) =>
 
 async function main() {
   if (!process.env.NOTION_TOKEN) throw new Error("NOTION_TOKEN not set (.env.local)");
+  assertNotSiteToken();
 
   // 2a + 2b, on the variant rows the site renders.
   const variants = new Map([...(await getSchoolVariantsForState("VA")), ...(await getSchoolVariantsForState("NJ"))]);
