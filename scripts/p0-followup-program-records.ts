@@ -44,6 +44,9 @@ const V1_OLD3 = "Even where dismissal is unavailable, the 5-point safe-driving c
 const V1_NEW =
   "If a judge dismisses the charge because you did a clinic, there's no conviction for your insurer to surcharge. If not, the clinic doesn't remove the conviction; its 5-point credit matters most if you're near the totals that make DMV order a clinic: 12 demerit points in 12 months, or 18 in 24 (Va. Code § 46.2-498(A)).";
 
+// V2 (round 4). Virginia True Cost: delete, no replacement (no source; contradicts the V1 sentence before it).
+const V2_OLD = "For a Virginia driver, the course is a strong move regardless of the exact court outcome.";
+
 // M1 (round 2). Missouri Dismissal Answer: the whole field.
 const MO_DISMISSAL_OLD = "No, no points added for that conviction";
 const MO_DISMISSAL_NEW =
@@ -141,12 +144,13 @@ async function main() {
         const found = [V1_OLD2, V1_OLD3].map((x) => `${tcText.includes(x) ? "present" : "MISSING"}: ${x.slice(0, 50)}…`).join(" | ");
         skips.push({ db: DB, page: name, field: "True Cost of a Ticket (V1, OLD 2 + OLD 3)", reason: "OLD 2 followed by OLD 3 is not in the field exactly once", found: `${found} || field: ${tcText}` });
       } else { tcText = o23; tcChanges.push({ db: DB, page: name, pageId: info.id, field: "True Cost of a Ticket (V1, OLD 2 + OLD 3)", current: `${V1_OLD2} ${V1_OLD3}`, next: V1_NEW, property: {} }); }
+      // V2: delete the sentence and the space before it.
+      const v2 = replaceOnce(tcText, ` ${V2_OLD}`, "") ?? replaceOnce(tcText, V2_OLD, "");
+      if (v2 === null) skips.push({ db: DB, page: name, field: "True Cost of a Ticket (V2)", reason: "the V2 sentence is not in the field exactly once", found: tcText });
+      else { tcText = v2.replace(/ +\n/g, "\n").trimEnd(); tcChanges.push({ db: DB, page: name, pageId: info.id, field: "True Cost of a Ticket (V2, delete)", current: V2_OLD, next: "(deleted)", property: {} }); }
       for (const c of tcChanges) c.property = { "True Cost of a Ticket": { rich_text: richText(tcText) } };
       changes.push(...tcChanges);
-      if (tcChanges.length) {
-        const rest = tcText.split(/(?<=[.!?])\s+/).filter((x) => /strong move regardless/i.test(x));
-        for (const r of rest) flags.push({ db: DB, page: name, field: "True Cost of a Ticket", note: "left as is (outside V1); an opinion with no source", found: r });
-      }
+      if (tcChanges.length) console.log(`INFO    Virginia True Cost after 1d, V1 and V2:\n${tcText}\n`);
 
       // 1e: edited inside the raw JSON so firms and every other key stay byte-for-byte.
       const lb = fullText(page, "Lawyer Block") ?? "";

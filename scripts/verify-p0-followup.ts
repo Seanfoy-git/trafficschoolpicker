@@ -90,7 +90,7 @@ async function task1() {
   const kf = va.match(/Ticket dismissal\s+(.{0,400})/);
   ok(!!kf && kf[1].startsWith(VA_DISMISSAL), "/virginia Key Facts 'Ticket dismissal' row is the 1c text");
   ok(va.includes(`Does it dismiss your ticket? ${VA_DISMISSAL}`), "/virginia banner shows the 1c text");
-  for (const s of ["never dismisses", "allows either dismissal", "accepted statewide", "lasts 3 years", "Insurance discount only", "24x", "$45 to $75", "carrier risk scoring"]) {
+  for (const s of ["never dismisses", "allows either dismissal", "accepted statewide", "lasts 3 years", "Insurance discount only", "24x", "$45 to $75", "carrier risk scoring", "strong move regardless"]) {
     const onPage = hits(va, new RegExp(s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
     const inLlms = hits(llms, new RegExp(s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
     ok(onPage.length === 0 && inLlms.length === 0, `"${s}" absent from /virginia and the llms files${onPage.length + inLlms.length ? `: ${[...onPage, ...inLlms].slice(0, 3).join(" … ")}` : ""}`);
