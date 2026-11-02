@@ -6,7 +6,8 @@
  *   npx tsx scripts/verify-p0-followup.ts --base=http://localhost:3000 [--task=1,2,3]
  *
  * A protected preview works too: set VERCEL_AUTOMATION_BYPASS_SECRET and pass
- * --base=<preview URL>. Exits 1 if any check fails.
+ * --base=<preview URL>, or pass --via-vercel-curl to fetch through the Vercel
+ * CLI. Exits 1 if any check fails.
  */
 export {}; // a module, so its helpers don't collide with other top-level scripts
 
@@ -27,7 +28,20 @@ const ok = (cond: boolean, msg: string) => {
   if (!cond) failures++;
 };
 
+/**
+ * --via-vercel-curl: fetch a protected preview through `vercel curl` (the CLI
+ * handles the deployment-protection bypass), for previews behind Vercel login.
+ */
+const VIA_VERCEL_CURL = process.argv.includes("--via-vercel-curl");
 async function get(path: string): Promise<string> {
+  if (VIA_VERCEL_CURL) {
+    const { execFileSync } = await import("node:child_process");
+    const out = execFileSync("vercel", ["curl", path, "--deployment", BASE, "--yes", "--", "-s", "-w", "\n__STATUS__%{http_code}"], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024, stdio: ["ignore", "pipe", "ignore"] });
+    const at = out.lastIndexOf("\n__STATUS__");
+    const status = at >= 0 ? Number(out.slice(at + 11).trim()) : 0;
+    if (status < 200 || status >= 300) throw new Error(`${path}: HTTP ${status}`);
+    return out.slice(0, at);
+  }
   const r = await fetch(BASE + path, { headers, redirect: "follow" });
   if (!r.ok) throw new Error(`${path}: HTTP ${r.status}`);
   return r.text();
@@ -123,7 +137,11 @@ async function task2() {
   reportRead('"all 50 states" scan', pages.length, read50.failed);
   for (const [p, t] of read50.texts) {
     for (const h of hits(t, /all 50 states/i)) {
-      const okLine = allowed.test(h) && (p === "/maine" || p === "/new-hampshire" || p.startsWith("/llms"));
+      // Allowed: the Maine / New Hampshire marketing lines, and DriveSafe Online's Cons
+      // "Not available in all 50 states" (accurate as a negative; Sean: leave it).
+      const okLine =
+        (allowed.test(h) && (p === "/maine" || p === "/new-hampshire" || p.startsWith("/llms"))) ||
+        /Not available in all 50 states/i.test(h);
       if (!okLine) bad.push(`${p}: …${h}…`);
     }
   }
