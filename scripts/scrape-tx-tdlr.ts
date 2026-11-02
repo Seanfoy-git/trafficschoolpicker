@@ -17,7 +17,8 @@
  * - TX TDLR: CSV download → single request, no rate limit
  */
 
-import { junkReason } from "../lib/directory-filter";
+import { rowIdentity, junkReason } from "../lib/directory-filter";
+import { getExistingSchools } from "./lib/scraper-utils";
 import { config } from "dotenv";
 config({ path: ".env.local" });
 import { makeNotionClient } from "./lib/notion-client";
@@ -103,36 +104,9 @@ async function scrapeTXTDLR(): Promise<Record<string, string>[]> {
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-async function getExistingTXSchools(): Promise<Map<string, string>> {
-  const existing = new Map<string, string>();
-  let cursor: string | undefined;
-
-  do {
-    const response: any = await notion.databases.query({
-      database_id: DIRECTORY_DB,
-      filter: { property: "State", select: { equals: "Texas" } },
-      start_cursor: cursor,
-      page_size: 100,
-    });
-
-    for (const page of response.results) {
-      const props = (page as any).properties;
-      const license =
-        props["License Number"]?.rich_text?.[0]?.plain_text;
-      if (license) existing.set(license, page.id);
-    }
-
-    cursor = response.has_more
-      ? response.next_cursor ?? undefined
-      : undefined;
-  } while (cursor);
-
-  console.log(`Found ${existing.size} existing TX schools in Notion`);
-  return existing;
-}
-
 async function syncTXToNotion(schools: Record<string, string>[]) {
-  const existing = await getExistingTXSchools();
+  // Existing rows matched on real licence, then cleaned name (shared index).
+  const existing = await getExistingSchools("Texas");
   const TODAY = new Date().toISOString().split("T")[0];
   let created = 0,
     updated = 0;
@@ -163,7 +137,7 @@ async function syncTXToNotion(schools: Record<string, string>[]) {
     if (junkReason(name)) { console.log(`  skip (${junkReason(name)}): ${JSON.stringify(name)}`); continue; }
 
     const properties: any = {
-      "School Name": { title: [{ text: { content: name } }] },
+      "School Name": { title: [{ text: { content: rowIdentity(name, license).name } }] },
       "License Number": { rich_text: [{ text: { content: license } }] },
       Phone: { rich_text: [{ text: { content: phone || "" } }] },
       Address: { rich_text: [{ text: { content: address } }] },
@@ -173,16 +147,17 @@ async function syncTXToNotion(schools: Record<string, string>[]) {
       "Date Scraped": { date: { start: TODAY } },
     };
 
-    const existingId = existing.get(license);
+    const match = existing.match(name, license);
 
-    if (existingId) {
-      await notion.pages.update({ page_id: existingId, properties });
+    if (match) {
+      await notion.pages.update({ page_id: match.id, properties });
       updated++;
     } else {
-      await notion.pages.create({
+      const page = await notion.pages.create({
         parent: { database_id: DIRECTORY_DB },
         properties,
       });
+      existing.add(page.id, name, license);
       created++;
     }
 

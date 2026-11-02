@@ -48,6 +48,8 @@ const UI_LABELS = [
   "location",
   "locations",
   "school information",
+  // Florida FLHSMV page heading (Sean, 2 Nov 2026): an exact match only, not an all-caps rule.
+  "driver improvement schools",
 ];
 
 /**
@@ -218,4 +220,43 @@ export function directoryListLabel(stateName: string, rows: DirectorySchool[]): 
     source: `Official ${stateName} DMV records`,
     online,
   };
+}
+
+/**
+ * How a scraper identifies a Directory row (P0 follow-up, round 4): the cleaned
+ * name, and the real licence (the field unless it's a placeholder, else a
+ * licence id found in the name). Scrapers match on this, never on the raw
+ * scraped name, so a name cleaned at source still matches on the next refresh.
+ */
+export function rowIdentity(rawName: string, licenseNumber: string): { name: string; licence: string; nameKey: string } {
+  const name = cleanName(rawName);
+  return { name, licence: effectiveLicence({ licenseNumber, name: rawName }), nameKey: name.toLowerCase().replace(/[^a-z0-9]/g, "") };
+}
+
+/**
+ * Existing Directory rows for one state, matched on a real licence number
+ * first, then on cleaned name. A name match counts only when one side has no
+ * real licence: two rows with the same name and different licences are two
+ * locations (Georgia's DUI school chains), never one school.
+ */
+export class DirectoryIndex {
+  private byLicence = new Map<string, string>();
+  private byName = new Map<string, { id: string; licence: string }>();
+  constructor(rows: Array<{ id: string; name: string; licenseNumber: string }> = []) {
+    for (const r of rows) this.add(r.id, r.name, r.licenseNumber);
+  }
+  add(id: string, rawName: string, licenseNumber: string) {
+    const k = rowIdentity(rawName, licenseNumber);
+    const L = k.licence.toUpperCase();
+    if (L && !this.byLicence.has(L)) this.byLicence.set(L, id);
+    if (k.nameKey && !this.byName.has(k.nameKey)) this.byName.set(k.nameKey, { id, licence: L });
+  }
+  match(rawName: string, licenseNumber: string): { id: string; by: "licence" | "name" } | null {
+    const k = rowIdentity(rawName, licenseNumber);
+    const L = k.licence.toUpperCase();
+    if (L && this.byLicence.has(L)) return { id: this.byLicence.get(L)!, by: "licence" };
+    const n = this.byName.get(k.nameKey);
+    if (n && (!L || !n.licence)) return { id: n.id, by: "name" };
+    return null;
+  }
 }

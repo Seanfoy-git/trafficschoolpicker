@@ -21,29 +21,35 @@
  *
  * Safety stops, before anything is written:
  *  - the per-state removal counts must equal the reviewed table
- *    (EXPECTED_REMOVED: AZ 240, CT 2, GA 9, MD 11, NV 45, NJ 3, NY 4, ND 1,
- *    VA 51, WA 7; total 373); any difference stops the run and is reported;
+ *    (EXPECTED_REMOVED: AZ 240, CT 2, FL 2, GA 9, MD 11, NV 45, NJ 3, NY 4,
+ *    ND 1, VA 59, WA 7; total 383); any difference stops the run and is reported;
  *  - the keep rule can keep a row other than the first (it did for Arizona
  *    licence 552 and New Jersey's Driving School of America). Sean approved
  *    that with --keep-richer; without the flag such a set stops the run.
  * The dry run also simulates the result of --apply and re-runs the filter on
- * it: the acceptance is zero rows removed on that rerun.
+ * it (acceptance: zero rows removed), lists the kept rows created after the
+ * 30 Oct review, and simulates the next scraper refresh against the
+ * post-apply table: the last scrape's rows replayed through the scrapers'
+ * matching (lib/directory-filter DirectoryIndex: real licence, then cleaned
+ * name). Acceptance: it creates nothing except schools new in the source.
  */
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { APPLY, assertWritable, fullText, notion } from "./lib/notion-edit";
 
 const KEEP_RICHER = process.argv.includes("--keep-richer");
-import { cleanDirectory, cleanName, directoryListLabel, licenceFromName, PLACEHOLDER_LICENSE, richness } from "../lib/directory-filter";
+import { cleanDirectory, cleanName, DirectoryIndex, directoryListLabel, junkReason, licenceFromName, PLACEHOLDER_LICENSE, richness } from "../lib/directory-filter";
 import { getAllStateSlugs, getStateBySlug } from "../lib/state-utils";
 import type { DirectorySchool } from "../lib/types";
 
-/** Reviewed removal counts (Sean, 30 Oct 2026): 373 rows. */
+/** Reviewed removal counts (Sean, 2 Nov 2026, after the 1 Nov Monthly Data Refresh): 383 rows. */
 const EXPECTED_REMOVED: Record<string, number> = {
-  Arizona: 240, Connecticut: 2, Georgia: 9, Maryland: 11, Nevada: 45, "New Jersey": 3, "New York": 4, "North Dakota": 1, Virginia: 51, Washington: 7,
+  Arizona: 240, Connecticut: 2, Florida: 2, Georgia: 9, Maryland: 11, Nevada: 45, "New Jersey": 3, "New York": 4, "North Dakota": 1, Virginia: 59, Washington: 7,
 };
-const EXPECTED_TOTAL = 373;
+const EXPECTED_TOTAL = 383;
+/** Rows created after the 30 Oct review (the 1 Nov Monthly Data Refresh added some): the ones kept are listed for a check. */
+const REVIEWED_AT = "2026-10-31T00:00:00Z";
 
-type Row = DirectorySchool & { page: PageObjectResponse };
+type Row = DirectorySchool & { page: PageObjectResponse; created: string };
 
 async function loadRows(): Promise<Row[]> {
   const db = process.env.NOTION_DIRECTORY_DB!;
@@ -56,6 +62,7 @@ async function loadRows(): Promise<Row[]> {
       const pr = page.properties as any;
       out.push({
         page,
+        created: page.created_time,
         id: page.id,
         name: fullText(page, "School Name") ?? "",
         state: pr.State?.select?.name ?? fullText(page, "State") ?? "",
@@ -94,6 +101,7 @@ async function main() {
   const keepNotFirst: string[] = [];
   let total = 0;
   let licencesFromNames = 0;
+  const newKept: string[] = [];
 
   console.log("state | raw rows | kept | removed | removed by reason | header");
   for (const slug of getAllStateSlugs()) {
@@ -124,6 +132,9 @@ async function main() {
     }
 
     const keptIds = new Set(kept.map((k) => k.id));
+    for (const r of rows.filter((x) => keptIds.has(x.id) && x.created >= REVIEWED_AT)) {
+      newKept.push(`${st.name} | ${JSON.stringify(cleanName(r.name))} | licence ${JSON.stringify(r.licenseNumber || "(none)")} | created ${r.created.slice(0, 10)} | page ${r.id}`);
+    }
     for (const r of rows.filter((x) => keptIds.has(x.id))) {
       // b. cleaned name
       const clean = cleanName(r.name);
@@ -185,6 +196,31 @@ async function main() {
     if (removed.length) rerunBy.push(`${st.name} ${removed.length} (${removed.slice(0, 3).map((x) => `${x.reason}: ${JSON.stringify(x.name)}`).join("; ")})`);
   }
   console.log(`simulated rerun after --apply: ${rerun} rows removed${rerunBy.length ? ` -> ${rerunBy.join(" | ")}` : ""}`);
+
+  // Kept rows that weren't there at the 30 Oct review: check they're real schools.
+  console.log(`\nkept rows created after the 30 Oct review (${newKept.length}):`);
+  for (const n of newKept) console.log(`NEW      ${n}`);
+
+  // Simulate the next refresh: replay the last scrape (every raw row, as scraped) through the
+  // scrapers' matching against the post-apply table. Junk is skipped as the syncs skip it.
+  console.log("\nsimulated next refresh against the post-apply table (state | updates | creates | skipped as junk):");
+  let simCreates = 0;
+  for (const slug of getAllStateSlugs()) {
+    const st = getStateBySlug(slug)!;
+    const source = raw.filter((r) => r.state === st.name);
+    if (!source.length) continue;
+    const index = new DirectoryIndex(after.filter((r) => r.state === st.name));
+    let updates = 0, skipped = 0;
+    const creates: string[] = [];
+    for (const r of source) {
+      if (junkReason(r.name)) { skipped++; continue; }
+      if (index.match(r.name, r.licenseNumber)) updates++;
+      else { creates.push(`${JSON.stringify(cleanName(r.name))} (${r.licenseNumber || "no licence"})`); index.add(`new:${r.id}`, r.name, r.licenseNumber); }
+    }
+    simCreates += creates.length;
+    console.log(`${st.name} | ${updates} | ${creates.length} | ${skipped}${creates.length ? ` -> would create: ${creates.join("; ")}` : ""}`);
+  }
+  console.log(`simulated refresh: ${simCreates} row(s) created (the replayed source is the table itself, so any create is a matching gap)`);
 
   // Safety stops.
   if (total !== EXPECTED_TOTAL) mismatches.push(`total ${total}, the reviewed table says ${EXPECTED_TOTAL}`);

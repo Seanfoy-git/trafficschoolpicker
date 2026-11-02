@@ -17,7 +17,8 @@
  * - CA DMV: no documented limit → Playwright adds natural delays
  */
 
-import { junkReason } from "../lib/directory-filter";
+import { rowIdentity, junkReason } from "../lib/directory-filter";
+import { getExistingSchools } from "./lib/scraper-utils";
 import { config } from "dotenv";
 config({ path: ".env.local" });
 import { chromium } from "playwright";
@@ -132,7 +133,9 @@ async function getExistingNotionSchools(): Promise<Map<string, string>> {
 }
 
 async function syncToNotion(scraped: ScrapedSchool[]) {
+  // Licence-keyed map for the deactivation pass below; matching uses the shared index (real licence, then cleaned name).
   const existing = await getExistingNotionSchools();
+  const index = await getExistingSchools("California");
   const scrapedLicenses = new Set(scraped.map((s) => s.license));
 
   let created = 0,
@@ -143,10 +146,10 @@ async function syncToNotion(scraped: ScrapedSchool[]) {
   for (const school of scraped) {
     // Same validation the site renders through (lib/directory-filter, P0 follow-up): never write page furniture as a school.
     if (junkReason(school.name)) { console.log(`  skip (${junkReason(school.name)}): ${JSON.stringify(school.name)}`); continue; }
-    const existingId = existing.get(school.license);
+    const existingId = index.match(school.name, school.license)?.id;
 
     const properties: any = {
-      "School Name": { title: [{ text: { content: school.name } }] },
+      "School Name": { title: [{ text: { content: rowIdentity(school.name, school.license).name } }] },
       "License Number": {
         rich_text: [{ text: { content: school.license } }],
       },

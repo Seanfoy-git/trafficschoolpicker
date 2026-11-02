@@ -5,7 +5,8 @@
  * the FL DHSMV website. The provider list is a table on the page.
  */
 
-import { junkReason } from "../lib/directory-filter";
+import { rowIdentity, junkReason } from "../lib/directory-filter";
+import { getExistingSchools } from "./lib/scraper-utils";
 import { config } from "dotenv";
 config({ path: ".env.local" });
 import { chromium } from "playwright";
@@ -142,32 +143,9 @@ async function scrapeFLDHSMV(): Promise<ScrapedSchool[]> {
   return schools;
 }
 
-async function getExistingFLSchools(): Promise<Map<string, string>> {
-  const existing = new Map<string, string>();
-  let cursor: string | undefined;
-
-  do {
-    const response: any = await notion.databases.query({
-      database_id: DIRECTORY_DB,
-      filter: { property: "State", select: { equals: "Florida" } },
-      start_cursor: cursor,
-      page_size: 100,
-    });
-
-    for (const page of response.results) {
-      const name = (page as any).properties["School Name"]?.title?.[0]?.plain_text;
-      if (name) existing.set(name.toLowerCase(), page.id);
-    }
-
-    cursor = response.has_more ? response.next_cursor ?? undefined : undefined;
-  } while (cursor);
-
-  console.log(`Found ${existing.size} existing FL schools in Notion`);
-  return existing;
-}
-
 async function syncToNotion(scraped: ScrapedSchool[]) {
-  const existing = await getExistingFLSchools();
+  // Existing rows matched on real licence, then cleaned name (never the raw scraped name).
+  const existing = await getExistingSchools("Florida");
   const TODAY = new Date().toISOString().split("T")[0];
   let created = 0, updated = 0;
 
@@ -180,7 +158,7 @@ async function syncToNotion(scraped: ScrapedSchool[]) {
                      school.deliveryMethod.toLowerCase().includes("app");
 
     const properties: any = {
-      "School Name": { title: [{ text: { content: school.name } }] },
+      "School Name": { title: [{ text: { content: rowIdentity(school.name, "").name } }] },
       // The FLHSMV list publishes no licence number: leave the field empty, never a placeholder.
       "License Number": { rich_text: [] },
       Phone: { rich_text: [{ text: { content: school.phone || "" } }] },
@@ -204,16 +182,17 @@ async function syncToNotion(scraped: ScrapedSchool[]) {
       },
     };
 
-    const existingId = existing.get(school.name.toLowerCase());
+    const match = existing.match(school.name, "");
 
-    if (existingId) {
-      await notion.pages.update({ page_id: existingId, properties });
+    if (match) {
+      await notion.pages.update({ page_id: match.id, properties });
       updated++;
     } else {
-      await notion.pages.create({
+      const page = await notion.pages.create({
         parent: { database_id: DIRECTORY_DB },
         properties,
       });
+      existing.add(page.id, school.name, "");
       created++;
     }
 
