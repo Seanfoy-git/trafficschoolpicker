@@ -1,13 +1,16 @@
 /**
  * Directory DB clean-up at source (P0 follow-up, Task 3, 30 Oct 2026).
  *
- *   npx tsx scripts/report-directory-cleaning.ts           # DRY RUN (default): report, write nothing
- *   npx tsx scripts/report-directory-cleaning.ts --apply   # write (stops if the token can't write)
+ *   npx tsx scripts/report-directory-cleaning.ts --keep-richer           # DRY RUN (default): report, write nothing
+ *   npx tsx scripts/report-directory-cleaning.ts --keep-richer --apply   # write (stops if the token can't write)
  *
  * Runs the site's own directory filter (lib/directory-filter) over every
  * state's raw Directory DB rows, then:
  *  a. archives every row the filter removes (Notion trash, recoverable for 30
- *     days); for duplicates the first row is kept and the rest archived;
+ *     days). For duplicates the keep rule (Sean, 30 Oct 2026) is: a row with a
+ *     price AND a price source beats one without; next, a row with a phone
+ *     beats one without; otherwise the first row is kept. The rest are archived,
+ *     and every keep decision is printed (KEEP lines);
  *  b. writes back the cleaned name where the filter cleans rather than removes
  *     (a URL, phone, address or licence id glued into the name);
  *  c. unchecks Online Available on the Georgia DDS rows (classroom clinics);
@@ -17,13 +20,12 @@
  *     number is written instead of clearing, so cleaning the name doesn't lose it.
  *
  * Safety stops, before anything is written:
- *  - the per-state removal counts must equal PR #69's reviewed table
- *    (EXPECTED_REMOVED); any difference stops the run and is reported;
- *  - a duplicate set where the filter would keep a row other than the first
- *    (it keeps the richest: the one holding a price, source or website) stops
- *    the run, because the reviewed rule is "keep the first". Pass
- *    --keep-richer to accept the filter's choice instead, once Sean has
- *    decided.
+ *  - the per-state removal counts must equal the reviewed table
+ *    (EXPECTED_REMOVED: AZ 240, CT 2, GA 9, MD 11, NV 45, NJ 3, NY 4, ND 1,
+ *    VA 51, WA 7; total 373); any difference stops the run and is reported;
+ *  - the keep rule can keep a row other than the first (it did for Arizona
+ *    licence 552 and New Jersey's Driving School of America). Sean approved
+ *    that with --keep-richer; without the flag such a set stops the run.
  * The dry run also simulates the result of --apply and re-runs the filter on
  * it: the acceptance is zero rows removed on that rerun.
  */
@@ -35,7 +37,7 @@ import { cleanDirectory, cleanName, directoryListLabel, licenceFromName, PLACEHO
 import { getAllStateSlugs, getStateBySlug } from "../lib/state-utils";
 import type { DirectorySchool } from "../lib/types";
 
-/** Reviewed removal counts (Sean, 30 Oct 2026: PR #69's table plus AZ +1, NV +2, ND +1). */
+/** Reviewed removal counts (Sean, 30 Oct 2026): 373 rows. */
 const EXPECTED_REMOVED: Record<string, number> = {
   Arizona: 240, Connecticut: 2, Georgia: 9, Maryland: 11, Nevada: 45, "New Jersey": 3, "New York": 4, "North Dakota": 1, Virginia: 51, Washington: 7,
 };
@@ -104,7 +106,7 @@ async function main() {
     for (const x of removed) by.set(x.reason, (by.get(x.reason) ?? 0) + 1);
     const label = directoryListLabel(st.name, kept);
     console.log(`${st.name} | ${rows.length} | ${kept.length} | ${removed.length} | ${[...by].map(([k, v]) => `${k} ${v}`).join(", ") || "-"} | All ${kept.length} ${label.noun} (${label.source})`);
-    if ((EXPECTED_REMOVED[st.name] ?? 0) !== removed.length) mismatches.push(`${st.name}: ${removed.length} removed, PR #69 table says ${EXPECTED_REMOVED[st.name] ?? 0}`);
+    if ((EXPECTED_REMOVED[st.name] ?? 0) !== removed.length) mismatches.push(`${st.name}: ${removed.length} removed, the reviewed table says ${EXPECTED_REMOVED[st.name] ?? 0}`);
 
     // a. archive. Duplicates: the richer row is kept (price + source, then phone), else the first.
     const order = new Map(rows.map((r, i) => [r.id, i]));
@@ -185,11 +187,11 @@ async function main() {
   console.log(`simulated rerun after --apply: ${rerun} rows removed${rerunBy.length ? ` -> ${rerunBy.join(" | ")}` : ""}`);
 
   // Safety stops.
-  if (total !== EXPECTED_TOTAL) mismatches.push(`total ${total}, PR #69 table says ${EXPECTED_TOTAL}`);
+  if (total !== EXPECTED_TOTAL) mismatches.push(`total ${total}, the reviewed table says ${EXPECTED_TOTAL}`);
   if (mismatches.length || (keepNotFirst.length && !KEEP_RICHER)) {
     console.error(`\nSTOP before writing anything:`);
     for (const m of mismatches) console.error(`  count differs: ${m}`);
-    if (!KEEP_RICHER) for (const k of keepNotFirst) console.error(`  keep-first conflict: ${k} (rerun with --keep-richer to keep the richer row)`);
+    if (!KEEP_RICHER) for (const k of keepNotFirst) console.error(`  keeps a row other than the first: ${k} (approved: rerun with --keep-richer)`);
     process.exit(1);
   }
   console.log(`\ncounts match the reviewed table (${Object.entries(EXPECTED_REMOVED).map(([k, v]) => `${k} ${v}`).join(", ")}; total ${EXPECTED_TOTAL}).`);

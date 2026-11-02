@@ -5,6 +5,7 @@
  * the FL DHSMV website. The provider list is a table on the page.
  */
 
+import { junkReason } from "../lib/directory-filter";
 import { config } from "dotenv";
 config({ path: ".env.local" });
 import { chromium } from "playwright";
@@ -172,15 +173,16 @@ async function syncToNotion(scraped: ScrapedSchool[]) {
 
   for (const school of scraped) {
     if (!school.name) continue;
+    // Same validation the site renders through (lib/directory-filter, P0 follow-up): never write page furniture as a school.
+    if (junkReason(school.name)) { console.log(`  skip (${junkReason(school.name)}): ${JSON.stringify(school.name)}`); continue; }
 
     const isOnline = school.deliveryMethod.toLowerCase().includes("internet") ||
                      school.deliveryMethod.toLowerCase().includes("app");
 
     const properties: any = {
       "School Name": { title: [{ text: { content: school.name } }] },
-      "License Number": {
-        rich_text: [{ text: { content: "FL-BDI" } }],
-      },
+      // The FLHSMV list publishes no licence number: leave the field empty, never a placeholder.
+      "License Number": { rich_text: [] },
       Phone: { rich_text: [{ text: { content: school.phone || "" } }] },
       Address: {
         rich_text: [{ text: { content: school.deliveryMethod } }],

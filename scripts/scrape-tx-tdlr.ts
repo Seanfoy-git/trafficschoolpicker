@@ -17,6 +17,7 @@
  * - TX TDLR: CSV download → single request, no rate limit
  */
 
+import { junkReason } from "../lib/directory-filter";
 import { config } from "dotenv";
 config({ path: ".env.local" });
 import { makeNotionClient } from "./lib/notion-client";
@@ -158,6 +159,8 @@ async function syncTXToNotion(schools: Record<string, string>[]) {
       .join(", ");
 
     if (!name || !license) continue;
+    // Same validation the site renders through (lib/directory-filter, P0 follow-up): never write page furniture as a school.
+    if (junkReason(name)) { console.log(`  skip (${junkReason(name)}): ${JSON.stringify(name)}`); continue; }
 
     const properties: any = {
       "School Name": { title: [{ text: { content: name } }] },

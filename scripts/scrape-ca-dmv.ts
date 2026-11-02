@@ -17,6 +17,7 @@
  * - CA DMV: no documented limit → Playwright adds natural delays
  */
 
+import { junkReason } from "../lib/directory-filter";
 import { config } from "dotenv";
 config({ path: ".env.local" });
 import { chromium } from "playwright";
@@ -140,6 +141,8 @@ async function syncToNotion(scraped: ScrapedSchool[]) {
   const TODAY = new Date().toISOString().split("T")[0];
 
   for (const school of scraped) {
+    // Same validation the site renders through (lib/directory-filter, P0 follow-up): never write page furniture as a school.
+    if (junkReason(school.name)) { console.log(`  skip (${junkReason(school.name)}): ${JSON.stringify(school.name)}`); continue; }
     const existingId = existing.get(school.license);
 
     const properties: any = {

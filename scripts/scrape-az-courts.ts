@@ -43,7 +43,7 @@ async function scrape(): Promise<ScrapedSchool[]> {
       if (opt.text.length > 5 && !opt.text.match(/^\d+$/)) {
         schools.push({
           name: opt.text,
-          licenseNumber: opt.value || "AZ-DDS",
+          licenseNumber: opt.value || "", // no number on the option: empty, never a placeholder
           phone: "",
           address: "",
           website: "",
