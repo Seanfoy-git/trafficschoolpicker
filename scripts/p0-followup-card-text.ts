@@ -145,10 +145,20 @@ async function main() {
     unusedIds.add(u.id);
     const name = `${t} (page ${u.id})`;
     const { found, unchecked } = await relationsTo(u.id);
+    // Variants join on slug text. A slug match counts only if no live Traffic Schools row
+    // (Status = Active and Show On Site, the site's own filter) carries that slug: if one
+    // does, the variants belong to it, not to this row.
     const slug = fullText(page, "Slug") ?? "";
     if (slug) {
       const v = await notion.databases.query({ database_id: process.env.NOTION_SCHOOL_VARIANTS_DB!, filter: { property: "School Slug", rich_text: { equals: slug } } });
-      if (v.results.length) found.push(`School State Variants: ${v.results.length} row(s) with School Slug "${slug}" (the slug the live ${slug} row also carries)`);
+      if (v.results.length) {
+        const live = (await notion.databases.query({
+          database_id: process.env.NOTION_SCHOOLS_DB!,
+          filter: { and: [{ property: "Status", select: { equals: "Active" } }, { property: "Show On Site", checkbox: { equals: true } }, { property: "Slug", rich_text: { equals: slug } }] },
+        })).results.filter((r) => r.id !== u.id) as PageObjectResponse[];
+        if (live.length) console.log(`INFO    ${name}: ${v.results.length} School State Variants row(s) with School Slug "${slug}" belong to the live row ${title(live[0])} (page ${live[0].id}); not counted`);
+        else found.push(`School State Variants: ${v.results.length} row(s) with School Slug "${slug}", and no live Traffic Schools row carries that slug`);
+      }
     }
     if (!found.length && !unchecked.length) {
       changes.push({ db: SDB, page: name, pageId: u.id, field: "(archive row)", current: "row present (no relations found in any database)", next: "archived (Notion trash, 30 days)", property: {}, archive: true });
