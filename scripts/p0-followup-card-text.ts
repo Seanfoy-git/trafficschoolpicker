@@ -24,7 +24,7 @@
  *     other database relates to them: Notion relations from School Pricing,
  *     School State Variants, School Directory and Affiliate Programs, and the
  *     slug text the variants join on. Affiliate Programs isn't shared with the
- *     site token; pass --affiliate-programs-db=<id> with a token that can read
+ *     site token; pass --affiliate-programs-db=<id>[,<id>…] with a token that can read
  *     it. Anything related, or anything that can't be checked, means no archive:
  *     their "all 50 states" pros and One Liner text are deleted instead, and the
  *     relations are listed.
@@ -66,17 +66,21 @@ const UNUSED_ROWS = [
   { id: "9149e794-4352-823d-bfef-81bb0d1554d8", title: "DriversEd.com" },
   { id: "5e39e794-4352-837c-930c-016f6befff47", title: "[ARCHIVED DUP] iDriveSafely" },
 ];
-const AFFILIATE_DB = process.argv.find((a) => a.startsWith("--affiliate-programs-db="))?.split("=")[1] ?? null;
+// One or more Affiliate Programs databases, comma-separated (the current one and its older copies under Data).
+const AFFILIATE_DBS: string[] = (process.argv.find((a) => a.startsWith("--affiliate-programs-db="))?.split("=")[1] ?? "")
+  .split(",")
+  .map((x) => x.trim())
+  .filter(Boolean);
 
 /**
  * Affiliate Programs stays off the site token (read-only, scoped to site data
  * since the August incident). The check runs only with the write token used
  * for --apply, passed in the environment:
- *   NOTION_TOKEN=<write token> npx tsx scripts/p0-followup-card-text.ts --affiliate-programs-db=<id>
+ *   NOTION_TOKEN=<write token> npx tsx scripts/p0-followup-card-text.ts --affiliate-programs-db=<id>[,<id>…]
  * If NOTION_TOKEN is still the site token from .env.local, stop.
  */
 function assertNotSiteToken() {
-  if (!AFFILIATE_DB) return;
+  if (!AFFILIATE_DBS.length) return;
   let siteToken: string | undefined;
   try {
     const env = readFileSync(".env.local", "utf8").match(/^\s*NOTION_TOKEN\s*=\s*(.*)\s*$/m);
@@ -85,7 +89,7 @@ function assertNotSiteToken() {
   if (!process.env.NOTION_TOKEN || (siteToken && process.env.NOTION_TOKEN === siteToken)) {
     console.error(
       "STOP: --affiliate-programs-db must run with the write token, never the site token in .env.local.\n" +
-        "  NOTION_TOKEN=<write token> npx tsx scripts/p0-followup-card-text.ts --affiliate-programs-db=<id> [--apply]",
+        "  NOTION_TOKEN=<write token> npx tsx scripts/p0-followup-card-text.ts --affiliate-programs-db=<id>[,<id>…] [--apply]",
     );
     process.exit(2);
   }
@@ -99,12 +103,14 @@ async function relationsTo(pageId: string): Promise<{ found: string[]; unchecked
     ["School Pricing", process.env.NOTION_PRICING_DB],
     ["School State Variants", process.env.NOTION_SCHOOL_VARIANTS_DB],
     ["School Directory", process.env.NOTION_DIRECTORY_DB],
-    ["Affiliate Programs", AFFILIATE_DB ?? undefined],
+    ...(AFFILIATE_DBS.length
+      ? AFFILIATE_DBS.map((id, i) => [`Affiliate Programs (${i + 1} of ${AFFILIATE_DBS.length}, ${id})`, id] as [string, string])
+      : [["Affiliate Programs", undefined] as [string, undefined]]),
   ];
   const found: string[] = [];
   const unchecked: string[] = [];
   for (const [name, id] of dbs) {
-    if (!id) { unchecked.push(`${name}: no database id (not shared with this token; pass --affiliate-programs-db=<id>)`); continue; }
+    if (!id) { unchecked.push(`${name}: no database id (not shared with this token; pass --affiliate-programs-db=<id>[,<id>…])`); continue; }
     let schema;
     try { schema = await notion.databases.retrieve({ database_id: id }); } catch (e) { unchecked.push(`${name}: can't read (${(e as { code?: string }).code ?? e})`); continue; }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -188,11 +194,12 @@ async function main() {
     // Affiliate Programs names schools in a text field, not a relation (Sean, 2 Nov 2026).
     // A row naming this school counts only if no live Traffic Schools row carries that
     // name; if one does, the programme is the live school's (same rule as the slug).
-    if (AFFILIATE_DB) {
+    for (const affDb of AFFILIATE_DBS) {
+      const label = `Affiliate Programs (${affDb})`;
       const bare = t.replace(/^\[ARCHIVED DUP\]\s*/i, "").trim();
       const keys = [...new Set([bare, slug].filter(Boolean).map((x) => x.toLowerCase().replace(/[^a-z0-9]/g, "")))];
       let rows: PageObjectResponse[] = [];
-      try { rows = await queryAll(AFFILIATE_DB); } catch (e) { unchecked.push(`Affiliate Programs: can't read (${(e as { code?: string }).code ?? e})`); }
+      try { rows = await queryAll(affDb); } catch (e) { unchecked.push(`${label}: can't read (${(e as { code?: string }).code ?? e})`); continue; }
       const naming = rows.filter((r) => Object.keys(r.properties).some((f) => {
         const v = (fullText(r, f) ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
         return v && keys.some((k) => k.length >= 5 && v.includes(k));
@@ -206,10 +213,10 @@ async function main() {
         const carriesName = (r: PageObjectResponse) => keys.includes(norm(title(r))) || keys.includes(norm(fullText(r, "Slug") ?? ""));
         const live = liveRows.filter((r) => r.id !== u.id && carriesName(r));
         const list = naming.map((r) => `${title(r)} (page ${r.id})`).join("; ");
-        if (live.length) console.log(`INFO    ${name}: Affiliate Programs rows naming this school belong to the live row ${title(live[0])} (page ${live[0].id}); not counted: ${list}`);
-        else found.push(`Affiliate Programs: ${naming.length} row(s) name this school in text, and no live Traffic Schools row carries that name: ${list}`);
+        if (live.length) console.log(`INFO    ${name}: ${label}: ${naming.length} of ${rows.length} rows name this school; they belong to the live row ${title(live[0])} (page ${live[0].id}), not counted: ${list}`);
+        else found.push(`${label}: ${naming.length} row(s) name this school in text, and no live Traffic Schools row carries that name: ${list}`);
       } else {
-        console.log(`INFO    ${name}: no Affiliate Programs row names this school (${rows.length} rows read)`);
+        console.log(`INFO    ${name}: ${label}: no row names this school (${rows.length} rows read)`);
       }
     }
     if (!found.length && !unchecked.length) {
