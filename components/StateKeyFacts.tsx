@@ -45,9 +45,16 @@ export function StateKeyFacts({
   const status = stateInfo.onlineStatus;
   const facts: Fact[] = [];
 
-  // Online availability — phrased for what's actually true in this state.
+  // Online availability — phrased for what's actually true in this state. When the
+  // state has a program record (Dismissal Answer), the benefit is answered there
+  // only, in the "Ticket dismissal" row below: this row just says an online course
+  // exists, so the two rows can't give different answers (P0, 30 Oct 2026: VA
+  // "Insurance discount only" vs a points credit; CA/FL "Yes, for ticket
+  // dismissal" vs masking / adjudication withheld).
   const available =
-    status === "Online — ticket dismissal"
+    stateInfo.dismissalAnswer?.trim() && status.startsWith("Online — ")
+      ? "Yes"
+      : status === "Online — ticket dismissal"
       ? "Yes, for ticket dismissal"
       : status === "Online — insurance discount only"
         ? "Insurance discount only"

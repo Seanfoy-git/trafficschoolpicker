@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { cleanDirectory } from "./directory-filter";
 import { Client } from "@notionhq/client";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import type {
@@ -1068,11 +1069,20 @@ const getAllDirectorySchools = memoize(async (): Promise<DirectorySchool[]> => {
   }
 });
 
+/**
+ * The state's directory rows, cleaned (lib/directory-filter, P0 30 Oct 2026):
+ * no URL / UI-label / agency / empty names, one row per license number. Every
+ * directory count and table on the site reads this, so a header count always
+ * equals its rows. A state whose rows all fail renders "Directory data coming
+ * soon" (no rows).
+ */
 export async function getDirectoryForState(
   stateName: string
 ): Promise<DirectorySchool[]> {
   const all = await getAllDirectorySchools();
-  return all.filter((d) => d.state === stateName);
+  const { rows, removed } = cleanDirectory(all.filter((d) => d.state === stateName));
+  if (removed.length) console.warn(`[directory] ${stateName}: dropped ${removed.length} row(s) (${[...new Set(removed.map((r) => r.reason))].join(", ")})`);
+  return rows;
 }
 
 // ─── PROS/CONS HELPER ───────────────────────────────────────

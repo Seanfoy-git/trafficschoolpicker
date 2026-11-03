@@ -9,7 +9,7 @@ import {
   lowestDisplayedPrice,
   type VideoEntry,
 } from "@/lib/structured-data";
-import { loadStateData, noPriceLabel, ONLINE_COMPARISON_STATUSES } from "@/lib/state-page-data";
+import { cardCourseHours, loadStateData, noPriceLabel, ONLINE_COMPARISON_STATUSES, prosAgreeingWithRow } from "@/lib/state-page-data";
 import {
   comparisonH1,
   comparisonH2,
@@ -28,6 +28,7 @@ import { getStateBySlug, getAllStateSlugs } from "@/lib/state-utils";
 import { SchoolCard } from "@/components/SchoolCard";
 import { FaqSection } from "@/components/FaqSection";
 import { DirectoryTable } from "@/components/DirectoryTable";
+import { directoryListLabel } from "@/lib/directory-filter";
 import { TrustBar } from "@/components/TrustBar";
 import { OutOfStateCallout } from "@/components/OutOfStateCallout";
 import { StateKeyFacts } from "@/components/StateKeyFacts";
@@ -190,13 +191,19 @@ export default async function StatePage({ params }: Props) {
   // P17: on comparison-layout pages the card must never show a price the table
   // calls unsourced, so a card whose price has no recorded source + checked date
   // renders the same no-price label as its table row (omit beats unsourced).
+  // P0 (30 Oct 2026): a card pro may not contradict the same school's verified
+  // table row (final exam, timers); a contradicting pro is dropped, never reworded.
   const tier1Cards = comparison
-    ? tier1Resolved.map(({ school, resolved }) =>
-        resolved.priceSource
-          ? { school, resolved }
-          : { school, resolved: { ...resolved, price: null, priceDisplay: noPriceLabel(resolved) } }
-      )
+    ? tier1Resolved.map(({ school, resolved }) => {
+        const row = comparison.rows.find((r) => r.tier === 1 && r.slug === school.slug);
+        const agreed = { ...resolved, pros: prosAgreeingWithRow(resolved.pros, row, `${stateSlug}/${school.slug}`) };
+        return agreed.priceSource
+          ? { school, resolved: agreed }
+          : { school, resolved: { ...agreed, price: null, priceDisplay: noPriceLabel(agreed) } };
+      })
     : tier1Resolved;
+  // A card prints a course length only when it describes the program the card qualifies for.
+  const cardHours = cardCourseHours(stateInfo);
 
   // P12 badges (computed per page, not from the static Notion field): "Top Rated"
   // on the single highest-scored card (tier1Cards is already sorted by TSP Score
@@ -228,10 +235,9 @@ export default async function StatePage({ params }: Props) {
     ? new Set(allSchools.map((s) => s.slug))
     : new Set<string>();
 
-  // Washington DC: the national comparison cards are shown for reference only —
-  // DC point removal can be earned ONLY through the two DC DMV-approved providers
-  // (see the DC callout below), so we suppress the Product/Offer markup that would
-  // otherwise assert these cards are the DC-approved course (P10 Task 4).
+  // Named-provider states (Washington DC) render no cards at all, so no
+  // Product/Offer markup either: loadStateData keeps only confirmed schools in
+  // tier1, which turns showComparison off (P0, 30 Oct 2026).
   const comparisonSchema = comparison
     ? buildComparisonTableItemList({
         comparison,
@@ -239,18 +245,18 @@ export default async function StatePage({ params }: Props) {
         stateName: stateMeta.name,
         stateSlug,
         reviewSlugs,
-        courseHours: stateInfo?.courseHours ?? null,
+        courseHours: cardHours,
         hasApproval: onlineStatus !== "Online — court discretion",
         heading: comparisonH2(comparison, stateMeta.name),
       })
-    : showComparison && stateSlug !== "washington-dc"
+    : showComparison
     ? buildComparisonItemList(
         tier1Resolved,
         stateMeta.name,
         stateSlug,
         reviewSlugs,
         year,
-        stateInfo?.courseHours ?? null,
+        cardHours,
         // No statewide approval program in court-discretion states: the Product
         // description must not claim the course is "state-approved" (P10 Task 4).
         onlineStatus !== "Online — court discretion"
@@ -323,15 +329,16 @@ export default async function StatePage({ params }: Props) {
             <p className="text-lg text-slate-300 max-w-3xl">
               Comparing {tier1.length} reviewed option
               {tier1.length !== 1 ? "s" : ""}
-              {directory.length > 0 && (
+              {/* "from N online schools" only when the directory is a list of online
+                  courses (Georgia's is DDS classroom clinics, P0 30 Oct 2026). */}
+              {directory.length > 0 && directoryListLabel(stateMeta.name, directory).online && (
                 <>
-                  {" "}from <span data-count="directory">{directory.length}</span> {stateMeta.name}-approved online
-                  schools
+                  {" "}from <span data-count="directory">{directory.length}</span> {`${stateMeta.name}-approved online schools`}
                 </>
               )}
             </p>
           )}
-          {!showComparison && onlineStatus === "Online — insurance discount only" && (
+          {!showComparison && onlineStatus === "Online — insurance discount only" && !stateInfo?.dismissalAnswer && (
             <p className="text-lg text-slate-300 max-w-3xl">
               Online courses in {stateMeta.name} are for insurance discounts, not ticket dismissal
             </p>
@@ -434,7 +441,22 @@ export default async function StatePage({ params }: Props) {
   const bannersBlock = (
     <>
       {/* STATUS BANNERS */}
-      {onlineStatus === "Online — insurance discount only" && (
+      {/* P0 (30 Oct 2026): the banner answers "does it dismiss my ticket" from the
+          state's program record (Dismissal Answer), the same field Key Facts uses,
+          so the two can't disagree. The fixed "insurance discount only" wording is
+          the fallback only for a state with no program record. */}
+      {onlineStatus === "Online — insurance discount only" && stateInfo?.dismissalAnswer && (
+        <section className="py-6 bg-amber-50 border-b border-amber-200">
+          <div className="max-w-5xl mx-auto px-4 flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+            <div>
+              <p className="font-semibold text-amber-800">Does it dismiss your ticket?</p>
+              <p className="text-sm text-amber-700">{stateInfo.dismissalAnswer}</p>
+            </div>
+          </div>
+        </section>
+      )}
+      {onlineStatus === "Online — insurance discount only" && !stateInfo?.dismissalAnswer && (
         <section className="py-6 bg-amber-50 border-b border-amber-200">
           <div className="max-w-5xl mx-auto px-4 flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
@@ -614,9 +636,8 @@ export default async function StatePage({ params }: Props) {
       )}
 
       {/* WASHINGTON DC — the answer is the DC DMV's two approved online providers.
-          The national comparison cards below are demoted to reference only: they
-          carry no DC benefit claim and their Product/Offer markup is suppressed
-          (P10 Task 4). Provider list + process sourced to dmv.dc.gov. */}
+          No school cards render here (NAMED_PROVIDER_STATES, P0 30 Oct 2026): we
+          list neither provider. Provider list + process sourced to dmv.dc.gov. */}
       {stateSlug === "washington-dc" && (
         <section className="py-6 bg-amber-50 border-b border-amber-200">
           <div className="max-w-5xl mx-auto px-4 flex items-start gap-3">
@@ -639,7 +660,7 @@ export default async function StatePage({ params }: Props) {
                 >
                   dmv.dc.gov
                 </a>
-                ). The national courses listed below are shown for reference only and are
+                ). Other online courses are
                 <strong> not valid for DC point removal</strong>; confirm the current
                 approved-provider list with the DC DMV before you pay.
               </p>
@@ -733,7 +754,7 @@ export default async function StatePage({ params }: Props) {
                   rank={i + 1}
                   showProsAndCons
                   stateCode={stateMeta.code}
-                  courseHours={stateInfo?.courseHours ?? null}
+                  courseHours={cardHours}
                   badges={badgesFor(school.id)}
                 />
               ))}
@@ -768,7 +789,7 @@ export default async function StatePage({ params }: Props) {
                   rank={i + 1}
                   showProsAndCons
                   stateCode={stateMeta.code}
-                  courseHours={stateInfo?.courseHours ?? null}
+                  courseHours={cardHours}
                   badges={badgesFor(school.id)}
                 />
               ))}
@@ -792,7 +813,7 @@ export default async function StatePage({ params }: Props) {
         <section className="py-12 bg-white">
           <div className="max-w-4xl mx-auto px-4">
             <h2 className="text-2xl font-bold text-slate-900 mb-6">
-              {stateMeta.name} Traffic School Rules &amp; Requirements
+              {`${stateMeta.name} Traffic School Rules & Requirements`}
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-slate-50 rounded-lg p-6">
