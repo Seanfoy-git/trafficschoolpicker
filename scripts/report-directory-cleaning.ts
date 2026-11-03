@@ -21,8 +21,14 @@
  *
  * Safety stops, before anything is written:
  *  - the per-state removal counts must equal the reviewed table
- *    (EXPECTED_REMOVED: AZ 240, CT 2, FL 2, GA 9, MD 11, NV 45, NJ 3, NY 4,
- *    ND 1, VA 59, WA 7; total 383); any difference stops the run and is reported;
+ *    (EXPECTED_REMOVED: AZ 240, CT 2, FL 12, GA 10, MD 11, NV 45, NJ 3, NY 4,
+ *    ND 1, VA 59, WA 7; total 394); any difference stops the run and is reported;
+ *  - Florida (round 5): the new DOM parser (scripts/lib/fl-dhsmv.ts) is run
+ *    against the live FLHSMV page, parse only. Rows whose name has the
+ *    delivery method glued on get the parser's name written back; every row's
+ *    Online Available is set from its delivery method. A rename that
+ *    duplicates another row, or a glued name the parser can't pair, stops the
+ *    run.
  *  - the keep rule can keep a row other than the first (it did for Arizona
  *    licence 552 and New Jersey's Driving School of America). Sean approved
  *    that with --keep-richer; without the flag such a set stops the run.
@@ -39,13 +45,16 @@ import { APPLY, assertWritable, fullText, notion } from "./lib/notion-edit";
 const KEEP_RICHER = process.argv.includes("--keep-richer");
 import { cleanDirectory, cleanName, DirectoryIndex, directoryListLabel, junkReason, licenceFromName, PLACEHOLDER_LICENSE, richness } from "../lib/directory-filter";
 import { getAllStateSlugs, getStateBySlug } from "../lib/state-utils";
+import { scrapeFLProviders, type FLProvider } from "./lib/fl-dhsmv";
 import type { DirectorySchool } from "../lib/types";
 
-/** Reviewed removal counts (Sean, 2 Nov 2026, after the 1 Nov Monthly Data Refresh): 383 rows. */
+/** Reviewed removal counts (Sean, round 5, 3 Nov 2026: the 11 page-furniture labels added): 394 rows. */
 const EXPECTED_REMOVED: Record<string, number> = {
-  Arizona: 240, Connecticut: 2, Florida: 2, Georgia: 9, Maryland: 11, Nevada: 45, "New Jersey": 3, "New York": 4, "North Dakota": 1, Virginia: 59, Washington: 7,
+  Arizona: 240, Connecticut: 2, Florida: 12, Georgia: 10, Maryland: 11, Nevada: 45, "New Jersey": 3, "New York": 4, "North Dakota": 1, Virginia: 59, Washington: 7,
 };
-const EXPECTED_TOTAL = 383;
+const EXPECTED_TOTAL = 394;
+/** --no-fl-live: skip reading the live FLHSMV page (Florida renames, Online Available and its refresh replay need it). */
+const FL_LIVE = !process.argv.includes("--no-fl-live");
 /** Rows created after the 30 Oct review (the 1 Nov Monthly Data Refresh added some): the ones kept are listed for a check. */
 const REVIEWED_AT = "2026-10-31T00:00:00Z";
 
@@ -163,6 +172,57 @@ async function main() {
   }
   console.log(`total removed: ${total}\n`);
 
+  // e/f. Florida (round 5): names and Online Available from the new DOM parser, live page, parse only.
+  const flStops: string[] = [];
+  const flRenames: string[] = [];
+  const flOnline: string[] = [];
+  const flNotInSource: string[] = [];
+  let flProviders: FLProvider[] | null = null;
+  if (FL_LIVE) {
+    flProviders = await scrapeFLProviders();
+    console.log(`Florida: the new parser read ${flProviders.length} providers from the live FLHSMV page (parse only, nothing written)`);
+    const key = (x: string) => x.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const byKey = new Map(flProviders.map((p) => [key(p.name), p]));
+    // A delivery method glued to the end of a name: "…Classroom, Internet", "FloridaClassroom, Internet, DVD, Booklet".
+    const GLUE = /\s*(?:(?:Classroom|Internet|DVD|Booklet|App)\b[\s,]*|\((?:Additional|Other) Languages Available\)[\s,]*)+$/i;
+    const flRaw = raw.filter((r) => r.state === "Florida");
+    const flKeptIds = new Set(cleanDirectory(flRaw).rows.map((r) => r.id));
+    const finalNames = new Map<string, { name: string; renamed: boolean }>();
+    for (const r of flRaw.filter((x) => flKeptIds.has(x.id))) {
+      const cur = cleanName(r.name);
+      let finalName = cur;
+      const base = cur.replace(GLUE, "").trim();
+      if (base && base !== cur) {
+        const p = byKey.get(key(base)) ?? flProviders.find((x) => x.name.toLowerCase().startsWith(`${base.toLowerCase()} (`));
+        if (!p) flStops.push(`Florida: ${JSON.stringify(cur)} has a delivery method glued on, and the new parser has no provider named ${JSON.stringify(base)}`);
+        else {
+          finalName = p.name;
+          const u = upd(r);
+          u.props["School Name"] = { title: [{ type: "text", text: { content: p.name } }] };
+          u.notes.push(`Florida name ${JSON.stringify(cur)} -> ${JSON.stringify(p.name)} (new parser)`);
+          flRenames.push(`${JSON.stringify(cur)} -> ${JSON.stringify(p.name)} | page ${r.id}`);
+        }
+      }
+      finalNames.set(r.id, { name: finalName, renamed: finalName !== cur });
+      const p2 = byKey.get(key(finalName));
+      if (!p2) { flNotInSource.push(`${JSON.stringify(finalName)} | page ${r.id}`); continue; }
+      if (p2.online !== r.onlineAvailable) {
+        const u = upd(r);
+        u.props["Online Available"] = { checkbox: p2.online };
+        u.notes.push(`Online Available: ${r.onlineAvailable ? "checked" : "unchecked"} -> ${p2.online ? "checked" : "unchecked"} (delivery: ${p2.deliveryMethod})`);
+        flOnline.push(`${JSON.stringify(finalName)} | delivery ${JSON.stringify(p2.deliveryMethod)} | ${r.onlineAvailable} -> ${p2.online} | page ${r.id}`);
+      }
+    }
+    // A rename may not duplicate another kept Florida row.
+    const seen = new Map<string, string>();
+    for (const [id, f] of finalNames) {
+      const k = key(f.name);
+      const other = seen.get(k);
+      if (other && (f.renamed || finalNames.get(other)!.renamed)) flStops.push(`Florida: the new name ${JSON.stringify(f.name)} (page ${id}) duplicates page ${other}`);
+      if (!other) seen.set(k, id);
+    }
+  }
+
   for (const a of archive) console.log(`ARCHIVE  ${a.state} | ${a.reason} | ${JSON.stringify(a.name)} | page ${a.id}`);
   for (const [id, u] of updates) console.log(`UPDATE   ${u.state} | ${JSON.stringify(u.name)} | page ${id} | ${u.notes.join("; ")}`);
   const renames = [...updates.values()].filter((u) => u.props["School Name"]).length;
@@ -182,7 +242,8 @@ async function main() {
       ...r,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       name: u.props["School Name"] ? (u.props["School Name"] as any).title[0].text.content : r.name,
-      onlineAvailable: u.props["Online Available"] ? false : r.onlineAvailable,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onlineAvailable: u.props["Online Available"] ? (u.props["Online Available"] as any).checkbox : r.onlineAvailable,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       licenseNumber: u.props["License Number"] ? ((u.props["License Number"] as any).rich_text[0]?.text.content ?? "") : r.licenseNumber,
     };
@@ -197,17 +258,27 @@ async function main() {
   }
   console.log(`simulated rerun after --apply: ${rerun} rows removed${rerunBy.length ? ` -> ${rerunBy.join(" | ")}` : ""}`);
 
+  if (FL_LIVE) {
+    console.log(`\nFlorida renames (delivery method glued on -> the new parser's name): ${flRenames.length}`);
+    for (const x of flRenames) console.log(`FL-NAME  ${x}`);
+    console.log(`\nFlorida Online Available changes (from the delivery method): ${flOnline.length}`);
+    for (const x of flOnline) console.log(`FL-ONLINE ${x}`);
+    console.log(`\nFlorida rows kept but not in the live source (no change written): ${flNotInSource.length}`);
+    for (const x of flNotInSource) console.log(`FL-NOT-IN-SOURCE ${x}`);
+  }
+
   // Kept rows that weren't there at the 30 Oct review: check they're real schools.
   console.log(`\nkept rows created after the 30 Oct review (${newKept.length}):`);
   for (const n of newKept) console.log(`NEW      ${n}`);
 
   // Simulate the next refresh: replay the last scrape (every raw row, as scraped) through the
   // scrapers' matching against the post-apply table. Junk is skipped as the syncs skip it.
-  console.log("\nsimulated next refresh against the post-apply table (state | updates | creates | skipped as junk):");
+  console.log(`\nsimulated next refresh against the post-apply table (state | updates | creates | skipped as junk). Source: ${flProviders ? "Florida from the new parser on the live FLHSMV page; " : ""}every other state replays its last scrape (1 Nov):`);
   let simCreates = 0;
   for (const slug of getAllStateSlugs()) {
     const st = getStateBySlug(slug)!;
-    const source = raw.filter((r) => r.state === st.name);
+    const source: Array<{ id: string; name: string; licenseNumber: string }> =
+      st.name === "Florida" && flProviders ? flProviders.map((p, i) => ({ id: `fl:${i}`, name: p.name, licenseNumber: "" })) : raw.filter((r) => r.state === st.name);
     if (!source.length) continue;
     const index = new DirectoryIndex(after.filter((r) => r.state === st.name));
     let updates = 0, skipped = 0;
@@ -224,9 +295,10 @@ async function main() {
 
   // Safety stops.
   if (total !== EXPECTED_TOTAL) mismatches.push(`total ${total}, the reviewed table says ${EXPECTED_TOTAL}`);
-  if (mismatches.length || (keepNotFirst.length && !KEEP_RICHER)) {
+  if (mismatches.length || flStops.length || (keepNotFirst.length && !KEEP_RICHER)) {
     console.error(`\nSTOP before writing anything:`);
     for (const m of mismatches) console.error(`  count differs: ${m}`);
+    for (const f of flStops) console.error(`  ${f}`);
     if (!KEEP_RICHER) for (const k of keepNotFirst) console.error(`  keeps a row other than the first: ${k} (approved: rerun with --keep-richer)`);
     process.exit(1);
   }

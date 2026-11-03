@@ -9,14 +9,11 @@ import { rowIdentity, junkReason } from "../lib/directory-filter";
 import { getExistingSchools } from "./lib/scraper-utils";
 import { config } from "dotenv";
 config({ path: ".env.local" });
-import { chromium } from "playwright";
+import { scrapeFLProviders, onlineFromDelivery } from "./lib/fl-dhsmv";
 import { makeNotionClient } from "./lib/notion-client";
 
 const notion = makeNotionClient();
 const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB!;
-
-const BDI_URL =
-  "https://www.flhsmv.gov/driver-licenses-id-cards/education-courses/driver-improvement-schools/basic-driver-improvement-bdi-find-approved-listing-bdi-course-providers/";
 
 interface ScrapedSchool {
   name: string;
@@ -28,119 +25,12 @@ interface ScrapedSchool {
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/** The provider table, read from the DOM by the shared parser (scripts/lib/fl-dhsmv.ts, round 5). */
 async function scrapeFLDHSMV(): Promise<ScrapedSchool[]> {
   console.log("Launching browser...");
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
-
-  await page.goto(BDI_URL, { waitUntil: "networkidle", timeout: 30000 });
-  await page.waitForTimeout(2000);
-
-  // The BDI providers are in a table with columns: NAME, DELIVERY METHOD, CONTACT INFORMATION
-  const schools: ScrapedSchool[] = [];
-
-  // Extract from the page text — the table renders as structured text
-  const text = await page.evaluate(() => document.body.innerText);
-  const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
-
-  // Find the start of the provider list (after "Approved BDI Course Providers")
-  let inProviderSection = false;
-  let currentName = "";
-  let currentDelivery = "";
-  let currentPhone = "";
-  let currentNotes = "";
-
-  const phonePattern = /\d{3}[-.]?\d{3}[-.]?\d{4}/;
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-
-    if (line.includes("Approved BDI Course Providers")) {
-      inProviderSection = true;
-      // Skip header row
-      continue;
-    }
-
-    if (!inProviderSection) continue;
-
-    // Stop at footer/copyright
-    if (line.includes("PRIVACY STATEMENT") || line.includes("© Copyright")) break;
-
-    // Skip header labels
-    if (line === "NAME" || line === "DELIVERY METHOD" || line === "CONTACT INFORMATION") continue;
-    if (line === "Provider's Website" || line === "Provider's Website") continue;
-
-    // Phone number line
-    if (phonePattern.test(line)) {
-      currentPhone = line.match(phonePattern)![0];
-      continue;
-    }
-
-    // Delivery method indicators
-    if (
-      line.match(/^(Classroom|Internet|DVD|Booklet|App|internet)/i) ||
-      line.match(/^\(.*Languages.*\)$/i) ||
-      line.match(/^\(Additional/i) ||
-      line.match(/^\(Other/i)
-    ) {
-      if (currentDelivery) {
-        currentDelivery += ", " + line;
-      } else {
-        currentDelivery = line;
-      }
-      continue;
-    }
-
-    // If we have accumulated a school and hit a new name-like line, flush
-    if (currentName && line.length > 3 && !line.startsWith("(") && !phonePattern.test(line)) {
-      // Save previous school
-      const isOnline = currentDelivery.toLowerCase().includes("internet") ||
-                       currentDelivery.toLowerCase().includes("app");
-      schools.push({
-        name: currentName,
-        deliveryMethod: currentDelivery,
-        phone: currentPhone,
-        hasWebsite: true,
-        notes: currentNotes,
-      });
-
-      // Start new school
-      currentName = line;
-      currentDelivery = "";
-      currentPhone = "";
-      currentNotes = "";
-
-      // Check for county restrictions in parens
-      const parenMatch = line.match(/\(([^)]+)\)/);
-      if (parenMatch) {
-        currentNotes = parenMatch[1];
-        currentName = line.replace(/\s*\([^)]*\)\s*/g, "").trim();
-      }
-    } else if (!currentName) {
-      // First school name
-      currentName = line;
-      const parenMatch = line.match(/\(([^)]+)\)/);
-      if (parenMatch) {
-        currentNotes = parenMatch[1];
-        currentName = line.replace(/\s*\([^)]*\)\s*/g, "").trim();
-      }
-    }
-  }
-
-  // Flush last school
-  if (currentName) {
-    schools.push({
-      name: currentName,
-      deliveryMethod: currentDelivery,
-      phone: currentPhone,
-      hasWebsite: true,
-      notes: currentNotes,
-    });
-  }
-
-  await browser.close();
-  console.log(`Scraped ${schools.length} FL BDI providers`);
-  return schools;
+  const providers = await scrapeFLProviders();
+  console.log(`Scraped ${providers.length} FL BDI providers`);
+  return providers.map((p) => ({ name: p.name, deliveryMethod: p.deliveryMethod, phone: p.phone, hasWebsite: !!p.website, notes: p.notes }));
 }
 
 async function syncToNotion(scraped: ScrapedSchool[]) {
@@ -154,8 +44,7 @@ async function syncToNotion(scraped: ScrapedSchool[]) {
     // Same validation the site renders through (lib/directory-filter, P0 follow-up): never write page furniture as a school.
     if (junkReason(school.name)) { console.log(`  skip (${junkReason(school.name)}): ${JSON.stringify(school.name)}`); continue; }
 
-    const isOnline = school.deliveryMethod.toLowerCase().includes("internet") ||
-                     school.deliveryMethod.toLowerCase().includes("app");
+    const isOnline = onlineFromDelivery(school.deliveryMethod);
 
     const properties: any = {
       "School Name": { title: [{ text: { content: rowIdentity(school.name, "").name } }] },

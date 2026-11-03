@@ -50,6 +50,20 @@ const UI_LABELS = [
   "school information",
   // Florida FLHSMV page heading (Sean, 2 Nov 2026): an exact match only, not an all-caps rule.
   "driver improvement schools",
+  // Page furniture the 1 Nov refresh wrote as schools (Sean, round 5, 3 Nov 2026): exact strings,
+  // whitespace-normalised and lower-cased. Florida's FLHSMV page (headings, the table header, the FAQ):
+  "driver improvement courses faq",
+  "mature driver discount insurance courses",
+  "wireless communications device course",
+  "what is advanced driver improvementand how do i find the approved listing of adi course providers?",
+  "what is basic driver improvementand how do i find the approved listing of bdi course providers?",
+  "what are 3 crashes in 3 years and how do i complete this requirement?",
+  "driver education traffic safety",
+  "what is traffic law and substance abuse educationand how do i find the approved listing of tlsae course providers?",
+  "commercial driving schools providing behind the wheel training",
+  "name delivery method contact information",
+  // Georgia DDS results table header:
+  "dt service type 30/6hr full service30hr classroom only6hr behind the wheel onlyvirtual provider",
 ];
 
 /**
