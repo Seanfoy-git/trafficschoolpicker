@@ -539,7 +539,21 @@ export default async function StatePage({ params }: Props) {
       {/* POINT-REDUCTION states: a real online course reduces/credits points but does
           NOT dismiss the ticket. Cards render; the benefit is a point credit, not a
           dismissal. Per-school benefit eligibility is refined by Qualifies-For-Benefit. */}
-      {onlineStatus === "Online — point reduction" && (
+      {/* Same rule as the insurance-discount banner (P0, 30 Oct 2026): the state's
+          program record (Dismissal Answer) answers when set; the fixed copy below is
+          the fallback only. */}
+      {onlineStatus === "Online — point reduction" && stateInfo?.dismissalAnswer && (
+        <section className="py-6 bg-slate-50 border-b border-slate-200">
+          <div className="max-w-5xl mx-auto px-4 flex items-start gap-3">
+            <Info className="w-5 h-5 text-slate-500 mt-0.5 shrink-0" />
+            <div>
+              <p className="font-semibold text-slate-700">Does it dismiss your ticket?</p>
+              <p className="text-sm text-slate-600">{stateInfo.dismissalAnswer}</p>
+            </div>
+          </div>
+        </section>
+      )}
+      {onlineStatus === "Online — point reduction" && !stateInfo?.dismissalAnswer && (
         <section className="py-6 bg-slate-50 border-b border-slate-200">
           <div className="max-w-5xl mx-auto px-4 flex items-start gap-3">
             <Info className="w-5 h-5 text-slate-500 mt-0.5 shrink-0" />
