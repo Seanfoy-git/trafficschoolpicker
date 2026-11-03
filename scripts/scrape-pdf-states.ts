@@ -45,7 +45,7 @@ function parseOklahoma(text: string): ScrapedSchool[] {
       if (name.length > 2) {
         schools.push({
           name,
-          licenseNumber: "OK-DPS",
+          licenseNumber: "", // no licence number published; never a placeholder
           phone: lines[i],
           address: `${address}, ${city}, OK`,
           website: "",
@@ -79,7 +79,7 @@ function parseMinnesota(text: string): ScrapedSchool[] {
       currentPhone = phoneMatch[0];
       schools.push({
         name: currentName,
-        licenseNumber: "MN-DPS",
+        licenseNumber: "", // no licence number published; never a placeholder
         phone: currentPhone,
         address: currentAddress,
         website: currentWebsite,
@@ -139,7 +139,7 @@ function parseWyoming(text: string): ScrapedSchool[] {
       if (name.length > 3) {
         schools.push({
           name,
-          licenseNumber: "WY-WDE",
+          licenseNumber: "", // no licence number published; never a placeholder
           phone: "",
           address: `${address} ${match[3]} ${match[4]}`.trim(),
           website: "",
