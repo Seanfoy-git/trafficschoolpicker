@@ -128,7 +128,7 @@ const BLOCKS: Block[] = [
   {
     code: "VA",
     disqualifier:
-      "The Virginia course earns safe driving points or an insurance discount. It never dismisses a ticket, and reckless driving by speed is a criminal charge in Virginia. That charge needs a lawyer, not a course.",
+      "The Virginia course earns a 5-point credit or an insurance discount. It doesn't dismiss a ticket on its own, and reckless driving by speed is a criminal charge in Virginia. That charge needs a lawyer, not a course.",
     firms: [
       { name: "Law Office of Ann Thayer", url: "https://www.thayernovalaw.com/what-we-do/reckless-driving/", note: "Fairfax" },
       { name: "Riley & Wells", url: "https://www.rileywellslaw.com/richmond-va/reckless-driving-lawyer/", note: "Richmond" },
