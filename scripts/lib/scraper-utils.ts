@@ -9,6 +9,7 @@ import { junkReason } from "../../lib/directory-filter";
 config({ path: ".env.local" });
 import { makeNotionClient } from "./notion-client";
 import { logIssue } from "./issues";
+import { isHandSet } from "./directory-rows";
 
 const notion = makeNotionClient();
 const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB!;
@@ -25,10 +26,16 @@ export interface ScrapedSchool {
   notes: string;
 }
 
+export interface ExistingRow {
+  id: string;
+  /** Website Source = Manual or Enrichment Status = Manual / Skipped: a person owns its website. */
+  handSet: boolean;
+}
+
 export async function getExistingSchools(
   stateName: string
-): Promise<Map<string, string>> {
-  const existing = new Map<string, string>();
+): Promise<Map<string, ExistingRow>> {
+  const existing = new Map<string, ExistingRow>();
   let cursor: string | undefined;
   do {
     const response: any = await notion.databases.query({
@@ -38,8 +45,9 @@ export async function getExistingSchools(
       page_size: 100,
     });
     for (const page of response.results) {
-      const name = (page as any).properties["School Name"]?.title?.[0]?.plain_text?.toLowerCase();
-      if (name) existing.set(name, page.id);
+      const props = (page as any).properties;
+      const name = props["School Name"]?.title?.[0]?.plain_text?.toLowerCase();
+      if (name) existing.set(name, { id: page.id, handSet: isHandSet({ websiteSource: props["Website Source"]?.select?.name ?? "", enrichmentStatus: props["Enrichment Status"]?.select?.name ?? "" }) });
     }
     cursor = response.has_more ? response.next_cursor ?? undefined : undefined;
   } while (cursor);
@@ -85,18 +93,25 @@ export async function syncToNotion(
       Source: { select: { name: sourceLabel } },
       "Date Scraped": { date: { start: TODAY } },
     };
-    if (school.website) {
+    const prior = existing.get(school.name.toLowerCase());
+    // The regulator's own list gave a website: record where it came from. A website a
+    // person set (Website Source = Manual) is never replaced.
+    if (school.website && !prior?.handSet) {
       const url = school.website.startsWith("http") ? school.website : `https://${school.website}`;
-      try { new URL(url); properties.Website = { url }; } catch { /* invalid URL, skip */ }
+      try {
+        new URL(url);
+        properties.Website = { url };
+        properties["Website Source"] = { select: { name: "State DMV" } };
+      } catch { /* invalid URL, skip */ }
     }
-    if (school.notes) {
+    // Notes only on a new row: an update must not erase what Notes holds (17 Nov 2026).
+    if (school.notes && !prior) {
       properties.Notes = { rich_text: [{ text: { content: school.notes } }] };
     }
 
     try {
-      const existingId = existing.get(school.name.toLowerCase());
-      if (existingId) {
-        await notion.pages.update({ page_id: existingId, properties });
+      if (prior) {
+        await notion.pages.update({ page_id: prior.id, properties });
         updated++;
       } else {
         await notion.pages.create({ parent: { database_id: DIRECTORY_DB }, properties });

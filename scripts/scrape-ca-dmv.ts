@@ -21,9 +21,31 @@ import { config } from "dotenv";
 config({ path: ".env.local" });
 import { chromium } from "playwright";
 import { makeNotionClient } from "./lib/notion-client";
+import { directorySchema, PROP, type LicenceStatus } from "./lib/directory-rows";
 
 const notion = makeNotionClient();
 const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB!;
+// --dry-run: scrape and report what would be written, without writing (a sync replay).
+const DRY_RUN = process.argv.includes("--dry-run");
+/**
+ * A school missing from the scrape is marked Inactive only when the scrape looks
+ * whole: at least this share of the CA rows already in Notion. A DMV page that
+ * half-loads must not hide the whole California directory.
+ */
+const MIN_SCRAPE_SHARE = 0.8;
+
+/**
+ * The DMV list's status column → Licence Status. "Probation" schools are still
+ * licensed and still shown; only Inactive is hidden on the site. Anything else
+ * is not a status we know, so Licence Status is left as it is.
+ */
+export function licenceStatus(raw: string): LicenceStatus | null {
+  const s = raw.trim().toLowerCase();
+  if (s === "active") return "Active";
+  if (s === "probation") return "Probation";
+  if (s === "inactive" || s.startsWith("inactive")) return "Inactive";
+  return null;
+}
 
 interface ScrapedSchool {
   name: string;
@@ -103,7 +125,7 @@ async function scrapeCADMV(): Promise<ScrapedSchool[]> {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 async function getExistingNotionSchools(): Promise<Map<string, string>> {
-  const existing = new Map<string, string>();
+  const existing = new Map<string, string>(); // licence → page id
   let cursor: string | undefined;
 
   do {
@@ -133,14 +155,25 @@ async function getExistingNotionSchools(): Promise<Map<string, string>> {
 async function syncToNotion(scraped: ScrapedSchool[]) {
   const existing = await getExistingNotionSchools();
   const scrapedLicenses = new Set(scraped.map((s) => s.license));
+  // Licence Status is written only once the property exists (scripts/migrate-directory-schema.ts).
+  const schema = await directorySchema(notion);
+  // A dry run shows what would be written once the property exists.
+  const hasStatus = schema[PROP.licenceStatus]?.type === "select" || DRY_RUN;
+  if (schema[PROP.licenceStatus]?.type !== "select") console.warn(`::warning::School Directory has no "${PROP.licenceStatus}" select; licence status not written. Run scripts/migrate-directory-schema.ts.`);
 
   let created = 0,
     updated = 0,
     deactivated = 0;
   const TODAY = new Date().toISOString().split("T")[0];
+  const statusCounts: Record<string, number> = {};
 
+  // DMV fields only. Notes, Website, Google Place ID, Website Source and Enrichment
+  // Status are never written here (17 Nov 2026): a sync used to overwrite Notes with
+  // "Status: X" and erase the Places provenance kept there.
   for (const school of scraped) {
     const existingId = existing.get(school.license);
+    const status = licenceStatus(school.status);
+    statusCounts[status ?? `unknown (${school.status})`] = (statusCounts[status ?? `unknown (${school.status})`] ?? 0) + 1;
 
     const properties: any = {
       "School Name": { title: [{ text: { content: school.name } }] },
@@ -155,61 +188,47 @@ async function syncToNotion(scraped: ScrapedSchool[]) {
       "Online Available": { checkbox: true },
       Source: { select: { name: "CA DMV" } },
       "Date Scraped": { date: { start: TODAY } },
-      Notes: {
-        rich_text: [{ text: { content: `Status: ${school.status}` } }],
-      },
     };
+    if (status && hasStatus) properties[PROP.licenceStatus] = { select: { name: status } };
 
     if (existingId) {
-      await notion.pages.update({
-        page_id: existingId,
-        properties,
-      });
+      if (!DRY_RUN) await notion.pages.update({ page_id: existingId, properties });
       updated++;
     } else {
-      await notion.pages.create({
-        parent: { database_id: DIRECTORY_DB },
-        properties,
-      });
+      if (!DRY_RUN) await notion.pages.create({ parent: { database_id: DIRECTORY_DB }, properties });
       created++;
     }
+    if (DRY_RUN && created + updated === 1) console.log(`  [dry run] properties written per row: ${Object.keys(properties).join(", ")}`);
 
     // Respect Notion rate limits (3 req/sec)
-    await new Promise((r) => setTimeout(r, 350));
+    if (!DRY_RUN) await new Promise((r) => setTimeout(r, 350));
   }
 
-  // Deactivate schools no longer in DMV list
-  const existingEntries = Array.from(existing.entries());
-  for (let idx = 0; idx < existingEntries.length; idx++) {
-    const [license, pageId] = existingEntries[idx];
-    if (!scrapedLicenses.has(license)) {
-      await notion.pages.update({
-        page_id: pageId,
-        properties: {
-          Notes: {
-            rich_text: [
-              {
-                text: {
-                  content: `Status: Inactive - not in DMV list as of ${TODAY}`,
-                },
-              },
-            ],
-          },
-        } as any,
-      });
+  // Schools no longer in the DMV list: Licence Status = Inactive (hidden on the site).
+  const gone = Array.from(existing.entries()).filter(([license]) => !scrapedLicenses.has(license));
+  const whole = scraped.length >= MIN_SCRAPE_SHARE * existing.size;
+  if (gone.length && !whole) {
+    console.warn(`::warning::CA scrape returned ${scraped.length} schools vs ${existing.size} in Notion (< ${MIN_SCRAPE_SHARE * 100}%); not marking ${gone.length} missing schools Inactive.`);
+  } else if (gone.length && hasStatus) {
+    for (const [license, pageId] of gone) {
+      if (!DRY_RUN) {
+        await notion.pages.update({ page_id: pageId, properties: { [PROP.licenceStatus]: { select: { name: "Inactive" } } } as any });
+        await new Promise((r) => setTimeout(r, 350));
+      }
+      console.log(`  ${DRY_RUN ? "[dry run] would mark" : "marked"} Inactive (not in DMV list): ${license}`);
       deactivated++;
-      await new Promise((r) => setTimeout(r, 350));
     }
   }
 
   console.log(`
   ━━━━━━━━━━━━━━━━━━━━━━━━
-  CA DMV Sync Complete
+  CA DMV Sync ${DRY_RUN ? "DRY RUN (nothing written)" : "Complete"}
   ━━━━━━━━━━━━━━━━━━━━━━━━
   Scraped:     ${scraped.length} schools from DMV
   Created:     ${created} new Notion records
   Updated:     ${updated} existing records
   Deactivated: ${deactivated} schools (no longer in DMV list)
+  Statuses:    ${Object.entries(statusCounts).map(([k, v]) => `${k} ${v}`).join(", ")}
   ━━━━━━━━━━━━━━━━━━━━━━━━
   `);
 }
@@ -231,7 +250,7 @@ async function main() {
   const scraped = await scrapeCADMV();
   await syncToNotion(scraped);
 
-  if (process.argv.includes("--deploy")) {
+  if (process.argv.includes("--deploy") && !DRY_RUN) {
     await triggerDeploy();
   }
 }

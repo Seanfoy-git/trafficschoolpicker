@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { cleanDirectory } from "./directory-filter";
+import { cleanDirectory, isInactiveLicence } from "./directory-filter";
 import { Client } from "@notionhq/client";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import type {
@@ -1034,6 +1034,7 @@ function mapDirectorySchool(page: PageObjectResponse): DirectorySchool {
     onlineAvailable: getCheckbox(page, "Online Available"),
     source: getSelect(page, "Source") || getText(page, "Source") || "State DMV",
     lastScraped: getDate(page, "Date Scraped"),
+    licenceStatus: getSelect(page, "Licence Status") || null,
     displayName: getText(page, "Display Name").trim() || null,
     price: getNumber(page, "Price"),
     priceSourceUrl: getText(page, "Price Source URL") || null,
@@ -1080,7 +1081,9 @@ export async function getDirectoryForState(
   stateName: string
 ): Promise<DirectorySchool[]> {
   const all = await getAllDirectorySchools();
-  const { rows, removed } = cleanDirectory(all.filter((d) => d.state === stateName));
+  // A school whose licence is Inactive (no longer on the regulator's list) keeps its
+  // Notion row for the record but is not shown, nor its Visit link (17 Nov 2026).
+  const { rows, removed } = cleanDirectory(all.filter((d) => d.state === stateName && !isInactiveLicence(d)));
   if (removed.length) console.warn(`[directory] ${stateName}: dropped ${removed.length} row(s) (${[...new Set(removed.map((r) => r.reason))].join(", ")})`);
   return rows;
 }

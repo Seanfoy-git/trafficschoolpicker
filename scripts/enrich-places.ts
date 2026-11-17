@@ -1,215 +1,132 @@
 /**
- * DATA FLOW: Google Places API → Notion → Site
+ * DATA FLOW: Google Places API → Notion School Directory → Site (Visit links)
  *
- * JOB 4: Enriches directory schools with website URLs and Google
- * ratings via the Places Text Search API. Only processes schools where
- * the Website field is empty (not yet enriched).
+ * Finds the website of directory schools that have none (the CA, TX, FL, GA and
+ * AZ lists publish no website). Since 17 Nov 2026 a Places result is accepted
+ * only when it is proved to be the row's school (scripts/lib/places-match):
+ * street number + ZIP in its address, or (no street address) the school's
+ * distinctive name words. Otherwise the row gets no website: a wrong Visit link
+ * is worse than none. A place ID another school (different licence and address)
+ * already holds is rejected.
  *
- * Cost: ~$0.002 per lookup. 204 CA schools = ~$0.41.
- * Requires GOOGLE_PLACES_API_KEY from console.cloud.google.com
- * (enable "Places API (New)").
+ * Writes only: Website (when found), Google Place ID, Website Source = Google
+ * Places, Enrichment Status (Enriched | Not Found), Enriched At. Never Notes.
+ * Never touches a row a person set: Website Source = Manual, or Enrichment
+ * Status = Manual / Skipped. A row looked up in the last 180 days is not
+ * looked up again.
  *
- * Rate limits:
- * - Notion API: 3 requests/second → 350ms delay between writes
- * - Google Places: 10 QPS for Text Search → 150ms delay
+ *   npx tsx scripts/enrich-places.ts                 # dry run: lookups, no writes
+ *   npx tsx scripts/enrich-places.ts --apply         # write (monthly-update.yml)
+ *   npx tsx scripts/enrich-places.ts --only E1008,E0893 [--include-hand-set]
+ *        look up just these licences; --include-hand-set (dry run only) evaluates
+ *        hand-set rows too, to show what the matcher would do, without writing
+ *
+ * Cost: scripts/lib/places-client (Text Search Pro + Place Details Enterprise).
+ * Rate limits: Places 10 QPS (150 ms between rows); Notion 3 req/s (350 ms per write).
  */
 
 import { config } from "dotenv";
 config({ path: ".env.local" });
 import { makeNotionClient } from "./lib/notion-client";
+import { directorySchema, isHandSet, loadDirectory, PROP, type DirRow } from "./lib/directory-rows";
+import { cost, usage } from "./lib/places-client";
+import { holdingsOf, lookup } from "./lib/places-lookup";
 
 const notion = makeNotionClient();
-const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB!;
-const PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY!;
+const APPLY = process.argv.includes("--apply");
+const INCLUDE_HAND_SET = process.argv.includes("--include-hand-set");
+const onlyArg = process.argv.find((a, i) => process.argv[i - 1] === "--only");
+const ONLY = onlyArg ? new Set(onlyArg.split(",").map((s) => s.trim().toUpperCase())) : null;
+const RETRY_AFTER_DAYS = 180;
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const daysSince = (iso: string) => (Date.now() - new Date(iso).getTime()) / 86_400_000;
 
-interface PlacesResult {
-  placeId: string;
-  website: string | null;
-  rating: number | null;
-  userRatingCount: number | null;
-  name: string;
-}
+/** Properties this script writes, and the select options it uses: fail closed if the schema lacks one. */
+const NEEDS: [string, string, string[]][] = [
+  [PROP.placeId, "rich_text", []],
+  [PROP.websiteSource, "select", ["Google Places"]],
+  [PROP.enrichmentStatus, "select", ["Enriched", "Not Found"]],
+  [PROP.enrichedAt, "date", []],
+];
 
-async function queryGooglePlaces(
-  schoolName: string,
-  stateCode: string
-): Promise<PlacesResult | null> {
-  try {
-    const response = await fetch(
-      "https://places.googleapis.com/v1/places:searchText",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Goog-Api-Key": PLACES_API_KEY,
-          "X-Goog-FieldMask":
-            "places.id,places.displayName,places.websiteUri,places.rating,places.userRatingCount",
-        },
-        body: JSON.stringify({
-          textQuery: `${schoolName} traffic school ${stateCode}`,
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      console.error(`  Places API error: ${response.status}`);
-      return null;
-    }
-
-    const data = (await response.json()) as any;
-    const place = data.places?.[0];
-    if (!place) return null;
-
-    return {
-      placeId: place.id ?? "",
-      website: place.websiteUri ?? null,
-      rating: place.rating ?? null,
-      userRatingCount: place.userRatingCount ?? null,
-      name: place.displayName?.text ?? "",
-    };
-  } catch (err) {
-    console.error(`  Places API error:`, (err as Error).message);
-    return null;
-  }
-}
-
-// State name → 2-letter code for better Places query accuracy
-const STATE_CODES: Record<string, string> = {
-  California: "CA", Texas: "TX", Florida: "FL", "New York": "NY",
-  Arizona: "AZ", Georgia: "GA", Ohio: "OH", Illinois: "IL",
-  Pennsylvania: "PA", "North Carolina": "NC", Michigan: "MI",
-  "New Jersey": "NJ", Virginia: "VA", Washington: "WA",
-  Colorado: "CO", Nevada: "NV", Oregon: "OR", Tennessee: "TN",
-};
-
-async function getPendingSchools(): Promise<any[]> {
-  const results: any[] = [];
-  let cursor: string | undefined;
-
-  do {
-    const response: any = await notion.databases.query({
-      database_id: DIRECTORY_DB,
-      filter: {
-        and: [
-          { property: "Online Available", checkbox: { equals: true } },
-          // Only schools without a website yet
-          {
-            or: [
-              { property: "Website", url: { is_empty: true } },
-            ],
-          },
-        ],
-      },
-      page_size: 100,
-      start_cursor: cursor,
-    });
-
-    results.push(...response.results);
-    cursor = response.has_more
-      ? response.next_cursor ?? undefined
-      : undefined;
-  } while (cursor);
-
-  return results;
+function pending(rows: DirRow[]): DirRow[] {
+  return rows.filter((r) => {
+    if (ONLY) return ONLY.has(r.licence.toUpperCase()) && (INCLUDE_HAND_SET || !isHandSet(r));
+    if (!r.onlineAvailable || r.website || isHandSet(r) || !r.name) return false;
+    return !(r.enrichedAt && daysSince(r.enrichedAt) < RETRY_AFTER_DAYS);
+  });
 }
 
 async function main() {
-  if (!PLACES_API_KEY) {
-    console.error("GOOGLE_PLACES_API_KEY not set in environment");
+  if (INCLUDE_HAND_SET && APPLY) {
+    console.error("--include-hand-set is dry-run only: hand-set rows are never written.");
     process.exit(1);
   }
-
-  if (!DIRECTORY_DB) {
-    console.error("NOTION_DIRECTORY_DB not set in environment");
-    process.exit(1);
+  const schema = await directorySchema(notion);
+  const missing = NEEDS.filter(([n, t, opts]) => schema[n]?.type !== t || opts.some((o) => !schema[n].options.includes(o)));
+  if (missing.length) {
+    const msg = `School Directory schema lacks ${missing.map(([n, t, o]) => `"${n}" (${t}${o.length ? `: ${o.join(", ")}` : ""})`).join("; ")}. Run scripts/migrate-directory-schema.ts first.`;
+    // Writing would fail row by row; a dry run writes nothing, so it can go on.
+    if (APPLY) {
+      console.error(`::error::${msg}`);
+      process.exit(1);
+    }
+    console.warn(`(dry run) ${msg}`);
   }
 
-  const schools = await getPendingSchools();
-  console.log(
-    `Enriching ${schools.length} directory schools via Google Places...\n`
-  );
+  const rows = await loadDirectory(notion);
+  const holdings = holdingsOf(rows);
+  const todo = pending(rows);
+  console.log(`${APPLY ? "APPLY" : "DRY RUN (no writes; --apply to write)"}: ${todo.length} of ${rows.length} directory rows to look up.`);
+  if (!todo.length) return;
+  const ts = cost(todo.length, "textSearchPro");
+  const det = cost(todo.length, "placeDetailsEnterprise");
+  console.log(`  Cost at most: Text Search Pro $${ts.gross.toFixed(2)} ($${ts.afterFree.toFixed(2)} after 5,000 free/month) + Place Details $${det.gross.toFixed(2)} ($${det.afterFree.toFixed(2)} after 1,000 free/month)\n`);
 
-  if (schools.length === 0) {
-    console.log("No schools need enrichment. Done.");
-    return;
-  }
-
-  const estimatedCost = (schools.length * 0.002).toFixed(2);
-  console.log(`  Estimated cost: ~$${estimatedCost}`);
-  console.log("  Starting in 3 seconds... (Ctrl+C to cancel)\n");
-  await new Promise((r) => setTimeout(r, 3000));
-
-  const TODAY = new Date().toISOString().split("T")[0];
-  let enriched = 0;
-  let notFound = 0;
-  let failed = 0;
-
-  for (const page of schools) {
-    const props = page.properties;
-    const name = props["School Name"]?.title?.[0]?.plain_text ?? "";
-    const state = props["State"]?.select?.name ?? "";
-    const stateCode = STATE_CODES[state] ?? state.substring(0, 2).toUpperCase();
-
-    if (!name) continue;
-
+  const today = new Date().toISOString().slice(0, 10);
+  let enriched = 0, notFound = 0, failed = 0;
+  for (const row of todo) {
     try {
-      const result = await queryGooglePlaces(name, stateCode);
-
-      if (!result) {
-        notFound++;
-        console.log(`  -- ${name} → not found`);
-      } else {
-        const updateProps: any = {
-          Notes: {
-            rich_text: [
-              {
-                text: {
-                  content: `Google Place ID: ${result.placeId}. Enriched ${TODAY}.`,
-                },
-              },
-            ],
-          },
-        };
-
-        if (result.website) {
-          updateProps["Website"] = { url: result.website };
+      const res = await lookup(row, holdings);
+      const props: Record<string, unknown> = {
+        [PROP.enrichedAt]: { date: { start: today } },
+        [PROP.enrichmentStatus]: { select: { name: res.found ? "Enriched" : "Not Found" } },
+      };
+      if (res.found) {
+        props[PROP.placeId] = { rich_text: [{ text: { content: res.candidate.id } }] };
+        if (res.website) {
+          props.Website = { url: res.website };
+          props[PROP.websiteSource] = { select: { name: "Google Places" } };
         }
-
-        await notion.pages.update({
-          page_id: page.id,
-          properties: updateProps,
-        });
+        // Later rows in this run see this hold (1c).
+        holdings.set(res.candidate.id, [...(holdings.get(res.candidate.id) ?? []), row]);
         enriched++;
-
-        if (result.website) {
-          console.log(`  OK ${name} → ${result.website}`);
-        } else {
-          console.log(`  OK ${name} → place found, no website`);
-        }
+        console.log(`  OK   ${row.licence} ${row.name} → ${res.website ?? "(listing has no website)"} [${res.rule}, ${res.evidence} evidence: ${res.candidate.displayName}, ${res.candidate.formattedAddress}]`);
+      } else {
+        notFound++;
+        // Address only (a listing at the row's address without its name) is Not Found too; logged with both names.
+        const detail = res.addressOnly.length
+          ? ` | ${res.addressOnly.map((c) => `${c.displayName} (${c.id}), ${c.formattedAddress}${res.websites[c.id] ? `, ${res.websites[c.id]}` : ""}`).join("; ")}`
+          : res.candidates.length ? ` | top: ${res.candidates[0].displayName} (${res.candidates[0].id}), ${res.candidates[0].formattedAddress}` : "";
+        console.log(`  --   ${row.licence} ${row.name} (${row.address || "no address"}) → no website: ${res.reason}${detail}`);
+      }
+      if (APPLY && !isHandSet(row)) {
+        await notion.pages.update({ page_id: row.id, properties: props as never });
+        await sleep(350);
       }
     } catch (err) {
-      console.error(`  ERR ${name}: ${(err as Error).message}`);
       failed++;
+      console.error(`  ERR  ${row.licence} ${row.name}: ${(err as Error).message}`);
     }
-
-    // Respect Places API rate limits
-    await new Promise((r) => setTimeout(r, 150));
-    // Notion rate limit
-    await new Promise((r) => setTimeout(r, 350));
+    await sleep(150);
   }
 
-  console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  console.log("Enrichment Complete");
-  console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-  console.log(`  Enriched:   ${enriched}`);
-  console.log(`  Not Found:  ${notFound}`);
-  console.log(`  Failed:     ${failed}`);
-  console.log(`  Est. cost:  ~$${(schools.length * 0.002).toFixed(2)}`);
+  const spent = cost(usage.textSearch, "textSearchPro").gross + cost(usage.details, "placeDetailsEnterprise").gross;
+  console.log(`\nEnrichment ${APPLY ? "complete" : "dry run"}: ${enriched} matched, ${notFound} not found, ${failed} failed.`);
+  console.log(`  Calls: ${usage.textSearch} Text Search Pro, ${usage.details} Place Details (list price $${spent.toFixed(2)} before free calls)`);
+  if (failed) process.exitCode = 1;
 }
-
-/* eslint-enable @typescript-eslint/no-explicit-any */
 
 main().catch((err) => {
   console.error("Fatal:", err);
