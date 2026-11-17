@@ -22,8 +22,8 @@ config({ path: ".env.local" });
 import { loadDirectory, type DirRow } from "./lib/directory-rows";
 import { differentSchools, normAddress, normLicence } from "./lib/places-match";
 
-/** Turn on in the PR that applies the website re-check (every Website then has a source). */
-const REQUIRE_WEBSITE_SOURCE = false;
+/** On since the website re-check apply (PR B): every Website has a source. Merge PR B only after that apply. */
+const REQUIRE_WEBSITE_SOURCE = true;
 
 export function sharedListings(rows: DirRow[]): { placeId: string; rows: DirRow[] }[] {
   const by = new Map<string, DirRow[]>();
@@ -69,7 +69,7 @@ async function main() {
     console.error(`❌ Directory links: ${problems.length} problem(s)`);
     for (const p of problems.slice(0, 50)) console.error(`  - ${p}`);
     if (problems.length > 50) console.error(`  … and ${problems.length - 50} more`);
-    console.error("  Fix in the School Directory (Notion): clear the wrong Website, or set Website Source = Manual with the right one.");
+    console.error("  Fix in the School Directory (Notion): clear the wrong Website, or set the right one with Website Source = Manual.");
     process.exit(1);
   }
   console.log(`✅ Directory links: ${rows.length} rows, no shared Google listing across schools${REQUIRE_WEBSITE_SOURCE ? ", every Website has a source" : ` (${unsourced.length} websites without a source; enforced after the re-check)`}.`);
