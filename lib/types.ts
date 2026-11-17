@@ -309,6 +309,9 @@ export type DirectorySchool = {
   onlineAvailable: boolean;
   source: string;                // "CA DMV"
   lastScraped: string | null;
+  // The regulator's list status (Active | Probation | Inactive), written by the
+  // scrapers. Inactive rows (dropped off the list) are not rendered.
+  licenceStatus: string | null;
   // P17 Tier 2 comparison data (set only on rows we priced from the school's own
   // site). displayName is the brand the site shows; the licensed DBA stays in name.
   displayName: string | null;

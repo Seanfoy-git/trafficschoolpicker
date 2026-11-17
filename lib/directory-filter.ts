@@ -58,6 +58,11 @@ const UI_LABELS = [
 const AGENCY = /\b(department\s*of|dept\.?\s*of|division\s*of|bureau\s*of|secretary\s*of\s*state|motor\s*vehicle\s*administration)\b|^\(?approved by\b|\bwork at the (dmv|dds|mvc|mva|dps)\b|^(the\s+)?(dmv|dds|mvc|mva|dhsmv|dps|dol)$/i;
 const SCHOOLISH = /\b(school|academy|clinic|driving|driver'?s?\s+(ed|education|training|improvement)|safety|traffic|course|institute|college|llc|inc\.?|corp|company)\b/i;
 
+/** Licence Status = Inactive: the school is no longer on the regulator's list and is not rendered. */
+export function isInactiveLicence(r: Pick<DirectorySchool, "licenceStatus">): boolean {
+  return (r.licenceStatus ?? "").trim().toLowerCase() === "inactive";
+}
+
 export type JunkReason = "empty" | "url" | "ui label" | "agency name";
 
 /** Why a scraped name is not a school, or null when it can be one. */

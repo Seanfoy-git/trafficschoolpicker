@@ -1008,8 +1008,57 @@ self-closing GitHub issue that surfaces `Needs Review` items.
 
 ### 9.4 Google Places enrichment — `scripts/enrich-places.ts`
 
-For DMV-scraped schools without a website, query Places API to find their
-official site. Updates the `Website` field on the Directory DB row.
+For directory schools whose state list gives no website (CA, TX, FL, GA and AZ
+give none), look the school up on Google Places and take its website, **only
+when the listing is proved to be that school** (rules in
+`scripts/lib/places-match.ts`, since 17 Nov 2026). A wrong Visit link is worse
+than none.
+
+- **Search:** Text Search for `{name}, {address}` when the row has a street
+  address, else `{name} traffic school {state code}`; up to 5 candidates, with
+  `formattedAddress`.
+- **Accept a candidate only if:**
+  - the row has a street address: its street number **and** ZIP both appear in
+    the candidate's `formattedAddress`;
+  - the row has a ZIP but no street number (most TDLR rows read "CITY, TX,
+    ZIP"): the ZIP appears **and** the name rule passes;
+  - the row has no usable address: the candidate's `displayName` contains every
+    distinctive word of the school name (dropping traffic, school, driving,
+    defensive, online, course, com, www, inc, llc, the).
+  Of several that pass, the one whose name also matches; a tie accepts nothing.
+- **Refuse** a place ID another row already holds when that row is a different
+  school (different licence and different address; where a licence is a
+  placeholder like "UT-approved", the name stands in for it).
+- **Writes** (never Notes): `Website` (if the listing has one), `Google Place
+  ID`, `Website Source` = Google Places, `Enrichment Status` = Enriched or Not
+  Found, `Enriched At`.
+- **Never touches** a row with `Website Source` = Manual or `Enrichment Status`
+  = Manual / Skipped. Rows looked up in the last 180 days are not retried.
+- **Dry run by default**; `--apply` writes (the monthly workflow passes it).
+  `--only E1008,E0893` limits to licences; with `--include-hand-set` (dry run
+  only) it shows what the matcher would do for hand-set rows too.
+- **Cost** (Google price list, 17 Nov 2026): the search asks only Pro fields
+  (Text Search Pro, $32 / 1,000, 5,000 free a month); the website is fetched
+  with Place Details (Enterprise, $20 / 1,000, 1,000 free a month) only for an
+  accepted match. Asking Text Search for `websiteUri` would bill every search
+  at Enterprise ($35 / 1,000, 1,000 free).
+- Matcher assertions: `npm run test:places-match`.
+
+**Provenance and licence status.** Each Directory row records where its
+website came from in its own properties, not in Notes: `Website Source`
+(Google Places | State DMV | Manual | Unknown), `Google Place ID`, `Enrichment
+Status`, `Enriched At`. The DMV syncs never write Notes on an existing row,
+set `Website Source` = State DMV when the state list supplies the website, and
+never replace a Manual website. The CA sync writes the DMV list's status to
+`Licence Status` (Active | Probation | Inactive) and marks schools that have
+dropped off the list Inactive, unless the scrape returned under 80% of the
+known rows. The site does not render Inactive rows (`getDirectoryForState`).
+Schema changes: `scripts/migrate-directory-schema.ts` (dry run; `--apply`).
+
+**Guard:** `scripts/verify-directory-links.ts` (prebuild) fails the build if
+two rows with `Website Source` = Google Places share a `Google Place ID` and
+are different schools. Self-test: `--plant` plants one violation in memory and
+must exit 1.
 
 ### 9.5 Configuration files
 

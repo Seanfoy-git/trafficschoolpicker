@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "generate-llms": "npx tsx scripts/generate-llms-full.ts",
-    "prebuild": "npx tsx scripts/verify-notion-boundary.ts && npx tsx scripts/verify-content-standards.ts && npx tsx scripts/verify-faq-integrity.ts && npm run generate-llms",
+    "prebuild": "npx tsx scripts/verify-notion-boundary.ts && npx tsx scripts/verify-content-standards.ts && npx tsx scripts/verify-faq-integrity.ts && npx tsx scripts/verify-directory-links.ts && npm run generate-llms",
     "build": "next build",
     "postbuild": "npx tsx scripts/verify-question-routes.ts && npx tsx scripts/verify-no-internal-leaks.ts && npx tsx scripts/verify-page-contradictions.ts && npx tsx scripts/verify-comparison-first.ts && npx tsx scripts/verify-sitemap-200.ts && npx tsx scripts/verify-crawl-paths.ts && npx tsx scripts/crawl-health.ts",
     "start": "next start",
@@ -27,6 +27,7 @@
     "sync:jsonld-prices": "npx tsx scripts/sync-jsonld-prices.ts",
     "discover:ids-prices": "npx tsx scripts/discover-ids-prices.ts",
     "enrich:places": "npx tsx scripts/enrich-places.ts",
+    "test:places-match": "npx tsx scripts/test-places-match.ts",
     "scrape:all": "npm run scrape:dmv && npm run scrape:reviews && npm run scrape:prices && npm run enrich:places",
     "audit:affiliate": "npx tsx scripts/audit-affiliate-links.ts",
     "populate:state-reqs": "npx tsx scripts/populate-state-requirements.ts",

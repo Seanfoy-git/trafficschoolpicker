@@ -189,20 +189,13 @@ async function syncToNotion(scraped: ScrapedSchool[]) {
       "Online Available": { checkbox: isOnline },
       Source: { select: { name: "FL DHSMV" } },
       "Date Scraped": { date: { start: TODAY } },
-      Notes: {
-        rich_text: [
-          {
-            text: {
-              content: school.notes
-                ? `BDI Provider. ${school.notes}`
-                : "BDI Provider",
-            },
-          },
-        ],
-      },
     };
 
     const existingId = existing.get(school.name.toLowerCase());
+    // Notes only on a new row: an update must not erase what Notes holds (17 Nov 2026).
+    if (!existingId) {
+      properties.Notes = { rich_text: [{ text: { content: school.notes ? `BDI Provider. ${school.notes}` : "BDI Provider" } }] };
+    }
 
     if (existingId) {
       await notion.pages.update({ page_id: existingId, properties });
