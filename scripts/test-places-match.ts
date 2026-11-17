@@ -3,7 +3,7 @@
  *   npx tsx scripts/test-places-match.ts
  */
 import assert from "node:assert/strict";
-import { nameMatches, nameTokens, parseAddress, pickCandidate, registrableDomain } from "./lib/places-match";
+import { nameMatches, nameTokens, needsWebsite, parseAddress, pickCandidate, registrableDomain, websiteMatches } from "./lib/places-match";
 import { heldByOther, holdingsOf } from "./lib/places-lookup";
 import type { DirRow } from "./lib/directory-rows";
 
@@ -66,6 +66,48 @@ t("ZIP but no street number (TDLR): ZIP and name both needed", () => {
   const r = pickCandidate(row, [saferoute, safeway]);
   assert.equal(r.accepted && r.candidate.id, "w");
   assert.equal(pickCandidate(row, [{ ...safeway, formattedAddress: "567 Westheimer, Houston, TX 77042, USA" }]).accepted, false);
+});
+
+t("524 Mountain View Ave, San Bernardino: four licences, one listing; only E0957 gets it", () => {
+  const escuela = { id: "esc", displayName: "Escuela de Trafico", formattedAddress: "524 N Mountain View Ave, San Bernardino, CA 92401, USA" };
+  const site = new Map([["esc", "https://www.baratoescueladetrafico.com/contact_s.jsp"]]);
+  const at = (unit: number) => `524 MOUNTAIN VIEW AVE ${unit},SAN BERNARDINO,CA 92401`;
+  const rows = [
+    { lic: "E0962", name: "IPaylessTrafficSchoolcom", address: at(1) },
+    { lic: "E0948", name: "DUMMIESTRAFFICSCHOOLCOM", address: at(2) },
+    { lic: "E0957", name: "BARATOESCUELADETRAFICOCOM", address: at(3) },
+    { lic: "E0954", name: "3DollarsQuickTrafficSchool com", address: at(4) },
+  ];
+  for (const r of rows) {
+    assert.deepEqual(needsWebsite(r, [escuela]).map((c) => c.id), ["esc"]); // at the address, name not in displayName
+    const m = pickCandidate(r, [escuela], site);
+    if (r.lic === "E0957") assert.ok(m.accepted && m.evidence === "website", r.lic);
+    else assert.ok(!m.accepted && m.addressOnly.length === 1 && /address only/.test(m.reason), r.lic);
+  }
+  // Without the website, even E0957 is address only: the address alone proves nothing.
+  assert.equal(pickCandidate(rows[2], [escuela]).accepted, false);
+});
+
+t("100 E San Marcos Blvd 92069: E0803 Aceable and E0138 IDriveSafely each get their own listing", () => {
+  const ace = { id: "ace", displayName: "Aceable", formattedAddress: "100 E San Marcos Blvd #439, San Marcos, CA 92069, USA" };
+  const ids = { id: "ids", displayName: "I Drive Safely", formattedAddress: "100 E San Marcos Blvd #425, San Marcos, CA 92069, USA" };
+  const e0803 = pickCandidate({ name: "ACEABLE TRAFFIC SCHOOL", address: "100 E SAN MARCOS BLVD STE 439,SAN MARCOS,CA 92069" }, [ids, ace]);
+  const e0138 = pickCandidate({ name: "IDRIVESAFELYCOM", address: "100 E SAN MARCOS BLVD STE 425,SAN MARCOS,CA 92069" }, [ace, ids]);
+  assert.ok(e0803.accepted && e0803.candidate.id === "ace");
+  assert.ok(e0138.accepted && e0138.candidate.id === "ids");
+  // Aceable's listing alone, for IDriveSafely: address only.
+  assert.equal(pickCandidate({ name: "IDRIVESAFELYCOM", address: "100 E SAN MARCOS BLVD STE 425,SAN MARCOS,CA 92069" }, [ace], new Map([["ace", "https://aceable.com/"]])).accepted, false);
+});
+
+t("glued www/com and the website test", () => {
+  assert.deepEqual(nameTokens("IDRIVESAFELYCOM"), ["idrivesafely"]);
+  assert.deepEqual(nameTokens("wwwCheapTickets"), ["cheaptickets"]);
+  assert.deepEqual(nameTokens("FINISHFAST COM"), ["finishfast"]);
+  assert.equal(websiteMatches("BARATOESCUELADETRAFICOCOM", "https://www.baratoescueladetrafico.com/"), true);
+  assert.equal(websiteMatches("3DollarsQuickTrafficSchool com", "https://www.baratoescueladetrafico.com/"), false);
+  assert.equal(websiteMatches("Best Traffic School", "https://trafficschool.com/"), false); // only generic words
+  assert.equal(websiteMatches("ABC Traffic", "https://abc.com/"), false); // under 6 characters
+  assert.equal(websiteMatches("IDRIVESAFELYCOM", "https://www.idrivesafely.com/ca"), true);
 });
 
 t("1c: a listing held by a different licence at a different address is refused", () => {

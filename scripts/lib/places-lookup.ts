@@ -3,7 +3,7 @@
  * enrich-places (new rows) and recheck-directory-websites (rows that already
  * carry a website). Rules: scripts/lib/places-match.
  */
-import { differentSchools, matchRule, pickCandidate, type PlaceCandidate } from "./places-match";
+import { differentSchools, matchRule, needsWebsite, pickCandidate, type PlaceCandidate } from "./places-match";
 import { placeWebsite, searchCandidates } from "./places-client";
 import type { DirRow } from "./directory-rows";
 
@@ -39,17 +39,22 @@ export function heldByOther(placeId: string, row: Pick<DirRow, "id" | "licence" 
 }
 
 export type Lookup =
-  | { found: true; candidate: PlaceCandidate; rule: string; website: string | null }
-  | { found: false; reason: string; candidates: PlaceCandidate[] };
+  | { found: true; candidate: PlaceCandidate; rule: string; evidence: string; website: string | null; candidates: PlaceCandidate[]; websites: Record<string, string | null> }
+  | { found: false; addressOnly: PlaceCandidate[]; reason: string; candidates: PlaceCandidate[]; websites: Record<string, string | null> };
 
 export async function lookup(row: DirRow, holdings: Holdings): Promise<Lookup> {
   const candidates = await searchCandidates(textQuery(row));
-  const m = pickCandidate(row, candidates);
-  if (!m.accepted) return { found: false, reason: m.reason, candidates };
+  // Websites only for candidates at the row's address that lack its name in displayName.
+  const websites = new Map<string, string | null>();
+  for (const c of needsWebsite(row, candidates)) websites.set(c.id, await placeWebsite(c.id));
+  const m = pickCandidate(row, candidates, websites);
+  const fetched = Object.fromEntries(websites);
+  if (!m.accepted) return { found: false, addressOnly: m.addressOnly, reason: m.reason, candidates, websites: fetched };
   const other = heldByOther(m.candidate.id, row, holdings);
   if (other) {
-    return { found: false, reason: `place ${m.candidate.id} is already held by ${other.licence || "?"} ${other.name} at ${other.address || "(no address)"}`, candidates };
+    return { found: false, addressOnly: [], reason: `place ${m.candidate.id} is already held by ${other.licence || "?"} ${other.name} at ${other.address || "(no address)"}`, candidates, websites: fetched };
   }
-  const website = await placeWebsite(m.candidate.id);
-  return { found: true, candidate: m.candidate, rule: m.rule, website };
+  const website = websites.has(m.candidate.id) ? websites.get(m.candidate.id)! : await placeWebsite(m.candidate.id);
+  fetched[m.candidate.id] = website;
+  return { found: true, candidate: m.candidate, rule: m.rule, evidence: m.evidence, website, candidates, websites: fetched };
 }

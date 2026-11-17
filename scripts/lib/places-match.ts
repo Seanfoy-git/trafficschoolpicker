@@ -9,15 +9,19 @@
  * proved to be the row's school:
  *
  *   - the row has a street address: the street number AND the ZIP both appear in
- *     the candidate's formattedAddress;
+ *     the candidate's formattedAddress, AND there is name evidence: the
+ *     candidate's displayName passes the name rule, or its website's domain is
+ *     the school's name (one building can hold several licences: 524 Mountain View
+ *     Ave, San Bernardino holds E0962, E0948, E0957 and E0954, so an address alone
+ *     proves nothing). Address without name evidence is "address only": not accepted;
  *   - the row has a ZIP but no street number (most TDLR rows are "CITY, TX, ZIP"):
  *     the ZIP appears AND the name rule below passes;
  *   - the row has no usable address: the candidate's displayName contains every
  *     distinctive token of the school name (generic words dropped).
  *
- * Of several candidates that pass, one whose name also passes wins; two or more
- * that tie are ambiguous and nothing is accepted. Pure functions only (no I/O),
- * so scripts/test-places-match.ts can assert them.
+ * One candidate with evidence is accepted; two or more with evidence are ambiguous
+ * and nothing is accepted. Pure functions only (no I/O), so
+ * scripts/test-places-match.ts can assert them.
  */
 
 export interface PlaceCandidate {
@@ -52,9 +56,15 @@ export function parseAddress(address: string | null | undefined): ParsedAddress 
   return { streetNumber: street ? street[1] : null, zip: zips ? zips[zips.length - 1].slice(0, 5) : null };
 }
 
-/** Distinctive name tokens: lower-cased alphanumeric runs, generic words dropped. */
+/**
+ * Distinctive name tokens: lower-cased alphanumeric runs, generic words dropped.
+ * A "www" or "com" glued to a token is stripped too ("IDRIVESAFELYCOM" →
+ * "idrivesafely", "wwwcheap" → "cheap"), when at least 4 characters remain.
+ */
 export function nameTokens(name: string): string[] {
-  return (name.toLowerCase().match(/[a-z0-9]+/g) ?? []).filter((t) => !GENERIC_WORDS.has(t));
+  return (name.toLowerCase().match(/[a-z0-9]+/g) ?? [])
+    .map((t) => t.replace(/^www(?=[a-z0-9]{4})/, "").replace(/(?<=[a-z0-9]{4})com$/, ""))
+    .filter((t) => !GENERIC_WORDS.has(t));
 }
 
 const squash = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -67,6 +77,30 @@ export function nameMatches(schoolName: string, displayName: string): boolean {
   return tokens.every((t) => dn.includes(t));
 }
 
+/** The label is made only of generic words ("trafficschool", "onlinedrivingcourse"), so it names no school. */
+function onlyGeneric(label: string): boolean {
+  const ok: boolean[] = [true];
+  for (let i = 1; i <= label.length; i++) {
+    ok[i] = false;
+    for (const w of GENERIC_WORDS) if (i >= w.length && ok[i - w.length] && label.slice(i - w.length, i) === w) ok[i] = true;
+  }
+  return ok[label.length];
+}
+
+/**
+ * The website's domain is the school's name: the registrable domain's first label
+ * (6+ characters, not only generic words) appears in the school name squashed to
+ * a-z0-9 with a leading "www" and a trailing "com" dropped.
+ * BARATOESCUELADETRAFICOCOM + baratoescueladetrafico.com passes;
+ * 3DollarsQuickTrafficSchool com + baratoescueladetrafico.com does not.
+ */
+export function websiteMatches(schoolName: string, website: string | null | undefined): boolean {
+  const label = registrableDomain(website)?.split(".")[0] ?? "";
+  if (label.length < 6 || onlyGeneric(label)) return false;
+  const name = squash(schoolName).replace(/^www/, "").replace(/com$/, "");
+  return name.includes(label);
+}
+
 const hasToken = (hay: string, needle: string) => new RegExp(`(^|[^0-9])${needle}([^0-9]|$)`).test(hay);
 
 export function addressMatches(addr: ParsedAddress, formattedAddress: string): boolean {
@@ -77,8 +111,8 @@ export function addressMatches(addr: ParsedAddress, formattedAddress: string): b
 export type MatchRule = "address" | "zip+name" | "name";
 
 export type MatchResult =
-  | { accepted: true; candidate: PlaceCandidate; rule: MatchRule }
-  | { accepted: false; reason: string };
+  | { accepted: true; candidate: PlaceCandidate; rule: MatchRule; evidence: "name" | "website" }
+  | { accepted: false; addressOnly: PlaceCandidate[]; reason: string };
 
 export function matchRule(address: string | null | undefined): MatchRule {
   const a = parseAddress(address);
@@ -87,24 +121,45 @@ export function matchRule(address: string | null | undefined): MatchRule {
   return "name";
 }
 
-/** The one candidate proved to be this school, or why none is. */
-export function pickCandidate(row: { name: string; address: string | null | undefined }, candidates: PlaceCandidate[]): MatchResult {
-  if (!candidates.length) return { accepted: false, reason: "no candidates" };
+/**
+ * Candidates whose website must be fetched to decide: at the row's street address
+ * but without the school's name in their displayName. (The website of the one
+ * accepted is fetched anyway; these are the only extra Place Details calls.)
+ */
+export function needsWebsite(row: { name: string; address: string | null | undefined }, candidates: PlaceCandidate[]): PlaceCandidate[] {
+  if (matchRule(row.address) !== "address") return [];
+  const addr = parseAddress(row.address);
+  return candidates.filter((c) => addressMatches(addr, c.formattedAddress) && !nameMatches(row.name, c.displayName));
+}
+
+/**
+ * The one candidate proved to be this school, or why none is. `websites` holds
+ * the fetched website of each candidate needsWebsite returned (missing = unknown).
+ */
+export function pickCandidate(
+  row: { name: string; address: string | null | undefined },
+  candidates: PlaceCandidate[],
+  websites: Map<string, string | null> = new Map(),
+): MatchResult {
+  if (!candidates.length) return { accepted: false, addressOnly: [], reason: "no candidates" };
   const addr = parseAddress(row.address);
   const rule = matchRule(row.address);
-  const passing = candidates.filter((c) => {
-    if (rule === "address") return addressMatches(addr, c.formattedAddress);
-    if (rule === "zip+name") return hasToken(c.formattedAddress, addr.zip!) && nameMatches(row.name, c.displayName);
-    return nameMatches(row.name, c.displayName);
-  });
-  if (!passing.length) {
-    return { accepted: false, reason: rule === "address" ? "no candidate at this street number and ZIP" : rule === "zip+name" ? "no candidate in this ZIP with the school's name" : "no candidate with the school's name" };
+  if (rule === "address") {
+    const atAddress = candidates.filter((c) => addressMatches(addr, c.formattedAddress));
+    if (!atAddress.length) return { accepted: false, addressOnly: [], reason: "no candidate at this street number and ZIP" };
+    const proved = atAddress
+      .map((c) => ({ c, evidence: nameMatches(row.name, c.displayName) ? ("name" as const) : websiteMatches(row.name, websites.get(c.id)) ? ("website" as const) : null }))
+      .filter((x) => x.evidence);
+    if (proved.length === 1) return { accepted: true, candidate: proved[0].c, rule, evidence: proved[0].evidence! };
+    if (proved.length > 1) return { accepted: false, addressOnly: [], reason: `ambiguous: ${proved.length} candidates at this address carry the name (${proved.map((x) => x.c.displayName).join("; ")})` };
+    return { accepted: false, addressOnly: atAddress, reason: `address only: ${atAddress.length === 1 ? "a listing" : `${atAddress.length} listings`} at this address without the school's name` };
   }
-  if (passing.length === 1) return { accepted: true, candidate: passing[0], rule };
-  // Several at one address (a shared office building): the one with the school's name, if exactly one.
-  const named = passing.filter((c) => nameMatches(row.name, c.displayName));
-  if (named.length === 1) return { accepted: true, candidate: named[0], rule };
-  return { accepted: false, reason: `ambiguous: ${passing.length} candidates pass (${passing.map((c) => c.displayName).join("; ")})` };
+  const passing = candidates.filter((c) =>
+    rule === "zip+name" ? hasToken(c.formattedAddress, addr.zip!) && nameMatches(row.name, c.displayName) : nameMatches(row.name, c.displayName),
+  );
+  if (!passing.length) return { accepted: false, addressOnly: [], reason: rule === "zip+name" ? "no candidate in this ZIP with the school's name" : "no candidate with the school's name" };
+  if (passing.length === 1) return { accepted: true, candidate: passing[0], rule, evidence: "name" };
+  return { accepted: false, addressOnly: [], reason: `ambiguous: ${passing.length} candidates pass (${passing.map((c) => c.displayName).join("; ")})` };
 }
 
 /** Comparable address: upper-case alphanumerics only, so "Ste 439" and "STE 439" are one address. */

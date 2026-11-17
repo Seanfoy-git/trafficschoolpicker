@@ -102,10 +102,14 @@ async function main() {
         // Later rows in this run see this hold (1c).
         holdings.set(res.candidate.id, [...(holdings.get(res.candidate.id) ?? []), row]);
         enriched++;
-        console.log(`  OK   ${row.licence} ${row.name} → ${res.website ?? "(listing has no website)"} [${res.rule}: ${res.candidate.displayName}, ${res.candidate.formattedAddress}]`);
+        console.log(`  OK   ${row.licence} ${row.name} → ${res.website ?? "(listing has no website)"} [${res.rule}, ${res.evidence} evidence: ${res.candidate.displayName}, ${res.candidate.formattedAddress}]`);
       } else {
         notFound++;
-        console.log(`  --   ${row.licence} ${row.name} → no website: ${res.reason}${res.candidates.length ? ` | top: ${res.candidates[0].displayName} (${res.candidates[0].id}), ${res.candidates[0].formattedAddress}` : ""}`);
+        // Address only (a listing at the row's address without its name) is Not Found too; logged with both names.
+        const detail = res.addressOnly.length
+          ? ` | ${res.addressOnly.map((c) => `${c.displayName} (${c.id}), ${c.formattedAddress}${res.websites[c.id] ? `, ${res.websites[c.id]}` : ""}`).join("; ")}`
+          : res.candidates.length ? ` | top: ${res.candidates[0].displayName} (${res.candidates[0].id}), ${res.candidates[0].formattedAddress}` : "";
+        console.log(`  --   ${row.licence} ${row.name} (${row.address || "no address"}) → no website: ${res.reason}${detail}`);
       }
       if (APPLY && !isHandSet(row)) {
         await notion.pages.update({ page_id: row.id, properties: props as never });
