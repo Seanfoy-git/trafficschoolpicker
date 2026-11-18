@@ -9,9 +9,9 @@
  *           and differ in BOTH licence and address (two schools, one listing).
  *           Where a licence is a placeholder ("UT-approved"), the school name
  *           stands in for it (places-match differentSchools).
- *   FAIL 2  (once REQUIRE_WEBSITE_SOURCE is on, after the Task 3 re-check is
- *           applied) a row has a Website and no Website Source: a link nobody can
- *           account for.
+ *   FAIL 2  (once REQUIRE_WEBSITE_SOURCE is on, after the held states' scrapers
+ *           are fixed and those states re-checked) a row has a Website and no
+ *           Website Source: a link nobody can account for.
  *
  *   npx tsx scripts/verify-directory-links.ts
  *   npx tsx scripts/verify-directory-links.ts --plant   # self-test: plants one FAIL 1
@@ -22,8 +22,13 @@ config({ path: ".env.local" });
 import { loadDirectory, type DirRow } from "./lib/directory-rows";
 import { differentSchools, normAddress, normLicence } from "./lib/places-match";
 
-/** On since the website re-check apply (PR B): every Website has a source. Merge PR B only after that apply. */
-const REQUIRE_WEBSITE_SOURCE = true;
+/**
+ * Off until every state is finished: the re-check apply (PR B) leaves the held
+ * states (NY, VA, NV, MD, ND, WA; broken scrapers) untouched, so their websites
+ * still have no source. The PR that fixes those scrapers and finishes those
+ * states turns this on.
+ */
+const REQUIRE_WEBSITE_SOURCE = false;
 
 export function sharedListings(rows: DirRow[]): { placeId: string; rows: DirRow[] }[] {
   const by = new Map<string, DirRow[]>();

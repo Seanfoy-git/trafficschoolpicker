@@ -17,7 +17,11 @@
  *   - the row has a ZIP but no street number (most TDLR rows are "CITY, TX, ZIP"):
  *     the ZIP appears AND the name rule below passes;
  *   - the row has no usable address: the candidate's displayName contains every
- *     distinctive token of the school name (generic words dropped).
+ *     distinctive token of the school name (generic words dropped), with at least
+ *     one that is not a state name or code ("Arizona Defensive Driving School"
+ *     names no school), AND the
+ *     candidate's formattedAddress is in the row's state (a Winter Park, FL listing
+ *     proves nothing about a New York school).
  *
  * One candidate with evidence is accepted; two or more with evidence are ambiguous
  * and nothing is accepted. Pure functions only (no I/O), so
@@ -40,6 +44,33 @@ export const GENERIC_WORDS = new Set([
   "traffic", "school", "driving", "defensive", "online", "course", "com", "www", "inc", "llc", "the",
 ]);
 
+export const STATE_CODES: Record<string, string> = {
+  Alabama: "AL", Alaska: "AK", Arizona: "AZ", Arkansas: "AR", California: "CA", Colorado: "CO", Connecticut: "CT",
+  Delaware: "DE", "District of Columbia": "DC", Florida: "FL", Georgia: "GA", Hawaii: "HI", Idaho: "ID", Illinois: "IL",
+  Indiana: "IN", Iowa: "IA", Kansas: "KS", Kentucky: "KY", Louisiana: "LA", Maine: "ME", Maryland: "MD",
+  Massachusetts: "MA", Michigan: "MI", Minnesota: "MN", Mississippi: "MS", Missouri: "MO", Montana: "MT",
+  Nebraska: "NE", Nevada: "NV", "New Hampshire": "NH", "New Jersey": "NJ", "New Mexico": "NM", "New York": "NY",
+  "North Carolina": "NC", "North Dakota": "ND", Ohio: "OH", Oklahoma: "OK", Oregon: "OR", Pennsylvania: "PA",
+  "Rhode Island": "RI", "South Carolina": "SC", "South Dakota": "SD", Tennessee: "TN", Texas: "TX", Utah: "UT",
+  Vermont: "VT", Virginia: "VA", Washington: "WA", "West Virginia": "WV", Wisconsin: "WI", Wyoming: "WY",
+};
+const STATE_NAMES = Object.keys(STATE_CODES).map((n) => n.toLowerCase());
+const STATE_CODE_WORDS = new Set(Object.values(STATE_CODES).map((c) => c.toLowerCase()));
+/** Generic words plus state names squashed ("newyork"), for "is this domain label only generic". */
+const GENERIC_OR_STATE = new Set([...GENERIC_WORDS, ...STATE_NAMES.map((n) => n.replace(/[^a-z]/g, ""))]);
+
+/**
+ * The state of a Places formattedAddress, as a two-letter code: "…, Phoenix, AZ 85004, USA" → "AZ",
+ * "Texas 78570, USA" → "TX". Null when it is not a US address.
+ */
+export function candidateState(formattedAddress: string): string | null {
+  const a = formattedAddress.trim();
+  const code = a.match(/(?:^|,)\s*([A-Z]{2})(?:\s+\d{5}(?:-\d{4})?)?(?:,\s*USA)?$/);
+  if (code && STATE_CODE_WORDS.has(code[1].toLowerCase())) return code[1];
+  const named = a.match(/(?:^|,)\s*([A-Za-z ]+?)(?:\s+\d{5}(?:-\d{4})?)?(?:,\s*USA)?$/);
+  return named ? STATE_CODES[Object.keys(STATE_CODES).find((n) => n.toLowerCase() === named[1].trim().toLowerCase()) ?? ""] ?? null : null;
+}
+
 /**
  * Street number and ZIP from a scraped Address. The street number is a number
  * that starts the address and is followed by a street name ("3800 MARKET STREET
@@ -61,35 +92,41 @@ export function parseAddress(address: string | null | undefined): ParsedAddress 
  * A "www" or "com" glued to a token is stripped too ("IDRIVESAFELYCOM" →
  * "idrivesafely", "wwwcheap" → "cheap"), when at least 4 characters remain.
  */
-export function nameTokens(name: string): string[] {
-  return (name.toLowerCase().match(/[a-z0-9]+/g) ?? [])
+export function nameTokens(name: string, opts: { dropStates?: boolean } = {}): string[] {
+  let n = name.toLowerCase();
+  // State names as whole phrases first, so "New York" goes and "New Horizons" stays.
+  if (opts.dropStates) for (const st of STATE_NAMES) n = n.replace(new RegExp(`\\b${st}\\b`, "g"), " ");
+  return (n.match(/[a-z0-9]+/g) ?? [])
     .map((t) => t.replace(/^www(?=[a-z0-9]{4})/, "").replace(/(?<=[a-z0-9]{4})com$/, ""))
-    .filter((t) => !GENERIC_WORDS.has(t));
+    .filter((t) => !GENERIC_WORDS.has(t) && !(opts.dropStates && STATE_CODE_WORDS.has(t)));
 }
 
 const squash = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
 
 /** Every distinctive token of the school name appears in the candidate's name. A name with none can't be proved. */
-export function nameMatches(schoolName: string, displayName: string): boolean {
+export function nameMatches(schoolName: string, displayName: string, opts: { statesGeneric?: boolean } = {}): boolean {
   const tokens = nameTokens(schoolName);
-  if (!tokens.length) return false;
+  // statesGeneric: a state name or code proves nothing, so the name needs another
+  // distinctive word; the state word is still required (else dropping it would
+  // loosen "Arizona Traffic Safety Institute" to "safety institute").
+  if (!(opts.statesGeneric ? nameTokens(schoolName, { dropStates: true }) : tokens).length) return false;
   const dn = squash(displayName);
   return tokens.every((t) => dn.includes(t));
 }
 
-/** The label is made only of generic words ("trafficschool", "onlinedrivingcourse"), so it names no school. */
+/** The label is made only of generic words and state names ("trafficschool", "arizonadrivingcourse"), so it names no school. */
 function onlyGeneric(label: string): boolean {
   const ok: boolean[] = [true];
   for (let i = 1; i <= label.length; i++) {
     ok[i] = false;
-    for (const w of GENERIC_WORDS) if (i >= w.length && ok[i - w.length] && label.slice(i - w.length, i) === w) ok[i] = true;
+    for (const w of GENERIC_OR_STATE) if (i >= w.length && ok[i - w.length] && label.slice(i - w.length, i) === w) ok[i] = true;
   }
   return ok[label.length];
 }
 
 /**
  * The website's domain is the school's name: the registrable domain's first label
- * (6+ characters, not only generic words) appears in the school name squashed to
+ * (6+ characters, not only generic words and state names) appears in the school name squashed to
  * a-z0-9 with a leading "www" and a trailing "com" dropped.
  * BARATOESCUELADETRAFICOCOM + baratoescueladetrafico.com passes;
  * 3DollarsQuickTrafficSchool com + baratoescueladetrafico.com does not.
@@ -114,6 +151,9 @@ export type MatchResult =
   | { accepted: true; candidate: PlaceCandidate; rule: MatchRule; evidence: "name" | "website" }
   | { accepted: false; addressOnly: PlaceCandidate[]; reason: string };
 
+/** The row as the matcher sees it; state (full name, "Arizona") is needed for the name-only rule. */
+export type MatchRow = { name: string; address: string | null | undefined; state?: string };
+
 export function matchRule(address: string | null | undefined): MatchRule {
   const a = parseAddress(address);
   if (a.streetNumber && a.zip) return "address";
@@ -126,7 +166,7 @@ export function matchRule(address: string | null | undefined): MatchRule {
  * but without the school's name in their displayName. (The website of the one
  * accepted is fetched anyway; these are the only extra Place Details calls.)
  */
-export function needsWebsite(row: { name: string; address: string | null | undefined }, candidates: PlaceCandidate[]): PlaceCandidate[] {
+export function needsWebsite(row: MatchRow, candidates: PlaceCandidate[]): PlaceCandidate[] {
   if (matchRule(row.address) !== "address") return [];
   const addr = parseAddress(row.address);
   return candidates.filter((c) => addressMatches(addr, c.formattedAddress) && !nameMatches(row.name, c.displayName));
@@ -137,7 +177,7 @@ export function needsWebsite(row: { name: string; address: string | null | undef
  * the fetched website of each candidate needsWebsite returned (missing = unknown).
  */
 export function pickCandidate(
-  row: { name: string; address: string | null | undefined },
+  row: MatchRow,
   candidates: PlaceCandidate[],
   websites: Map<string, string | null> = new Map(),
 ): MatchResult {
@@ -154,10 +194,14 @@ export function pickCandidate(
     if (proved.length > 1) return { accepted: false, addressOnly: [], reason: `ambiguous: ${proved.length} candidates at this address carry the name (${proved.map((x) => x.c.displayName).join("; ")})` };
     return { accepted: false, addressOnly: atAddress, reason: `address only: ${atAddress.length === 1 ? "a listing" : `${atAddress.length} listings`} at this address without the school's name` };
   }
+  const code = row.state ? STATE_CODES[row.state] : undefined;
+  if (rule === "name" && !code) return { accepted: false, addressOnly: [], reason: `no address and no known state (${row.state || "blank"}): can't prove` };
   const passing = candidates.filter((c) =>
-    rule === "zip+name" ? hasToken(c.formattedAddress, addr.zip!) && nameMatches(row.name, c.displayName) : nameMatches(row.name, c.displayName),
+    rule === "zip+name"
+      ? hasToken(c.formattedAddress, addr.zip!) && nameMatches(row.name, c.displayName)
+      : candidateState(c.formattedAddress) === code && nameMatches(row.name, c.displayName, { statesGeneric: true }),
   );
-  if (!passing.length) return { accepted: false, addressOnly: [], reason: rule === "zip+name" ? "no candidate in this ZIP with the school's name" : "no candidate with the school's name" };
+  if (!passing.length) return { accepted: false, addressOnly: [], reason: rule === "zip+name" ? "no candidate in this ZIP with the school's name" : `no candidate in ${code} with the school's name (state names don't count)` };
   if (passing.length === 1) return { accepted: true, candidate: passing[0], rule, evidence: "name" };
   return { accepted: false, addressOnly: [], reason: `ambiguous: ${passing.length} candidates pass (${passing.map((c) => c.displayName).join("; ")})` };
 }
@@ -207,4 +251,16 @@ export function registrableDomain(url: string | null | undefined): string | null
   if (labels.length <= 2) return labels.join(".");
   const twoPart = /^(co|com|org|net|gov|edu|ac)\.[a-z]{2}$/.test(labels.slice(-2).join("."));
   return labels.slice(twoPart ? -3 : -2).join(".");
+}
+
+/** The URL without its query string and fragment (utm_*, gclid, id=LocalPack…); the path stays. */
+export function stripQuery(url: string): string {
+  try {
+    const u = new URL(url.startsWith("http") ? url : `https://${url}`);
+    u.search = "";
+    u.hash = "";
+    return u.toString();
+  } catch {
+    return url.replace(/[?#].*$/, "");
+  }
 }
