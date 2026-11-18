@@ -54,6 +54,11 @@ export function logIssue(
 
 /** Flush all buffered issues to Notion at the end of the run. */
 export async function flushIssues() {
+  // A scraper dry run (SCRAPER_DRY_RUN, scripts/lib/scraper-utils) writes nothing to Notion, issues included.
+  if (process.env.SCRAPER_DRY_RUN) {
+    if (issueBuffer.length) console.log(`\n${issueBuffer.length} issue(s) logged (dry run: console only)`);
+    return;
+  }
   if (!ISSUES_DB || issueBuffer.length === 0) {
     if (issueBuffer.length > 0) {
       console.log(`\n${issueBuffer.length} issue(s) logged (NOTION_ISSUES_DB not set — console only)`);

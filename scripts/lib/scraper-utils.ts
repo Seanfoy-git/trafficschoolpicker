@@ -4,6 +4,7 @@
  * only needs to define how to extract schools from the page.
  */
 
+import { appendFileSync } from "fs";
 import { config } from "dotenv";
 import { junkReason } from "../../lib/directory-filter";
 config({ path: ".env.local" });
@@ -13,6 +14,13 @@ import { isHandSet } from "./directory-rows";
 
 const notion = makeNotionClient();
 const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB!;
+/**
+ * SCRAPER_DRY_RUN=<file.jsonl>: write nothing to Notion; append each scraped
+ * school (state, name, licence, website as it would be written, whether a row
+ * exists) to the file. Used by scripts/recheck-directory-websites.ts to see
+ * which Notion websites the state's own list supplies.
+ */
+const CAPTURE = process.env.SCRAPER_DRY_RUN;
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -109,6 +117,13 @@ export async function syncToNotion(
       properties.Notes = { rich_text: [{ text: { content: school.notes } }] };
     }
 
+    if (CAPTURE) {
+      appendFileSync(CAPTURE, JSON.stringify({ state: stateName, name: school.name, licence: school.licenseNumber || `${stateCode}-approved`, website: properties.Website?.url ?? "", existing: !!prior }) + "\n");
+      if (prior) updated++;
+      else created++;
+      continue;
+    }
+
     try {
       if (prior) {
         await notion.pages.update({ page_id: prior.id, properties });
@@ -127,7 +142,7 @@ export async function syncToNotion(
     await new Promise((r) => setTimeout(r, 350));
   }
 
-  console.log(`\n  ${stateName} Sync: ${scraped.length} scraped, ${created} created, ${updated} updated`);
+  console.log(`\n  ${stateName} Sync${CAPTURE ? " (dry run, nothing written)" : ""}: ${scraped.length} scraped, ${created} ${CAPTURE ? "would be created" : "created"}, ${updated} ${CAPTURE ? "would be updated" : "updated"}`);
   return { created, updated };
 }
 
