@@ -85,21 +85,54 @@ npm run seed                                # = wrangler kv bulk put --binding=M
 npm run deploy                              # = wrangler deploy
 ```
 
-## Acceptance tests
+## Bots
+
+`src/classify.ts` decides, per `/c/` request, whether it goes on to the offer.
+Bots get a `204` with no `Location`, are logged under `bot:` (90-day TTL) with a
+`reason`, and never reach the network or the school.
+
+| Rule (first match wins) | Result |
+|---|---|
+| `Referer` is the tracker's own host | blocked (`tracker-referrer`) |
+| Assistant fetching for a person (`ChatGPT-User`, `Perplexity-User`, `Claude-User`, `MistralAI-User`) | redirected, `class: ai-user` |
+| Search-engine crawler (Googlebot, bingbot, Applebot, DuckDuckBot…) | redirected, `class: search-crawler` |
+| Declared crawler, scraper or HTTP library (`…bot/1.0`, `meta-externalagent`, `curl`, `python-requests`, `HeadlessChrome`…) | blocked (`declared-bot`) |
+| Known spoofed browser string (iPhone iOS 13_2_3 + Safari 13.0.3) | blocked (`spoofed-ua`) |
+| Anything else | redirected, `class: browser` |
+
+Search engines are deliberately redirected like people: they must see what
+people see. Keep them off `/c/` with robots.txt, not with a different response.
+
+Tests (no deploy, no network), from the repo root:
 
 ```bash
+npx tsx tracker/test/bot-filter.ts   # every state offer: people land on the exact offer URL, bots get 204
+npx tsx tracker/test/smoke.ts        # original map/fallback behaviour
+```
+
+## Acceptance tests
+
+`curl`'s own user agent is a bot to the tracker (it gets a `204`), so send a
+browser user agent when checking the redirect by hand.
+
+```bash
+UA="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36"
+
 # Mapped NY → offer 25
-curl -sI "https://track.trafficschoolpicker.com/c/idrivesafely?s=NY&p=demo" | grep -i location
+curl -sI -A "$UA" "https://track.trafficschoolpicker.com/c/idrivesafely?s=NY&p=demo" | grep -i location
 #   location: https://go.idrivesafely.com/aff_c?offer_id=25&aff_id=6858&aff_sub=tsp-NY&aff_sub3=...
 
 # Mapped GA → offer 21
-curl -sI "https://track.trafficschoolpicker.com/c/idrivesafely?s=GA&p=demo" | grep -i location
+curl -sI -A "$UA" "https://track.trafficschoolpicker.com/c/idrivesafely?s=GA&p=demo" | grep -i location
 
-# Unmapped TX → partner default (offer 19), logged as a miss (mapped=false)
-curl -sI "https://track.trafficschoolpicker.com/c/idrivesafely?s=TX&p=demo" | grep -i location
+# Unmapped state → partner default, logged as a miss (mapped=false)
+curl -sI -A "$UA" "https://track.trafficschoolpicker.com/c/idrivesafely?s=ZZ&p=demo" | grep -i location
 
-# Every response must be 302 + no-store
-curl -sI "https://track.trafficschoolpicker.com/c/idrivesafely?s=NY" | grep -iE "HTTP/|cache-control"
+# Every redirect must be 302 + no-store
+curl -sI -A "$UA" "https://track.trafficschoolpicker.com/c/idrivesafely?s=NY" | grep -iE "HTTP/|cache-control"
+
+# A bot gets 204, no location
+curl -sI "https://track.trafficschoolpicker.com/c/idrivesafely?s=NY" | grep -iE "HTTP/|location"
 ```
 
 ## Reading the click log
@@ -110,8 +143,12 @@ wrangler kv key get  --binding=CLICKS "click:<paste-a-key>"
 ```
 
 Each record: `{ clickId, ts, slug, state, sourcePageId, destination, mapped,
-fellBackToSite, referrer, ua, country }`. `mapped:false` rows are state coverage
+fellBackToSite, referrer, ua, country, class }`. `mapped:false` rows are state coverage
 gaps to fill; `fellBackToSite:true` rows are partners with no map entry at all.
+`class` is `browser`, `ai-user` or `search-crawler` (records before Nov 2026 have none).
+
+Blocked bots: `wrangler kv key list --binding=CLICKS --prefix "bot:" --remote`. Each
+record: `{ ts, slug, state, sourcePageId, source, reason, method, referrer, ua, country }`.
 
 > KV is fine for launch volume. If you later want SQL queries over clicks
 > (top states, conversion joins), swap `CLICKS` for a **D1** table — the Worker

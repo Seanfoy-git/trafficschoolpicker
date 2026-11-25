@@ -13,10 +13,18 @@
  * as the partner fallback. Never 404 — unmapped clicks still redirect and are
  * logged as misses so coverage gaps surface.
  *
+ * Bots (see classify.ts) are not redirected: they are logged under `bot:` and get
+ * a 204 with no Location, so they never reach the network or the school. Everyone
+ * else, including search-engine crawlers and assistants fetching for a person,
+ * gets exactly the redirect described above.
+ *
  * Storage (Workers KV):
  *   MAP    — offer map. key `${slug}:${STATE}` or `${slug}:_default` → destination URL
  *   CLICKS — click log. key `click:{ISO}:{clickId}` → JSON record (TTL ~400d)
+ *            bot log.   key `bot:{ISO}:{id}`       → JSON record (TTL ~90d)
  */
+
+import { classify } from "./classify";
 
 export interface Env {
   MAP: KVNamespace;
@@ -25,6 +33,7 @@ export interface Env {
 }
 
 const CLICK_TTL_SECONDS = 60 * 60 * 24 * 400; // ~400 days
+const BOT_TTL_SECONDS = 60 * 60 * 24 * 90; // ~90 days
 const SITE_FALLBACK = "https://www.trafficschoolpicker.com";
 
 const handler = {
@@ -46,6 +55,36 @@ const handler = {
     const state = (url.searchParams.get("s") || "").trim().toUpperCase();
     const sourcePageId = (url.searchParams.get("p") || "").trim();
     const source = (url.searchParams.get("src") || "").trim(); // reserved: aff_sub2
+
+    // Bots stop here: logged, no redirect, nothing sent on to the network.
+    const verdict = classify({
+      userAgent: request.headers.get("user-agent"),
+      referer: request.headers.get("referer"),
+      host: url.hostname,
+    });
+    if (verdict.block) {
+      const nowIso = new Date().toISOString();
+      const botRecord = {
+        ts: nowIso,
+        slug,
+        state: state || null,
+        sourcePageId: sourcePageId || null,
+        source: source || null,
+        reason: verdict.reason,
+        method: request.method,
+        referrer: request.headers.get("referer"),
+        ua: request.headers.get("user-agent"),
+        country: (request.cf && (request.cf as { country?: string }).country) || null,
+      };
+      await env.CLICKS.put(`bot:${nowIso}:${crypto.randomUUID()}`, JSON.stringify(botRecord), {
+        expirationTtl: BOT_TTL_SECONDS,
+        metadata: { slug, state: state || "", reason: verdict.reason },
+      });
+      return new Response(null, {
+        status: 204,
+        headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" },
+      });
+    }
 
     // Resolve destination: exact (slug:STATE) → partner default (slug:_default).
     const exact = state ? await env.MAP.get(`${slug}:${state}`) : null;
@@ -86,6 +125,7 @@ const handler = {
       referrer: request.headers.get("referer"),
       ua: request.headers.get("user-agent"),
       country: (request.cf && (request.cf as { country?: string }).country) || null,
+      class: verdict.label, // browser | ai-user | search-crawler
     };
     await env.CLICKS.put(`click:${nowIso}:${clickId}`, JSON.stringify(record), {
       expirationTtl: CLICK_TTL_SECONDS,
