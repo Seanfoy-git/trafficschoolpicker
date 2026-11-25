@@ -40,7 +40,7 @@ async function scrape(): Promise<ScrapedSchool[]> {
         if (card.name.length > 2) {
           schools.push({
             name: card.name,
-            licenseNumber: "VA-DIC",
+            licenseNumber: "", // the VA DMV list publishes no licence number; never a placeholder
             phone: card.phone,
             address: "",
             website: card.website,

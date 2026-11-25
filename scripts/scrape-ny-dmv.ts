@@ -50,7 +50,7 @@ async function scrape(): Promise<ScrapedSchool[]> {
 
       schools.push({
         name,
-        licenseNumber: "NY-PIRP",
+        licenseNumber: "", // the list publishes no licence number; never a placeholder (P0 follow-up)
         phone,
         address: row.cells.find((c) => c.includes(",") && c.length > 15) ?? "",
         website,
@@ -69,7 +69,7 @@ async function scrape(): Promise<ScrapedSchool[]> {
         if (phonePattern.test(lines[i]) && i > 0 && lines[i - 1].length > 3 && lines[i - 1].length < 100) {
           schools.push({
             name: lines[i - 1],
-            licenseNumber: "NY-PIRP",
+            licenseNumber: "", // the list publishes no licence number; never a placeholder (P0 follow-up)
             phone: lines[i].match(phonePattern)?.[0] ?? "",
             address: "",
             website: "",

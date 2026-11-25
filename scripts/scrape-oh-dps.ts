@@ -40,7 +40,7 @@ async function scrape(): Promise<ScrapedSchool[]> {
       if (row.cells.length >= 3 && row.cells[0].length > 2) {
         schools.push({
           name: row.cells[0].replace(/^!!?\s*"?|"?\s*!!?$/g, "").trim(),
-          licenseNumber: "OH-ARO",
+          licenseNumber: "", // no licence number published; never a placeholder
           phone: row.cells[1],
           address: "",
           website: row.link,
@@ -70,7 +70,7 @@ async function scrape(): Promise<ScrapedSchool[]> {
         if (!schools.find((s) => s.name === name)) {
           schools.push({
             name,
-            licenseNumber: "OH-AAO",
+            licenseNumber: "", // no licence number published; never a placeholder
             phone: row.cells[1],
             address: "",
             website: row.link,

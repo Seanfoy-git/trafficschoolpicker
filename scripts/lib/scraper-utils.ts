@@ -5,7 +5,7 @@
  */
 
 import { config } from "dotenv";
-import { junkReason } from "../../lib/directory-filter";
+import { DirectoryIndex, junkReason, rowIdentity } from "../../lib/directory-filter";
 config({ path: ".env.local" });
 import { makeNotionClient } from "./notion-client";
 import { logIssue } from "./issues";
@@ -25,10 +25,9 @@ export interface ScrapedSchool {
   notes: string;
 }
 
-export async function getExistingSchools(
-  stateName: string
-): Promise<Map<string, string>> {
-  const existing = new Map<string, string>();
+/** The state's existing Directory rows, indexed by real licence and cleaned name (lib/directory-filter DirectoryIndex). */
+export async function getExistingSchools(stateName: string): Promise<DirectoryIndex> {
+  const rows: { id: string; name: string; licenseNumber: string }[] = [];
   let cursor: string | undefined;
   do {
     const response: any = await notion.databases.query({
@@ -38,12 +37,14 @@ export async function getExistingSchools(
       page_size: 100,
     });
     for (const page of response.results) {
-      const name = (page as any).properties["School Name"]?.title?.[0]?.plain_text?.toLowerCase();
-      if (name) existing.set(name, page.id);
+      const props = (page as any).properties;
+      const name = (props["School Name"]?.title ?? []).map((t: any) => t.plain_text).join("");
+      const licenseNumber = (props["License Number"]?.rich_text ?? []).map((t: any) => t.plain_text).join("");
+      if (name) rows.push({ id: page.id, name, licenseNumber });
     }
     cursor = response.has_more ? response.next_cursor ?? undefined : undefined;
   } while (cursor);
-  return existing;
+  return new DirectoryIndex(rows);
 }
 
 export async function syncToNotion(
@@ -66,8 +67,10 @@ export async function syncToNotion(
       console.log(`  skip (${junk}): ${JSON.stringify(school.name)}`);
       continue;
     }
-    const lic = (school.licenseNumber || "").trim().toUpperCase();
-    if (lic && !/^[A-Z]{2}-(APPROVED|[A-Z]{2,5})$/.test(lic)) {
+    // Match and write on the cleaned name and the real licence, never the raw scraped name.
+    const id = rowIdentity(school.name, school.licenseNumber || "");
+    const lic = id.licence.toUpperCase();
+    if (lic) {
       if (seenLicense.has(lic)) {
         console.log(`  skip (duplicate license ${lic}): ${JSON.stringify(school.name)}`);
         continue;
@@ -76,8 +79,9 @@ export async function syncToNotion(
     }
 
     const properties: any = {
-      "School Name": { title: [{ text: { content: school.name } }] },
-      "License Number": { rich_text: [{ text: { content: school.licenseNumber || `${stateCode}-approved` } }] },
+      "School Name": { title: [{ text: { content: id.name } }] },
+      // No licence scraped: leave the field empty, never a "{STATE}-approved" placeholder (P0 follow-up).
+      "License Number": { rich_text: id.licence ? [{ text: { content: id.licence } }] : [] },
       Phone: { rich_text: [{ text: { content: school.phone } }] },
       Address: { rich_text: [{ text: { content: school.address } }] },
       State: { select: { name: stateName } },
@@ -94,12 +98,13 @@ export async function syncToNotion(
     }
 
     try {
-      const existingId = existing.get(school.name.toLowerCase());
-      if (existingId) {
-        await notion.pages.update({ page_id: existingId, properties });
+      const match = existing.match(school.name, school.licenseNumber || "");
+      if (match) {
+        await notion.pages.update({ page_id: match.id, properties });
         updated++;
       } else {
-        await notion.pages.create({ parent: { database_id: DIRECTORY_DB }, properties });
+        const page = await notion.pages.create({ parent: { database_id: DIRECTORY_DB }, properties });
+        existing.add(page.id, id.name, id.licence); // a second scrape of the same school in this run updates, not creates
         created++;
       }
     } catch (err) {
