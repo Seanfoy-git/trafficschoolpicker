@@ -20,6 +20,7 @@ import {
   methodStatement,
   reviewedTableHeading,
   otherTableHeading,
+  regulatorAfterStateName,
 } from "@/lib/comparison";
 import { SURCHARGE_ESTIMATE_LABEL } from "@/lib/ticket-cost-study";
 import { STATE_SEO } from "@/lib/seo-config";
@@ -79,6 +80,15 @@ export const revalidate = 86400;
 export const dynamicParams = false;
 
 type Props = { params: Promise<{ state: string }> };
+
+/** "tdlr.texas.gov" for a link with no regulator name on record. */
+function hostOfUrl(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return "official site";
+  }
+}
 
 export async function generateStaticParams() {
   return getAllStateSlugs().map((slug) => ({ state: slug }));
@@ -209,10 +219,10 @@ export default async function StatePage({ params }: Props) {
     const resale = resaleConFor(school.slug, code, school.name);
     const agreed = {
       ...resolved,
-      pros: cardLinesFor(prosAgreeingWithRow(resolved.pros, row, where), school.slug, code, where),
-      cons: [...cardLinesFor(prosAgreeingWithRow(resolved.cons, row, where), school.slug, code, where), ...(resale ? [resale] : [])],
-      oneLiner: cardTextFor(takeAgreeingWithRow(resolved.oneLiner, row, where), school.slug, code, where),
-      bestFor: cardTextFor(resolved.bestFor, school.slug, code, where),
+      pros: cardLinesFor(prosAgreeingWithRow(resolved.pros, row, where), school.slug, code, where, approvalVerified),
+      cons: [...cardLinesFor(prosAgreeingWithRow(resolved.cons, row, where), school.slug, code, where, approvalVerified), ...(resale ? [resale] : [])],
+      oneLiner: cardTextFor(takeAgreeingWithRow(resolved.oneLiner, row, where), school.slug, code, where, approvalVerified),
+      bestFor: cardTextFor(resolved.bestFor, school.slug, code, where, approvalVerified),
       approvalVerified,
       approvalBodyShort: approvalVerified ? resolved.approvalBodyShort : "State Approved",
     };
@@ -912,27 +922,24 @@ export default async function StatePage({ params }: Props) {
                 <div className="bg-slate-50 rounded-lg p-6">
                   <div className="flex items-center gap-2 mb-3">
                     <ShieldCheck className="w-5 h-5 text-blue-500" />
-                    <h3 className="font-semibold text-slate-900">Official DMV</h3>
+                    <h3 className="font-semibold text-slate-900">Official source</h3>
                   </div>
+                  {/* Named for the agency, not "{State} DMV": Texas's link is TDLR's. */}
                   <a
                     href={stateInfo.dmvUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm text-accent underline flex items-center gap-1"
                   >
-                    {stateMeta.name} DMV <ExternalLink className="w-3 h-3" />
+                    {stateInfo.regulatorShort
+                      ? `${stateMeta.name} ${regulatorAfterStateName(stateInfo.regulatorShort, stateMeta.code, stateMeta.name)}`
+                      : hostOfUrl(stateInfo.dmvUrl)}{" "}
+                    <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>
               )}
-              {stateInfo.notes && (
-                <div className="bg-slate-50 rounded-lg p-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Info className="w-5 h-5 text-slate-500" />
-                    <h3 className="font-semibold text-slate-900">Notes</h3>
-                  </div>
-                  <p className="text-sm text-slate-600">{stateInfo.notes}</p>
-                </div>
-              )}
+              {/* The States DB "Notes" field is not rendered: it is internal working text
+                  ("Major market.", "Verify.", a dated audit change log), 25 Nov 2026. */}
             </div>
           </div>
         </section>
