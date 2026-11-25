@@ -10,10 +10,18 @@ import { usePathname } from "next/navigation";
 // Rendered during SSR too, so the correct sentence is in the initial HTML.
 const AFFILIATE_FREE_PATHS = new Set(["/out-of-state-ticket"]);
 
+// State question pages (/{state}/{question}) are citation-only too (DOCUMENTATION.md
+// §7.2): no affiliate, tracker or merchant markup ever renders on them.
+const NOT_QUESTION_PREFIXES = new Set(["blog", "reviews", "admin", "api", "schools"]);
+function isQuestionPage(pathname: string): boolean {
+  const parts = pathname.split("/").filter(Boolean);
+  return parts.length === 2 && !NOT_QUESTION_PREFIXES.has(parts[0]);
+}
+
 export function FooterAffiliateNote() {
   const pathname = usePathname();
-  if (pathname && AFFILIATE_FREE_PATHS.has(pathname)) {
+  if (pathname && (AFFILIATE_FREE_PATHS.has(pathname) || isQuestionPage(pathname))) {
     return <>TrafficSchoolPicker earns commission from partner links elsewhere on this site. This page carries none.</>;
   }
-  return <>Affiliate disclosure: we earn commissions from partner links.</>;
+  return <>We may earn a commission when you enroll through our links. It never changes our rankings.</>;
 }

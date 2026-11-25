@@ -65,20 +65,52 @@ export function cardCourseHours(stateInfo: { onlineStatus: string; courseHours: 
  * course has a final exam, or "no timers" against a row that says it has them.
  * The row is checked against the school's own page; a pro that disagrees is
  * dropped (never reworded) and logged so its Notion source can be corrected.
+ *
+ * Helpfulness audit (24 Nov 2026), one source per attribute: card text also may
+ * not restate a figure that another part of the page owns. Dropped too:
+ *  - exam detail ("closed-book", "3 attempts", "exam required") when the row says
+ *    the course has no final exam;
+ *  - review counts and star ratings (the card header shows the live ones, and the
+ *    free-text copies had drifted: "44,900+" against a header of 45,435);
+ *  - court-fee dollar amounts (the state's cost section owns them; school copy
+ *    said "$10 to $30" on /texas where the real court-side total is $134 plus up
+ *    to $10).
  */
-export function prosAgreeingWithRow(
-  pros: string[],
-  row: { finalExam: { text: string }; timers: { text: string } } | undefined,
-  where: string
-): string[] {
-  if (!row) return pros;
-  const contradicts = (p: string) =>
+const REVIEW_STAT =
+  /\b\d[\d,]*\+?\s+(?:[A-Za-z]+\s+){0,2}reviews?\b|\b[1-5]\.\d\s*(?:\/\s*5\s*)?(?:-|\s)?(?:stars?|rating|trustpilot)\b/i;
+const COURT_FEE_AMOUNT = /\bcourt\b[^.;]*\$\s?\d|\$\s?\d[^.;]*\bcourt\b/i;
+const EXAM_DETAIL =
+  /\b(?:final )?exam\b[^.;]*\b(?:required|closed[- ]book|attempts?)\b|\bclosed[- ]book\b[^.;]*\bexam\b|\b\d+ attempts\b/i;
+
+type RowFacts = { finalExam: { text: string }; timers: { text: string } };
+
+function contradictsRow(p: string, row: RowFacts): boolean {
+  return (
     (row.finalExam.text === "Yes" && /\bno (final )?exam\b|\bwithout (a |any )?(final )?exam\b/i.test(p)) ||
-    (row.finalExam.text === "No" && /\b(final )?exam (is )?required\b|\bincludes? a final exam\b/i.test(p)) ||
-    (row.timers.text === "Yes" && /\bno (lesson |page |course |chapter )?timers?\b|\bwithout (lesson |page )?timers?\b/i.test(p));
-  const kept = pros.filter((p) => !contradicts(p));
-  for (const p of pros) if (contradicts(p)) console.warn(`[card-pros] ${where}: dropped "${p}" (contradicts the comparison row)`);
+    (row.finalExam.text === "No" && (EXAM_DETAIL.test(p) || /\bincludes? a final exam\b/i.test(p))) ||
+    (row.timers.text === "Yes" && /\bno (lesson |page |course |chapter )?timers?\b|\bwithout (lesson |page )?timers?\b/i.test(p)) ||
+    REVIEW_STAT.test(p) ||
+    COURT_FEE_AMOUNT.test(p)
+  );
+}
+
+export function prosAgreeingWithRow(pros: string[], row: RowFacts | undefined, where: string): string[] {
+  if (!row) return pros;
+  const kept = pros.filter((p) => !contradictsRow(p, row));
+  for (const p of pros) if (contradictsRow(p, row)) console.warn(`[card-pros] ${where}: dropped "${p}" (contradicts the comparison row)`);
   return kept;
+}
+
+/** Same rule for the card's one-line take: a sentence that restates a row-owned
+ *  figure is dropped (never reworded); null when nothing is left. */
+export function takeAgreeingWithRow(take: string | null, row: RowFacts | undefined, where: string): string | null {
+  if (!take || !row) return take;
+  const sentences = take.match(/[^.!?]+[.!?]+(?:\s+|$)|[^.!?]+$/g) ?? [take];
+  const kept = sentences.filter((s) => !contradictsRow(s, row));
+  if (kept.length === sentences.length) return take;
+  console.warn(`[card-pros] ${where}: trimmed take "${take}" (restates a row-owned figure)`);
+  const out = kept.join("").trim();
+  return out || null;
 }
 
 export const noPriceLabel = (r: ResolvedSchoolContent) =>

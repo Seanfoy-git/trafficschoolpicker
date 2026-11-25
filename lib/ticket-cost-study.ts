@@ -85,3 +85,15 @@ export function ticketCostFor(code: string): StateTicketCost | null {
 export function formatCost(n: number): string {
   return `$${n.toLocaleString("en-US")}`;
 }
+
+/** The one savings sentence every surface prints (state page stat box, the cost
+ *  and worth-it snapshot, llms). Where the study's mechanism is the court's
+ *  choice (HI, LA, NV, OK), the saving depends on the court, so the sentence
+ *  says so instead of promising it (helpfulness audit, 24 Nov 2026). */
+export function savingsSentence(c: StateTicketCost): string | null {
+  if (!c.netSavings) return null;
+  const amount = formatCost(c.netSavings);
+  return /^court dismissal/i.test(c.mechanism ?? "")
+    ? `If the court lets a course dismiss or reduce the ticket, that can save you about ${amount} of it.`
+    : `An approved course can save you about ${amount} of that.`;
+}

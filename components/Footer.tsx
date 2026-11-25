@@ -97,16 +97,8 @@ export async function Footer() {
             <p className="text-xs text-slate-400 leading-relaxed">
               TrafficSchoolPicker.com is an independent comparison site, not a
               traffic school, law firm, court, or government agency, and nothing
-              here is legal advice. Prices and promotional offers are gathered
-              periodically, may change or expire without notice, and can differ
-              from a provider&apos;s checkout; always confirm the current price and
-              terms on the provider&apos;s own website before purchasing. Whether an
-              online course is accepted, dismisses your ticket, or removes points
-              depends on your state and the specific court handling your case.
-              Verify with the court listed on your citation before enrolling. We
-              do not guarantee any outcome. We may earn a commission when you enroll
-              through our links, at no extra cost to you; this never affects our
-              rankings or reviews.
+              here is legal advice. Check the final price on the school&apos;s own
+              checkout, and your deadline with the court on your citation.
             </p>
             <ul className="mt-3 space-y-1.5 text-xs">
               <li>
@@ -151,8 +143,7 @@ export async function Footer() {
 
         <div className="border-t border-slate-700 mt-8 pt-6 text-center text-xs text-slate-400">
           &copy; {new Date().getFullYear()} PellucidMedia LLC · TrafficSchoolPicker.com.
-          All rights reserved. | <FooterAffiliateNote /> | Prices &amp; offers subject to
-          change; verify on the provider&apos;s site.
+          All rights reserved. | <FooterAffiliateNote />
         </div>
       </div>
     </footer>

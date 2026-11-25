@@ -9,7 +9,7 @@ import {
   lowestDisplayedPrice,
   type VideoEntry,
 } from "@/lib/structured-data";
-import { cardCourseHours, loadStateData, noPriceLabel, ONLINE_COMPARISON_STATUSES, prosAgreeingWithRow } from "@/lib/state-page-data";
+import { cardCourseHours, loadStateData, noPriceLabel, ONLINE_COMPARISON_STATUSES, prosAgreeingWithRow, takeAgreeingWithRow } from "@/lib/state-page-data";
 import {
   comparisonH1,
   comparisonH2,
@@ -22,7 +22,7 @@ import {
 } from "@/lib/comparison";
 import { SURCHARGE_ESTIMATE_LABEL } from "@/lib/ticket-cost-study";
 import { STATE_SEO } from "@/lib/seo-config";
-import { ticketCostFor, formatCost } from "@/lib/ticket-cost-study";
+import { ticketCostFor, formatCost, savingsSentence } from "@/lib/ticket-cost-study";
 import { getNotionStateFaqs } from "@/lib/notion-faqs";
 import { getStateBySlug, getAllStateSlugs } from "@/lib/state-utils";
 import { SchoolCard } from "@/components/SchoolCard";
@@ -196,7 +196,13 @@ export default async function StatePage({ params }: Props) {
   const tier1Cards = comparison
     ? tier1Resolved.map(({ school, resolved }) => {
         const row = comparison.rows.find((r) => r.tier === 1 && r.slug === school.slug);
-        const agreed = { ...resolved, pros: prosAgreeingWithRow(resolved.pros, row, `${stateSlug}/${school.slug}`) };
+        const where = `${stateSlug}/${school.slug}`;
+        const agreed = {
+          ...resolved,
+          pros: prosAgreeingWithRow(resolved.pros, row, where),
+          cons: prosAgreeingWithRow(resolved.cons, row, where),
+          oneLiner: takeAgreeingWithRow(resolved.oneLiner, row, where),
+        };
         return agreed.priceSource
           ? { school, resolved: agreed }
           : { school, resolved: { ...agreed, price: null, priceDisplay: noPriceLabel(agreed) } };
@@ -221,6 +227,8 @@ export default async function StatePage({ params }: Props) {
     if (disp < minDisplayed) {
       minDisplayed = disp;
       cheapestId = school.id;
+    } else if (disp === minDisplayed) {
+      cheapestId = null; // a tie: no single school is "Lowest price"
     }
   }
   const badgesFor = (id: string): string[] => [
@@ -302,6 +310,19 @@ export default async function StatePage({ params }: Props) {
       ? lowestDisplayedPrice(tier1Resolved)
       : null;
 
+  // Content standards §0: the Quick Answer (States DB) is the reader's first two
+  // sentences. A "{from}" token is filled from the same lowest price the table and
+  // Key Facts use, so the opening line can never quote a different course price.
+  // A token with no price to fill drops the Quick Answer (the old subhead returns).
+  const quickAnswer = (() => {
+    const raw = stateInfo?.quickAnswer?.trim();
+    if (!raw) return null;
+    if (!raw.includes("{from}")) return raw;
+    if (lowestPrice === null) return null;
+    const price = Number.isInteger(lowestPrice) ? `$${lowestPrice}` : `$${lowestPrice.toFixed(2)}`;
+    return raw.split("{from}").join(price);
+  })();
+
   const heroBlock = (
     <>
       {/* HERO */}
@@ -325,7 +346,10 @@ export default async function StatePage({ params }: Props) {
               the grid (showComparison already accounts for noPartnerOffer + status).
               The "from N" figure is the directory row count, the same number the
               directory heading prints (P17 Task 5a: one source of truth). */}
-          {showComparison && (
+          {quickAnswer && (
+            <p className="text-lg text-white max-w-3xl leading-relaxed">{quickAnswer}</p>
+          )}
+          {showComparison && !quickAnswer && (
             <p className="text-lg text-slate-300 max-w-3xl">
               Comparing {tier1.length} reviewed option
               {tier1.length !== 1 ? "s" : ""}
@@ -416,11 +440,9 @@ export default async function StatePage({ params }: Props) {
                   {formatCost(ticketCost.allInCost)}
                 </span>
                 <span className="text-sm text-slate-600">
-                  estimated all-in cost of a first speeding ticket in {stateMeta.name}
-                  {" "}(fine plus a three-year insurance surcharge, {SURCHARGE_ESTIMATE_LABEL}).
-                  {ticketCost.netSavings ? (
-                    <> A state-approved course can avoid about {formatCost(ticketCost.netSavings)} of it.</>
-                  ) : null}{" "}
+                  is what a first speeding ticket in {stateMeta.name} costs over three years
+                  if you just pay it: the fine plus higher insurance ({SURCHARGE_ESTIMATE_LABEL}).
+                  {savingsSentence(ticketCost) ? <> {savingsSentence(ticketCost)}</> : null}{" "}
                   <a href="/blog/true-cost-of-a-traffic-ticket" className="text-accent underline">
                     See the 2026 study.
                   </a>
@@ -961,10 +983,16 @@ export default async function StatePage({ params }: Props) {
             />
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{h1}</h1>
           </div>
-          {comparison && (
+          {/* Content standards §0: when the state has a Quick Answer, the reader gets the
+              answer (what to do, what it costs in total) here instead of page metadata.
+              The method statement below already carries the count and prices date. */}
+          {quickAnswer && (
+            <p className="text-lg text-white max-w-3xl leading-relaxed">{quickAnswer}</p>
+          )}
+          {comparison && !quickAnswer && (
             <p className="text-lg text-slate-300 max-w-3xl">{comparisonSubhead(comparison)}</p>
           )}
-          {comparison && comparison.directoryCount > 0 && (
+          {comparison && !quickAnswer && comparison.directoryCount > 0 && (
             <p className="mt-1 text-sm text-slate-300 max-w-3xl">
               Drawn from <span data-count="directory">{comparison.directoryCount}</span> schools on the official{" "}
               {comparison.regulator ?? "state"} approved list, all shown in the directory below.
