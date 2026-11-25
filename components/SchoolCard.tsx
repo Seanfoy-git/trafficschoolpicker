@@ -34,7 +34,9 @@ export function SchoolCard({
   const salePrice = "salePrice" in school ? (school as SchoolWithPrice).salePrice : null;
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+    // data-card-* marks let scripts/verify-card-claims.ts read the free-text copy
+    // and the approval badge of each card from the built HTML.
+    <div data-card-school={school.slug} className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex flex-col sm:flex-row sm:items-start gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-2">
@@ -75,7 +77,7 @@ export function SchoolCard({
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-600 mb-1">
                 Our take
               </p>
-              <p className="text-sm text-slate-600">
+              <p data-card-copy="take" className="text-sm text-slate-600">
                 {resolved.oneLiner}
               </p>
             </div>
@@ -89,7 +91,7 @@ export function SchoolCard({
               </span>
             )}
             {resolved.approvalBodyShort !== "State Approved" && (
-              <span className="flex items-center gap-1">
+              <span data-card-approval="" className="flex items-center gap-1">
                 <CheckCircle className="w-4 h-4 text-slate-600" />
                 {resolved.approvalBodyShort}-approved
               </span>
@@ -113,7 +115,7 @@ export function SchoolCard({
                   </h4>
                   <ul className="space-y-1">
                     {pros.map((pro) => (
-                      <li key={pro} className="flex items-start gap-1.5 text-xs text-slate-600">
+                      <li key={pro} data-card-copy="pro" className="flex items-start gap-1.5 text-xs text-slate-600">
                         <CheckCircle className="w-3 h-3 text-green-500 mt-0.5 shrink-0" />
                         {pro}
                       </li>
@@ -128,7 +130,7 @@ export function SchoolCard({
                   </h4>
                   <ul className="space-y-1">
                     {cons.map((con) => (
-                      <li key={con} className="flex items-start gap-1.5 text-xs text-slate-600">
+                      <li key={con} data-card-copy="con" className="flex items-start gap-1.5 text-xs text-slate-600">
                         <span className="text-red-400 mt-0.5 shrink-0">&minus;</span>
                         {con}
                       </li>
@@ -142,7 +144,7 @@ export function SchoolCard({
 
           {resolved.bestFor && (
             <div className="mt-3 text-xs text-slate-600">
-              <span className="font-semibold text-slate-700">Best for:</span> {resolved.bestFor}
+              <span className="font-semibold text-slate-700">Best for:</span> <span data-card-copy="best-for">{resolved.bestFor}</span>
             </div>
           )}
         </div>

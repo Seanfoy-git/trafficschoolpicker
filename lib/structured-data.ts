@@ -168,7 +168,9 @@ function buildProductDescription(
   // court-discretion states there is no statewide approval program, so the
   // description must not call the course "state-approved" — a course is accepted
   // by a court on its own terms, not approved by the state.
-  const approval = !hasApproval
+  // A school not on the official list we hold for this state (approvalVerified
+  // false, lib/school-approvals) is never described as approved.
+  const approval = !hasApproval || resolved.approvalVerified === false
     ? ""
     : resolved.approvalBodyShort && resolved.approvalBodyShort !== "State Approved"
       ? `${resolved.approvalBodyShort}-approved `
