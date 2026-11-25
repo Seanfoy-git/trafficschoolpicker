@@ -3,7 +3,7 @@
  *   npx tsx scripts/test-places-match.ts
  */
 import assert from "node:assert/strict";
-import { nameMatches, nameTokens, needsWebsite, parseAddress, pickCandidate, registrableDomain, websiteMatches } from "./lib/places-match";
+import { candidateState, nameMatches, nameTokens, needsWebsite, parseAddress, pickCandidate, registrableDomain, stripQuery, websiteMatches } from "./lib/places-match";
 import { heldByOther, holdingsOf } from "./lib/places-lookup";
 import type { DirRow } from "./lib/directory-rows";
 
@@ -55,7 +55,7 @@ t("no address: every distinctive name word in the listing's name", () => {
   assert.equal(nameMatches("Safeway Driving School", "SafeRoute Driving School"), false);
   assert.equal(nameMatches("Safeway Driving", "Safeway Driving School - Memorial"), true);
   assert.equal(nameMatches("Traffic School Online", "Anything Traffic School"), false); // nothing distinctive: unprovable
-  assert.equal(pickCandidate({ name: "Drop The Ticket", address: "" }, [{ id: "d", displayName: "DropTheTicket.com", formattedAddress: "Phoenix, AZ" }]).accepted, true);
+  assert.equal(pickCandidate({ name: "Drop The Ticket", address: "", state: "Arizona" }, [{ id: "d", displayName: "DropTheTicket.com", formattedAddress: "Phoenix, AZ" }]).accepted, true);
 });
 
 t("ZIP but no street number (TDLR): ZIP and name both needed", () => {
@@ -121,6 +121,30 @@ t("1c: a listing held by a different licence at a different address is refused",
   const u = holdingsOf([{ ...row("u1", "UT-approved", ""), name: "Zion View Driving" }]);
   assert.ok(heldByOther("P", { id: "u2", licence: "UT-approved", address: "", name: "Other School" }, u));
   assert.equal(heldByOther("P", { id: "u2", licence: "UT-approved", address: "", name: "ZION VIEW DRIVING" }, u), undefined);
+});
+
+t("name-only rule: state names and codes are generic; the listing must be in the row's state", () => {
+  const improv = { id: "i", displayName: "Arizona Driving School by Improv", formattedAddress: "1 Main St, Phoenix, AZ 85004, USA" };
+  assert.equal(pickCandidate({ name: "Arizona Defensive Driving School", address: "", state: "Arizona" }, [improv]).accepted, false); // "arizona" alone
+  assert.deepEqual(nameTokens("New York Safety Driving NY", { dropStates: true }), ["safety"]);
+  assert.deepEqual(nameTokens("New Horizons Driving", { dropStates: true }), ["new", "horizons"]); // "new" alone is not a state
+  const nise = { id: "n", displayName: "National Institute for Safety Education", formattedAddress: "1 Broadway, Tucson, AZ 85711, USA" };
+  assert.equal(pickCandidate({ name: "Arizona Traffic Safety Institute LLC", address: "", state: "Arizona" }, [nise]).accepted, false); // the state word is still required
+  const fl = { id: "f", displayName: "Traffic Safety Consultants", formattedAddress: "100 Park Ave, Winter Park, FL 32789, USA" };
+  assert.equal(pickCandidate({ name: "Traffic Safety Consultants, Inc.", address: "", state: "New York" }, [fl]).accepted, false);
+  assert.equal(pickCandidate({ name: "Traffic Safety Consultants, Inc.", address: "", state: "Florida" }, [fl]).accepted, true);
+  const oh = { id: "o", displayName: "Prestige Driving School", formattedAddress: "1 Main St, Johnstown, OH 43031, USA" };
+  assert.equal(pickCandidate({ name: "Prestige Driving School, LLC", address: "", state: "Virginia" }, [oh]).accepted, false);
+  assert.equal(pickCandidate({ name: "Prestige Driving School", address: "" }, [oh]).accepted, false); // no state: unprovable
+  assert.equal(candidateState("Texas 78570, USA"), "TX");
+  assert.equal(candidateState("9559 130a St #38, Surrey, BC V3V 5N9, Canada"), null);
+  assert.equal(websiteMatches("Arizona Traffic School Online", "https://arizonatrafficschool.com/"), false); // state + generic
+});
+
+t("stripQuery keeps the path", () => {
+  assert.equal(stripQuery("https://www.idrivesafely.com/ca?utm_source=google&utm_medium=organic#x"), "https://www.idrivesafely.com/ca");
+  assert.equal(stripQuery("https://example.com/?id=LocalPack"), "https://example.com/");
+  assert.equal(stripQuery("https://safewaydriving.com/locations/memorial/pricing"), "https://safewaydriving.com/locations/memorial/pricing");
 });
 
 t("registrableDomain", () => {

@@ -1057,8 +1057,26 @@ Schema changes: `scripts/migrate-directory-schema.ts` (dry run; `--apply`).
 
 **Guard:** `scripts/verify-directory-links.ts` (prebuild) fails the build if
 two rows with `Website Source` = Google Places share a `Google Place ID` and
-are different schools. Self-test: `--plant` plants one violation in memory and
-must exit 1.
+are different schools, or if a row has a `Website` and no `Website Source`
+(a website set by hand needs `Website Source` = Manual). The second check
+(`REQUIRE_WEBSITE_SOURCE`) stays off until the held states (NY, VA, NV, MD,
+ND, WA) have working scrapers and are re-checked. Self-test: `--plant`
+plants one violation in memory and must exit 1.
+
+**Re-check of existing websites:** `scripts/recheck-directory-websites.ts`
+(Nov 2026). The state lists that publish websites are scraped in dry run
+(`SCRAPER_DRY_RUN=<file.jsonl>` makes `scripts/lib/scraper-utils` write nothing
+and capture each school). A row whose website the list gives is State DMV;
+every other website not set by hand gets one Places lookup per licence, saved
+to a lookups file, and a verdict: Confirmed, Changed, Name in domain (nothing
+proved, but the website's domain is the school's name: kept), Address only or
+Unconfirmed (cleared). Verdicts are recomputed from the saved candidates each
+run, so a matcher change needs no new calls. Arizona translate-menu rows are
+"Not a school" and states with broken scrapers are "Held"; the apply writes
+neither. `--report` writes the review file; `--apply` writes the verdicts
+from the saved lookups with no Places calls, drops query strings from every
+website it writes or keeps, and skips any row whose Website changed since its
+lookup.
 
 ### 9.5 Configuration files
 
