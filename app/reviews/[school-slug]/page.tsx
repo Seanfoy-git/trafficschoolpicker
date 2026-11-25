@@ -147,11 +147,8 @@ export default async function ReviewPage({ params }: Props) {
             <span className="flex items-center gap-1.5">
               <Clock className="w-4 h-4" /> Meets your state&apos;s minimum
             </span>
-            {school.courtAcceptance && (
-              <span className="flex items-center gap-1.5">
-                <CheckCircle className="w-4 h-4" /> {school.courtAcceptance}
-              </span>
-            )}
+            {/* No Court Acceptance chip ("All Courts", "Most Courts"): it is one value
+                per school across every state, and acceptance is a state rule (25 Nov 2026). */}
             {school.mobileApp && (
               <span className="flex items-center gap-1.5">
                 <Smartphone className="w-4 h-4" /> Mobile app
@@ -272,7 +269,6 @@ export default async function ReviewPage({ params }: Props) {
                       { label: "Course Length", getValue: () => "Set by your state" },
                       { label: "Mobile App", getValue: (s: typeof school) => s.mobileApp ? "Yes" : "No" },
                       { label: "Money-Back Guarantee", getValue: (s: typeof school) => s.moneyBackGuarantee ? "Yes" : "No" },
-                      { label: "Court Acceptance", getValue: (s: typeof school) => s.courtAcceptance ?? "—" },
                     ].map((row) => (
                       <tr key={row.label} className="border-b border-slate-100">
                         <td className="py-3 pr-4 font-medium text-slate-700">{row.label}</td>

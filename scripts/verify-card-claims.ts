@@ -12,6 +12,11 @@
  *       and no approval wording in its take, pros, cons or best-for;
  *   (c) no card copy carries a star rating or review count;
  *   (d) no card copy carries an exam-attempt count.
+ * And, since the same day's directory pass (lib/directory-filter):
+ *   (e) no state page prints the old generic directory labels ("Official X DMV
+ *       records", "Directory data coming soon");
+ *   (f) no review page and no llms-full.txt line prints the per-school Court
+ *       Acceptance value ("All Courts", "Most Courts", "Accepted by all courts").
  * Fix at the source (the Notion variant, or data/school-state-approvals.json via
  * scripts/check-school-approvals.ts), never in the built file.
  *
@@ -46,6 +51,15 @@ export function cardsIn(html: string): { slug: string; copy: { kind: string; tex
   });
 }
 
+/** Rendered text only: the RSC payload in <script> tags carries raw props
+ *  (e.g. courtAcceptance) that never reach the reader. */
+function visibleText(html: string): string {
+  return textOf(html.replace(/<script\b[\s\S]*?<\/script>/g, " "));
+}
+
+const OLD_DIRECTORY_LABEL = /Official [A-Z][A-Za-z ]+ DMV records|Directory data coming soon/;
+const COURT_ACCEPTANCE = /\b(?:All|Most) Courts\b|Accepted by all courts/;
+
 function main() {
   const buildDir = process.argv[2] ?? path.join(".next", "server", "app");
   const problems: string[] = [];
@@ -54,7 +68,10 @@ function main() {
     const file = path.join(buildDir, `${st.slug}.html`);
     if (!fs.existsSync(file)) continue;
     pages++;
-    for (const card of cardsIn(fs.readFileSync(file, "utf8"))) {
+    const html = fs.readFileSync(file, "utf8");
+    const old = visibleText(html).match(OLD_DIRECTORY_LABEL);
+    if (old) problems.push(`(e) /${st.slug}: old directory label "${old[0]}"`);
+    for (const card of cardsIn(html)) {
       cards++;
       const where = `/${st.slug} ${card.slug}`;
       if (isHiddenPair(card.slug, st.code)) problems.push(`(a) ${where}: card renders but the school disclaims approval here`);
@@ -66,6 +83,19 @@ function main() {
         if (EXAM_ATTEMPTS.test(c.text)) problems.push(`(d) ${where} ${c.kind}: exam attempts "${c.text}"`);
       }
     }
+  }
+  const reviewsDir = path.join(buildDir, "reviews");
+  const reviewFiles = fs.existsSync(reviewsDir) ? fs.readdirSync(reviewsDir).filter((f) => f.endsWith(".html")) : [];
+  for (const f of reviewFiles) {
+    const m = visibleText(fs.readFileSync(path.join(reviewsDir, f), "utf8")).match(COURT_ACCEPTANCE);
+    if (m) problems.push(`(f) /reviews/${f.replace(/\.html$/, "")}: "${m[0]}"`);
+  }
+  const llmsFull = path.join("public", "llms-full.txt");
+  if (fs.existsSync(llmsFull)) {
+    fs.readFileSync(llmsFull, "utf8").split("\n").forEach((line, i) => {
+      const m = line.match(COURT_ACCEPTANCE);
+      if (m) problems.push(`(f) llms-full.txt line ${i + 1}: "${m[0]}"`);
+    });
   }
   if (pages === 0) {
     console.error(`verify-card-claims: no state pages found in ${buildDir}`);

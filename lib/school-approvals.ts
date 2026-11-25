@@ -62,8 +62,10 @@ export function mayClaimApproval(slug: string, stateCode: string): boolean {
 // Not "an approved course" or "not approved": those aren't claims about this school.
 export const APPROVAL_CLAIM =
   /\b(?:approved|certified|licensed) by\b|\b(?!(?:an?|the|any|be|is|are|was|were|not|un|s|it|its)\b)[\w.]+[- ]approved\b|\bcourt[- ]accepted\b|\baccepted by all\b/i;
+// Also bare star counts ("7-star rated", "8 stars from 26,000+ drivers"): what was
+// left of "4.7-star" when the old sentence splitter cut at the decimal point.
 export const REVIEW_STAT =
-  /\b\d[\d,]*\+?\s+(?:[A-Za-z]+\s+){0,2}reviews?\b|\b[1-5]\.\d\s*(?:\/\s*5\s*)?(?:-|\s)?(?:stars?|rating|trustpilot)\b/i;
+  /\b\d[\d,]*\+?\s+(?:[A-Za-z]+\s+){0,2}reviews?\b|\b[1-5]\.\d\s*(?:\/\s*5\s*)?(?:-|\s)?(?:stars?|rating|trustpilot)\b|\b\d(?:\.\d)?\s?-?\s?stars?\b/i;
 export const EXAM_ATTEMPTS = /\b\d+ attempts?\b|\b(?:two|three) attempts\b|\bonly \d+ (?:tries|attempts)\b/i;
 
 function dropReason(line: string, claimsOk: boolean): string | null {
@@ -74,8 +76,13 @@ function dropReason(line: string, claimsOk: boolean): string | null {
 }
 
 /** Pros/cons lines a card may print for this pair. */
-export function cardLinesFor(lines: string[], slug: string, stateCode: string, where: string): string[] {
-  const claimsOk = mayClaimApproval(slug, stateCode);
+export function cardLinesFor(
+  lines: string[],
+  slug: string,
+  stateCode: string,
+  where: string,
+  claimsOk: boolean = mayClaimApproval(slug, stateCode),
+): string[] {
   return lines.filter((l) => {
     const why = dropReason(l, claimsOk);
     if (why) console.warn(`[card-claims] ${where}: dropped "${l}" (${why})`);
@@ -84,16 +91,23 @@ export function cardLinesFor(lines: string[], slug: string, stateCode: string, w
 }
 
 /** One-line take or best-for sentence(s): offending sentences dropped; null when nothing is left. */
-export function cardTextFor(text: string | null, slug: string, stateCode: string, where: string): string | null {
+export function cardTextFor(
+  text: string | null,
+  slug: string,
+  stateCode: string,
+  where: string,
+  claimsOk: boolean = mayClaimApproval(slug, stateCode),
+): string | null {
   if (!text) return text;
-  const claimsOk = mayClaimApproval(slug, stateCode);
-  const sentences = text.match(/[^.!?]+[.!?]+(?:\s+|$)|[^.!?]+$/g) ?? [text];
+  // A sentence ends at . ! or ? followed by a space or the end, never at a decimal
+  // point: the old splitter turned "4.7-star rated" into "7-star rated" (25 Nov 2026).
+  const sentences = text.trim().split(/(?<=[.!?])\s+/);
   const kept = sentences.filter((s) => {
     const why = dropReason(s, claimsOk);
     if (why) console.warn(`[card-claims] ${where}: dropped "${s.trim()}" (${why})`);
     return !why;
   });
-  const out = kept.join("").trim();
+  const out = kept.join(" ").trim();
   return out || null;
 }
 

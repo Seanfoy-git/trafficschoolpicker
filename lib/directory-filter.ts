@@ -219,26 +219,175 @@ export function cleanDirectory(rows: DirectorySchool[]): CleanResult {
 
 /**
  * What a directory is, by the list it was scraped from ("Source" in the
- * Directory DB). Classroom clinics are never called online schools: a list is
- * "online" only when the regulator's list is of online courses.
+ * Directory DB), so the heading names the real agency and the real list.
+ * There is no fallback label: a list we haven't identified is not shown,
+ * because a generic "N state-licensed traffic schools · Official X DMV records"
+ * line was wrong in most states (25 Nov 2026: Texas's 845 "online traffic
+ * schools" were TDLR driver-ed licences; Utah, Wyoming, Oklahoma, Nebraska and
+ * South Carolina were driver-ed lists; Arizona's list is the Supreme Court's).
+ *
+ * kind:
+ *  - "ticket": the course the state's ticket process runs on (dismissal, masking).
+ *  - "points": the state's point-reduction or driver improvement course list.
+ *  - "course": a real list for a narrower course (a suspension, a young-driver
+ *    programme, one offence). Shown, but it earns a school no approval badge.
+ *  - "driver-ed", "insurance", "unidentified": not a list that helps someone
+ *    with a ticket. Not shown (Sean, 25 Nov 2026: hide, don't relabel).
+ * Classroom clinics are never called online schools: `onlineNoun` applies only
+ * when every row on the list is an online course.
  */
-const DIRECTORY_LISTS: Record<string, { noun: string; source: string; online: boolean }> = {
-  // Georgia DDS "Driver Improvement Clinic" search: DI-numbered DDS-certified clinics (classroom), not online schools.
-  "GA DDS": { noun: "DDS-certified Driver Improvement Clinics", source: "Georgia DDS Driver Improvement Clinic list", online: false },
+export type DirectoryListKind = "ticket" | "points" | "course" | "driver-ed" | "insurance" | "unidentified";
+
+type DirectoryListInfo = { noun: string; onlineNoun?: string; source: string; kind: DirectoryListKind };
+
+const DIRECTORY_LISTS: Record<string, DirectoryListInfo> = {
+  "CA DMV": {
+    noun: "DMV-licensed traffic schools",
+    onlineNoun: "DMV-licensed online traffic schools",
+    source: "California DMV list of licensed traffic schools",
+    kind: "ticket",
+  },
+  "FL DHSMV": {
+    noun: "FLHSMV-approved Basic Driver Improvement course providers",
+    source: "FLHSMV list of approved Basic Driver Improvement course providers",
+    kind: "ticket",
+  },
+  // azcourts.gov/drive: schools certified by the Arizona Supreme Court's Defensive Driving Program.
+  "AZ Courts": {
+    noun: "Supreme Court-certified defensive driving schools",
+    source: "Arizona Supreme Court Defensive Driving Program school list",
+    kind: "ticket",
+  },
+  "NV DMV": {
+    noun: "DMV-licensed traffic safety schools",
+    onlineNoun: "DMV-licensed online traffic safety schools",
+    source: "Nevada DMV list of licensed traffic safety schools",
+    kind: "ticket",
+  },
+  // nj.gov/mvc/license/driverprograms.htm: state-approved classroom and online defensive driving courses (2-point reduction).
+  "NJ MVC": {
+    noun: "MVC-approved defensive driving course providers",
+    source: "New Jersey MVC list of approved defensive driving courses",
+    kind: "points",
+  },
   // Virginia DMV clinics-schools search, filtered to "Online Clinic".
-  "VA DMV": { noun: "DMV-licensed online Driver Improvement Clinics", source: "Virginia DMV list of online Driver Improvement Clinics", online: true },
+  "VA DMV": {
+    noun: "DMV-licensed online Driver Improvement Clinics",
+    onlineNoun: "DMV-licensed online Driver Improvement Clinics",
+    source: "Virginia DMV list of online Driver Improvement Clinics",
+    kind: "points",
+  },
+  // Georgia DDS "Driver Improvement Clinic" search: DI-numbered DDS-certified clinics (classroom), not online schools.
+  "GA DDS": {
+    noun: "DDS-certified Driver Improvement Clinics",
+    source: "Georgia DDS Driver Improvement Clinic list",
+    kind: "points",
+  },
+  // apps.dps.ohio.gov/DETS: Adult Remedial Online and Abbreviated courses.
+  "OH DPS": {
+    noun: "DPS-approved online remedial driving courses",
+    onlineNoun: "DPS-approved online remedial driving courses",
+    source: "Ohio DPS list of approved online remedial driving courses",
+    kind: "points",
+  },
+  "TN Safety": {
+    noun: "Department of Safety-approved 8-hour driver improvement schools",
+    source: "Tennessee Department of Safety list of approved 8-hour schools",
+    kind: "points",
+  },
+  "NY DMV": {
+    noun: "DMV-approved PIRP and IPIRP course sponsors",
+    source: "New York DMV list of Point and Insurance Reduction Program sponsors",
+    kind: "points",
+  },
+  // dol.wa.gov: the Safe Driving Course is for drivers suspended for an accumulation of tickets.
+  "WA DOL": {
+    noun: "DOL-approved Safe Driving Course providers",
+    source: "Washington DOL list of Safe Driving Course providers (the course for license suspensions)",
+    kind: "course",
+  },
+  "MD MVA": {
+    noun: "MVA-approved young-driver Driver Improvement Program providers",
+    source: "Maryland MVA list of Driver Improvement Program providers for young drivers",
+    kind: "course",
+  },
+  // oregon.gov/odot/safety: DDAC is the Distracted Driving Avoidance Course a court may refer a driver to.
+  "OR ODOT": {
+    noun: "ODOT-approved Distracted Driving Avoidance Course providers",
+    source: "Oregon ODOT list of Distracted Driving Avoidance Course providers",
+    kind: "course",
+  },
+  // Not shown. TDLR's driver education provider file: C-numbered driver-ed schools, ISDs and
+  // parent-taught courses. The driving safety course providers (CP numbers) are not in it.
+  "TX TDLR": { noun: "TDLR-licensed driver education schools", source: "TDLR driver education provider list", kind: "driver-ed" },
+  // Not shown. Nebraska "driver safety schools" teach and test 14 to 16 year olds (POP/SCP permits).
+  "NE DMV": { noun: "DMV-approved driver safety schools", source: "Nebraska DMV list of driver safety schools", kind: "driver-ed" },
+  // Not shown. Utah DLD third-party driver training and testing schools.
+  "UT DLD": { noun: "DLD-certified driver training schools", source: "Utah DLD third-party school list", kind: "driver-ed" },
+  // Not shown. Wyoming Department of Education driver education programmes (2022 PDF).
+  "WY WDE": { noun: "approved driver education programs", source: "Wyoming Department of Education driver education list", kind: "driver-ed" },
+  // Not shown. Oklahoma DPS driver education schools PDF.
+  "OK DPS": { noun: "DPS-licensed driver education schools", source: "Oklahoma DPS driver education school list", kind: "driver-ed" },
+  // Not shown. SCDMV-licensed driver training schools.
+  "SC DMV": { noun: "SCDMV-licensed driver training schools", source: "SCDMV driver training school list", kind: "driver-ed" },
+  // Not shown. Connecticut mature-driver insurance discount course providers.
+  "CT DMV": { noun: "DMV-approved mature driver course providers", source: "Connecticut DMV insurance discount course list", kind: "insurance" },
+  // Not shown. Minnesota accident prevention courses (insurance discount).
+  "MN DPS": { noun: "DPS-approved accident prevention courses", source: "Minnesota DPS accident prevention course list", kind: "insurance" },
+  // Not shown. North Dakota Highway Patrol insurance premium reduction courses. Point
+  // reduction courses are approved separately by NDDOT.
+  "ND HP": { noun: "Highway Patrol-approved insurance premium reduction courses", source: "North Dakota Highway Patrol insurance premium reduction course list", kind: "insurance" },
+  // Not shown until it is refreshed by hand (the PDF refuses automated requests).
+  "RI DMV": { noun: "RI DMV-listed course providers", source: "Rhode Island DMV list", kind: "unidentified" },
 };
 
-export function directoryListLabel(stateName: string, rows: DirectorySchool[]): { noun: string; source: string; online: boolean } {
+const SHOWN_KINDS = new Set<DirectoryListKind>(["ticket", "points", "course"]);
+const APPROVING_KINDS = new Set<DirectoryListKind>(["ticket", "points"]);
+const warnedSources = new Set<string>();
+
+export type DirectoryList = {
+  noun: string;
+  source: string;
+  online: boolean;
+  kind: DirectoryListKind;
+  /** Render the directory (table, counts, "the directory below") on the state page. */
+  shown: boolean;
+  /** Being on this list is evidence of the approval a card badge claims. */
+  approves: boolean;
+};
+
+export function directoryListLabel(stateName: string, rows: DirectorySchool[]): DirectoryList {
   const sources = [...new Set(rows.map((r) => r.source))];
   const known = sources.length === 1 ? DIRECTORY_LISTS[sources[0]] : undefined;
-  if (known) return known;
-  const online = rows.length > 0 && rows.every((r) => r.onlineAvailable);
+  if (!known) {
+    const key = `${stateName}:${sources.join("+")}`;
+    if (rows.length && !warnedSources.has(key)) {
+      warnedSources.add(key);
+      console.warn(`[directory] ${stateName}: no label for source ${sources.join(", ") || "(none)"}, directory not shown`);
+    }
+    return { noun: "listed providers", source: "", online: false, kind: "unidentified", shown: false, approves: false };
+  }
+  const online = rows.length > 0 && rows.every((r) => r.onlineAvailable) && !!known.onlineNoun;
   return {
-    noun: online ? "DMV-licensed online traffic schools" : "state-licensed traffic schools",
-    source: `Official ${stateName} DMV records`,
+    noun: online ? known.onlineNoun! : known.noun,
+    source: known.source,
     online,
+    kind: known.kind,
+    shown: SHOWN_KINDS.has(known.kind),
+    approves: APPROVING_KINDS.has(known.kind),
   };
+}
+
+/**
+ * The directory's "Last verified" date: the date at least 80% of its rows were
+ * checked on. The newest row date overclaimed: Nevada said 1 Nov when only 2 of
+ * 18 rows were matched that day (25 Nov 2026). Null when fewer than 80% have a date.
+ */
+export function directoryVerifiedDate(rows: { lastScraped: string | null }[]): string | null {
+  if (!rows.length) return null;
+  const dates = rows.map((r) => r.lastScraped).filter((d): d is string => !!d).sort().reverse();
+  const need = Math.ceil(rows.length * 0.8);
+  return dates.length >= need ? dates[need - 1] : null;
 }
 
 /**

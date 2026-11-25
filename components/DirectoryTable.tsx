@@ -122,7 +122,7 @@ export function DirectoryTable({
       </div>
 
       <p className="mt-4 text-xs text-slate-600">
-        This directory lists all DMV-licensed online schools in {stateName}.
+        {`This directory lists the schools on the ${list.source}. `}
         Schools above have been independently reviewed. Directory listings have
         not.
       </p>

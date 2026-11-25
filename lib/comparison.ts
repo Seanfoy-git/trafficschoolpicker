@@ -87,6 +87,12 @@ export type StateComparison = {
   /** Short name of the approving body, or null when no statewide body approves
    *  courses for this benefit (then no copy claims "-approved"). */
   regulator: string | null;
+  /** Every compared school is on the regulator's ticket or point-reduction list
+   *  (lib/school-approvals + lib/directory-filter). Set by lib/state-page-data.
+   *  Without it no heading, subhead, method line or meta description says
+   *  "{regulator}-approved" (25 Nov 2026: "5 Delaware DMV-approved schools compared"
+   *  with no Delaware list held). */
+  allApproved: boolean;
   /** Directory row count — the single source for every "{D} schools" count. */
   directoryCount: number;
   hasMonetizedLink: boolean;
@@ -129,7 +135,7 @@ export function regulatorAfterStateName(regulator: string, stateCode: string, st
 
 /** "California DMV-approved " after a state name, or "" when no body approves courses. */
 function approvedAfterState(c: StateComparison, stateName: string, stateCode: string): string {
-  return c.regulator ? `${regulatorAfterStateName(c.regulator, stateCode, stateName)}-approved ` : "";
+  return c.regulator && c.allApproved ? `${regulatorAfterStateName(c.regulator, stateCode, stateName)}-approved ` : "";
 }
 
 /** Price shown for a tier-1 row: identical to the card (and its Offer). */
@@ -280,6 +286,7 @@ export function buildStateComparison(input: {
     programNoun: noun,
     programNounPlural: `${noun}s`,
     regulator: stateInfo?.regulatorShort || stateReq?.approvalBodyShort || null,
+    allApproved: false,
     directoryCount: directory.length,
     hasMonetizedLink: rows.some((r) => r.monetized),
     anyFeesFolded: priced.some((r) => r.priceIncludesFees),
@@ -300,7 +307,7 @@ export function comparisonTitle(c: StateComparison, stateName: string, year: num
 
 export function comparisonSubhead(c: StateComparison): string {
   const date = c.verifiedLabel ? ` Prices verified ${c.verifiedLabel}.` : "";
-  return c.regulator
+  return c.regulator && c.allApproved
     ? `${c.count} ${c.regulator}-approved schools compared on price and rules.${date}`
     : `${c.count} schools compared on price and rules.${date}`;
 }
