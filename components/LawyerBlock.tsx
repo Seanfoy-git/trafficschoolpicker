@@ -72,7 +72,7 @@ export function LawyerBlock({
             <span className="font-semibold">How these firms get listed:</span> each is a
             real firm with an active traffic-ticket practice in {stateName} whose published
             guidance we read ourselves. No fee, no affiliate relationship, and no ranking or
-            endorsement. Nothing here is legal advice.
+            endorsement.
           </p>
         </div>
       </div>

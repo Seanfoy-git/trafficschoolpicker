@@ -332,6 +332,7 @@ function mapStateInfo(page: PageObjectResponse): StateInfo {
     status: getSelect(page, "Status") ?? "Not Started",
     introParagraph: getFullRichText(page, "Intro Paragraph"),
     trueCostOfATicket: getFullRichText(page, "True Cost of a Ticket").trim() || null,
+    quickAnswer: getFullRichText(page, "Quick Answer").trim() || null,
     stateFaq: parseStateFaqJson(getFullRichText(page, "State FAQ"), getText(page, "Abbreviation")),
     lawyerBlock: parseLawyerBlock(getFullRichText(page, "Lawyer Block")),
     lastVerified: getDate(page, "Last Verified"),

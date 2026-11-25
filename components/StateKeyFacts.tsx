@@ -91,7 +91,7 @@ export function StateKeyFacts({
   if (stateInfo.courseHours) facts.push({ label: "Course length", value: stateInfo.courseHours });
 
   // Reuses the exact lowest card/Offer price, so it can't drift from the grid.
-  if (lowestPrice !== null) facts.push({ label: "Typical cost", value: `from $${lowestPrice.toFixed(2)}` });
+  if (lowestPrice !== null) facts.push({ label: "Course price", value: `from $${lowestPrice.toFixed(2)}` });
 
   if (stateInfo.eligibility?.trim())
     facts.push({ label: "Eligibility", value: eligibilitySummary(stateInfo.eligibility) });

@@ -51,6 +51,9 @@ export type StateInfo = {
   // Per-state page-content fields (added for uniqueness uplift)
   introParagraph: string;
   trueCostOfATicket: string | null;  // "True Cost of a Ticket" prose; null when unset
+  // States DB "Quick Answer": two sentences for the typical reader (content standards
+  // §0): what to do and what it costs in total. Renders under the H1; null when unset.
+  quickAnswer: string | null;
   stateFaq: StateFaqEntry[];     // parsed from JSON; empty array if missing/malformed
   lastVerified: string | null;   // ISO date — drives the "Last verified" header chip
   contentStatus: ContentStatus | null;  // null treated as Stub for sitemap inclusion

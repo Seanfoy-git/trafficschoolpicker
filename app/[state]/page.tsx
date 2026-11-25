@@ -302,6 +302,19 @@ export default async function StatePage({ params }: Props) {
       ? lowestDisplayedPrice(tier1Resolved)
       : null;
 
+  // Content standards §0: the Quick Answer (States DB) is the reader's first two
+  // sentences. A "{from}" token is filled from the same lowest price the table and
+  // Key Facts use, so the opening line can never quote a different course price.
+  // A token with no price to fill drops the Quick Answer (the old subhead returns).
+  const quickAnswer = (() => {
+    const raw = stateInfo?.quickAnswer?.trim();
+    if (!raw) return null;
+    if (!raw.includes("{from}")) return raw;
+    if (lowestPrice === null) return null;
+    const price = Number.isInteger(lowestPrice) ? `$${lowestPrice}` : `$${lowestPrice.toFixed(2)}`;
+    return raw.split("{from}").join(price);
+  })();
+
   const heroBlock = (
     <>
       {/* HERO */}
@@ -325,7 +338,10 @@ export default async function StatePage({ params }: Props) {
               the grid (showComparison already accounts for noPartnerOffer + status).
               The "from N" figure is the directory row count, the same number the
               directory heading prints (P17 Task 5a: one source of truth). */}
-          {showComparison && (
+          {quickAnswer && (
+            <p className="text-lg text-white max-w-3xl leading-relaxed">{quickAnswer}</p>
+          )}
+          {showComparison && !quickAnswer && (
             <p className="text-lg text-slate-300 max-w-3xl">
               Comparing {tier1.length} reviewed option
               {tier1.length !== 1 ? "s" : ""}
@@ -961,10 +977,16 @@ export default async function StatePage({ params }: Props) {
             />
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{h1}</h1>
           </div>
-          {comparison && (
+          {/* Content standards §0: when the state has a Quick Answer, the reader gets the
+              answer (what to do, what it costs in total) here instead of page metadata.
+              The method statement below already carries the count and prices date. */}
+          {quickAnswer && (
+            <p className="text-lg text-white max-w-3xl leading-relaxed">{quickAnswer}</p>
+          )}
+          {comparison && !quickAnswer && (
             <p className="text-lg text-slate-300 max-w-3xl">{comparisonSubhead(comparison)}</p>
           )}
-          {comparison && comparison.directoryCount > 0 && (
+          {comparison && !quickAnswer && comparison.directoryCount > 0 && (
             <p className="mt-1 text-sm text-slate-300 max-w-3xl">
               Drawn from <span data-count="directory">{comparison.directoryCount}</span> schools on the official{" "}
               {comparison.regulator ?? "state"} approved list, all shown in the directory below.
