@@ -11,6 +11,7 @@ import {
 } from "./notion";
 import { buildStateComparison, usesComparisonLayout, type StateComparison } from "./comparison";
 import { getStateBySlug } from "./state-utils";
+import { isHiddenPair } from "./school-approvals";
 import type { ResolvedSchoolContent } from "./types";
 
 // The online statuses that render the comparison cards (and so a comparison).
@@ -136,7 +137,11 @@ export async function loadStateData(stateSlug: string) {
   // State grids are Tier 1 only. Tier 2 schools appear in the /schools directory only.
   // Named-provider states keep only schools confirmed on the regulator's list.
   const restricted = NAMED_PROVIDER_STATES[stateSlug];
-  const tier1 = schools.filter((s) => s.tier === 1 && (!restricted || restricted.qualifyingSlugs.includes(s.slug)));
+  // A school whose own site says it is not approved for this state's program
+  // renders no card here (lib/school-approvals, 25 Nov 2026).
+  const tier1 = schools.filter(
+    (s) => s.tier === 1 && (!restricted || restricted.qualifyingSlugs.includes(s.slug)) && !isHiddenPair(s.slug, stateMeta.code),
+  );
   // The comparison grid (and its Product/ItemList schema) render only for online
   // states that actually have tier-1 schools — the single gate shared below.
   // noPartnerOffer suppresses it even where the program exists (we list no offer):

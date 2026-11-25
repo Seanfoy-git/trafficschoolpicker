@@ -10,6 +10,7 @@ import {
   type VideoEntry,
 } from "@/lib/structured-data";
 import { cardCourseHours, loadStateData, noPriceLabel, ONLINE_COMPARISON_STATUSES, prosAgreeingWithRow, takeAgreeingWithRow } from "@/lib/state-page-data";
+import { cardLinesFor, cardTextFor, mayClaimApproval, resaleConFor } from "@/lib/school-approvals";
 import {
   comparisonH1,
   comparisonH2,
@@ -193,21 +194,30 @@ export default async function StatePage({ params }: Props) {
   // renders the same no-price label as its table row (omit beats unsourced).
   // P0 (30 Oct 2026): a card pro may not contradict the same school's verified
   // table row (final exam, timers); a contradicting pro is dropped, never reworded.
-  const tier1Cards = comparison
-    ? tier1Resolved.map(({ school, resolved }) => {
-        const row = comparison.rows.find((r) => r.tier === 1 && r.slug === school.slug);
-        const where = `${stateSlug}/${school.slug}`;
-        const agreed = {
-          ...resolved,
-          pros: prosAgreeingWithRow(resolved.pros, row, where),
-          cons: prosAgreeingWithRow(resolved.cons, row, where),
-          oneLiner: takeAgreeingWithRow(resolved.oneLiner, row, where),
-        };
-        return agreed.priceSource
-          ? { school, resolved: agreed }
-          : { school, resolved: { ...agreed, price: null, priceDisplay: noPriceLabel(agreed) } };
-      })
-    : tier1Resolved;
+  // Approval gate (25 Nov 2026, lib/school-approvals), on EVERY card, not only
+  // comparison-layout pages: no approval wording or "-approved" badge unless the
+  // school is on the official list we hold, no star ratings or review counts in
+  // free text, no exam-attempt counts, and a resold course says whose it is.
+  const tier1Cards = tier1Resolved.map(({ school, resolved }) => {
+    const row = comparison?.rows.find((r) => r.tier === 1 && r.slug === school.slug);
+    const where = `${stateSlug}/${school.slug}`;
+    const code = stateMeta.code;
+    const approvalVerified = mayClaimApproval(school.slug, code);
+    const resale = resaleConFor(school.slug, code, school.name);
+    const agreed = {
+      ...resolved,
+      pros: cardLinesFor(prosAgreeingWithRow(resolved.pros, row, where), school.slug, code, where),
+      cons: [...cardLinesFor(prosAgreeingWithRow(resolved.cons, row, where), school.slug, code, where), ...(resale ? [resale] : [])],
+      oneLiner: cardTextFor(takeAgreeingWithRow(resolved.oneLiner, row, where), school.slug, code, where),
+      bestFor: cardTextFor(resolved.bestFor, school.slug, code, where),
+      approvalVerified,
+      approvalBodyShort: approvalVerified ? resolved.approvalBodyShort : "State Approved",
+    };
+    if (!comparison) return { school, resolved: agreed };
+    return agreed.priceSource
+      ? { school, resolved: agreed }
+      : { school, resolved: { ...agreed, price: null, priceDisplay: noPriceLabel(agreed) } };
+  });
   // A card prints a course length only when it describes the program the card qualifies for.
   const cardHours = cardCourseHours(stateInfo);
 
@@ -259,7 +269,7 @@ export default async function StatePage({ params }: Props) {
       })
     : showComparison
     ? buildComparisonItemList(
-        tier1Resolved,
+        tier1Cards,
         stateMeta.name,
         stateSlug,
         reviewSlugs,

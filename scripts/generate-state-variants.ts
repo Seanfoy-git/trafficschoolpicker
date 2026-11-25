@@ -15,6 +15,7 @@ config({ path: ".env.local" });
 
 import Anthropic from "@anthropic-ai/sdk";
 import { makeNotionClient } from "./lib/notion-client";
+import { approvalFor, isHiddenPair } from "../lib/school-approvals";
 
 const notion = makeNotionClient();
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -232,14 +233,29 @@ OUTPUT FORMAT — respond with valid JSON only, no markdown:
 }
 
 RULES:
+- APPROVAL (25 Nov 2026, after cards called schools "DMV-approved" that their own sites
+  say are not): say the school is approved, licensed or certified by anyone ONLY when
+  Approval Status is "listed". For any other status make no approval claim at all, in
+  any field. Where it is "court", you may say acceptance is up to the driver's court.
+  Where it is "resold", say whose course it is (the Partner).
+- The STATE REQUIREMENTS are the state's rules, not facts about this school's course.
+  Never state exam attempts, open-book status or lesson timers as a feature of this
+  school; the page's comparison table shows those per school from its own site.
 - Only claim "no final exam" if Has Final Exam = false for this state
-- Reference the correct approval body (CA DMV, TDLR, AZ Supreme Court, etc.)
+- Never mention star ratings or review counts: the card header shows the live ones
 - Use the state's official course term in copy (Traffic Violator School for CA, Defensive Driving for TX/AZ, etc.)
 - Use "mask" for CA ticket outcomes, "dismiss" for AZ/TX
 - Do not include price in One Liner — it is rendered separately
 - Pros and Cons must be factually grounded in the school data and state requirements provided
 - Write for a stressed driver who just got a ticket — be reassuring, clear, not salesy
 - Cons should be honest and useful, not just filler`;
+
+function approvalLine(slug: string, stateCode: string): string {
+  const a = approvalFor(slug, stateCode);
+  if (!a) return "Approval Status: unchecked (run scripts/check-school-approvals.ts)";
+  const ev = a.evidence.filter((e) => e.kind !== "page").map((e) => `${e.kind}: "${e.text}"`).join("; ");
+  return `Approval Status: ${a.status}${a.partner ? ` (Partner: ${a.partner})` : ""}${ev ? `\nEvidence: ${ev}` : ""}`;
+}
 
 function buildPrompt(school: SchoolData, stateCode: string, state: StateReq): string {
   return `SCHOOL DATA:
@@ -255,7 +271,10 @@ Global Cons: ${school.cons}
 Global Best For: ${school.bestFor}
 Global Not For: ${school.notFor}
 
-STATE REQUIREMENTS for ${stateCode}:
+APPROVAL EVIDENCE for ${school.name} in ${stateCode} (data/school-state-approvals.json):
+${approvalLine(school.slug, stateCode)}
+
+STATE REQUIREMENTS for ${stateCode} (the state's rules, not this school's course):
 Official Term: ${state.officialTerm}
 Approval Body: ${state.approvalBody}
 Mandated Hours: ${state.mandatedHours ?? "none mandated"}
@@ -409,6 +428,14 @@ async function main() {
       if (existing?.status === "Locked") {
         console.log(`  SKIP (Locked): ${key}`);
         locked++;
+        continue;
+      }
+
+      // The school's own site says it is not approved here: no card renders, so
+      // no copy is generated (lib/school-approvals).
+      if (isHiddenPair(school.slug, stateCode)) {
+        console.log(`  SKIP (school disclaims approval): ${key}`);
+        skipped++;
         continue;
       }
 

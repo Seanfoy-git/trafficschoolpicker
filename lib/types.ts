@@ -288,6 +288,10 @@ export type ResolvedSchoolContent = {
   officialTerm: string;
   approvalBody: string;
   approvalBodyShort: string;
+  // Set on state-page cards (lib/school-approvals): false means this school is not
+  // on the official list we hold for this state, so nothing may call it approved.
+  // Undefined off state pages, where no approval is claimed per state.
+  approvalVerified?: boolean;
   hasFinalExam: boolean;
   examAttemptsAllowed: number | null;
   examIsOpenBook: boolean;

@@ -1,0 +1,4483 @@
+{
+  "generated": "2026-11-25",
+  "base": "https://www.trafficschoolpicker.com",
+  "pairs": {
+    "aceable:CA": {
+      "school": "aceable",
+      "state": "california",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "ACEABLE TRAFFIC SCHOOL",
+          "url": "https://www.trafficschoolpicker.com/california (directory: data-count=\"directory\">218 DMV-licensed online traffic schools in California Source: Official California DMV records · Last verified 2026-11-01)"
+        },
+        {
+          "kind": "page",
+          "text": "9279 chars",
+          "url": "https://www.aceable.com/traffic-school/california/"
+        },
+        {
+          "kind": "claim",
+          "text": "fornia Traffic School legit? Yep. We’re licensed by the California Department of Motor Vehicles, and we’ve helped more than 200,000 peopl",
+          "url": "https://www.aceable.com/traffic-school/california/"
+        },
+        {
+          "kind": "page",
+          "text": "2161 chars",
+          "url": "https://www.aceable.com/dmv/california/report-of-traffic-accident-sr1/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "aceable:FL": {
+      "school": "aceable",
+      "state": "florida",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "Aceable",
+          "url": "https://www.trafficschoolpicker.com/florida (directory: data-count=\"directory\">58 state-licensed traffic schools in Florida Source: Official Florida DMV records · Last verified 2026-09-24)"
+        },
+        {
+          "kind": "page",
+          "text": "5948 chars",
+          "url": "https://www.aceable.com/driver-improvement/florida/"
+        },
+        {
+          "kind": "court",
+          "text": "Before you get started, you’ll want to check with your court to make sure you’re eligible to take a Basic Driver Improve",
+          "url": "https://www.aceable.com/driver-improvement/florida/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "aceable:TX": {
+      "school": "aceable",
+      "state": "texas",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "ACEABLE",
+          "url": "https://www.trafficschoolpicker.com/texas (directory: data-count=\"directory\">845 DMV-licensed online traffic schools in Texas Source: Official Texas DMV records · Last verified 2026-08-01)"
+        },
+        {
+          "kind": "page",
+          "text": "14155 chars",
+          "url": "https://www.aceable.com/defensive-driving/texas/"
+        },
+        {
+          "kind": "claim",
+          "text": "ve driving course. No Fluff. No Filler. TDLR-approved and State-Certified: Meets ticket dismissal requirements by",
+          "url": "https://www.aceable.com/defensive-driving/texas/"
+        },
+        {
+          "kind": "court",
+          "text": "are not eligible for defensive driving. Check with your court to make sure you take defensive driving before you start th",
+          "url": "https://www.aceable.com/defensive-driving/texas/"
+        },
+        {
+          "kind": "page",
+          "text": "14155 chars",
+          "url": "https://www.aceable.com/defensive-driving/texas-course/"
+        },
+        {
+          "kind": "claim",
+          "text": "ve driving course. No Fluff. No Filler. TDLR-approved and State-Certified: Meets ticket dismissal requirements by",
+          "url": "https://www.aceable.com/defensive-driving/texas-course/"
+        },
+        {
+          "kind": "court",
+          "text": "are not eligible for defensive driving. Check with your court to make sure you take defensive driving before you start th",
+          "url": "https://www.aceable.com/defensive-driving/texas-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:AK": {
+      "school": "driversed",
+      "state": "alaska",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5159 chars",
+          "url": "https://driversed.com/alaska/"
+        },
+        {
+          "kind": "partner",
+          "text": "off Seamlessly work on multiple devices Provided by our partner company I Drive Safely Fix a Ticket Alaska Save Time and Money Clear and efficient",
+          "url": "https://driversed.com/alaska/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:AL": {
+      "school": "driversed",
+      "state": "alabama",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5314 chars",
+          "url": "https://driversed.com/alabama/"
+        },
+        {
+          "kind": "partner",
+          "text": "ising 100% online – save time and money Provided by our partner company I Drive Safely Fix a Ticket Alabama Alabama Driving School America's #1 Dr",
+          "url": "https://driversed.com/alabama/"
+        },
+        {
+          "kind": "claim",
+          "text": "ine drivers education & driver training DMV-approved teen drivers ed Over 25 years of driver training experience",
+          "url": "https://driversed.com/alabama/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:AR": {
+      "school": "driversed",
+      "state": "arkansas",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5303 chars",
+          "url": "https://driversed.com/arkansas/"
+        },
+        {
+          "kind": "partner",
+          "text": "ur course from the comfort of your home Provided by our partner company I Drive Safely Fix a Ticket Arkansas Arkansas Driving School America's #1",
+          "url": "https://driversed.com/arkansas/"
+        },
+        {
+          "kind": "claim",
+          "text": "e #1 driving school in the US with 100+ state-approved courses across the nation All-in-one source: online course,",
+          "url": "https://driversed.com/arkansas/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:CA": {
+      "school": "driversed",
+      "state": "california",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "ACE TRAFFIC SCHOOL",
+          "url": "https://www.trafficschoolpicker.com/california (directory: data-count=\"directory\">218 DMV-licensed online traffic schools in California Source: Official California DMV records · Last verified 2026-11-01)"
+        },
+        {
+          "kind": "page",
+          "text": "6274 chars",
+          "url": "https://driversed.com/california/traffic-school/"
+        },
+        {
+          "kind": "court",
+          "text": "letion information sent to DMV for free Court-approved California online traffic school is the hassle-free solutio",
+          "url": "https://driversed.com/california/traffic-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:CO": {
+      "school": "driversed",
+      "state": "colorado",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5703 chars",
+          "url": "https://driversed.com/colorado/"
+        },
+        {
+          "kind": "partner",
+          "text": "ers Ed Colorado Colorado Traffic School Provided by our partner company I Drive Safely, Let us help you clear your ticket and get back on the road",
+          "url": "https://driversed.com/colorado/"
+        },
+        {
+          "kind": "claim",
+          "text": "ine drivers education & driver training DMV-approved teen drivers ed Over 25 years of driver training experience",
+          "url": "https://driversed.com/colorado/"
+        },
+        {
+          "kind": "page",
+          "text": "3441 chars",
+          "url": "https://driversed.com/colorado/driving-lessons/"
+        },
+        {
+          "kind": "claim",
+          "text": "e #1 driving school in the US with 100+ state-approved courses across the nation All-in-one source: online course,",
+          "url": "https://driversed.com/colorado/driving-lessons/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:CT": {
+      "school": "driversed",
+      "state": "connecticut",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5407 chars",
+          "url": "https://driversed.com/connecticut/"
+        },
+        {
+          "kind": "partner",
+          "text": "pace A great way to save time and money Provided by our partner company I Drive Safely Fix a Ticket Connecticut Drivers Ed the Easy Way Our adult",
+          "url": "https://driversed.com/connecticut/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:DE": {
+      "school": "driversed",
+      "state": "delaware",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5269 chars",
+          "url": "https://driversed.com/delaware/traffic-school/"
+        },
+        {
+          "kind": "partner",
+          "text": "urance bills 100% online and convenient Provided by our partner company I Drive Safely $11.95 Enroll Now 100% Money Back Guarantee Over 3 Million",
+          "url": "https://driversed.com/delaware/traffic-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:FL": {
+      "school": "driversed",
+      "state": "florida",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6830 chars",
+          "url": "https://driversed.com/florida/"
+        },
+        {
+          "kind": "partner",
+          "text": "Affordable costs to help save you money Provided by our partner company I Drive Safely Fix a Ticket Florida Florida Drivers Ed Online America's #1",
+          "url": "https://driversed.com/florida/"
+        },
+        {
+          "kind": "page",
+          "text": "4951 chars",
+          "url": "https://driversed.com/florida/dets/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:GA": {
+      "school": "driversed",
+      "state": "georgia",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6857 chars",
+          "url": "https://driversed.com/georgia/"
+        },
+        {
+          "kind": "partner",
+          "text": "le Available 24/7 – study when you want Provided by our partner company I Drive Safely Fix a Ticket Georgia Georgia Adult Drivers Ed Earn insuranc",
+          "url": "https://driversed.com/georgia/"
+        },
+        {
+          "kind": "claim",
+          "text": "e #1 driving school in the US with 100+ state-approved courses across the nation All-in-one source: online course,",
+          "url": "https://driversed.com/georgia/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:HI": {
+      "school": "driversed",
+      "state": "hawaii",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5233 chars",
+          "url": "https://driversed.com/hawaii/"
+        },
+        {
+          "kind": "partner",
+          "text": "o insurance rates Passing is guaranteed Provided by our partner company I Drive Safely Fix a Ticket Hawaii Drivers Ed the Easy Way Our adult drive",
+          "url": "https://driversed.com/hawaii/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:IA": {
+      "school": "driversed",
+      "state": "iowa",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5085 chars",
+          "url": "https://driversed.com/iowa/"
+        },
+        {
+          "kind": "partner",
+          "text": "sy Available 24/7 – study when you want Provided by our partner company I Drive Safely Fix a Ticket Iowa Unparalleled Quality from DriversEd.com T",
+          "url": "https://driversed.com/iowa/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:ID": {
+      "school": "driversed",
+      "state": "idaho",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5340 chars",
+          "url": "https://driversed.com/idaho/"
+        },
+        {
+          "kind": "partner",
+          "text": "keeps things interesting and engaging. Provided by our partner company I Drive Safely Fix a Ticket Idaho Only the Best from DriversEd.com Eager t",
+          "url": "https://driversed.com/idaho/"
+        },
+        {
+          "kind": "claim",
+          "text": "iversEd.com Eager to start driving? Our DMV-approved, required teen drivers ed course will get you behind the wh",
+          "url": "https://driversed.com/idaho/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:IN": {
+      "school": "driversed",
+      "state": "indiana",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5589 chars",
+          "url": "https://driversed.com/indiana/"
+        },
+        {
+          "kind": "partner",
+          "text": "g knowledge 100% Mobile Friendly Course Provided by our partner company I Drive Safely Fix a Ticket Indiana Indiana Driving School Online America'",
+          "url": "https://driversed.com/indiana/"
+        },
+        {
+          "kind": "claim",
+          "text": "m required teen drivers ed that's fully BMV-approved, to adult drivers ed for auto insurance discounts, to pract",
+          "url": "https://driversed.com/indiana/"
+        },
+        {
+          "kind": "page",
+          "text": "3402 chars",
+          "url": "https://driversed.com/indiana/driving-lessons/"
+        },
+        {
+          "kind": "claim",
+          "text": "e #1 driving school in the US with 100+ state-approved courses across the nation All-in-one source: online course,",
+          "url": "https://driversed.com/indiana/driving-lessons/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:KS": {
+      "school": "driversed",
+      "state": "kansas",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5062 chars",
+          "url": "https://driversed.com/kansas/"
+        },
+        {
+          "kind": "partner",
+          "text": "-approved Keep your insurance rates low Provided by our partner company I Drive Safely Fix a Ticket Kansas Save Time and Money Paying for auto ins",
+          "url": "https://driversed.com/kansas/"
+        },
+        {
+          "kind": "court",
+          "text": "Dismiss your ticket 100% online DMV and court-approved Keep your insurance rates low Provided by our partner compa",
+          "url": "https://driversed.com/kansas/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:LA": {
+      "school": "driversed",
+      "state": "louisiana",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5029 chars",
+          "url": "https://driversed.com/louisiana/"
+        },
+        {
+          "kind": "partner",
+          "text": "ising 100% online – save time and money Provided by our partner company I Drive Safely Fix a Ticket Louisiana Superior Product, Superior Service W",
+          "url": "https://driversed.com/louisiana/"
+        },
+        {
+          "kind": "court",
+          "text": "a Louisiana Defensive Driving Louisiana court-approved Set your own study schedule Keep your insurance costs from",
+          "url": "https://driversed.com/louisiana/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:MN": {
+      "school": "driversed",
+      "state": "minnesota",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5141 chars",
+          "url": "https://driversed.com/minnesota/"
+        },
+        {
+          "kind": "partner",
+          "text": "d Multimedia features make learning fun Provided by our partner company I Drive Safely Fix a Ticket Minnesota Save Time and Money Get on the path",
+          "url": "https://driversed.com/minnesota/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:MO": {
+      "school": "driversed",
+      "state": "missouri",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5135 chars",
+          "url": "https://driversed.com/missouri/"
+        },
+        {
+          "kind": "partner",
+          "text": "keeps things interesting and engaging. Provided by our partner company I Drive Safely Fix a Ticket Missouri Drivers Ed the Easy Way Our adult dri",
+          "url": "https://driversed.com/missouri/"
+        },
+        {
+          "kind": "page",
+          "text": "3441 chars",
+          "url": "https://driversed.com/missouri/driving-lessons/"
+        },
+        {
+          "kind": "claim",
+          "text": "e #1 driving school in the US with 100+ state-approved courses across the nation All-in-one source: online course,",
+          "url": "https://driversed.com/missouri/driving-lessons/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:MS": {
+      "school": "driversed",
+      "state": "mississippi",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5023 chars",
+          "url": "https://driversed.com/mississippi/"
+        },
+        {
+          "kind": "partner",
+          "text": "chedule Lower your auto insurance rates Provided by our partner company I Drive Safely Fix a Ticket Mississippi Online Learning Made Easy Our all-",
+          "url": "https://driversed.com/mississippi/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:MT": {
+      "school": "driversed",
+      "state": "montana",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5041 chars",
+          "url": "https://driversed.com/montana/"
+        },
+        {
+          "kind": "partner",
+          "text": "s, no teachers – learn at your own pace Provided by our partner company I Drive Safely Fix a Ticket Montana Unparalleled Quality from DriversEd.co",
+          "url": "https://driversed.com/montana/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:NC": {
+      "school": "driversed",
+      "state": "north-carolina",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5562 chars",
+          "url": "https://driversed.com/north-carolina/"
+        },
+        {
+          "kind": "partner",
+          "text": "rolina North Carolina Defensive Driving Provided by our partner company I Drive Safely, choose between two defensive driving courses to help fulfi",
+          "url": "https://driversed.com/north-carolina/"
+        },
+        {
+          "kind": "claim",
+          "text": "ine drivers education & driver training DMV-approved teen drivers ed Over 25 years of driver training experience",
+          "url": "https://driversed.com/north-carolina/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:ND": {
+      "school": "driversed",
+      "state": "north-dakota",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5450 chars",
+          "url": "https://driversed.com/north-dakota/"
+        },
+        {
+          "kind": "partner",
+          "text": "t keeps things interesting and engaging Provided by our partner company I Drive Safely Fix a Ticket North Dakota All Online, No Hassle If you're p",
+          "url": "https://driversed.com/north-dakota/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:NE": {
+      "school": "driversed",
+      "state": "nebraska",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5290 chars",
+          "url": "https://driversed.com/nebraska/"
+        },
+        {
+          "kind": "partner",
+          "text": "keeps things interesting and engaging. Provided by our partner company I Drive Safely Fix a Ticket Nebraska Drivers Ed the Easy Way Clear writing",
+          "url": "https://driversed.com/nebraska/"
+        },
+        {
+          "kind": "claim",
+          "text": "you're eager to earn your license, our DMV-approved and required teen drivers ed course will help get you where",
+          "url": "https://driversed.com/nebraska/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:NJ": {
+      "school": "driversed",
+      "state": "new-jersey",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "DriversEd.com",
+          "url": "https://www.trafficschoolpicker.com/new-jersey (directory: data-count=\"directory\">86 state-licensed traffic schools in New Jersey Source: Official New Jersey DMV records · Last verified 2026-11-01)"
+        },
+        {
+          "kind": "page",
+          "text": "4930 chars",
+          "url": "https://driversed.com/new-jersey/"
+        },
+        {
+          "kind": "partner",
+          "text": "t keeps things interesting and engaging Provided by our partner company I Drive Safely Fix a Ticket Online Unparalleled Online Education Avoid lic",
+          "url": "https://driversed.com/new-jersey/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:NM": {
+      "school": "driversed",
+      "state": "new-mexico",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "4763 chars",
+          "url": "https://driversed.com/new-mexico/"
+        },
+        {
+          "kind": "partner",
+          "text": "t keeps things interesting and engaging Provided by our partner company I Drive Safely Fix a Ticket Online Drivers Ed the Easy Way Earn license po",
+          "url": "https://driversed.com/new-mexico/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:NV": {
+      "school": "driversed",
+      "state": "nevada",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5936 chars",
+          "url": "https://driversed.com/nevada/"
+        },
+        {
+          "kind": "partner",
+          "text": "t keeps things interesting and engaging Provided by our partner company I Drive Safely Fix a Ticket Nevada All Online, No Hassle We use custom-bui",
+          "url": "https://driversed.com/nevada/"
+        },
+        {
+          "kind": "claim",
+          "text": "er online solutions for all your needs: DMV-approved teen drivers ed, insurance discounts, and traffic school. A",
+          "url": "https://driversed.com/nevada/"
+        },
+        {
+          "kind": "page",
+          "text": "3423 chars",
+          "url": "https://driversed.com/nevada/driving-lessons/"
+        },
+        {
+          "kind": "claim",
+          "text": "e #1 driving school in the US with 100+ state-approved courses across the nation All-in-one source: online course,",
+          "url": "https://driversed.com/nevada/driving-lessons/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:NY": {
+      "school": "driversed",
+      "state": "new-york",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5128 chars",
+          "url": "https://driversed.com/new-york/"
+        },
+        {
+          "kind": "partner",
+          "text": "Ed New York New York Defensive Driving Provided by our partner company I Drive Safely, take your online defensive driving course today with no fi",
+          "url": "https://driversed.com/new-york/"
+        },
+        {
+          "kind": "claim",
+          "text": "ine drivers education & driver training DMV-approved teen drivers ed Over 25 years of driver training experience",
+          "url": "https://driversed.com/new-york/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:OH": {
+      "school": "driversed",
+      "state": "ohio",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "DriversEd.com",
+          "url": "https://www.trafficschoolpicker.com/ohio (directory: data-count=\"directory\">27 DMV-licensed online traffic schools in Ohio Source: Official Ohio DMV records · Last verified 2026-11-01)"
+        },
+        {
+          "kind": "page",
+          "text": "5544 chars",
+          "url": "https://driversed.com/ohio/"
+        },
+        {
+          "kind": "partner",
+          "text": "ce discount offered (carrier-dependent) Provided by our partner company I Drive Safely Fix a Ticket Ohio Ohio Driving School Online America's #1 D",
+          "url": "https://driversed.com/ohio/"
+        },
+        {
+          "kind": "claim",
+          "text": "r an Ohio driver education course fully BMV-approved, or an adult looking to save money with an auto insurance d",
+          "url": "https://driversed.com/ohio/"
+        },
+        {
+          "kind": "page",
+          "text": "4986 chars",
+          "url": "https://driversed.com/ohio/knowledge-test-prep-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:OK": {
+      "school": "driversed",
+      "state": "oklahoma",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5787 chars",
+          "url": "https://driversed.com/oklahoma/"
+        },
+        {
+          "kind": "partner",
+          "text": "t keeps things interesting and engaging Provided by our partner company I Drive Safely Fix a Ticket Oklahoma Drivers Ed the Easy Way Our adult dri",
+          "url": "https://driversed.com/oklahoma/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:OR": {
+      "school": "driversed",
+      "state": "oregon",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5156 chars",
+          "url": "https://driversed.com/oregon/"
+        },
+        {
+          "kind": "partner",
+          "text": "t keeps things interesting and engaging Provided by our partner company I Drive Safely Fix a Ticket Oregon The Authority in Online Drivers Ed Take",
+          "url": "https://driversed.com/oregon/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:RI": {
+      "school": "driversed",
+      "state": "rhode-island",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5225 chars",
+          "url": "https://driversed.com/rhode-island/"
+        },
+        {
+          "kind": "partner",
+          "text": "vailable 24/7 – study whenever you want Provided by our partner company I Drive Safely Fix a Ticket Rhode Island Drivers Ed the Easy Way Qualify f",
+          "url": "https://driversed.com/rhode-island/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:SD": {
+      "school": "driversed",
+      "state": "south-dakota",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5155 chars",
+          "url": "https://driversed.com/south-dakota/"
+        },
+        {
+          "kind": "partner",
+          "text": "Easy to complete, passing is guaranteed Provided by our partner company I Drive Safely Fix a Ticket South Dakota Online Learning Made Easy Enjoy f",
+          "url": "https://driversed.com/south-dakota/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:TN": {
+      "school": "driversed",
+      "state": "tennessee",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5313 chars",
+          "url": "https://driversed.com/tennessee/"
+        },
+        {
+          "kind": "partner",
+          "text": "Test Tennessee Tennessee Traffic School Provided by our partner company I Drive Safely, an online traffic school course that can help you handle a",
+          "url": "https://driversed.com/tennessee/"
+        },
+        {
+          "kind": "claim",
+          "text": "ine drivers education & driver training DMV-approved teen drivers ed Over 25 years of driver training experience",
+          "url": "https://driversed.com/tennessee/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:TX": {
+      "school": "driversed",
+      "state": "texas",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "AS DRIVER EDUCATION",
+          "url": "https://www.trafficschoolpicker.com/texas (directory: data-count=\"directory\">845 DMV-licensed online traffic schools in Texas Source: Official Texas DMV records · Last verified 2026-08-01)"
+        },
+        {
+          "kind": "page",
+          "text": "7533 chars",
+          "url": "https://driversed.com/texas/defensive-driving/"
+        },
+        {
+          "kind": "claim",
+          "text": "history. This type of driving record is certified by the Texas DPS and accepted by the court. You can get your record by mail",
+          "url": "https://driversed.com/texas/defensive-driving/"
+        },
+        {
+          "kind": "court",
+          "text": "to keep your driving record clean. Our court-approved Texas defensive driving course, also known as a driving saf",
+          "url": "https://driversed.com/texas/defensive-driving/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:UT": {
+      "school": "driversed",
+      "state": "utah",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5268 chars",
+          "url": "https://driversed.com/utah/"
+        },
+        {
+          "kind": "partner",
+          "text": "format lets you study at your own pace Provided by our partner company I Drive Safely Fix a Ticket Utah Utah Driving School Online America's #1 d",
+          "url": "https://driversed.com/utah/"
+        },
+        {
+          "kind": "claim",
+          "text": "s to help you achieve success. We offer DMV-approved and required teen drivers ed, adult drivers ed that can qua",
+          "url": "https://driversed.com/utah/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:VA": {
+      "school": "driversed",
+      "state": "virginia",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5015 chars",
+          "url": "https://driversed.com/virginia/"
+        },
+        {
+          "kind": "partner",
+          "text": "insurance record to keep your rates low Provided by our partner company I Drive Safely Fix a Ticket Virginia Save Time and Money Study on your own",
+          "url": "https://driversed.com/virginia/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:WA": {
+      "school": "driversed",
+      "state": "washington",
+      "status": "unchecked",
+      "evidence": [],
+      "checked": "2026-11-25"
+    },
+    "driversed:WI": {
+      "school": "driversed",
+      "state": "wisconsin",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6227 chars",
+          "url": "https://driversed.com/wisconsin/"
+        },
+        {
+          "kind": "partner",
+          "text": "videos, 3D animations, and case studies Provided by our partner company I Drive Safely Learn More Failure To Yield Wisconsin Traffic School 100% o",
+          "url": "https://driversed.com/wisconsin/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:WV": {
+      "school": "driversed",
+      "state": "west-virginia",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5458 chars",
+          "url": "https://driversed.com/west-virginia/"
+        },
+        {
+          "kind": "partner",
+          "text": "pass! 100% online – save time and money Provided by our partner company I Drive Safely Fix a Ticket West Virginia Drivers Ed the Easy Way Our adul",
+          "url": "https://driversed.com/west-virginia/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "driversed:WY": {
+      "school": "driversed",
+      "state": "wyoming",
+      "status": "resold",
+      "partner": "idrivesafely",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5191 chars",
+          "url": "https://driversed.com/wyoming/"
+        },
+        {
+          "kind": "partner",
+          "text": "nt Complete the course on your own time Provided by our partner company I Drive Safely Fix a Ticket Wyoming Drivers Ed the Easy Way Our Wyoming on",
+          "url": "https://driversed.com/wyoming/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:AK": {
+      "school": "drivesafeonline",
+      "state": "alaska",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "14190 chars",
+          "url": "https://www.drivesafeonline.org/alaska/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:AL": {
+      "school": "drivesafeonline",
+      "state": "alabama",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "8180 chars",
+          "url": "https://www.drivesafeonline.org/alabama/traffic-school/"
+        },
+        {
+          "kind": "page",
+          "text": "19434 chars",
+          "url": "https://www.drivesafeonline.org/alabama/defensive-driving-course/"
+        },
+        {
+          "kind": "court",
+          "text": "nline Alabama Defensive Driving course. Check with your court before paying the fine to see if you are eligible to take a",
+          "url": "https://www.drivesafeonline.org/alabama/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:AR": {
+      "school": "drivesafeonline",
+      "state": "arkansas",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "15793 chars",
+          "url": "https://www.drivesafeonline.org/arkansas/"
+        },
+        {
+          "kind": "court",
+          "text": "pension of driving privileges. You must check with your court to find out if you qualify for a ticket dismissal diversion",
+          "url": "https://www.drivesafeonline.org/arkansas/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:CA": {
+      "school": "drivesafeonline",
+      "state": "california",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "7628 chars",
+          "url": "https://www.drivesafeonline.org/california/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:CO": {
+      "school": "drivesafeonline",
+      "state": "colorado",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "12653 chars",
+          "url": "https://www.drivesafeonline.org/colorado/defensive-driving-course/"
+        },
+        {
+          "kind": "court",
+          "text": "ved on a court by court basis. You must check with your court to find out if you qualify for diversion prior to taking th",
+          "url": "https://www.drivesafeonline.org/colorado/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:CT": {
+      "school": "drivesafeonline",
+      "state": "connecticut",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "Connecticut Mature Driver Accident Prevention - DriveSafe Online®",
+          "url": "https://www.trafficschoolpicker.com/connecticut (directory: data-count=\"directory\">22 DMV-licensed online traffic schools in Connecticut Source: Official Connecticut DMV records · Last verified 2026-11-01)"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:DE": {
+      "school": "drivesafeonline",
+      "state": "delaware",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "22414 chars",
+          "url": "https://www.drivesafeonline.org/delaware/defensive-driving-courses/"
+        },
+        {
+          "kind": "claim",
+          "text": "elaware Online Defensive Driving Course DMV approved. Save up to 15% on auto insurance. Earn a 3-point credit on",
+          "url": "https://www.drivesafeonline.org/delaware/defensive-driving-courses/"
+        },
+        {
+          "kind": "court",
+          "text": "ve driving course in Delaware? Yes, but check with your court. If you want to keep your driver’s license in good standing",
+          "url": "https://www.drivesafeonline.org/delaware/defensive-driving-courses/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:FL": {
+      "school": "drivesafeonline",
+      "state": "florida",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "NexLearn",
+          "url": "https://www.trafficschoolpicker.com/florida (directory: data-count=\"directory\">58 state-licensed traffic schools in Florida Source: Official Florida DMV records · Last verified 2026-09-24)"
+        },
+        {
+          "kind": "page",
+          "text": "8781 chars",
+          "url": "https://www.drivesafeonline.org/florida/defensive-driving-course/"
+        },
+        {
+          "kind": "page",
+          "text": "17003 chars",
+          "url": "https://www.drivesafeonline.org/florida/basic-driver-improvement/"
+        },
+        {
+          "kind": "claim",
+          "text": "need to dismiss a traffic ticket! Fully approved by the Florida Department of Highway Safety and Motor Vehicles (FLHSMV). Complete onl",
+          "url": "https://www.drivesafeonline.org/florida/basic-driver-improvement/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:GA": {
+      "school": "drivesafeonline",
+      "state": "georgia",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "9467 chars",
+          "url": "https://www.drivesafeonline.org/georgia/cobb-county/defensive-driving/"
+        },
+        {
+          "kind": "court",
+          "text": "sive Driving Course Insurance Discount. Accepted by Many GA Courts. Money-Back Guarantee! ONLY $24.95 Click &#8220;START&#8221",
+          "url": "https://www.drivesafeonline.org/georgia/cobb-county/defensive-driving/"
+        },
+        {
+          "kind": "page",
+          "text": "10296 chars",
+          "url": "https://www.drivesafeonline.org/georgia/henry-county/defensive-driving/"
+        },
+        {
+          "kind": "court",
+          "text": "sive Driving Course Insurance Discount. Accepted by Many GA Courts. Money-Back Guarantee! ONLY $24.95 Click &#8220;START&#8221",
+          "url": "https://www.drivesafeonline.org/georgia/henry-county/defensive-driving/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:HI": {
+      "school": "drivesafeonline",
+      "state": "hawaii",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "14873 chars",
+          "url": "https://www.drivesafeonline.org/hawaii/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:IA": {
+      "school": "drivesafeonline",
+      "state": "iowa",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "14263 chars",
+          "url": "https://www.drivesafeonline.org/iowa/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:ID": {
+      "school": "drivesafeonline",
+      "state": "idaho",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "15218 chars",
+          "url": "https://www.drivesafeonline.org/idaho/"
+        },
+        {
+          "kind": "claim",
+          "text": "se and Traffic School Features: Content approved by the Idaho Transportation Department Fully narrated video with closed captioning Innovative in-c",
+          "url": "https://www.drivesafeonline.org/idaho/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:IN": {
+      "school": "drivesafeonline",
+      "state": "indiana",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "9806 chars",
+          "url": "https://www.drivesafeonline.org/indiana/defensive-driving-courses/"
+        },
+        {
+          "kind": "claim",
+          "text": ". This course is not affiliated with or approved by the Indiana BMV. It is designed solely to help you qualify for an auto insu",
+          "url": "https://www.drivesafeonline.org/indiana/defensive-driving-courses/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:KS": {
+      "school": "drivesafeonline",
+      "state": "kansas",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "15058 chars",
+          "url": "https://www.drivesafeonline.org/kansas/defensive-driving-course/"
+        },
+        {
+          "kind": "court",
+          "text": "ved on a court by court basis. You must check with your court to find out if you qualify for diversion prior to taking th",
+          "url": "https://www.drivesafeonline.org/kansas/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:LA": {
+      "school": "drivesafeonline",
+      "state": "louisiana",
+      "status": "unchecked",
+      "evidence": [],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:MN": {
+      "school": "drivesafeonline",
+      "state": "minnesota",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "DriveSafe Online",
+          "url": "https://www.trafficschoolpicker.com/minnesota (directory: data-count=\"directory\">28 state-licensed traffic schools in Minnesota Source: Official Minnesota DMV records · Last verified 2026-11-01)"
+        },
+        {
+          "kind": "page",
+          "text": "18988 chars",
+          "url": "https://www.drivesafeonline.org/minnesota/accident-prevention-courses/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:MO": {
+      "school": "drivesafeonline",
+      "state": "missouri",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "13997 chars",
+          "url": "https://www.drivesafeonline.org/missouri/driver-improvement-program/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:MS": {
+      "school": "drivesafeonline",
+      "state": "mississippi",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "18943 chars",
+          "url": "https://www.drivesafeonline.org/mississippi/defensive-driving-course/"
+        },
+        {
+          "kind": "court",
+          "text": "tickets during that three-year period. Check with your court to find out exactly what they will allow for your specific",
+          "url": "https://www.drivesafeonline.org/mississippi/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:MT": {
+      "school": "drivesafeonline",
+      "state": "montana",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "7907 chars",
+          "url": "https://www.drivesafeonline.org/montana/defensive-driving-course/"
+        },
+        {
+          "kind": "court",
+          "text": "might be a step in the right direction. Check with your court for eligibility and approval. Stay Informed on Current Driv",
+          "url": "https://www.drivesafeonline.org/montana/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:NC": {
+      "school": "drivesafeonline",
+      "state": "north-carolina",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "16858 chars",
+          "url": "https://www.drivesafeonline.org/north-carolina/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:ND": {
+      "school": "drivesafeonline",
+      "state": "north-dakota",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "15784 chars",
+          "url": "https://www.drivesafeonline.org/north-dakota/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:NE": {
+      "school": "drivesafeonline",
+      "state": "nebraska",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "13638 chars",
+          "url": "https://www.drivesafeonline.org/nebraska/defensive-driving-course/"
+        },
+        {
+          "kind": "claim",
+          "text": "ants must have successfully completed a DMV-approved driver safety course along with written and driving tests,",
+          "url": "https://www.drivesafeonline.org/nebraska/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:NJ": {
+      "school": "drivesafeonline",
+      "state": "new-jersey",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "DriveSafe Online",
+          "url": "https://www.trafficschoolpicker.com/new-jersey (directory: data-count=\"directory\">86 state-licensed traffic schools in New Jersey Source: Official New Jersey DMV records · Last verified 2026-11-01)"
+        },
+        {
+          "kind": "page",
+          "text": "10405 chars",
+          "url": "https://www.drivesafeonline.org/new-jersey/defensive-driving-course/"
+        },
+        {
+          "kind": "claim",
+          "text": "Click START to begin New Jersey’s best MVC-approved defensive driving course. NJ State-Approved Defensive Drivi",
+          "url": "https://www.drivesafeonline.org/new-jersey/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:NM": {
+      "school": "drivesafeonline",
+      "state": "new-mexico",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "9004 chars",
+          "url": "https://www.drivesafeonline.org/new-mexico/online-defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:NV": {
+      "school": "drivesafeonline",
+      "state": "nevada",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "8574 chars",
+          "url": "https://www.drivesafeonline.org/nevada/traffic-safety-course/"
+        },
+        {
+          "kind": "claim",
+          "text": "da Traffic Safety Course is 100% Nevada DMV-approved for ticket dismissal, point reduction, or for an insurance",
+          "url": "https://www.drivesafeonline.org/nevada/traffic-safety-course/"
+        },
+        {
+          "kind": "page",
+          "text": "8574 chars",
+          "url": "https://www.drivesafeonline.org/nevada/defensive-driving-course/"
+        },
+        {
+          "kind": "claim",
+          "text": "da Traffic Safety Course is 100% Nevada DMV-approved for ticket dismissal, point reduction, or for an insurance",
+          "url": "https://www.drivesafeonline.org/nevada/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:NY": {
+      "school": "drivesafeonline",
+      "state": "new-york",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "10928 chars",
+          "url": "https://www.drivesafeonline.org/new-york/defensive-driving-course/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "irements Trustpilot Notice: This course is not a New York DMV PIRP course. If you need a New York DMV PIRP course, visit the NY DMV w",
+          "url": "https://www.drivesafeonline.org/new-york/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:OH": {
+      "school": "drivesafeonline",
+      "state": "ohio",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "10879 chars",
+          "url": "https://www.drivesafeonline.org/ohio/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:OK": {
+      "school": "drivesafeonline",
+      "state": "oklahoma",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "9873 chars",
+          "url": "https://www.drivesafeonline.org/oklahoma-court/"
+        },
+        {
+          "kind": "page",
+          "text": "16844 chars",
+          "url": "https://www.drivesafeonline.org/oklahoma/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:OR": {
+      "school": "drivesafeonline",
+      "state": "oregon",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "14369 chars",
+          "url": "https://www.drivesafeonline.org/oregon/"
+        },
+        {
+          "kind": "claim",
+          "text": "Guarantee! Click START to take the best DMV-approved safe driver course in Oregon ONLY $24.95 START Trustpilot ",
+          "url": "https://www.drivesafeonline.org/oregon/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:RI": {
+      "school": "drivesafeonline",
+      "state": "rhode-island",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "13134 chars",
+          "url": "https://www.drivesafeonline.org/rhode-island/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:SD": {
+      "school": "drivesafeonline",
+      "state": "south-dakota",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "13595 chars",
+          "url": "https://www.drivesafeonline.org/south-dakota/defensive-driving-course/"
+        },
+        {
+          "kind": "claim",
+          "text": "ledge test unless they have completed a state-approved driver’s education course. With an instruction permit, the",
+          "url": "https://www.drivesafeonline.org/south-dakota/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:TN": {
+      "school": "drivesafeonline",
+      "state": "tennessee",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "20956 chars",
+          "url": "https://www.drivesafeonline.org/tennessee/ticket-dismissal/"
+        },
+        {
+          "kind": "claim",
+          "text": "and requirements. Register to take our state-approved DriveSafe Online Tennessee Defensive Driving course. Voted",
+          "url": "https://www.drivesafeonline.org/tennessee/ticket-dismissal/"
+        },
+        {
+          "kind": "court",
+          "text": "curity (TDOSHS) to dismiss your ticket. Check with your court to see if your case qualifies. When you contact your court,",
+          "url": "https://www.drivesafeonline.org/tennessee/ticket-dismissal/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:TX": {
+      "school": "drivesafeonline",
+      "state": "texas",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "17773 chars",
+          "url": "https://www.drivesafeonline.org/texas/defensive-driving-course/"
+        },
+        {
+          "kind": "claim",
+          "text": "ctronic certificate available. Pass our TDLR-approved course and your completion certificate is sent to your emai",
+          "url": "https://www.drivesafeonline.org/texas/defensive-driving-course/"
+        },
+        {
+          "kind": "page",
+          "text": "14701 chars",
+          "url": "https://www.drivesafeonline.org/texas/bexar-county-defensive-driving/"
+        },
+        {
+          "kind": "claim",
+          "text": "nstant electronic certificate. Pass our TDLR-approved course and your completion certificate is sent to your emai",
+          "url": "https://www.drivesafeonline.org/texas/bexar-county-defensive-driving/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:UT": {
+      "school": "drivesafeonline",
+      "state": "utah",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "14263 chars",
+          "url": "https://www.drivesafeonline.org/utah/defensive-driving-courses/"
+        },
+        {
+          "kind": "court",
+          "text": "ed Video Included. Risk-Free Guarantee! Accepted by Many Utah Courts. ONLY $24.95 Click START to begin the best driver improveme",
+          "url": "https://www.drivesafeonline.org/utah/defensive-driving-courses/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:VA": {
+      "school": "drivesafeonline",
+      "state": "virginia",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "DriveSafe Online",
+          "url": "https://www.trafficschoolpicker.com/virginia (directory: data-count=\"directory\">64 DMV-licensed online Driver Improvement Clinics in Virginia Source: Virginia DMV list of online Driver Improvement Clinics · Last verified 2026-05-01)"
+        },
+        {
+          "kind": "page",
+          "text": "19946 chars",
+          "url": "https://www.drivesafeonline.org/virginia/driver-improvement/"
+        },
+        {
+          "kind": "claim",
+          "text": "afe Online&#8217;s Virginia course is a DMV-approved driver improvement program for licensed drivers. Can I take",
+          "url": "https://www.drivesafeonline.org/virginia/driver-improvement/"
+        },
+        {
+          "kind": "court",
+          "text": "T & DEFENSIVE DRIVING COURSE VA DMV and Court Approved Traffic School. Meets Court-Ordered Requirements. Get Safe",
+          "url": "https://www.drivesafeonline.org/virginia/driver-improvement/"
+        },
+        {
+          "kind": "page",
+          "text": "19946 chars",
+          "url": "https://www.drivesafeonline.org/virginia/defensive-driving-course/"
+        },
+        {
+          "kind": "claim",
+          "text": "afe Online&#8217;s Virginia course is a DMV-approved driver improvement program for licensed drivers. Can I take",
+          "url": "https://www.drivesafeonline.org/virginia/defensive-driving-course/"
+        },
+        {
+          "kind": "court",
+          "text": "T & DEFENSIVE DRIVING COURSE VA DMV and Court Approved Traffic School. Meets Court-Ordered Requirements. Get Safe",
+          "url": "https://www.drivesafeonline.org/virginia/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:WA": {
+      "school": "drivesafeonline",
+      "state": "washington",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "10682 chars",
+          "url": "https://www.drivesafeonline.org/washington/online-defensive-driving/"
+        },
+        {
+          "kind": "claim",
+          "text": "er insurance rates when completing this state-approved course. Drivers under the age of 55 need to speak with thei",
+          "url": "https://www.drivesafeonline.org/washington/online-defensive-driving/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:WI": {
+      "school": "drivesafeonline",
+      "state": "wisconsin",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "11395 chars",
+          "url": "https://www.drivesafeonline.org/wisconsin/failure-to-yield-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:WV": {
+      "school": "drivesafeonline",
+      "state": "west-virginia",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "12950 chars",
+          "url": "https://www.drivesafeonline.org/west-virginia/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "drivesafeonline:WY": {
+      "school": "drivesafeonline",
+      "state": "wyoming",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "14659 chars",
+          "url": "https://www.drivesafeonline.org/wyoming/defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:AK": {
+      "school": "gototrafficschool",
+      "state": "alaska",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "8648 chars",
+          "url": "https://www.gototrafficschool.com/states/alaska"
+        },
+        {
+          "kind": "claim",
+          "text": "that matches your requirement. Multiple state-approved programs are available depending on your situation. State-a",
+          "url": "https://www.gototrafficschool.com/states/alaska"
+        },
+        {
+          "kind": "page",
+          "text": "3479 chars",
+          "url": "https://www.gototrafficschool.com/register/Alaska-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:AL": {
+      "school": "gototrafficschool",
+      "state": "alabama",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6331 chars",
+          "url": "https://www.gototrafficschool.com/states/alabama"
+        },
+        {
+          "kind": "claim",
+          "text": "1 Is your Alabama traffic school course DMV-approved? Our course is designed for Alabama drivers and is accepted",
+          "url": "https://www.gototrafficschool.com/states/alabama"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/alabama"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Arab-Alabama-City-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Arab-Alabama-City-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Arab-Alabama-City-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:AR": {
+      "school": "gototrafficschool",
+      "state": "arkansas",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6341 chars",
+          "url": "https://www.gototrafficschool.com/states/arkansas"
+        },
+        {
+          "kind": "claim",
+          "text": "Is your Arkansas traffic school course DMV-approved? Our course is designed for Arkansas drivers and is accepte",
+          "url": "https://www.gototrafficschool.com/states/arkansas"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/arkansas"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Arkansas-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Arkansas-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Arkansas-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:CA": {
+      "school": "gototrafficschool",
+      "state": "california",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "GOTOTRAFFICSCHOOLCOM",
+          "url": "https://www.trafficschoolpicker.com/california (directory: data-count=\"directory\">218 DMV-licensed online traffic schools in California Source: Official California DMV records · Last verified 2026-11-01)"
+        },
+        {
+          "kind": "page",
+          "text": "8054 chars",
+          "url": "https://www.gototrafficschool.com/states/california"
+        },
+        {
+          "kind": "claim",
+          "text": "that matches your requirement. Multiple state-approved programs are available depending on your situation. State-a",
+          "url": "https://www.gototrafficschool.com/states/california"
+        },
+        {
+          "kind": "page",
+          "text": "6465 chars",
+          "url": "https://www.gototrafficschool.com/states-spanish/california"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:CO": {
+      "school": "gototrafficschool",
+      "state": "colorado",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "7401 chars",
+          "url": "https://www.gototrafficschool.com/states/colorado"
+        },
+        {
+          "kind": "claim",
+          "text": "Is your Colorado traffic school course DMV-approved? Our course is designed for Colorado drivers and is accepte",
+          "url": "https://www.gototrafficschool.com/states/colorado"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/colorado"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Colorado-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Colorado-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Colorado-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:CT": {
+      "school": "gototrafficschool",
+      "state": "connecticut",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6374 chars",
+          "url": "https://www.gototrafficschool.com/states/connecticut"
+        },
+        {
+          "kind": "claim",
+          "text": "your Connecticut traffic school course DMV-approved? Our course is designed for Connecticut drivers and is acce",
+          "url": "https://www.gototrafficschool.com/states/connecticut"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/connecticut"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Connecticut-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Connecticut-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Connecticut-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:DE": {
+      "school": "gototrafficschool",
+      "state": "delaware",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "8633 chars",
+          "url": "https://www.gototrafficschool.com/states/delaware"
+        },
+        {
+          "kind": "claim",
+          "text": "iving-related obligations. Our Delaware DMV-approved programs are available entirely online and include completi",
+          "url": "https://www.gototrafficschool.com/states/delaware"
+        },
+        {
+          "kind": "page",
+          "text": "33562 chars",
+          "url": "https://www.gototrafficschool.com/info2/Delaware-Defensive-Driving-Course.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:FL": {
+      "school": "gototrafficschool",
+      "state": "florida",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "Cyberactive (Miami-Dade Citations Only)",
+          "url": "https://www.trafficschoolpicker.com/florida (directory: data-count=\"directory\">58 state-licensed traffic schools in Florida Source: Official Florida DMV records · Last verified 2026-09-24)"
+        },
+        {
+          "kind": "page",
+          "text": "8111 chars",
+          "url": "https://www.gototrafficschool.com/states/florida"
+        },
+        {
+          "kind": "claim",
+          "text": "that matches your requirement. Multiple state-approved programs are available depending on your situation. State-a",
+          "url": "https://www.gototrafficschool.com/states/florida"
+        },
+        {
+          "kind": "page",
+          "text": "33528 chars",
+          "url": "https://www.gototrafficschool.com/info2/Florida-BDI.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:GA": {
+      "school": "gototrafficschool",
+      "state": "georgia",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "8732 chars",
+          "url": "https://www.gototrafficschool.com/states/georgia"
+        },
+        {
+          "kind": "claim",
+          "text": "1 Is your Georgia traffic school course DMV-approved? Our course is designed for Georgia drivers and is accepted",
+          "url": "https://www.gototrafficschool.com/states/georgia"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/georgia"
+        },
+        {
+          "kind": "page",
+          "text": "3356 chars",
+          "url": "https://www.gototrafficschool.com/articles/Buckle-Up-Its-Finally-The-Law-In-Georgia.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:HI": {
+      "school": "gototrafficschool",
+      "state": "hawaii",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6321 chars",
+          "url": "https://www.gototrafficschool.com/states/hawaii"
+        },
+        {
+          "kind": "claim",
+          "text": "1 Is your Hawaii traffic school course DMV-approved? Our course is designed for Hawaii drivers and is accepted",
+          "url": "https://www.gototrafficschool.com/states/hawaii"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/hawaii"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Hawaii-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Hawaii-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Hawaii-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:IA": {
+      "school": "gototrafficschool",
+      "state": "iowa",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6301 chars",
+          "url": "https://www.gototrafficschool.com/states/iowa"
+        },
+        {
+          "kind": "claim",
+          "text": "e. 1 Is your Iowa traffic school course DMV-approved? Our course is designed for Iowa drivers and is accepted by",
+          "url": "https://www.gototrafficschool.com/states/iowa"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/iowa"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Iowa-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Iowa-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Iowa-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:ID": {
+      "school": "gototrafficschool",
+      "state": "idaho",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6381 chars",
+          "url": "https://www.gototrafficschool.com/states/idaho"
+        },
+        {
+          "kind": "page",
+          "text": "32832 chars",
+          "url": "https://www.gototrafficschool.com/info2/Idaho-Traffic-Schools.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:IN": {
+      "school": "gototrafficschool",
+      "state": "indiana",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6369 chars",
+          "url": "https://www.gototrafficschool.com/states/indiana"
+        },
+        {
+          "kind": "claim",
+          "text": "1 Is your Indiana traffic school course DMV-approved? Our course is designed for Indiana drivers and is accepted",
+          "url": "https://www.gototrafficschool.com/states/indiana"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/indiana"
+        },
+        {
+          "kind": "page",
+          "text": "1725 chars",
+          "url": "https://www.gototrafficschool.com/register/Indiana-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "CATE Indiana Notice: This course is NOT approved by the Indiana BMV, nor approved by any Indiana courts, and will NOT be accept",
+          "url": "https://www.gototrafficschool.com/register/Indiana-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:KS": {
+      "school": "gototrafficschool",
+      "state": "kansas",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6324 chars",
+          "url": "https://www.gototrafficschool.com/states/kansas"
+        },
+        {
+          "kind": "claim",
+          "text": "1 Is your Kansas traffic school course DMV-approved? Our course is designed for Kansas drivers and is accepted",
+          "url": "https://www.gototrafficschool.com/states/kansas"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/kansas"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Kansas-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Kansas-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Kansas-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:LA": {
+      "school": "gototrafficschool",
+      "state": "louisiana",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6351 chars",
+          "url": "https://www.gototrafficschool.com/states/louisiana"
+        },
+        {
+          "kind": "claim",
+          "text": "Is your Louisiana traffic school course DMV-approved? Our course is designed for Louisiana drivers and is accept",
+          "url": "https://www.gototrafficschool.com/states/louisiana"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/louisiana"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Louisiana-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Louisiana-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Louisiana-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:MN": {
+      "school": "gototrafficschool",
+      "state": "minnesota",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "GoToTrafficSchool.com",
+          "url": "https://www.trafficschoolpicker.com/minnesota (directory: data-count=\"directory\">28 state-licensed traffic schools in Minnesota Source: Official Minnesota DMV records · Last verified 2026-11-01)"
+        },
+        {
+          "kind": "page",
+          "text": "6289 chars",
+          "url": "https://www.gototrafficschool.com/states/minnesota"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Minnesota-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Minnesota-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Minnesota-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:MO": {
+      "school": "gototrafficschool",
+      "state": "missouri",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6714 chars",
+          "url": "https://www.gototrafficschool.com/states/missouri"
+        },
+        {
+          "kind": "page",
+          "text": "32835 chars",
+          "url": "https://www.gototrafficschool.com/info2/Missouri-Traffic-Laws.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "i classroom courses are known for being court approved for ticket dismissal. Is the GoToTrafficSchool.com Missouri",
+          "url": "https://www.gototrafficschool.com/info2/Missouri-Traffic-Laws.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:MS": {
+      "school": "gototrafficschool",
+      "state": "mississippi",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6371 chars",
+          "url": "https://www.gototrafficschool.com/states/mississippi"
+        },
+        {
+          "kind": "claim",
+          "text": "your Mississippi traffic school course DMV-approved? Our course is designed for Mississippi drivers and is acce",
+          "url": "https://www.gototrafficschool.com/states/mississippi"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/mississippi"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Mississippi-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Mississippi-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Mississippi-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:MT": {
+      "school": "gototrafficschool",
+      "state": "montana",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6334 chars",
+          "url": "https://www.gototrafficschool.com/states/montana"
+        },
+        {
+          "kind": "claim",
+          "text": "1 Is your Montana traffic school course DMV-approved? Our course is designed for Montana drivers and is accepted",
+          "url": "https://www.gototrafficschool.com/states/montana"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/montana"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Montana-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Montana-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Montana-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:NC": {
+      "school": "gototrafficschool",
+      "state": "north-carolina",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6401 chars",
+          "url": "https://www.gototrafficschool.com/states/north-carolina"
+        },
+        {
+          "kind": "claim",
+          "text": "ur North Carolina traffic school course DMV-approved? Our course is designed for North Carolina drivers and is a",
+          "url": "https://www.gototrafficschool.com/states/north-carolina"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/north-carolina"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/North-Carolina-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/North-Carolina-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/North-Carolina-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:NE": {
+      "school": "gototrafficschool",
+      "state": "nebraska",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6341 chars",
+          "url": "https://www.gototrafficschool.com/states/nebraska"
+        },
+        {
+          "kind": "claim",
+          "text": "Is your Nebraska traffic school course DMV-approved? Our course is designed for Nebraska drivers and is accepte",
+          "url": "https://www.gototrafficschool.com/states/nebraska"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/nebraska"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Nebraska-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Nebraska-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Nebraska-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:NJ": {
+      "school": "gototrafficschool",
+      "state": "new-jersey",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "GoToTrafficSchool.com",
+          "url": "https://www.trafficschoolpicker.com/new-jersey (directory: data-count=\"directory\">86 state-licensed traffic schools in New Jersey Source: Official New Jersey DMV records · Last verified 2026-11-01)"
+        },
+        {
+          "kind": "page",
+          "text": "6566 chars",
+          "url": "https://www.gototrafficschool.com/states/new-jersey"
+        },
+        {
+          "kind": "page",
+          "text": "34514 chars",
+          "url": "https://www.gototrafficschool.com/info2/New-Jersey-Traffic-Ticket.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "t New Jersey Traffic Ticket by taking a DMV-approved traffic school. And ours is the very best. Each year, thous",
+          "url": "https://www.gototrafficschool.com/info2/New-Jersey-Traffic-Ticket.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "insurance reduction. It never hurts to check with your court’s judge to make sure before signing up for the course. What",
+          "url": "https://www.gototrafficschool.com/info2/New-Jersey-Traffic-Ticket.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:NM": {
+      "school": "gototrafficschool",
+      "state": "new-mexico",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5076 chars",
+          "url": "https://www.gototrafficschool.com/states/new-mexico"
+        },
+        {
+          "kind": "claim",
+          "text": "s your New Mexico traffic school course DMV-approved? Our course is designed for New Mexico drivers and is accep",
+          "url": "https://www.gototrafficschool.com/states/new-mexico"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/new-mexico"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:NV": {
+      "school": "gototrafficschool",
+      "state": "nevada",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "Go To Traffic School",
+          "url": "https://www.trafficschoolpicker.com/nevada (directory: data-count=\"directory\">18 DMV-licensed online traffic schools in Nevada Source: Official Nevada DMV records · Last verified 2026-06-01)"
+        },
+        {
+          "kind": "page",
+          "text": "6388 chars",
+          "url": "https://www.gototrafficschool.com/states/nevada"
+        },
+        {
+          "kind": "claim",
+          "text": "1 Is your Nevada traffic safety course DMV-approved? The course is designed for applicable Nevada requirements.",
+          "url": "https://www.gototrafficschool.com/states/nevada"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Nevada-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Nevada-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Nevada-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:NY": {
+      "school": "gototrafficschool",
+      "state": "new-york",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "7247 chars",
+          "url": "https://www.gototrafficschool.com/states/new-york"
+        },
+        {
+          "kind": "claim",
+          "text": "our full FAQ page. 1 Is this a New York DMV-approved PIRP course? Yes. This online Point and Insurance Reduction",
+          "url": "https://www.gototrafficschool.com/states/new-york"
+        },
+        {
+          "kind": "page",
+          "text": "35328 chars",
+          "url": "https://www.gototrafficschool.com/info2/New-York-Defensive-Driving.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "ew York online defensive driving course court approved in my state? While the GoToTrafficSchool.com New York New Y",
+          "url": "https://www.gototrafficschool.com/info2/New-York-Defensive-Driving.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:OK": {
+      "school": "gototrafficschool",
+      "state": "oklahoma",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6344 chars",
+          "url": "https://www.gototrafficschool.com/states/oklahoma"
+        },
+        {
+          "kind": "claim",
+          "text": "Is your Oklahoma traffic school course DMV-approved? Our course is designed for Oklahoma drivers and is accepte",
+          "url": "https://www.gototrafficschool.com/states/oklahoma"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/oklahoma"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Oklahoma-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Oklahoma-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Oklahoma-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:OR": {
+      "school": "gototrafficschool",
+      "state": "oregon",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "CyberActive Incorporated",
+          "url": "https://www.trafficschoolpicker.com/oregon (directory: data-count=\"directory\">13 state-licensed traffic schools in Oregon Source: Official Oregon DMV records · Last verified 2026-11-01)"
+        },
+        {
+          "kind": "page",
+          "text": "7148 chars",
+          "url": "https://www.gototrafficschool.com/states/oregon"
+        },
+        {
+          "kind": "page",
+          "text": "33846 chars",
+          "url": "https://www.gototrafficschool.com/info2/Oregon-Traffic-Court.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "egon online defensive driving course is court approved in my state, but how do I know for sure? You can check with",
+          "url": "https://www.gototrafficschool.com/info2/Oregon-Traffic-Court.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:RI": {
+      "school": "gototrafficschool",
+      "state": "rhode-island",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6568 chars",
+          "url": "https://www.gototrafficschool.com/states/rhode-island"
+        },
+        {
+          "kind": "claim",
+          "text": "your Rhode Island traffic school course DMV-approved? Our course is designed for Rhode Island drivers and is acc",
+          "url": "https://www.gototrafficschool.com/states/rhode-island"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/rhode-island"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Rhode-Island-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Rhode-Island-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Rhode-Island-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:SD": {
+      "school": "gototrafficschool",
+      "state": "south-dakota",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6384 chars",
+          "url": "https://www.gototrafficschool.com/states/south-dakota"
+        },
+        {
+          "kind": "claim",
+          "text": "your South Dakota traffic school course DMV-approved? Our course is designed for South Dakota drivers and is acc",
+          "url": "https://www.gototrafficschool.com/states/south-dakota"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/south-dakota"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/South-Dakota-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/South-Dakota-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/South-Dakota-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:TN": {
+      "school": "gototrafficschool",
+      "state": "tennessee",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "7857 chars",
+          "url": "https://www.gototrafficschool.com/states/tennessee"
+        },
+        {
+          "kind": "claim",
+          "text": "Is your Tennessee traffic school course DMV-approved? Our course is designed for Tennessee drivers and is accept",
+          "url": "https://www.gototrafficschool.com/states/tennessee"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/tennessee"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Tennessee-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Tennessee-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Tennessee-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:TX": {
+      "school": "gototrafficschool",
+      "state": "texas",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6248 chars",
+          "url": "https://www.gototrafficschool.com/states/texas"
+        },
+        {
+          "kind": "claim",
+          "text": ". 1 Is your Texas traffic school course DMV-approved? Our course is designed for Texas drivers and is accepted b",
+          "url": "https://www.gototrafficschool.com/states/texas"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/texas"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Texas-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Texas-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Texas-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:UT": {
+      "school": "gototrafficschool",
+      "state": "utah",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6301 chars",
+          "url": "https://www.gototrafficschool.com/states/utah"
+        },
+        {
+          "kind": "claim",
+          "text": "e. 1 Is your Utah traffic school course DMV-approved? Our course is designed for Utah drivers and is accepted by",
+          "url": "https://www.gototrafficschool.com/states/utah"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/utah"
+        },
+        {
+          "kind": "page",
+          "text": "33850 chars",
+          "url": "https://www.gototrafficschool.com/info2/Defensive-Driving-Utah.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:VA": {
+      "school": "gototrafficschool",
+      "state": "virginia",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "8747 chars",
+          "url": "https://www.gototrafficschool.com/states/virginia"
+        },
+        {
+          "kind": "claim",
+          "text": "Is your Virginia traffic school course DMV-approved? Our course is designed for Virginia drivers and is accepte",
+          "url": "https://www.gototrafficschool.com/states/virginia"
+        },
+        {
+          "kind": "court",
+          "text": "is designed for Virginia drivers and is accepted by participating courts for eligible traffic violations. Confirm that the course sa",
+          "url": "https://www.gototrafficschool.com/states/virginia"
+        },
+        {
+          "kind": "page",
+          "text": "34536 chars",
+          "url": "https://www.gototrafficschool.com/info2/Virginia-DMV-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "ill notify you via e-mail. You can then check with your court to make sure that they have received your certificate of co",
+          "url": "https://www.gototrafficschool.com/info2/Virginia-DMV-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:WA": {
+      "school": "gototrafficschool",
+      "state": "washington",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6364 chars",
+          "url": "https://www.gototrafficschool.com/states/washington"
+        },
+        {
+          "kind": "claim",
+          "text": "s your Washington traffic school course DMV-approved? Our course is designed for Washington drivers and is accep",
+          "url": "https://www.gototrafficschool.com/states/washington"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/washington"
+        },
+        {
+          "kind": "page",
+          "text": "17727 chars",
+          "url": "https://www.gototrafficschool.com/register/Alabama_Washington-County-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:WI": {
+      "school": "gototrafficschool",
+      "state": "wisconsin",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "7077 chars",
+          "url": "https://www.gototrafficschool.com/states/wisconsin"
+        },
+        {
+          "kind": "page",
+          "text": "3458 chars",
+          "url": "https://www.gototrafficschool.com/articles/Warmer-Weather-Means-Increased-Police-Presence-Throughout-Wisconsin.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:WV": {
+      "school": "gototrafficschool",
+      "state": "west-virginia",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6391 chars",
+          "url": "https://www.gototrafficschool.com/states/west-virginia"
+        },
+        {
+          "kind": "claim",
+          "text": "our West Virginia traffic school course DMV-approved? Our course is designed for West Virginia drivers and is ac",
+          "url": "https://www.gototrafficschool.com/states/west-virginia"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/west-virginia"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/West-Virginia-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/West-Virginia-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/West-Virginia-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "gototrafficschool:WY": {
+      "school": "gototrafficschool",
+      "state": "wyoming",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6334 chars",
+          "url": "https://www.gototrafficschool.com/states/wyoming"
+        },
+        {
+          "kind": "claim",
+          "text": "1 Is your Wyoming traffic school course DMV-approved? Our course is designed for Wyoming drivers and is accepted",
+          "url": "https://www.gototrafficschool.com/states/wyoming"
+        },
+        {
+          "kind": "court",
+          "text": "the final exam. Court Approval Required Accepted by most courts. Switch between any device Progress saves automatically. Ba",
+          "url": "https://www.gototrafficschool.com/states/wyoming"
+        },
+        {
+          "kind": "page",
+          "text": "8145 chars",
+          "url": "https://www.gototrafficschool.com/register/Wyoming-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "claim",
+          "text": "time. Lowest Price Guarantee Affordable state-approved courses with no hidden fees. Trusted by 10+ Million Drivers",
+          "url": "https://www.gototrafficschool.com/register/Wyoming-Defensive-Driving-Online-Traffic-School.aspx"
+        },
+        {
+          "kind": "court",
+          "text": "r own pace Certificate after completion Accepted by most courts Confirm acceptance with your court before enrolling. $40.00",
+          "url": "https://www.gototrafficschool.com/register/Wyoming-Defensive-Driving-Online-Traffic-School.aspx"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "highwaytrafficschool:FL": {
+      "school": "highwaytrafficschool",
+      "state": "florida",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "Highway Traffic School",
+          "url": "https://www.trafficschoolpicker.com/florida (directory: data-count=\"directory\">58 state-licensed traffic schools in Florida Source: Official Florida DMV records · Last verified 2026-09-24)"
+        },
+        {
+          "kind": "page",
+          "text": "13188 chars",
+          "url": "https://www.highwaytrafficschool.com/florida/"
+        },
+        {
+          "kind": "claim",
+          "text": "ass E Knowledge Exam online through our state-approved system. You get three attempts, 100 practice questions, roa",
+          "url": "https://www.highwaytrafficschool.com/florida/"
+        },
+        {
+          "kind": "page",
+          "text": "7978 chars",
+          "url": "https://www.highwaytrafficschool.com/florida/tlsae-vs-dets/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "highwaytrafficschool:TX": {
+      "school": "highwaytrafficschool",
+      "state": "texas",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "7617 chars",
+          "url": "https://www.highwaytrafficschool.com/texas/how-it-works/"
+        },
+        {
+          "kind": "page",
+          "text": "9110 chars",
+          "url": "https://www.highwaytrafficschool.com/texas/ticket-dismissal/"
+        },
+        {
+          "kind": "claim",
+          "text": "is $25 with nothing added at checkout — TDLR-approved, License CP994. The certificate is free and instant. The on",
+          "url": "https://www.highwaytrafficschool.com/texas/ticket-dismissal/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:AK": {
+      "school": "idrivesafely",
+      "state": "alaska",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "16397 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/alaska/"
+        },
+        {
+          "kind": "claim",
+          "text": "3; 4.8/5 &middot; 28,237 reviews Alaska DMV-approved course Reduce points and lower your insurance Virtual cours",
+          "url": "https://www.idrivesafely.com/defensive-driving/alaska/"
+        },
+        {
+          "kind": "page",
+          "text": "6843 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/alaska/fines-and-penalties/"
+        },
+        {
+          "kind": "claim",
+          "text": "ska Traffic Fines &#038; Tickets Alaska DMV-approved course Reduce points and lower your insurance Virtual cours",
+          "url": "https://www.idrivesafely.com/defensive-driving/alaska/fines-and-penalties/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:AL": {
+      "school": "idrivesafely",
+      "state": "alabama",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "14632 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/alabama/"
+        },
+        {
+          "kind": "claim",
+          "text": "can be achieved through completion of a state-approved defensive driving course. The court may still give you a da",
+          "url": "https://www.idrivesafely.com/defensive-driving/alabama/"
+        },
+        {
+          "kind": "court",
+          "text": "Defensive Driving Course Alabama | Court Approved | Online About Us Help Center Safe Driving Tips Log In We B",
+          "url": "https://www.idrivesafely.com/defensive-driving/alabama/"
+        },
+        {
+          "kind": "page",
+          "text": "5463 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/alabama/fines-and-penalties/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:AR": {
+      "school": "idrivesafely",
+      "state": "arkansas",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6946 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/arkansas/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:CO": {
+      "school": "idrivesafely",
+      "state": "colorado",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "14513 chars",
+          "url": "https://www.idrivesafely.com/traffic-school/colorado/"
+        },
+        {
+          "kind": "court",
+          "text": "Defensive Driving Course Colorado | Court Approved | Online About Us Help Center Safe Driving Tips Log In We B",
+          "url": "https://www.idrivesafely.com/traffic-school/colorado/"
+        },
+        {
+          "kind": "page",
+          "text": "5223 chars",
+          "url": "https://www.idrivesafely.com/dmv/colorado/drivers-license/appointments/"
+        },
+        {
+          "kind": "court",
+          "text": "interested in: Colorado Traffic School Court-approved online course Dismiss traffic ticket Keep points off your r",
+          "url": "https://www.idrivesafely.com/dmv/colorado/drivers-license/appointments/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:CT": {
+      "school": "idrivesafely",
+      "state": "connecticut",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6584 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/connecticut/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:DE": {
+      "school": "idrivesafely",
+      "state": "delaware",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "4901 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/delaware/"
+        },
+        {
+          "kind": "claim",
+          "text": "drivers 18 years and older can take the state-approved 6-hour Delaware Insurance Reduction Course to save on their",
+          "url": "https://www.idrivesafely.com/defensive-driving/delaware/"
+        },
+        {
+          "kind": "page",
+          "text": "12623 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/delaware/online/"
+        },
+        {
+          "kind": "claim",
+          "text": "iolations. Each of our courses has been approved by the Delaware Division of Motor Vehicles (DMV), for both court-ordered defensive d",
+          "url": "https://www.idrivesafely.com/defensive-driving/delaware/online/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:GA": {
+      "school": "idrivesafely",
+      "state": "georgia",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "9751 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/georgia/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "by the state of Georgia? I Drive Safely is not currently an approved course provider in Georgia. However, you still may be able to take one of our courses",
+          "url": "https://www.idrivesafely.com/defensive-driving/georgia/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:HI": {
+      "school": "idrivesafely",
+      "state": "hawaii",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "7002 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/hawaii/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:IA": {
+      "school": "idrivesafely",
+      "state": "iowa",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6655 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/iowa/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:ID": {
+      "school": "idrivesafely",
+      "state": "idaho",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "14472 chars",
+          "url": "https://www.idrivesafely.com/traffic-school/idaho/"
+        },
+        {
+          "kind": "claim",
+          "text": "33; 4.8/5 &middot; 28,237 reviews Idaho DMV-approved Study at your own pace Fun, interactive multimedia Fast cer",
+          "url": "https://www.idrivesafely.com/traffic-school/idaho/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:IN": {
+      "school": "idrivesafely",
+      "state": "indiana",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5108 chars",
+          "url": "https://www.idrivesafely.com/traffic-school/indiana/"
+        },
+        {
+          "kind": "claim",
+          "text": "ved Our Indiana traffic school is fully approved by the Indiana BMV to fulfill court requirements, reduce points, or give you a",
+          "url": "https://www.idrivesafely.com/traffic-school/indiana/"
+        },
+        {
+          "kind": "page",
+          "text": "9921 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/indiana/"
+        },
+        {
+          "kind": "claim",
+          "text": "ing on your driving record – complete a state-approved defensive driving course. Indiana Defensive Driving Course",
+          "url": "https://www.idrivesafely.com/defensive-driving/indiana/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:KS": {
+      "school": "idrivesafely",
+      "state": "kansas",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "13812 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/kansas/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:LA": {
+      "school": "idrivesafely",
+      "state": "louisiana",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "13588 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/louisiana/"
+        },
+        {
+          "kind": "court",
+          "text": "&gt; Louisiana 100% Online · Louisiana Court-Approved Louisiana Defensive Driving &#9733;&#9733;&#9733;&#9733;&#9",
+          "url": "https://www.idrivesafely.com/defensive-driving/louisiana/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:MN": {
+      "school": "idrivesafely",
+      "state": "minnesota",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "Advancing the Experienced Driver",
+          "url": "https://www.trafficschoolpicker.com/minnesota (directory: data-count=\"directory\">28 state-licensed traffic schools in Minnesota Source: Official Minnesota DMV records · Last verified 2026-11-01)"
+        },
+        {
+          "kind": "page",
+          "text": "6870 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/minnesota/"
+        },
+        {
+          "kind": "claim",
+          "text": "ills and save you money. And since it’s approved by the Minnesota Department of Public Safety, you’ll be confident that you’re getting a",
+          "url": "https://www.idrivesafely.com/defensive-driving/minnesota/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:MO": {
+      "school": "idrivesafely",
+      "state": "missouri",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "15148 chars",
+          "url": "https://www.idrivesafely.com/driver-improvement/missouri/"
+        },
+        {
+          "kind": "claim",
+          "text": "ouri driver improvement course is fully approved by the Missouri Safety Center at the University of Central Missouri and meets all require",
+          "url": "https://www.idrivesafely.com/driver-improvement/missouri/"
+        },
+        {
+          "kind": "court",
+          "text": "r may not attend a course. Please note: permission from your court is granted on a case-by-case basis, and is NOT mandatory. Y",
+          "url": "https://www.idrivesafely.com/driver-improvement/missouri/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:MS": {
+      "school": "idrivesafely",
+      "state": "mississippi",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6251 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/mississippi/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:MT": {
+      "school": "idrivesafely",
+      "state": "montana",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6512 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/montana/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:NC": {
+      "school": "idrivesafely",
+      "state": "north-carolina",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "4270 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/north-carolina/"
+        },
+        {
+          "kind": "page",
+          "text": "4936 chars",
+          "url": "https://www.idrivesafely.com/dmv/north-carolina/insurance/points/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:ND": {
+      "school": "idrivesafely",
+      "state": "north-dakota",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "12160 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/north-dakota/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:NE": {
+      "school": "idrivesafely",
+      "state": "nebraska",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5491 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/nebraska/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:NJ": {
+      "school": "idrivesafely",
+      "state": "new-jersey",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "DefensiveDriving.com",
+          "url": "https://www.trafficschoolpicker.com/new-jersey (directory: data-count=\"directory\">86 state-licensed traffic schools in New Jersey Source: Official New Jersey DMV records · Last verified 2026-11-01)"
+        },
+        {
+          "kind": "page",
+          "text": "16309 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/new-jersey/online/"
+        },
+        {
+          "kind": "claim",
+          "text": ".8/5 &middot; 28,237 reviews New Jersey state-approved course — remove 2 points 3-year insurance discount with ext",
+          "url": "https://www.idrivesafely.com/defensive-driving/new-jersey/online/"
+        },
+        {
+          "kind": "page",
+          "text": "6912 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/new-jersey/fines-and-penalties/"
+        },
+        {
+          "kind": "claim",
+          "text": "Traffic Fines &#038; Tickets New Jersey state-approved course — remove 2 points 3-year insurance discount with ext",
+          "url": "https://www.idrivesafely.com/defensive-driving/new-jersey/fines-and-penalties/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:NM": {
+      "school": "idrivesafely",
+      "state": "new-mexico",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "13237 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/new-mexico/online/"
+        },
+        {
+          "kind": "claim",
+          "text": "tions Course Information Is this course licensed by the Traffic Safety Bureau? Yes! Our New Mexico defensive driving courses are licensed",
+          "url": "https://www.idrivesafely.com/defensive-driving/new-mexico/online/"
+        },
+        {
+          "kind": "page",
+          "text": "6447 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/new-mexico/fines-and-penalties/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:NV": {
+      "school": "idrivesafely",
+      "state": "nevada",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "I Drive Safely",
+          "url": "https://www.trafficschoolpicker.com/nevada (directory: data-count=\"directory\">18 DMV-licensed online traffic schools in Nevada Source: Official Nevada DMV records · Last verified 2026-06-01)"
+        },
+        {
+          "kind": "page",
+          "text": "13200 chars",
+          "url": "https://www.idrivesafely.com/traffic-school/nevada/"
+        },
+        {
+          "kind": "claim",
+          "text": "guidelines. Our online course is fully licensed by the Nevada Department of Motor Vehicles, and will enable you to: Satisfy a court",
+          "url": "https://www.idrivesafely.com/traffic-school/nevada/"
+        },
+        {
+          "kind": "page",
+          "text": "10683 chars",
+          "url": "https://www.idrivesafely.com/dmv/nevada/laws/traffic-tickets/"
+        },
+        {
+          "kind": "claim",
+          "text": "nse that isn’t suspended. The course is approved by the Nevada DMV . You haven’t taken traffic school in the last 12 months. Y",
+          "url": "https://www.idrivesafely.com/dmv/nevada/laws/traffic-tickets/"
+        },
+        {
+          "kind": "court",
+          "text": "mail, but if you are unsure, you should check with your court to verify. Think about hiring a traffic ticket attorney : A",
+          "url": "https://www.idrivesafely.com/dmv/nevada/laws/traffic-tickets/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:NY": {
+      "school": "idrivesafely",
+      "state": "new-york",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "I DRIVE SAFELY",
+          "url": "https://www.trafficschoolpicker.com/new-york (directory: data-count=\"directory\">20 state-licensed traffic schools in New York Source: Official New York DMV records · Last verified 2026-06-01)"
+        },
+        {
+          "kind": "page",
+          "text": "15057 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/new-york/pirp/"
+        },
+        {
+          "kind": "claim",
+          "text": "eduction Program (PIRP) course is fully approved by the New York State DMV and 100% online, which means you set the schedule. You deci",
+          "url": "https://www.idrivesafely.com/defensive-driving/new-york/pirp/"
+        },
+        {
+          "kind": "page",
+          "text": "5310 chars",
+          "url": "https://www.idrivesafely.com/dmv/new-york/drivers-license/appointments/"
+        },
+        {
+          "kind": "claim",
+          "text": "d in: New York Defensive Driving Course DMV-approved online course Avoid long lines at the DMV Get 10% insurance",
+          "url": "https://www.idrivesafely.com/dmv/new-york/drivers-license/appointments/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:OH": {
+      "school": "idrivesafely",
+      "state": "ohio",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "13292 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/ohio/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:OK": {
+      "school": "idrivesafely",
+      "state": "oklahoma",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5260 chars",
+          "url": "https://www.idrivesafely.com/dmv/oklahoma/appointments/"
+        },
+        {
+          "kind": "claim",
+          "text": "appointment, simply consult the list of state-approved official exam stations . If you don’t see a phone number li",
+          "url": "https://www.idrivesafely.com/dmv/oklahoma/appointments/"
+        },
+        {
+          "kind": "court",
+          "text": "d in: Oklahoma Defensive Driving Course Court-approved course Dismiss your traffic ticket Reduce points on record",
+          "url": "https://www.idrivesafely.com/dmv/oklahoma/appointments/"
+        },
+        {
+          "kind": "page",
+          "text": "13206 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/oklahoma/"
+        },
+        {
+          "kind": "court",
+          "text": "Defensive Driving Course Oklahoma | Court Approved | Online About Us Help Center Safe Driving Tips Log In We B",
+          "url": "https://www.idrivesafely.com/defensive-driving/oklahoma/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:OR": {
+      "school": "idrivesafely",
+      "state": "oregon",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "13368 chars",
+          "url": "https://www.idrivesafely.com/traffic-school/oregon/"
+        },
+        {
+          "kind": "court",
+          "text": "raffic School &gt; Oregon 100% Online · Approved by Most Oregon Courts Oregon Traffic School &#9733;&#9733;&#9733;&#9733;&#9733; 4",
+          "url": "https://www.idrivesafely.com/traffic-school/oregon/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:RI": {
+      "school": "idrivesafely",
+      "state": "rhode-island",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6065 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/rhode-island/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:SD": {
+      "school": "idrivesafely",
+      "state": "south-dakota",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6017 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/south-dakota/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:TN": {
+      "school": "idrivesafely",
+      "state": "tennessee",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "13798 chars",
+          "url": "https://www.idrivesafely.com/traffic-school/tennessee/"
+        },
+        {
+          "kind": "claim",
+          "text": "e online traffic school course is fully approved by the Tennessee Department of Safety and Homeland Security (DSHS). We teamed up with c",
+          "url": "https://www.idrivesafely.com/traffic-school/tennessee/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:TX": {
+      "school": "idrivesafely",
+      "state": "texas",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "I DRIVE SAFELY LLC",
+          "url": "https://www.trafficschoolpicker.com/texas (directory: data-count=\"directory\">845 DMV-licensed online traffic schools in Texas Source: Official Texas DMV records · Last verified 2026-08-01)"
+        },
+        {
+          "kind": "page",
+          "text": "13003 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/texas/"
+        },
+        {
+          "kind": "claim",
+          "text": "drivers to choose from. Our courses are approved by the Texas Department of Licensing and Regulation, which means that no matter whe",
+          "url": "https://www.idrivesafely.com/defensive-driving/texas/"
+        },
+        {
+          "kind": "page",
+          "text": "5389 chars",
+          "url": "https://www.idrivesafely.com/dmv/texas/laws/new-traffic-laws/"
+        },
+        {
+          "kind": "claim",
+          "text": "in: Texas Defensive Driving Course TEA/TDLR-approved course Dismiss ticket and clear your record Accessible on a",
+          "url": "https://www.idrivesafely.com/dmv/texas/laws/new-traffic-laws/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:UT": {
+      "school": "idrivesafely",
+      "state": "utah",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5429 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/utah/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:VA": {
+      "school": "idrivesafely",
+      "state": "virginia",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "I Drive Safely, LLC",
+          "url": "data/directory-recheck-state-lists-2026-11-17.jsonl"
+        },
+        {
+          "kind": "page",
+          "text": "19691 chars",
+          "url": "https://www.idrivesafely.com/driver-improvement/virginia/"
+        },
+        {
+          "kind": "claim",
+          "text": "ddot; 28,237 reviews Virginia court and DMV approved Earn a 5-point safe driver credit Keep your car insurance b",
+          "url": "https://www.idrivesafely.com/driver-improvement/virginia/"
+        },
+        {
+          "kind": "court",
+          "text": "vement Course Online &#8211; DMV &#038; Court Approved About Us Help Center Safe Driving Tips Log In We Build Safe",
+          "url": "https://www.idrivesafely.com/driver-improvement/virginia/"
+        },
+        {
+          "kind": "page",
+          "text": "7385 chars",
+          "url": "https://www.idrivesafely.com/driver-improvement/virginia/clinic-va/"
+        },
+        {
+          "kind": "claim",
+          "text": "r Improvement Clinic Virginia court and DMV approved Earn a 5-point safe driver credit Keep your car insurance b",
+          "url": "https://www.idrivesafely.com/driver-improvement/virginia/clinic-va/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:WA": {
+      "school": "idrivesafely",
+      "state": "washington",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5398 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/washington/"
+        },
+        {
+          "kind": "court",
+          "text": "nsive Driving Course Washington State | Court Approved | Online About Us Help Center Safe Driving Tips Log In We B",
+          "url": "https://www.idrivesafely.com/defensive-driving/washington/"
+        },
+        {
+          "kind": "page",
+          "text": "15975 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/washington/4-hour/"
+        },
+        {
+          "kind": "court",
+          "text": "7 reviews Approved by Washington courts Check with your court before you enroll Online – study when and where you want Ea",
+          "url": "https://www.idrivesafely.com/defensive-driving/washington/4-hour/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:WI": {
+      "school": "idrivesafely",
+      "state": "wisconsin",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "4461 chars",
+          "url": "https://www.idrivesafely.com/traffic-school/wisconsin/"
+        },
+        {
+          "kind": "claim",
+          "text": "need to fulfill a DMV requirement, our state-approved online course is the best option for you. Wisconsin Traffic",
+          "url": "https://www.idrivesafely.com/traffic-school/wisconsin/"
+        },
+        {
+          "kind": "court",
+          "text": "raffic citation. You’ll need to request permission from your court to do so; once granted, you can work through our online cou",
+          "url": "https://www.idrivesafely.com/traffic-school/wisconsin/"
+        },
+        {
+          "kind": "page",
+          "text": "5695 chars",
+          "url": "https://www.idrivesafely.com/dmv/wisconsin/appointments/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:WV": {
+      "school": "idrivesafely",
+      "state": "west-virginia",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5528 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/west-virginia/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "idrivesafely:WY": {
+      "school": "idrivesafely",
+      "state": "wyoming",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5652 chars",
+          "url": "https://www.idrivesafely.com/defensive-driving/wyoming/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:AK": {
+      "school": "trafficschoolonline",
+      "state": "alaska",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5076 chars",
+          "url": "https://www.trafficschoolonline.com/state/alaska-defensive-driving/"
+        },
+        {
+          "kind": "claim",
+          "text": "rt 7 days a week. Is this course Alaska state approved? Yes, TrafficSchoolOnline is an approved provider. We are a",
+          "url": "https://www.trafficschoolonline.com/state/alaska-defensive-driving/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:AL": {
+      "school": "trafficschoolonline",
+      "state": "alabama",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3466 chars",
+          "url": "https://www.trafficschoolonline.com/state/alabama-traffic-school/"
+        },
+        {
+          "kind": "claim",
+          "text": "drivers clear their ticket by taking a state approved traffic school course. By taking the simple, easy-to-follow",
+          "url": "https://www.trafficschoolonline.com/state/alabama-traffic-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:AR": {
+      "school": "trafficschoolonline",
+      "state": "arkansas",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3915 chars",
+          "url": "https://www.trafficschoolonline.com/state/arkansas-traffic-school/"
+        },
+        {
+          "kind": "claim",
+          "text": "drivers clear their ticket by taking a state approved traffic school course. By taking our simple, easy-to-follow",
+          "url": "https://www.trafficschoolonline.com/state/arkansas-traffic-school/"
+        },
+        {
+          "kind": "court",
+          "text": "ne traffic school course: You must have permission from your court to take a traffic school program You may have your violatio",
+          "url": "https://www.trafficschoolonline.com/state/arkansas-traffic-school/"
+        },
+        {
+          "kind": "page",
+          "text": "5384 chars",
+          "url": "https://www.trafficschoolonline.com/state/arkansas-traffic-school-2/"
+        },
+        {
+          "kind": "claim",
+          "text": "drivers clear their ticket by taking a state approved traffic school course. By taking our simple, easy-to-follow",
+          "url": "https://www.trafficschoolonline.com/state/arkansas-traffic-school-2/"
+        },
+        {
+          "kind": "court",
+          "text": "ne traffic school course: You must have permission from your court to take a traffic school program You may have your violatio",
+          "url": "https://www.trafficschoolonline.com/state/arkansas-traffic-school-2/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:CA": {
+      "school": "trafficschoolonline",
+      "state": "california",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "5 D O L L A R TRAFFIC SCHOOL ONLINE",
+          "url": "https://www.trafficschoolpicker.com/california (directory: data-count=\"directory\">218 DMV-licensed online traffic schools in California Source: Official California DMV records · Last verified 2026-11-01)"
+        },
+        {
+          "kind": "page",
+          "text": "8813 chars",
+          "url": "https://www.trafficschoolonline.com/state/california-traffic-school/"
+        },
+        {
+          "kind": "claim",
+          "text": "l Online is a licensed provider. We are licensed by the California Department of Motor Vehicles. Our license number is E1901. Our license",
+          "url": "https://www.trafficschoolonline.com/state/california-traffic-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:CO": {
+      "school": "trafficschoolonline",
+      "state": "colorado",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "4328 chars",
+          "url": "https://www.trafficschoolonline.com/state/colorado-driver-improvement/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:CT": {
+      "school": "trafficschoolonline",
+      "state": "connecticut",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3580 chars",
+          "url": "https://www.trafficschoolonline.com/state/connecticut-traffic-school/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "POPULAR Driver Improvement This course is not officially approved in the state of Connecticut. Contact your individual court or auto insurance company to",
+          "url": "https://www.trafficschoolonline.com/state/connecticut-traffic-school/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "ovider to take this course. This course is not approved with the courts for ticket dismissal. The Connecticut traffic school course is designed to be ef",
+          "url": "https://www.trafficschoolonline.com/state/connecticut-traffic-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:DE": {
+      "school": "trafficschoolonline",
+      "state": "delaware",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "7079 chars",
+          "url": "https://www.trafficschoolonline.com/state/delaware-defensive-driving/"
+        },
+        {
+          "kind": "claim",
+          "text": "to your driving record. Is this course state-approved? Yes. Both our 6-hour and 3-hour defensive driving courses",
+          "url": "https://www.trafficschoolonline.com/state/delaware-defensive-driving/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:FL": {
+      "school": "trafficschoolonline",
+      "state": "florida",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "Traffic School Online.com",
+          "url": "https://www.trafficschoolpicker.com/florida (directory: data-count=\"directory\">58 state-licensed traffic schools in Florida Source: Official Florida DMV records · Last verified 2026-09-24)"
+        },
+        {
+          "kind": "page",
+          "text": "8740 chars",
+          "url": "https://www.trafficschoolonline.com/state/florida-adi-course/"
+        },
+        {
+          "kind": "claim",
+          "text": "river Improvement (ADI) course is fully approved by the Florida Department of Highway Safety and Motor Vehicles (FLHSMV / DHSMV Provid",
+          "url": "https://www.trafficschoolonline.com/state/florida-adi-course/"
+        },
+        {
+          "kind": "page",
+          "text": "17414 chars",
+          "url": "https://www.trafficschoolonline.com/state/florida-traffic-school/"
+        },
+        {
+          "kind": "claim",
+          "text": "olOnline is a licensed provider. We are licensed by the Florida Department of Motor Vehicles. Our School identification number is 2180",
+          "url": "https://www.trafficschoolonline.com/state/florida-traffic-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:GA": {
+      "school": "trafficschoolonline",
+      "state": "georgia",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3294 chars",
+          "url": "https://www.trafficschoolonline.com/state/georgia-defensive-driving/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "POPULAR Driver Improvement This course is not officially approved in the state of Georgia. Contact your individual court or auto insurance company to",
+          "url": "https://www.trafficschoolonline.com/state/georgia-defensive-driving/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:HI": {
+      "school": "trafficschoolonline",
+      "state": "hawaii",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3105 chars",
+          "url": "https://www.trafficschoolonline.com/state/hawaii-driver-education-program/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "POPULAR Driver Improvement This course is not officially approved in the state of Hawaii. Contact your individual court or auto insurance company to",
+          "url": "https://www.trafficschoolonline.com/state/hawaii-driver-education-program/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:IA": {
+      "school": "trafficschoolonline",
+      "state": "iowa",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3154 chars",
+          "url": "https://www.trafficschoolonline.com/state/iowa-driver-improvement/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "POPULAR Driver Improvement This course is not officially approved in the state of Iowa. Contact your individual court or auto insurance company to",
+          "url": "https://www.trafficschoolonline.com/state/iowa-driver-improvement/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:ID": {
+      "school": "trafficschoolonline",
+      "state": "idaho",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "4970 chars",
+          "url": "https://www.trafficschoolonline.com/state/idaho-defensive-driving/"
+        },
+        {
+          "kind": "claim",
+          "text": "ort 7 days a week. Is this course Idaho state approved? Yes. This course is fully certified by the Idaho Transport",
+          "url": "https://www.trafficschoolonline.com/state/idaho-defensive-driving/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:IN": {
+      "school": "trafficschoolonline",
+      "state": "indiana",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3430 chars",
+          "url": "https://www.trafficschoolonline.com/state/indiana-driver-improvement/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "POPULAR Driver Improvement This course is not officially approved in the state of Indiana. Contact your individual court or auto insurance company to",
+          "url": "https://www.trafficschoolonline.com/state/indiana-driver-improvement/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "ovider to take this course. This course is not approved with the courts for ticket dismissal. No Traveling, No Inconveniences, No Worries Avoid all the",
+          "url": "https://www.trafficschoolonline.com/state/indiana-driver-improvement/"
+        },
+        {
+          "kind": "claim",
+          "text": "drivers clear their ticket by taking a state approved traffic school course. By taking our simple, easy-to-follow",
+          "url": "https://www.trafficschoolonline.com/state/indiana-driver-improvement/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:KS": {
+      "school": "trafficschoolonline",
+      "state": "kansas",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3146 chars",
+          "url": "https://www.trafficschoolonline.com/state/kansas-driver-improvement/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "ovider to take this course. This course is not approved with the courts for ticket dismissal. No Traveling, No Inconveniences, No Worries Avoid all the",
+          "url": "https://www.trafficschoolonline.com/state/kansas-driver-improvement/"
+        },
+        {
+          "kind": "claim",
+          "text": "drivers clear their ticket by taking a state approved traffic school course. By taking our simple, easy-to-follow",
+          "url": "https://www.trafficschoolonline.com/state/kansas-driver-improvement/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:LA": {
+      "school": "trafficschoolonline",
+      "state": "louisiana",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3635 chars",
+          "url": "https://www.trafficschoolonline.com/state/louisiana-driver-improvement/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "ND AUTO INSURANCE DISCOUNTS This course is not officially approved in the state of Louisiana. Contact your individual court or auto insurance company to",
+          "url": "https://www.trafficschoolonline.com/state/louisiana-driver-improvement/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "ovider to take this course. This course is not approved with the courts for ticket dismissal. No Traveling, No Inconveniences, No Worries Avoid all the",
+          "url": "https://www.trafficschoolonline.com/state/louisiana-driver-improvement/"
+        },
+        {
+          "kind": "claim",
+          "text": "drivers clear their ticket by taking a state approved traffic school course. By taking our simple, easy-to-follow",
+          "url": "https://www.trafficschoolonline.com/state/louisiana-driver-improvement/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:MN": {
+      "school": "trafficschoolonline",
+      "state": "minnesota",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3162 chars",
+          "url": "https://www.trafficschoolonline.com/state/minnesota-traffic-school/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "POPULAR Driver Improvement This course is not officially approved in the state of Minnesota. Contact your individual court or auto insurance company to",
+          "url": "https://www.trafficschoolonline.com/state/minnesota-traffic-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:MO": {
+      "school": "trafficschoolonline",
+      "state": "missouri",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5055 chars",
+          "url": "https://www.trafficschoolonline.com/state/missouri-driver-improvement/"
+        },
+        {
+          "kind": "claim",
+          "text": "housands clear their ticket by taking a state approved traffic school course. By taking our simple, easy-to-follow",
+          "url": "https://www.trafficschoolonline.com/state/missouri-driver-improvement/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:MS": {
+      "school": "trafficschoolonline",
+      "state": "mississippi",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3178 chars",
+          "url": "https://www.trafficschoolonline.com/state/mississippi-traffic-school/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "POPULAR Driver Improvement This course is not officially approved in the state of Mississippi. Contact your individual court or auto insurance company to",
+          "url": "https://www.trafficschoolonline.com/state/mississippi-traffic-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:MT": {
+      "school": "trafficschoolonline",
+      "state": "montana",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3304 chars",
+          "url": "https://www.trafficschoolonline.com/state/montana-traffic-school/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "POPULAR Driver Improvement This course is not officially approved in the state of Montana. Contact your individual court or auto insurance company to",
+          "url": "https://www.trafficschoolonline.com/state/montana-traffic-school/"
+        },
+        {
+          "kind": "claim",
+          "text": "fety defensive driving program has been approved by the Montana Department of Transportation. $29.97 Start Course ➜ IMPORTANT Things t",
+          "url": "https://www.trafficschoolonline.com/state/montana-traffic-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:NC": {
+      "school": "trafficschoolonline",
+      "state": "north-carolina",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3355 chars",
+          "url": "https://www.trafficschoolonline.com/state/north-carolina-driver-improvement/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "POPULAR Driver Improvement This course is not officially approved in the state of North Carolina. Contact your individual court or auto insurance company to",
+          "url": "https://www.trafficschoolonline.com/state/north-carolina-driver-improvement/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:ND": {
+      "school": "trafficschoolonline",
+      "state": "north-dakota",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "Traffic School Online.com",
+          "url": "https://www.trafficschoolpicker.com/north-dakota (directory: data-count=\"directory\">17 DMV-licensed online traffic schools in North Dakota Source: Official North Dakota DMV records · Last verified 2026-08-13)"
+        },
+        {
+          "kind": "page",
+          "text": "3327 chars",
+          "url": "https://www.trafficschoolonline.com/state/north-dakota-point-reduction/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:NE": {
+      "school": "trafficschoolonline",
+      "state": "nebraska",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3310 chars",
+          "url": "https://www.trafficschoolonline.com/state/nebraska-driver-improvement/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "POPULAR Driver Improvement This course is not officially approved in the state of Nebraska. Contact your individual court or auto insurance company to",
+          "url": "https://www.trafficschoolonline.com/state/nebraska-driver-improvement/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:NJ": {
+      "school": "trafficschoolonline",
+      "state": "new-jersey",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "TrafficSchoolOnline.com",
+          "url": "https://www.trafficschoolpicker.com/new-jersey (directory: data-count=\"directory\">86 state-licensed traffic schools in New Jersey Source: Official New Jersey DMV records · Last verified 2026-11-01)"
+        },
+        {
+          "kind": "page",
+          "text": "4872 chars",
+          "url": "https://www.trafficschoolonline.com/state/new-jersey-defensive-driving/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:NM": {
+      "school": "trafficschoolonline",
+      "state": "new-mexico",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3259 chars",
+          "url": "https://www.trafficschoolonline.com/state/new-mexico-defensive-driving/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:NV": {
+      "school": "trafficschoolonline",
+      "state": "nevada",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5842 chars",
+          "url": "https://www.trafficschoolonline.com/state/nevada-traffic-school/"
+        },
+        {
+          "kind": "claim",
+          "text": "lOnline is an approved provider. We are approved by the Nevada DMV. Our school ID number is TSS000025400. How long is the cour",
+          "url": "https://www.trafficschoolonline.com/state/nevada-traffic-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:NY": {
+      "school": "trafficschoolonline",
+      "state": "new-york",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3561 chars",
+          "url": "https://www.trafficschoolonline.com/state/new-york-defensive-driving/"
+        },
+        {
+          "kind": "court",
+          "text": "you a full refund. Note: You must have permission from your court or insurance company to receive credit for taking a Traffic",
+          "url": "https://www.trafficschoolonline.com/state/new-york-defensive-driving/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:OH": {
+      "school": "trafficschoolonline",
+      "state": "ohio",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3051 chars",
+          "url": "https://www.trafficschoolonline.com/state/ohio-driving-school/"
+        },
+        {
+          "kind": "court",
+          "text": "you a full refund. Note: You must have permission from your court or insurance company to receive credit for taking a Traffic",
+          "url": "https://www.trafficschoolonline.com/state/ohio-driving-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:OK": {
+      "school": "trafficschoolonline",
+      "state": "oklahoma",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3339 chars",
+          "url": "https://www.trafficschoolonline.com/state/oklahoma-traffic-school/"
+        },
+        {
+          "kind": "court",
+          "text": "you a full refund. Note: You must have permission from your court or insurance company to receive credit for taking a Traffic",
+          "url": "https://www.trafficschoolonline.com/state/oklahoma-traffic-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:OR": {
+      "school": "trafficschoolonline",
+      "state": "oregon",
+      "status": "listed",
+      "evidence": [
+        {
+          "kind": "list",
+          "text": "ABC Traffic School, LLC",
+          "url": "https://www.trafficschoolpicker.com/oregon (directory: data-count=\"directory\">13 state-licensed traffic schools in Oregon Source: Official Oregon DMV records · Last verified 2026-11-01)"
+        },
+        {
+          "kind": "page",
+          "text": "6939 chars",
+          "url": "https://www.trafficschoolonline.com/state/oregon-driver-improvement/"
+        },
+        {
+          "kind": "claim",
+          "text": "drivers clear their tickets by taking a state-approved traffic school course. By taking our simple, easy-to-follow",
+          "url": "https://www.trafficschoolonline.com/state/oregon-driver-improvement/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:RI": {
+      "school": "trafficschoolonline",
+      "state": "rhode-island",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3187 chars",
+          "url": "https://www.trafficschoolonline.com/state/rhode-island-traffic-school/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "POPULAR Driver Improvement This course is not officially approved in the state of Rhode Island. Contact your individual court or auto insurance company to",
+          "url": "https://www.trafficschoolonline.com/state/rhode-island-traffic-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:SD": {
+      "school": "trafficschoolonline",
+      "state": "south-dakota",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3318 chars",
+          "url": "https://www.trafficschoolonline.com/state/south-dakota-defensive-driving/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "POPULAR Driver Improvement This course is not officially approved in the state of South Dakota. Contact your individual court or auto insurance company to",
+          "url": "https://www.trafficschoolonline.com/state/south-dakota-defensive-driving/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:TN": {
+      "school": "trafficschoolonline",
+      "state": "tennessee",
+      "status": "court",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3313 chars",
+          "url": "https://www.trafficschoolonline.com/state/tennessee-defensive-driving/"
+        },
+        {
+          "kind": "court",
+          "text": "you a full refund. Note: You must have permission from your court or insurance company to receive credit for taking a Traffic",
+          "url": "https://www.trafficschoolonline.com/state/tennessee-defensive-driving/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:TX": {
+      "school": "trafficschoolonline",
+      "state": "texas",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "13237 chars",
+          "url": "https://www.trafficschoolonline.com/state/texas-defensive-driving-course/"
+        },
+        {
+          "kind": "claim",
+          "text": "proved? Yes, TrafficSchoolOnline.com is approved by the Texas Department of Licensing and Regulation (TDLR). Our Course Provider num",
+          "url": "https://www.trafficschoolonline.com/state/texas-defensive-driving-course/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:UT": {
+      "school": "trafficschoolonline",
+      "state": "utah",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6184 chars",
+          "url": "https://www.trafficschoolonline.com/state/utah-traffic-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:VA": {
+      "school": "trafficschoolonline",
+      "state": "virginia",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "7853 chars",
+          "url": "https://www.trafficschoolonline.com/state/virginia-driver-improvement/"
+        },
+        {
+          "kind": "claim",
+          "text": "lOnline is an approved provider. We are approved by the Virginia DMV. Our School ID is #0335. How long is the course and is ther",
+          "url": "https://www.trafficschoolonline.com/state/virginia-driver-improvement/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:WA": {
+      "school": "trafficschoolonline",
+      "state": "washington",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "4784 chars",
+          "url": "https://www.trafficschoolonline.com/state/washington-traffic-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:WI": {
+      "school": "trafficschoolonline",
+      "state": "wisconsin",
+      "status": "unchecked",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "5336 chars",
+          "url": "https://www.trafficschoolonline.com/state/wisconsin-defensive-driving/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:WV": {
+      "school": "trafficschoolonline",
+      "state": "west-virginia",
+      "status": "disclaimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "3194 chars",
+          "url": "https://www.trafficschoolonline.com/state/west-virginia-traffic-school/"
+        },
+        {
+          "kind": "disclaim",
+          "text": "POPULAR Driver Improvement This course is not officially approved in the state of West Virginia. Contact your individual court or auto insurance company to",
+          "url": "https://www.trafficschoolonline.com/state/west-virginia-traffic-school/"
+        }
+      ],
+      "checked": "2026-11-25"
+    },
+    "trafficschoolonline:WY": {
+      "school": "trafficschoolonline",
+      "state": "wyoming",
+      "status": "claimed",
+      "evidence": [
+        {
+          "kind": "page",
+          "text": "6230 chars",
+          "url": "https://www.trafficschoolonline.com/state/wyoming-driver-improvement/"
+        },
+        {
+          "kind": "claim",
+          "text": "drivers clear their ticket by taking a state approved traffic school course. By taking our simple, easy-to-follow",
+          "url": "https://www.trafficschoolonline.com/state/wyoming-driver-improvement/"
+        }
+      ],
+      "checked": "2026-11-25"
+    }
+  }
+}
