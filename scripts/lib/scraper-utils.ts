@@ -127,8 +127,8 @@ export async function syncToNotion(
     }
 
     if (CAPTURE) {
-      appendFileSync(CAPTURE, JSON.stringify({ state: stateName, name: school.name, licence: school.licenseNumber || `${stateCode}-approved`, website: properties.Website?.url ?? "", existing: !!prior }) + "\n");
-      if (prior) updated++;
+      appendFileSync(CAPTURE, JSON.stringify({ state: stateName, name: school.name, licence: school.licenseNumber || `${stateCode}-approved`, website: properties.Website?.url ?? "", existing: !!match }) + "\n");
+      if (match) updated++;
       else created++;
       continue;
     }
