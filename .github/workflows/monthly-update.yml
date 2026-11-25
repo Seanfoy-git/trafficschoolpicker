@@ -76,7 +76,9 @@ jobs:
         run: npm run scrape:prices
 
       - name: Enrich new schools via Google Places API
-        run: npm run enrich:places
+        # Dry run unless --apply. Accepts a Places match only when its address (or,
+        # with no street address, its name) proves it is the school; writes no Notes.
+        run: npm run enrich:places -- --apply
 
       - name: Trigger Vercel redeploy
         env:

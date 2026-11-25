@@ -9,6 +9,7 @@ import { DirectoryIndex, junkReason, rowIdentity } from "../../lib/directory-fil
 config({ path: ".env.local" });
 import { makeNotionClient } from "./notion-client";
 import { logIssue } from "./issues";
+import { isHandSet } from "./directory-rows";
 
 const notion = makeNotionClient();
 const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB!;
@@ -25,9 +26,18 @@ export interface ScrapedSchool {
   notes: string;
 }
 
-/** The state's existing Directory rows, indexed by real licence and cleaned name (lib/directory-filter DirectoryIndex). */
-export async function getExistingSchools(stateName: string): Promise<DirectoryIndex> {
-  const rows: { id: string; name: string; licenseNumber: string }[] = [];
+/**
+ * The state's existing Directory rows, indexed by real licence and cleaned name
+ * (lib/directory-filter DirectoryIndex), plus the rows whose website a person owns
+ * (Website Source = Manual or Enrichment Status = Manual / Skipped), which a sync
+ * never overwrites (PR A, 17 Nov 2026).
+ */
+export class ExistingSchools extends DirectoryIndex {
+  readonly handSet = new Set<string>();
+}
+
+export async function getExistingSchools(stateName: string): Promise<ExistingSchools> {
+  const index = new ExistingSchools();
   let cursor: string | undefined;
   do {
     const response: any = await notion.databases.query({
@@ -40,11 +50,14 @@ export async function getExistingSchools(stateName: string): Promise<DirectoryIn
       const props = (page as any).properties;
       const name = (props["School Name"]?.title ?? []).map((t: any) => t.plain_text).join("");
       const licenseNumber = (props["License Number"]?.rich_text ?? []).map((t: any) => t.plain_text).join("");
-      if (name) rows.push({ id: page.id, name, licenseNumber });
+      if (!name) continue;
+      index.add(page.id, name, licenseNumber);
+      if (isHandSet({ websiteSource: props["Website Source"]?.select?.name ?? "", enrichmentStatus: props["Enrichment Status"]?.select?.name ?? "" }))
+        index.handSet.add(page.id);
     }
     cursor = response.has_more ? response.next_cursor ?? undefined : undefined;
   } while (cursor);
-  return new DirectoryIndex(rows);
+  return index;
 }
 
 export async function syncToNotion(
@@ -89,16 +102,23 @@ export async function syncToNotion(
       Source: { select: { name: sourceLabel } },
       "Date Scraped": { date: { start: TODAY } },
     };
-    if (school.website) {
+    const match = existing.match(school.name, school.licenseNumber || "");
+    // The regulator's own list gave a website: record where it came from. A website a
+    // person set (Website Source = Manual) is never replaced.
+    if (school.website && !(match && existing.handSet.has(match.id))) {
       const url = school.website.startsWith("http") ? school.website : `https://${school.website}`;
-      try { new URL(url); properties.Website = { url }; } catch { /* invalid URL, skip */ }
+      try {
+        new URL(url);
+        properties.Website = { url };
+        properties["Website Source"] = { select: { name: "State DMV" } };
+      } catch { /* invalid URL, skip */ }
     }
-    if (school.notes) {
+    // Notes only on a new row: an update must not erase what Notes holds (17 Nov 2026).
+    if (school.notes && !match) {
       properties.Notes = { rich_text: [{ text: { content: school.notes } }] };
     }
 
     try {
-      const match = existing.match(school.name, school.licenseNumber || "");
       if (match) {
         await notion.pages.update({ page_id: match.id, properties });
         updated++;
