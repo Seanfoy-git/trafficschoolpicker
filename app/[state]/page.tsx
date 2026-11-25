@@ -9,7 +9,7 @@ import {
   lowestDisplayedPrice,
   type VideoEntry,
 } from "@/lib/structured-data";
-import { cardCourseHours, loadStateData, noPriceLabel, ONLINE_COMPARISON_STATUSES, prosAgreeingWithRow } from "@/lib/state-page-data";
+import { cardCourseHours, loadStateData, noPriceLabel, ONLINE_COMPARISON_STATUSES, prosAgreeingWithRow, takeAgreeingWithRow } from "@/lib/state-page-data";
 import {
   comparisonH1,
   comparisonH2,
@@ -196,7 +196,13 @@ export default async function StatePage({ params }: Props) {
   const tier1Cards = comparison
     ? tier1Resolved.map(({ school, resolved }) => {
         const row = comparison.rows.find((r) => r.tier === 1 && r.slug === school.slug);
-        const agreed = { ...resolved, pros: prosAgreeingWithRow(resolved.pros, row, `${stateSlug}/${school.slug}`) };
+        const where = `${stateSlug}/${school.slug}`;
+        const agreed = {
+          ...resolved,
+          pros: prosAgreeingWithRow(resolved.pros, row, where),
+          cons: prosAgreeingWithRow(resolved.cons, row, where),
+          oneLiner: takeAgreeingWithRow(resolved.oneLiner, row, where),
+        };
         return agreed.priceSource
           ? { school, resolved: agreed }
           : { school, resolved: { ...agreed, price: null, priceDisplay: noPriceLabel(agreed) } };
@@ -221,6 +227,8 @@ export default async function StatePage({ params }: Props) {
     if (disp < minDisplayed) {
       minDisplayed = disp;
       cheapestId = school.id;
+    } else if (disp === minDisplayed) {
+      cheapestId = null; // a tie: no single school is "Lowest price"
     }
   }
   const badgesFor = (id: string): string[] => [
