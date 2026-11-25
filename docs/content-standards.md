@@ -7,6 +7,36 @@ as a checklist; this file is the canonical version.
 
 ---
 
+## 0. Write for the 95th percentile
+
+This isn't a legal site. It's meant to help someone holding a ticket. Solve for the
+typical reader and disclaim the edge case quietly. Sourcing (§1) decides what's true;
+this section decides what the reader sees first. When the two pull against each
+other, the facts stay and the noise goes.
+
+- **The first two sentences answer the typical reader**: a holder of that state's
+  licence with an ordinary speeding ticket. Not page metadata, not a notice, not a
+  definition.
+- **One total.** Give the reader one number for what they'll pay, with the breakdown
+  underneath. One savings figure per page, taken from `lib/ticket-cost-study.ts`.
+- **Edge cases get one line each, below the answer**: CDL, the speed cut-off,
+  out-of-state licences, military, repeat use. Never woven into the main answer.
+- **Citations live in the Sources list.** Inline statute numbers only where someone
+  might argue the point (a fee cap, the CDL rule, an insurer protection). Two or three
+  per page is plenty. A sourced fact is still a sourced fact when its citation sits in
+  the list.
+- **One disclosure line and one "check with your court" line per page.** Not per
+  section, not per card. The surcharge estimate gets a short label ("an estimate;
+  your insurer's figure will differ"), with the full method on the study page.
+- **Plain words first.** Spell out an acronym once, then use it. Say "no contest", not
+  "nolo contendere"; "a short signed statement", not "an affidavit", unless the court's
+  form uses the word.
+- **Every rule here removes something.** Before adding a caveat, ask whether the typical
+  reader would act differently because of it. If not, it goes in the Sources list or
+  nowhere.
+
+---
+
 ## 1. Sourcing — every fact is cited
 
 - **Every factual claim carries at least one credible citation, ideally two.**
@@ -92,6 +122,7 @@ as a checklist; this file is the canonical version.
 
 Run this before shipping any page or post:
 
+- [ ] **95th percentile (§0):** the first two sentences answer the typical reader; one total cost; edge cases one line each below the answer; inline statute numbers only where contestable; one disclosure and one local-check line.
 - [ ] **Every fact** has ≥1 credible citation; contestable/load-bearing facts have 2.
 - [ ] Citations are **primary** where possible, cited **by name**; secondaries only corroborate.
 - [ ] **No unsourced numbers** — every fee/threshold/point/date/percent is sourced or hedged as a labelled range.

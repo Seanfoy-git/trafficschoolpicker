@@ -12,6 +12,12 @@ state-specific** where competitors guess — every claim must earn its place.
 
 ## When drafting
 
+0. **Write for the 95th percentile** (standards §0). This isn't a legal site. Answer the
+   typical reader (that state's licence, an ordinary speeding ticket) in the first two
+   sentences, give one total cost, and put edge cases in one line each below the answer.
+   Citations go in the Sources list; inline statute numbers only where someone might argue
+   the point. One disclosure line and one local-check line per page. The facts stay; the
+   noise goes.
 1. **Pin the subject and the state(s).** Almost every answer varies by state — decide
    up front whether this needs a per-state layer, and derive from data we already hold
    (States DB, question pages, ticket-cost study) before re-researching.
@@ -38,6 +44,7 @@ state-specific** where competitors guess — every claim must earn its place.
 
 Run the pre-publish checklist from [docs/content-standards.md](../../../docs/content-standards.md) §6:
 
+- 95th percentile: typical reader answered in two sentences; one total; edge cases below; few inline cites; one disclosure, one local check
 - Every fact cited (≥1 credible; 2 on contestable/load-bearing claims)
 - Citations primary where possible, by name; secondaries only corroborate
 - No unsourced numbers
