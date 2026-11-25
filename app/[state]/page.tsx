@@ -432,10 +432,10 @@ export default async function StatePage({ params }: Props) {
                   {formatCost(ticketCost.allInCost)}
                 </span>
                 <span className="text-sm text-slate-600">
-                  estimated all-in cost of a first speeding ticket in {stateMeta.name}
-                  {" "}(fine plus a three-year insurance surcharge, {SURCHARGE_ESTIMATE_LABEL}).
+                  is what a first speeding ticket in {stateMeta.name} costs over three years
+                  if you just pay it: the fine plus higher insurance ({SURCHARGE_ESTIMATE_LABEL}).
                   {ticketCost.netSavings ? (
-                    <> A state-approved course can avoid about {formatCost(ticketCost.netSavings)} of it.</>
+                    <> An approved course can save you about {formatCost(ticketCost.netSavings)} of that.</>
                   ) : null}{" "}
                   <a href="/blog/true-cost-of-a-traffic-ticket" className="text-accent underline">
                     See the 2026 study.

@@ -300,7 +300,7 @@ async function main() {
     }
     if (cost?.allInCost) {
       lines.push(
-        `**Estimated all-in cost of a first speeding ticket:** ${formatCost(cost.allInCost)} (fine plus a three-year insurance surcharge, ${SURCHARGE_ESTIMATE_LABEL}; 2026 study at ${BASE_URL}/blog/${TICKET_COST_STUDY.slug})`
+        `**Cost of a first speeding ticket over three years if you just pay it:** ${formatCost(cost.allInCost)} (the fine plus higher insurance, ${SURCHARGE_ESTIMATE_LABEL}; 2026 study at ${BASE_URL}/blog/${TICKET_COST_STUDY.slug})${cost.netSavings ? `. An approved course can save about ${formatCost(cost.netSavings)} of that` : ""}`
       );
       lines.push("");
     }
@@ -416,7 +416,7 @@ async function main() {
     "- Most expensive states, all-in: Michigan $8,742, California $5,619, Hawaii $5,227, Texas $5,047, New Jersey $4,965, Delaware $4,582, Louisiana $4,512, Rhode Island $4,481, Nevada $4,228, Florida $4,170.",
     "- Cheapest states, all-in: Vermont $1,305, Montana $1,486, Pennsylvania $1,494, Nebraska $1,528, Ohio $1,684, Utah $1,792, Virginia $1,818, Maryland $1,869, New Hampshire $2,024, Maine $2,100.",
     "- Biggest traffic-school net savings: Michigan ~$8,600, California ~$5,300, Hawaii ~$5,050, Texas ~$4,650, Louisiana ~$4,300, Nevada ~$3,950, Florida ~$3,900, Tennessee ~$2,950, Arizona ~$2,950, Oklahoma ~$2,350.",
-    "- Texas example: a driving-safety-course dismissal (~$182 all-in incl. court fee + driving record) prevents ~$4,800 in 3-year surcharges, ~26x return. Mechanism is dismissal, not a discount.",
+    "- Texas example: a driving safety course dismissal costs about $170 to $180 in total, and $134 of that is court costs and state fines owed even if you just pay the ticket. It avoids about $4,800 in estimated 3-year insurance increases. Mechanism is dismissal, not a discount.",
     "- Course mechanisms differ by state: masking (CA, VC §1808.7), dismissal (TX, Art. 45A.352), adjudication withheld (FL, §318.14), base-rate discount (NY PIRP, insurers still see the ticket), one-time point masking (MI BDIC). PA/MA/NJ/KS offer little for a first ticket.",
     "- Sources: FinanceBuzz (fines), CarInsurance.com/Quadrant (surcharges), U.S. News, NHTSA. Rankings are source-dependent (esp. Hawaii).",
     ""

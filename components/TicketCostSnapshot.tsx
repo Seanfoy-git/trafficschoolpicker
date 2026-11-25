@@ -12,8 +12,8 @@ export function TicketCostSnapshot({ stateCode, stateName }: { stateCode: string
   if (!c || c.allInCost == null || c.fine == null || c.threeYearSurcharge == null) return null;
   const rows: [string, string][] = [
     ["Typical fine", formatCost(c.fine)],
-    ["3-year insurance exposure", formatCost(c.threeYearSurcharge)],
-    ["All-in cost", formatCost(c.allInCost)],
+    ["Higher insurance, 3 years (est.)", formatCost(c.threeYearSurcharge)],
+    ["Total if you just pay it", formatCost(c.allInCost)],
   ];
   return (
     <section className="max-w-3xl mx-auto px-4 pt-6">
@@ -30,8 +30,8 @@ export function TicketCostSnapshot({ stateCode, stateName }: { stateCode: string
           ))}
         </dl>
         <p className="mt-3 text-xs text-slate-500">
-          A typical first-offense 10-over ticket: fine plus estimated three-year insurance
-          surcharge.{" "}
+          A typical first ticket for 10 mph over, paid without taking a course.
+          {c.netSavings ? <> An approved course can save you about {formatCost(c.netSavings)} of that.</> : null}{" "}
           <a href={`/blog/${TICKET_COST_STUDY.slug}`} className="text-accent underline">
             See the full study.
           </a>
