@@ -80,6 +80,13 @@ export const dynamicParams = false;
 
 type Props = { params: Promise<{ state: string }> };
 
+/** The directory's "Last verified" date: its newest scrape. It was the first
+ *  row's date, so one school the regulator had dropped (never re-scraped) could
+ *  date a freshly scraped list months back (25 Nov 2026). */
+function newestScrape(rows: { lastScraped: string | null }[]): string | null {
+  return rows.reduce<string | null>((max, r) => (r.lastScraped && (!max || r.lastScraped > max) ? r.lastScraped : max), null);
+}
+
 export async function generateStaticParams() {
   return getAllStateSlugs().map((slug) => ({ state: slug }));
 }
@@ -960,7 +967,7 @@ export default async function StatePage({ params }: Props) {
             <DirectoryTable
               schools={directory}
               stateName={stateMeta.name}
-              lastScraped={directory[0]?.lastScraped ?? null}
+              lastScraped={newestScrape(directory)}
             />
           ) : (
             <div>
