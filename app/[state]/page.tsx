@@ -22,7 +22,7 @@ import {
 } from "@/lib/comparison";
 import { SURCHARGE_ESTIMATE_LABEL } from "@/lib/ticket-cost-study";
 import { STATE_SEO } from "@/lib/seo-config";
-import { ticketCostFor, formatCost } from "@/lib/ticket-cost-study";
+import { ticketCostFor, formatCost, savingsSentence } from "@/lib/ticket-cost-study";
 import { getNotionStateFaqs } from "@/lib/notion-faqs";
 import { getStateBySlug, getAllStateSlugs } from "@/lib/state-utils";
 import { SchoolCard } from "@/components/SchoolCard";
@@ -442,9 +442,7 @@ export default async function StatePage({ params }: Props) {
                 <span className="text-sm text-slate-600">
                   is what a first speeding ticket in {stateMeta.name} costs over three years
                   if you just pay it: the fine plus higher insurance ({SURCHARGE_ESTIMATE_LABEL}).
-                  {ticketCost.netSavings ? (
-                    <> An approved course can save you about {formatCost(ticketCost.netSavings)} of that.</>
-                  ) : null}{" "}
+                  {savingsSentence(ticketCost) ? <> {savingsSentence(ticketCost)}</> : null}{" "}
                   <a href="/blog/true-cost-of-a-traffic-ticket" className="text-accent underline">
                     See the 2026 study.
                   </a>

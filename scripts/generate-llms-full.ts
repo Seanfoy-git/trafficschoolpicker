@@ -16,7 +16,7 @@ import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { STATE_LIST } from "../lib/state-utils";
-import { ticketCostFor, formatCost, TICKET_COST_STUDY, SURCHARGE_ESTIMATE_LABEL } from "../lib/ticket-cost-study";
+import { ticketCostFor, formatCost, savingsSentence, TICKET_COST_STUDY, SURCHARGE_ESTIMATE_LABEL } from "../lib/ticket-cost-study";
 import type { StateComparison } from "../lib/comparison";
 // Type-only imports are erased at compile time, so they don't trigger lib/notion's
 // module-load (its Client reads the token then). The runtime helpers are pulled in
@@ -300,7 +300,7 @@ async function main() {
     }
     if (cost?.allInCost) {
       lines.push(
-        `**Cost of a first speeding ticket over three years if you just pay it:** ${formatCost(cost.allInCost)} (the fine plus higher insurance, ${SURCHARGE_ESTIMATE_LABEL}; 2026 study at ${BASE_URL}/blog/${TICKET_COST_STUDY.slug})${cost.netSavings ? `. An approved course can save about ${formatCost(cost.netSavings)} of that` : ""}`
+        `**Cost of a first speeding ticket over three years if you just pay it:** ${formatCost(cost.allInCost)} (the fine plus higher insurance, ${SURCHARGE_ESTIMATE_LABEL}; 2026 study at ${BASE_URL}/blog/${TICKET_COST_STUDY.slug})${savingsSentence(cost) ? `. ${savingsSentence(cost)}` : ""}`
       );
       lines.push("");
     }

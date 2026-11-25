@@ -1,4 +1,4 @@
-import { ticketCostFor, formatCost, TICKET_COST_STUDY } from "@/lib/ticket-cost-study";
+import { ticketCostFor, formatCost, savingsSentence, TICKET_COST_STUDY } from "@/lib/ticket-cost-study";
 
 /**
  * Canonical ticket-cost snapshot for the cost / worth-it question pages. Reads the
@@ -31,7 +31,7 @@ export function TicketCostSnapshot({ stateCode, stateName }: { stateCode: string
         </dl>
         <p className="mt-3 text-xs text-slate-500">
           A typical first ticket for 10 mph over, paid without taking a course.
-          {c.netSavings ? <> An approved course can save you about {formatCost(c.netSavings)} of that.</> : null}{" "}
+          {savingsSentence(c) ? <> {savingsSentence(c)}</> : null}{" "}
           <a href={`/blog/${TICKET_COST_STUDY.slug}`} className="text-accent underline">
             See the full study.
           </a>
