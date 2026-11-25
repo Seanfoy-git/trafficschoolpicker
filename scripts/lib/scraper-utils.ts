@@ -21,6 +21,49 @@ const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB!;
  * which Notion websites the state's own list supplies.
  */
 const CAPTURE = process.env.SCRAPER_DRY_RUN;
+/** Capture without Notion at all (no token): diagnose a scraper anywhere. */
+const CAPTURE_OFFLINE = !!CAPTURE && !process.env.NOTION_TOKEN;
+
+/**
+ * Directory health (25 Nov 2026). The monthly job's scrape step runs with
+ * continue-on-error, so for months a broken scraper left its state's list stale
+ * with a green run and no email (Virginia's last write was 1 May; its pager had
+ * changed and it read only page 1). Now:
+ *  - SHRINK GUARD: a scrape that returns under SHRINK_RATIO of the rows we hold
+ *    (when we hold at least MIN_HELD) writes nothing and logs a Critical issue.
+ *    The regulator's page probably changed; fix the scraper, or set
+ *    DIRECTORY_ALLOW_SHRINK=1 if the list really did shrink.
+ *  - DELISTING: after a near-complete scrape (at least DELIST_MIN_SHARE of the
+ *    rows we hold), a row the regulator no longer lists is
+ *    marked Licence Status = Inactive (the site already hides those); a row that
+ *    is listed again goes back to Active. Hand-set rows are never touched.
+ *  - SUMMARY: each sync appends one JSON line to DIRECTORY_SCRAPE_SUMMARY (when
+ *    set) for scripts/report-directory-health.ts.
+ */
+const SHRINK_RATIO = 0.5;
+const MIN_HELD = 10;
+const DELIST_MIN_SHARE = 0.8;
+const ALLOW_SHRINK = process.env.DIRECTORY_ALLOW_SHRINK === "1";
+const SUMMARY = process.env.DIRECTORY_SCRAPE_SUMMARY;
+
+export type ScrapeStatus = "ok" | "shrunk" | "empty" | "error";
+
+export function recordScrapeResult(r: {
+  state: string;
+  code: string;
+  scraped: number;
+  valid: number;
+  held: number;
+  created: number;
+  updated: number;
+  delisted?: number;
+  relisted?: number;
+  status: ScrapeStatus;
+  note?: string;
+}) {
+  if (!SUMMARY) return;
+  appendFileSync(SUMMARY, JSON.stringify({ ...r, date: new Date().toISOString().slice(0, 10) }) + "\n");
+}
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -42,10 +85,13 @@ export interface ScrapedSchool {
  */
 export class ExistingSchools extends DirectoryIndex {
   readonly handSet = new Set<string>();
+  /** Every row id, with its current Licence Status, for the shrink guard and delisting. */
+  readonly rows = new Map<string, { status: string }>();
 }
 
 export async function getExistingSchools(stateName: string): Promise<ExistingSchools> {
   const index = new ExistingSchools();
+  if (CAPTURE_OFFLINE) return index;
   let cursor: string | undefined;
   do {
     const response: any = await notion.databases.query({
@@ -60,6 +106,7 @@ export async function getExistingSchools(stateName: string): Promise<ExistingSch
       const licenseNumber = (props["License Number"]?.rich_text ?? []).map((t: any) => t.plain_text).join("");
       if (!name) continue;
       index.add(page.id, name, licenseNumber);
+      index.rows.set(page.id, { status: props["Licence Status"]?.select?.name ?? "" });
       if (isHandSet({ websiteSource: props["Website Source"]?.select?.name ?? "", enrichmentStatus: props["Enrichment Status"]?.select?.name ?? "" }))
         index.handSet.add(page.id);
     }
@@ -77,6 +124,34 @@ export async function syncToNotion(
   const existing = await getExistingSchools(stateName);
   const TODAY = new Date().toISOString().split("T")[0];
   let created = 0, updated = 0;
+
+  // Count what would be written (same junk + duplicate-licence rules as the loop).
+  const lics = new Set<string>();
+  const valid = scraped.filter((s) => {
+    if (junkReason(s.name)) return false;
+    const L = rowIdentity(s.name, s.licenseNumber || "").licence.toUpperCase();
+    if (L && lics.has(L)) return false;
+    if (L) lics.add(L);
+    return true;
+  }).length;
+  const held = existing.rows.size;
+  const base = { state: stateName, code: stateCode, scraped: scraped.length, valid, held };
+  if (valid === 0) {
+    logIssue(`${stateName} scrape found no schools`, "DMV Scraper", "Critical", stateCode, "Nothing written.");
+    recordScrapeResult({ ...base, created: 0, updated: 0, status: "empty" });
+    return { created, updated };
+  }
+  if (!CAPTURE && held >= MIN_HELD && valid < held * SHRINK_RATIO && !ALLOW_SHRINK) {
+    logIssue(
+      `${stateName} list shrank: ${valid} scraped vs ${held} held`,
+      "DMV Scraper", "Critical", stateCode,
+      "Nothing written. The regulator's page probably changed; fix the scraper, or set DIRECTORY_ALLOW_SHRINK=1 if the list really did shrink.",
+    );
+    console.error(`  ${stateName}: ${valid} scraped vs ${held} held, under ${SHRINK_RATIO * 100}% — nothing written`);
+    recordScrapeResult({ ...base, created: 0, updated: 0, status: "shrunk" });
+    return { created, updated };
+  }
+  const seen = new Set<string>();
 
   // Same validation the site renders through (lib/directory-filter, P0 30 Oct 2026):
   // never write a URL, UI label, agency name or empty card as a school, and only
@@ -111,6 +186,11 @@ export async function syncToNotion(
       "Date Scraped": { date: { start: TODAY } },
     };
     const match = existing.match(school.name, school.licenseNumber || "");
+    if (match) {
+      seen.add(match.id);
+      // Listed again after being marked Inactive by an earlier sync.
+      if (existing.rows.get(match.id)?.status.toLowerCase() === "inactive") properties["Licence Status"] = { select: { name: "Active" } };
+    }
     // The regulator's own list gave a website: record where it came from. A website a
     // person set (Website Source = Manual) is never replaced.
     if (school.website && !(match && existing.handSet.has(match.id))) {
@@ -152,7 +232,25 @@ export async function syncToNotion(
     await new Promise((r) => setTimeout(r, 350));
   }
 
-  console.log(`\n  ${stateName} Sync${CAPTURE ? " (dry run, nothing written)" : ""}: ${scraped.length} scraped, ${created} ${CAPTURE ? "would be created" : "created"}, ${updated} ${CAPTURE ? "would be updated" : "updated"}`);
+  // Delisting: rows the regulator no longer lists. Only after a near-complete
+  // scrape (at least DELIST_MIN_SHARE of what we hold), so a partial scrape of a
+  // small list can't mark real schools Inactive; never a hand-set row.
+  let delisted = 0;
+  const delistOk = valid >= held * DELIST_MIN_SHARE;
+  for (const [id, row] of delistOk ? existing.rows : new Map<string, { status: string }>()) {
+    if (seen.has(id) || existing.handSet.has(id) || row.status.toLowerCase() === "inactive") continue;
+    delisted++;
+    if (CAPTURE) continue;
+    try {
+      await notion.pages.update({ page_id: id, properties: { "Licence Status": { select: { name: "Inactive" } } } as any });
+    } catch (err) {
+      logIssue(`Failed to mark a delisted ${stateName} row Inactive`, "DMV Scraper", "Warning", stateCode, (err as Error).message);
+    }
+    await new Promise((r) => setTimeout(r, 350));
+  }
+
+  console.log(`\n  ${stateName} Sync${CAPTURE ? " (dry run, nothing written)" : ""}: ${scraped.length} scraped, ${created} ${CAPTURE ? "would be created" : "created"}, ${updated} ${CAPTURE ? "would be updated" : "updated"}, ${delisted} ${CAPTURE ? "would be marked" : "marked"} Inactive (no longer listed)`);
+  recordScrapeResult({ ...base, created, updated, delisted, status: "ok" });
   return { created, updated };
 }
 

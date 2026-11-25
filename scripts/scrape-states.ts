@@ -134,7 +134,10 @@ async function scrapeStaticHtml(
 
 async function main() {
   const args = process.argv.slice(2).map((a) => a.toUpperCase());
-  const dedicatedScripts = ["CA", "TX", "FL"]; // These have their own scripts
+  // States with their own script in scrape:dmv. The generic parser re-scraping
+  // them produced junk rows (Virginia: 10 non-school rows; Arizona: 1; Georgia: 3)
+  // that a sync could write on top of the dedicated scraper's work (25 Nov 2026).
+  const dedicatedScripts = ["CA", "TX", "FL", "NY", "AZ", "VA", "OH", "GA"];
 
   let sources = getEnabledSources()
     .filter((s) => s.method === "static-html" || s.method === "playwright")

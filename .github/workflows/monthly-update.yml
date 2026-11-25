@@ -18,6 +18,9 @@ jobs:
     # Chromium build for it ("Playwright does not support chromium on ubuntu26.04-x64").
     # Move back to ubuntu-latest once Playwright supports 26.04.
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      issues: write # the directory-health step opens/closes its issue
     env:
       NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
       NOTION_SCHOOLS_DB: ${{ secrets.NOTION_SCHOOLS_DB }}
@@ -29,6 +32,8 @@ jobs:
       NOTION_STATE_REQUIREMENTS_DB: ${{ secrets.NOTION_STATE_REQUIREMENTS_DB }}
       NOTION_SCHOOL_VARIANTS_DB: ${{ secrets.NOTION_SCHOOL_VARIANTS_DB }}
       NOTION_ISSUES_DB: ${{ secrets.NOTION_ISSUES_DB }}
+      # One JSON line per state sync (scripts/lib/scraper-utils), read by the health report.
+      DIRECTORY_SCRAPE_SUMMARY: directory-scrape-summary.jsonl
       GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
     steps:
       - uses: actions/checkout@v5
@@ -90,3 +95,40 @@ jobs:
           else
             echo "No deploy hook configured — skipping"
           fi
+
+      # Directory health (25 Nov 2026). The scrape step above runs with
+      # continue-on-error, which for months hid broken state scrapers behind a
+      # green run (Virginia's list unwritten since 1 May). The report flags any
+      # state that failed this run or hasn't been refreshed in 35 days, keeps one
+      # self-maintaining GitHub issue, and turns the run red so GitHub emails.
+      - name: Directory health report
+        id: dirhealth
+        if: ${{ always() }}
+        continue-on-error: true
+        run: npx tsx scripts/report-directory-health.ts --out directory-health.md
+
+      - name: Notify — open/close "Directory health" issue
+        if: ${{ always() }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ ! -f directory-health.md ]; then echo "no report (step did not finish) — skipping"; exit 0; fi
+          gh label create directory-health --color D93F0B --description "Official school lists need attention" --force >/dev/null 2>&1 || true
+          NUM=$(gh issue list --label directory-health --state open --json number --jq '.[0].number // empty')
+          if [ "${{ steps.dirhealth.outcome }}" = "success" ]; then
+            if [ -n "$NUM" ]; then gh issue close "$NUM" --comment "✅ Every state list refreshed this run. Auto-closed."; fi
+            exit 0
+          fi
+          TITLE="🗂️ Official school lists need attention"
+          if [ -n "$NUM" ]; then
+            gh issue edit "$NUM" --title "$TITLE" --body-file directory-health.md
+          else
+            gh issue create --title "$TITLE" --body-file directory-health.md --label directory-health >/dev/null
+          fi
+
+      - name: Fail the run if a state list is broken or stale
+        if: ${{ always() && steps.dirhealth.outcome == 'failure' }}
+        run: |
+          echo "::error::Directory health check flagged states — see the 'Official school lists need attention' issue."
+          exit 1
