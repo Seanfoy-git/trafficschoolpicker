@@ -6,7 +6,7 @@ import { MultiRatingCompact } from "./MultiRating";
 import { RatingStars } from "./RatingStars";
 import { Badge } from "./Badge";
 import { AffiliateButton } from "./AffiliateButton";
-import { ArrowUpDown, Clock, CheckCircle, Smartphone, Shield } from "lucide-react";
+import { ArrowUpDown, Clock, Smartphone, Shield } from "lucide-react";
 import Link from "next/link";
 
 type SortKey = "price" | "rating";
@@ -129,11 +129,8 @@ export function ComparisonTable({
               </td>
               <td className="py-4 px-4">
                 <div className="flex gap-2">
-                  {school.courtAcceptance === "All Courts" && (
-                    <span title="Accepted by all courts" className="text-green-600">
-                      <CheckCircle className="w-4 h-4" />
-                    </span>
-                  )}
+                  {/* No "Accepted by all courts" tick: Court Acceptance is one value per
+                      school, and no school is accepted by every court in every state. */}
                   {school.mobileApp && (
                     <span title="Mobile app available" className="text-blue-600">
                       <Smartphone className="w-4 h-4" />

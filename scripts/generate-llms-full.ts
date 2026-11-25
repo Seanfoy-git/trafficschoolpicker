@@ -164,7 +164,9 @@ function schoolFacts(s: School): string {
   if (price != null) parts.push(`from $${formatPrice(price)}`);
   if (s.stateCodes.includes("all")) parts.push("Available nationwide");
   else if (s.stateCodes.length) parts.push(`Covers ${s.stateCodes.length} states (${s.stateCodes.join(", ")})`);
-  if (s.courtAcceptance) parts.push(s.courtAcceptance);
+  // No Court Acceptance: it is one value per school ("All Courts", "Most Courts")
+  // printed beside "Available nationwide", and no school is accepted by every court
+  // in every state. Acceptance is a state rule, stated on each state page (25 Nov 2026).
   // No per-school course hours: course length is a state fact (Package 4).
   return parts.length ? `**Facts:** ${parts.join(" · ")}` : "";
 }
@@ -426,13 +428,17 @@ async function main() {
   writeLlmsTxtBlock("comparison-prices", llmsPriceLines);
   // P17 Task 5a: the directory totals come from the same directory rows every
   // state page counts (one source of truth), never a hand-written figure.
+  // Only the lists the state pages show count: a driver-ed or insurance-only list
+  // isn't part of the directory (lib/directory-filter, 25 Nov 2026).
   const { getDirectoryForState } = await import("../lib/notion");
+  const { directoryListLabel } = await import("../lib/directory-filter");
   let dirRows = 0;
   let dirStates = 0;
   for (const s of STATE_LIST) {
-    const n = (await getDirectoryForState(s.name)).length;
-    dirRows += n;
-    if (n > 0) dirStates++;
+    const rows = await getDirectoryForState(s.name);
+    if (!directoryListLabel(s.name, rows).shown) continue;
+    dirRows += rows.length;
+    if (rows.length > 0) dirStates++;
   }
   const dirLine = `${dirRows.toLocaleString("en-US")} schools across ${dirStates} states`;
   writeLlmsTxtBlock("directory-count", [

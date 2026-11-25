@@ -29,7 +29,7 @@ import { getStateBySlug, getAllStateSlugs } from "@/lib/state-utils";
 import { SchoolCard } from "@/components/SchoolCard";
 import { FaqSection } from "@/components/FaqSection";
 import { DirectoryTable } from "@/components/DirectoryTable";
-import { directoryListLabel } from "@/lib/directory-filter";
+import { directoryVerifiedDate } from "@/lib/directory-filter";
 import { TrustBar } from "@/components/TrustBar";
 import { OutOfStateCallout } from "@/components/OutOfStateCallout";
 import { StateKeyFacts } from "@/components/StateKeyFacts";
@@ -79,13 +79,6 @@ export const revalidate = 86400;
 export const dynamicParams = false;
 
 type Props = { params: Promise<{ state: string }> };
-
-/** The directory's "Last verified" date: its newest scrape. It was the first
- *  row's date, so one school the regulator had dropped (never re-scraped) could
- *  date a freshly scraped list months back (25 Nov 2026). */
-function newestScrape(rows: { lastScraped: string | null }[]): string | null {
-  return rows.reduce<string | null>((max, r) => (r.lastScraped && (!max || r.lastScraped > max) ? r.lastScraped : max), null);
-}
 
 export async function generateStaticParams() {
   return getAllStateSlugs().map((slug) => ({ state: slug }));
@@ -160,7 +153,8 @@ export default async function StatePage({ params }: Props) {
   const { state: stateSlug } = await params;
   const data = await loadStateData(stateSlug);
   if (!data) notFound();
-  const { stateMeta, stateInfo, directory, tier1, tier1Resolved, showComparison, noPartnerOffer, onlineStatus, comparison, allSchools } = data;
+  // `directory` is empty when the state's list isn't one we show (lib/directory-filter).
+  const { stateMeta, stateInfo, directory, directoryList, tier1, tier1Resolved, showComparison, noPartnerOffer, onlineStatus, comparison, allSchools } = data;
 
   const [notionFaqs, linkableStates, stateQuestions] = await Promise.all([
     getNotionStateFaqs(stateSlug),
@@ -205,11 +199,13 @@ export default async function StatePage({ params }: Props) {
   // comparison-layout pages: no approval wording or "-approved" badge unless the
   // school is on the official list we hold, no star ratings or review counts in
   // free text, no exam-attempt counts, and a resold course says whose it is.
+  // The list must also be the state's ticket or point-reduction list: being on a
+  // driver-ed, insurance-discount or suspension-course list earns no badge.
   const tier1Cards = tier1Resolved.map(({ school, resolved }) => {
     const row = comparison?.rows.find((r) => r.tier === 1 && r.slug === school.slug);
     const where = `${stateSlug}/${school.slug}`;
     const code = stateMeta.code;
-    const approvalVerified = mayClaimApproval(school.slug, code);
+    const approvalVerified = directoryList.approves && mayClaimApproval(school.slug, code);
     const resale = resaleConFor(school.slug, code, school.name);
     const agreed = {
       ...resolved,
@@ -271,7 +267,8 @@ export default async function StatePage({ params }: Props) {
         stateSlug,
         reviewSlugs,
         courseHours: cardHours,
-        hasApproval: onlineStatus !== "Online — court discretion",
+        // Tier-2 rows come from the directory, so "{regulator}-approved" needs a list that approves.
+        hasApproval: onlineStatus !== "Online — court discretion" && directoryList.approves,
         heading: comparisonH2(comparison, stateMeta.name),
       })
     : showComparison
@@ -370,11 +367,12 @@ export default async function StatePage({ params }: Props) {
             <p className="text-lg text-slate-300 max-w-3xl">
               Comparing {tier1.length} reviewed option
               {tier1.length !== 1 ? "s" : ""}
-              {/* "from N online schools" only when the directory is a list of online
-                  courses (Georgia's is DDS classroom clinics, P0 30 Oct 2026). */}
-              {directory.length > 0 && directoryListLabel(stateMeta.name, directory).online && (
+              {/* "from N ..." only when the directory is a list of online courses
+                  (Georgia's is DDS classroom clinics, P0 30 Oct 2026) and is the
+                  state's ticket or point-reduction list. Named as the list names itself. */}
+              {directory.length > 0 && directoryList.online && directoryList.approves && (
                 <>
-                  {" "}from <span data-count="directory">{directory.length}</span> {`${stateMeta.name}-approved online schools`}
+                  {" "}from <span data-count="directory">{directory.length}</span> {directoryList.noun}
                 </>
               )}
             </p>
@@ -658,9 +656,9 @@ export default async function StatePage({ params }: Props) {
                     </a>
                     )
                   </>
-                )}{" "}
-                or the directory below, and confirm eligibility with the court on your
-                citation before you enroll.
+                )}
+                {directory.length > 0 ? " or the directory below" : ""}, and confirm
+                eligibility with the court on your citation before you enroll.
               </p>
             </div>
           </div>
@@ -959,29 +957,20 @@ export default async function StatePage({ params }: Props) {
           that push crawl equity from this page to neighboring state pages. */}
       <NearbyStates stateCode={stateMeta.code} linkable={linkableStates} />
 
-      {/* DIRECTORY TABLE — render section on every state page so the layout is
-          consistent across states. Shows a placeholder if no rows exist yet. */}
-      <section className="py-12 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
-          {directory.length > 0 ? (
+      {/* DIRECTORY TABLE — only where we hold a list a driver with a ticket can use.
+          The old placeholder ("DMV-licensed online traffic schools in X · Directory
+          data coming soon") promised a DMV list in states that have none (25 Nov 2026). */}
+      {directory.length > 0 && (
+        <section className="py-12 bg-white">
+          <div className="max-w-6xl mx-auto px-4">
             <DirectoryTable
               schools={directory}
               stateName={stateMeta.name}
-              lastScraped={newestScrape(directory)}
+              lastScraped={directoryVerifiedDate(directory)}
             />
-          ) : (
-            <div>
-              <h2 className="text-xl font-bold text-slate-900">
-                DMV-licensed online traffic schools in {stateMeta.name}
-              </h2>
-              <p className="text-sm text-slate-500 mt-2">
-                Directory data coming soon. We&apos;re collecting the official
-                {" "}{stateMeta.name} DMV listing.
-              </p>
-            </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
     </>
   );
   const heroP17Block = (
