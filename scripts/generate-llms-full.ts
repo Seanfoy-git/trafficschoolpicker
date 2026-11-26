@@ -431,12 +431,12 @@ async function main() {
   // Only the lists the state pages show count: a driver-ed or insurance-only list
   // isn't part of the directory (lib/directory-filter, 25 Nov 2026).
   const { getDirectoryForState } = await import("../lib/notion");
-  const { directoryListLabel } = await import("../lib/directory-filter");
+  const { directoryForState } = await import("../lib/directory-filter");
   let dirRows = 0;
   let dirStates = 0;
   for (const s of STATE_LIST) {
-    const rows = await getDirectoryForState(s.name);
-    if (!directoryListLabel(s.name, rows).shown) continue;
+    const { list, rows } = directoryForState(s.name, await getDirectoryForState(s.name));
+    if (!list.shown) continue;
     dirRows += rows.length;
     if (rows.length > 0) dirStates++;
   }

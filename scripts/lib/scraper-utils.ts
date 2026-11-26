@@ -89,7 +89,14 @@ export class ExistingSchools extends DirectoryIndex {
   readonly rows = new Map<string, { status: string }>();
 }
 
-export async function getExistingSchools(stateName: string): Promise<ExistingSchools> {
+/**
+ * `sources`: index only rows whose Source is one of these. A scraper that moves a
+ * state to a different official list (Texas, 25 Nov 2026: TDLR's driving safety
+ * provider file replaced its driver-ed file) matches, counts and delists only rows
+ * from its own list, so it never rewrites the old list's rows, whose hand-set
+ * prices still feed the comparison.
+ */
+export async function getExistingSchools(stateName: string, sources?: string[]): Promise<ExistingSchools> {
   const index = new ExistingSchools();
   if (CAPTURE_OFFLINE) return index;
   let cursor: string | undefined;
@@ -105,6 +112,7 @@ export async function getExistingSchools(stateName: string): Promise<ExistingSch
       const name = (props["School Name"]?.title ?? []).map((t: any) => t.plain_text).join("");
       const licenseNumber = (props["License Number"]?.rich_text ?? []).map((t: any) => t.plain_text).join("");
       if (!name) continue;
+      if (sources && !sources.includes(props["Source"]?.select?.name ?? "")) continue;
       index.add(page.id, name, licenseNumber);
       index.rows.set(page.id, { status: props["Licence Status"]?.select?.name ?? "" });
       if (isHandSet({ websiteSource: props["Website Source"]?.select?.name ?? "", enrichmentStatus: props["Enrichment Status"]?.select?.name ?? "" }))
@@ -119,9 +127,11 @@ export async function syncToNotion(
   scraped: ScrapedSchool[],
   stateName: string,
   sourceLabel: string,
-  stateCode: string
+  stateCode: string,
+  opts: { ownSourceOnly?: boolean } = {}
 ): Promise<{ created: number; updated: number }> {
-  const existing = await getExistingSchools(stateName);
+  // ownSourceOnly: match, guard and delist against this list's rows only (see getExistingSchools).
+  const existing = await getExistingSchools(stateName, opts.ownSourceOnly ? [sourceLabel] : undefined);
   const TODAY = new Date().toISOString().split("T")[0];
   let created = 0, updated = 0;
 

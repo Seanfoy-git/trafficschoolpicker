@@ -12,7 +12,7 @@ import {
 import { buildStateComparison, usesComparisonLayout, type StateComparison } from "./comparison";
 import { getStateBySlug } from "./state-utils";
 import { isHiddenPair, mayClaimApproval } from "./school-approvals";
-import { directoryListLabel } from "./directory-filter";
+import { directoryForState } from "./directory-filter";
 import type { ResolvedSchoolContent } from "./types";
 
 // The online statuses that render the comparison cards (and so a comparison).
@@ -176,8 +176,8 @@ export async function loadStateData(stateSlug: string) {
   // with a ticket can use (driver-ed, insurance-only, unidentified) is not shown:
   // no table, no count, no "the directory below". Its priced rows still feed the
   // comparison's tier 2 above, which links each school's own price page.
-  const directoryList = directoryListLabel(stateMeta.name, directory);
-  const shownDirectory = directoryList.shown ? directory : [];
+  const { list: directoryList, rows: listRows } = directoryForState(stateMeta.name, directory);
+  const shownDirectory = directoryList.shown ? listRows : [];
   if (comparison) {
     // "{regulator}-approved" copy only when every row is on an approving list:
     // tier-2 rows are directory rows, tier-1 rows need their own listed evidence.
@@ -185,7 +185,7 @@ export async function loadStateData(stateSlug: string) {
       directoryList.approves &&
       comparison.rows.every((r) => r.tier !== 1 || (!!r.slug && mayClaimApproval(r.slug, stateMeta.code)));
     // "Drawn from N schools on the official ... approved list" needs a shown, approving list.
-    const directoryCount = directoryList.shown && directoryList.approves ? comparison.directoryCount : 0;
+    const directoryCount = directoryList.shown && directoryList.approves ? listRows.length : 0;
     comparison = { ...comparison, allApproved, directoryCount };
   }
   const stateReq = stateReqs.get(stateMeta.code);

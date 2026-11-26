@@ -1,203 +1,132 @@
 /**
- * DATA FLOW: DMV → Notion → Site
+ * Texas directory: TDLR's licensed driving safety course providers.
  *
- * 1. This script fetches the TX TDLR driving safety provider CSV
- * 2. It writes/updates records in the Notion School Directory database
- *    (ID: process.env.NOTION_DIRECTORY_DB)
- * 3. The Next.js site reads from Notion via getDirectoryForState()
- *    in lib/notion.ts on every request (cached for 24hrs via ISR)
- * 4. No JSON files are involved. Notion is the single source of truth.
- * 5. To see changes on the site immediately after scraping:
- *    - Run this script with --deploy flag: npm run scrape:tx -- --deploy
- *    - OR go to trafficschoolpicker.com/admin and click Trigger Redeploy
- *    - OR wait up to 24hrs for ISR to pick up Notion changes automatically
+ * Source: TDLR "Download License Files" (tdlr.texas.gov/LicenseSearch/licfile.asp),
+ * file "Driver Safety Providers", vsDriverSafetyProvider.csv. One row per licence:
+ * License Number (CP###), Profession ("DRIVING SAFETY PROVIDER"), License Status,
+ * Licensee, License Expiration Date, Address 1, Address 2, City, State, County,
+ * Zip, Phone. TDLR updates the files daily.
  *
- * Rate limits:
- * - Notion API: 3 requests/second → 350ms delay between writes
- * - TX TDLR: CSV download → single request, no rate limit
+ * Until 25 Nov 2026 this script read vsDriverEduProvider.csv, TDLR's driver
+ * EDUCATION provider file (C-numbered schools, ISDs, parent-taught courses), and
+ * kept every row because that file has no type column. So /texas listed 845
+ * "online traffic schools" that were driver-ed licences, and the approval gate
+ * used them as evidence. The old rows keep Source "TX TDLR" (hidden by
+ * lib/directory-filter, still read for their hand-set prices in the comparison);
+ * this list writes Source "TX TDLR DSC" and matches, guards and delists only its
+ * own rows (syncToNotion ownSourceOnly).
+ *
+ * Writes through syncToNotion, so the shrink guard, delisting and the run summary
+ * for the directory health check apply. A fetch that still fails after retries is
+ * recorded as an error, so the health check flags Texas the same day.
  */
 
-import { rowIdentity, junkReason } from "../lib/directory-filter";
-import { getExistingSchools } from "./lib/scraper-utils";
 import { config } from "dotenv";
 config({ path: ".env.local" });
-import { makeNotionClient } from "./lib/notion-client";
+import { syncToNotion, recordScrapeResult, type ScrapedSchool } from "./lib/scraper-utils";
 
-const notion = makeNotionClient();
-const DIRECTORY_DB = process.env.NOTION_DIRECTORY_DB!;
+const CSV_URL = "https://www.tdlr.texas.gov/dbproduction2/vsDriverSafetyProvider.csv";
+export const TX_DSC_SOURCE = "TX TDLR DSC";
 
-const CSV_URL =
-  "https://www.tdlr.texas.gov/dbproduction2/vsDriverEduProvider.csv";
+/**
+ * Licences left out of the directory. CP1425 is Pellucid Media's own course (The
+ * Texas Course). Whether TSP lists it is Sean's parked decision (tsp-open-items,
+ * "Should The Texas Course ever be listed on TSP?"), so it stays out until he decides.
+ */
+const EXCLUDED_LICENCES = new Set(["CP1425"]);
 
-function parseCSV(text: string): Record<string, string>[] {
-  const lines = text.split("\n");
-  const headers = lines[0]
-    .split(",")
-    .map((h) => h.trim().replace(/"/g, ""));
+const RETRY_DELAYS_MS = [5_000, 20_000, 60_000];
 
-  return lines
-    .slice(1)
-    .filter((line) => line.trim())
-    .map((line) => {
-      const values = line.split(",").map((v) => v.trim().replace(/"/g, ""));
-      const row: Record<string, string> = {};
-      headers.forEach((h, i) => (row[h] = values[i] ?? ""));
-      return row;
-    });
+/** RFC 4180: quoted fields may hold commas ("I DRIVE SAFELY, LLC") and doubled quotes. */
+export function parseCsv(text: string): Record<string, string>[] {
+  const records: string[][] = [];
+  let field = "";
+  let row: string[] = [];
+  let quoted = false;
+  const src = text.replace(/^﻿/, "");
+  for (let i = 0; i < src.length; i++) {
+    const c = src[i];
+    if (quoted) {
+      if (c === '"' && src[i + 1] === '"') { field += '"'; i++; }
+      else if (c === '"') quoted = false;
+      else field += c;
+    } else if (c === '"') quoted = true;
+    else if (c === ",") { row.push(field); field = ""; }
+    else if (c === "\n" || c === "\r") {
+      if (c === "\r" && src[i + 1] === "\n") i++;
+      row.push(field); field = "";
+      if (row.some((f) => f.trim())) records.push(row);
+      row = [];
+    } else field += c;
+  }
+  row.push(field);
+  if (row.some((f) => f.trim())) records.push(row);
+  const [header, ...rest] = records;
+  if (!header) return [];
+  const keys = header.map((h) => h.trim());
+  return rest.map((r) => Object.fromEntries(keys.map((k, i) => [k, (r[i] ?? "").replace(/ /g, " ").trim()])));
 }
 
-function pickField(
-  row: Record<string, string>,
-  ...candidates: string[]
-): string {
-  for (const key of candidates) {
-    if (row[key]) return row[key];
-  }
-  return "";
-}
-
-async function scrapeTXTDLR(): Promise<Record<string, string>[]> {
-  console.log("Fetching TX TDLR CSV...");
-  const response = await fetch(CSV_URL, {
-    headers: {
-      "User-Agent": "Mozilla/5.0 (compatible; TrafficSchoolPicker/1.0)",
-    },
-    signal: AbortSignal.timeout(30000),
-  });
-
-  if (!response.ok) throw new Error(`HTTP ${response.status} fetching CSV`);
-
-  const csv = await response.text();
-  console.log(`Downloaded ${(csv.length / 1024).toFixed(0)} KB`);
-
-  if (csv.trimStart().startsWith("<!") || csv.trimStart().startsWith("<html")) {
-    throw new Error("Received HTML instead of CSV — endpoint may have changed");
-  }
-
-  const all = parseCSV(csv);
-  console.log(`Parsed ${all.length} total records`);
-
-  if (all.length > 0) {
-    console.log("Columns:", Object.keys(all[0]).join(", "));
-  }
-
-  // Filter for driving safety / defensive driving providers
-  const schools = all.filter((row) => {
-    const type = pickField(
-      row,
-      "License Type",
-      "Type",
-      "Category",
-      "School Type"
-    ).toLowerCase();
-    return (
-      type.includes("safety") ||
-      type.includes("defensive") ||
-      type.includes("driving safety") ||
-      type === "" // include if no type column (assume all are relevant)
-    );
-  });
-
-  console.log(`Filtered to ${schools.length} driving safety providers`);
-  return schools;
-}
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-async function syncTXToNotion(schools: Record<string, string>[]) {
-  // Existing rows matched on real licence, then cleaned name (shared index).
-  const existing = await getExistingSchools("Texas");
-  const TODAY = new Date().toISOString().split("T")[0];
-  let created = 0,
-    updated = 0;
-
-  for (const row of schools) {
-    const name = pickField(row, "Licensee", "Name", "Business Name", "BusinessName", "DBA Name");
-    const license = pickField(
-      row,
-      "License Number",
-      "LicenseNumber",
-      "License",
-      "Provider Number"
-    );
-    const phone = pickField(row, "Phone", "PhoneNumber", "Phone Number");
-    const city = pickField(row, "City");
-    const address = [
-      pickField(row, "Address 1", "Address", "Street"),
-      pickField(row, "Address 2"),
-      city,
-      pickField(row, "State") || "TX",
-      pickField(row, "Zip", "ZipCode", "Zip Code"),
-    ]
-      .filter(Boolean)
-      .join(", ");
-
-    if (!name || !license) continue;
-    // Same validation the site renders through (lib/directory-filter, P0 follow-up): never write page furniture as a school.
-    if (junkReason(name)) { console.log(`  skip (${junkReason(name)}): ${JSON.stringify(name)}`); continue; }
-
-    const properties: any = {
-      "School Name": { title: [{ text: { content: rowIdentity(name, license).name } }] },
-      "License Number": { rich_text: [{ text: { content: license } }] },
-      Phone: { rich_text: [{ text: { content: phone || "" } }] },
-      Address: { rich_text: [{ text: { content: address } }] },
-      State: { select: { name: "Texas" } },
-      "Online Available": { checkbox: true },
-      Source: { select: { name: "TX TDLR" } },
-      "Date Scraped": { date: { start: TODAY } },
-    };
-
-    const match = existing.match(name, license);
-
-    if (match) {
-      await notion.pages.update({ page_id: match.id, properties });
-      updated++;
-    } else {
-      const page = await notion.pages.create({
-        parent: { database_id: DIRECTORY_DB },
-        properties,
-      });
-      existing.add(page.id, name, license);
-      created++;
+async function fetchCsv(): Promise<string> {
+  let lastErr: unknown;
+  for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
+    try {
+      const res = await fetch(CSV_URL, { signal: AbortSignal.timeout(60_000) });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const text = await res.text();
+      if (/^\s*</.test(text)) throw new Error("got HTML, not CSV: the file has moved");
+      return text;
+    } catch (err) {
+      lastErr = err;
+      const wait = RETRY_DELAYS_MS[attempt];
+      if (wait === undefined) break;
+      console.warn(`  TDLR fetch failed (${(err as Error).message}), retrying in ${wait / 1000}s`);
+      await new Promise((r) => setTimeout(r, wait));
     }
-
-    await new Promise((r) => setTimeout(r, 350));
   }
-
-  console.log(`
-  ━━━━━━━━━━━━━━━━━━━━━━━━
-  TX TDLR Sync Complete
-  ━━━━━━━━━━━━━━━━━━━━━━━━
-  Parsed:  ${schools.length} providers from CSV
-  Created: ${created} new Notion records
-  Updated: ${updated} existing records
-  ━━━━━━━━━━━━━━━━━━━━━━━━
-  `);
+  throw lastErr;
 }
 
-/* eslint-enable @typescript-eslint/no-explicit-any */
-
-async function triggerDeploy() {
-  const hookUrl = process.env.VERCEL_DEPLOY_HOOK;
-  if (!hookUrl) {
-    console.log("No deploy hook configured — skipping redeploy");
-    return;
-  }
-  await fetch(hookUrl, { method: "POST" });
-  console.log("Vercel redeploy triggered");
+export function toSchools(rows: Record<string, string>[]): ScrapedSchool[] {
+  return rows
+    .filter((r) => r["Profession"]?.toUpperCase() === "DRIVING SAFETY PROVIDER")
+    .filter((r) => r["License Status"]?.toUpperCase() === "CURRENT")
+    .filter((r) => r["License Number"] && !EXCLUDED_LICENCES.has(r["License Number"].toUpperCase()))
+    .map((r) => ({
+      // Some providers are licensed under a web address; "WWW.CHEAPDRIVINGCOURSE.COM"
+      // would otherwise be dropped as page furniture by the shared junk filter.
+      name: r["Licensee"].replace(/^www\./i, ""),
+      licenseNumber: r["License Number"],
+      phone: r["Phone"] ?? "",
+      address: [r["Address 1"], r["Address 2"], r["City"], r["State"], r["Zip"]].filter(Boolean).join(", "),
+      website: "",
+      // The file doesn't say whether a provider's course is online, so no claim either way.
+      onlineAvailable: false,
+      notes: "",
+    }));
 }
 
 async function main() {
-  console.log("Starting TX TDLR scrape...");
-  const schools = await scrapeTXTDLR();
-  await syncTXToNotion(schools);
-
-  if (process.argv.includes("--deploy")) {
-    await triggerDeploy();
+  console.log("Texas: TDLR driving safety course providers");
+  let text: string;
+  try {
+    text = await fetchCsv();
+  } catch (err) {
+    const message = (err as Error).message;
+    console.error(`  Texas: TDLR file unreachable after retries: ${message}`);
+    recordScrapeResult({ state: "Texas", code: "TX", scraped: 0, valid: 0, held: 0, created: 0, updated: 0, status: "error", note: message });
+    process.exit(1);
   }
+  const rows = parseCsv(text);
+  const schools = toSchools(rows);
+  console.log(`  ${rows.length} licences in the file, ${schools.length} current driving safety providers (excluding ${[...EXCLUDED_LICENCES].join(", ")})`);
+  await syncToNotion(schools, "Texas", TX_DSC_SOURCE, "TX", { ownSourceOnly: true });
 }
 
-main().catch((err) => {
-  console.error("Fatal:", err);
-  process.exit(1);
-});
+if (process.argv[1]?.endsWith("scrape-tx-tdlr.ts")) {
+  main().catch((err) => {
+    console.error("Fatal:", err);
+    recordScrapeResult({ state: "Texas", code: "TX", scraped: 0, valid: 0, held: 0, created: 0, updated: 0, status: "error", note: (err as Error).message });
+    process.exit(1);
+  });
+}
