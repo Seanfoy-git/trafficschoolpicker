@@ -243,14 +243,21 @@ async function main() {
   const recheck = recheckLists();
   const results: Record<string, Approval> = {};
   const states = STATE_LIST.filter((s) => !ONLY_STATE || s.slug === ONLY_STATE);
+  const prior: Record<string, Approval> = fs.existsSync(OUT_JSON) ? JSON.parse(fs.readFileSync(OUT_JSON, "utf8")).pairs ?? {} : {};
 
   for (const st of states) {
     const url = `${BASE}/${st.slug}`;
     const html = await get(url);
-    const cardSlugs = [...new Set([...html.matchAll(/href="\/reviews\/([a-z0-9-]+)"[^>]*>\s*Read full review/g)].map((m) => m[1]))];
-    if (!cardSlugs.length) continue;
+    const cardSlugs = [...html.matchAll(/href="\/reviews\/([a-z0-9-]+)"[^>]*>\s*Read full review/g)].map((m) => m[1]);
+    // Re-check every pair already on file too, not only the cards on the page: the
+    // gate hides "disclaimed" pairs, so a cards-only run never sees them, drops
+    // them, and the next build shows those cards again (caught 25 Nov 2026, when a
+    // re-run lost all 17).
+    const priorSlugs = Object.keys(prior).filter((k) => k.endsWith(`:${st.code}`)).map((k) => k.split(":")[0]);
+    const slugs = [...new Set([...cardSlugs, ...priorSlugs])];
+    if (!slugs.length) continue;
     const lists = [...directoryFromStatePage(html, url), ...(recheck.get(st.name.toLowerCase()) ?? [])];
-    for (const slug of cardSlugs) {
+    for (const slug of slugs) {
       if (!SCHOOLS[slug]) {
         console.warn(`  ${st.code} ${slug}: no identity configured, skipped`);
         continue;
@@ -262,7 +269,6 @@ async function main() {
   }
 
   // Merge into the existing file so a --state run updates only that state.
-  const prior: Record<string, Approval> = fs.existsSync(OUT_JSON) ? JSON.parse(fs.readFileSync(OUT_JSON, "utf8")).pairs ?? {} : {};
   const pairs = ONLY_STATE ? { ...prior, ...results } : results;
   const sorted = Object.fromEntries(Object.entries(pairs).sort(([a], [b]) => a.localeCompare(b)));
   fs.writeFileSync(OUT_JSON, JSON.stringify({ generated: TODAY, base: BASE, pairs: sorted }, null, 2) + "\n");
