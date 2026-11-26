@@ -1,0 +1,92 @@
+name: Directory scrape (one state, by hand)
+
+# Run one directory scraper on its own, so a fixed or new state list can be
+# checked before the Monthly Data Refresh runs every state (Sean, 25 Nov 2026:
+# watch the first run that delists). Dry run by default: it reads Notion, writes
+# nothing, and uploads what it would write. Untick dry_run to write.
+
+on:
+  workflow_dispatch:
+    inputs:
+      script:
+        description: "Scraper to run"
+        required: true
+        default: "scrape:tx"
+        type: choice
+        options:
+          # Not CA or FL: they still write outside syncToNotion, so a dry run
+          # would write. Add them once they're ported (deficiency plan, section 2).
+          - scrape:tx
+          - scrape:oh
+          - scrape:ga
+          - scrape:ny
+          - scrape:az
+          - scrape:va
+          - scrape:states
+          - scrape:pdf
+      dry_run:
+        description: "Dry run (read Notion, write nothing)"
+        required: true
+        default: true
+        type: boolean
+      redeploy:
+        description: "Redeploy the site after a real run"
+        required: true
+        default: true
+        type: boolean
+
+concurrency:
+  group: notion-writes
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    env:
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_DIRECTORY_DB: ${{ secrets.NOTION_DIRECTORY_DB }}
+      NOTION_SCRAPER_RULES_DB: ${{ secrets.NOTION_SCRAPER_RULES_DB }}
+      NOTION_STATES_DB: ${{ secrets.NOTION_STATES_DB }}
+      DIRECTORY_SCRAPE_SUMMARY: directory-scrape-summary.jsonl
+      SCRAPER_DRY_RUN: ${{ inputs.dry_run && 'directory-dry-run.jsonl' || '' }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - run: npm ci
+      - name: Install Playwright browsers
+        if: inputs.script != 'scrape:tx'
+        run: npx playwright install chromium --with-deps
+      - name: Run ${{ inputs.script }}${{ inputs.dry_run && ' (dry run)' || '' }}
+        run: npm run ${{ inputs.script }}
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### ${{ inputs.script }}${{ inputs.dry_run && ' (dry run, nothing written)' || '' }}"
+            echo
+            echo '```'
+            cat directory-scrape-summary.jsonl 2>/dev/null || echo "no summary written"
+            echo '```'
+            if [ -f directory-dry-run.jsonl ]; then
+              echo
+              echo "Would write $(wc -l < directory-dry-run.jsonl) rows; $(grep -c '"existing":true' directory-dry-run.jsonl || true) update existing rows. Full list in the artifact."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: directory-scrape
+          path: |
+            directory-scrape-summary.jsonl
+            directory-dry-run.jsonl
+          if-no-files-found: ignore
+      - name: Trigger Vercel redeploy
+        if: ${{ !inputs.dry_run && inputs.redeploy }}
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -n "$VERCEL_DEPLOY_HOOK" ]; then curl -s -X POST "$VERCEL_DEPLOY_HOOK" > /dev/null && echo "Redeploy triggered"; else echo "No deploy hook set"; fi

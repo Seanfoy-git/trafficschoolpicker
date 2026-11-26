@@ -317,8 +317,16 @@ const DIRECTORY_LISTS: Record<string, DirectoryListInfo> = {
     source: "Oregon ODOT list of Distracted Driving Avoidance Course providers",
     kind: "course",
   },
+  // TDLR "Driver Safety Providers" file (vsDriverSafetyProvider.csv): CP-numbered licensed
+  // driving safety course providers, the course a Texas court accepts for dismissal.
+  "TX TDLR DSC": {
+    noun: "TDLR-licensed driving safety course providers",
+    source: "TDLR list of licensed driving safety course providers",
+    kind: "ticket",
+  },
   // Not shown. TDLR's driver education provider file: C-numbered driver-ed schools, ISDs and
   // parent-taught courses. The driving safety course providers (CP numbers) are not in it.
+  // Its rows stay in Notion because the Texas comparison's priced tier-2 rows sit on them.
   "TX TDLR": { noun: "TDLR-licensed driver education schools", source: "TDLR driver education provider list", kind: "driver-ed" },
   // Not shown. Nebraska "driver safety schools" teach and test 14 to 16 year olds (POP/SCP permits).
   "NE DMV": { noun: "DMV-approved driver safety schools", source: "Nebraska DMV list of driver safety schools", kind: "driver-ed" },
@@ -355,6 +363,28 @@ export type DirectoryList = {
   /** Being on this list is evidence of the approval a card badge claims. */
   approves: boolean;
 };
+
+/**
+ * A state's directory and the rows it shows. Most states hold one list. Where a
+ * state holds rows from more than one (Texas: the old driver-ed file and TDLR's
+ * driving safety providers), the directory is the largest list of a shown kind,
+ * and only its rows are shown, counted and dated. The other rows stay data, e.g.
+ * for the comparison's priced rows.
+ */
+export function directoryForState(stateName: string, rows: DirectorySchool[]): { list: DirectoryList; rows: DirectorySchool[] } {
+  const bySource = new Map<string, DirectorySchool[]>();
+  for (const r of rows) bySource.set(r.source, [...(bySource.get(r.source) ?? []), r]);
+  if (bySource.size > 1) {
+    const shownLists = [...bySource.entries()]
+      .filter(([src]) => DIRECTORY_LISTS[src] && SHOWN_KINDS.has(DIRECTORY_LISTS[src].kind))
+      .sort((a, b) => b[1].length - a[1].length);
+    if (shownLists.length) {
+      const listRows = shownLists[0][1];
+      return { list: directoryListLabel(stateName, listRows), rows: listRows };
+    }
+  }
+  return { list: directoryListLabel(stateName, rows), rows };
+}
 
 export function directoryListLabel(stateName: string, rows: DirectorySchool[]): DirectoryList {
   const sources = [...new Set(rows.map((r) => r.source))];
