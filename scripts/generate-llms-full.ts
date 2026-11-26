@@ -16,7 +16,17 @@ import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { STATE_LIST } from "../lib/state-utils";
-import { ticketCostFor, formatCost, savingsSentence, TICKET_COST_STUDY, SURCHARGE_ESTIMATE_LABEL } from "../lib/ticket-cost-study";
+import {
+  ticketCostFor,
+  formatCost,
+  savingsSentence,
+  TICKET_COST_STUDY,
+  SURCHARGE_ESTIMATE_LABEL,
+  STATE_TICKET_COST,
+  MOST_EXPENSIVE,
+  CHEAPEST,
+  BEST_SAVINGS,
+} from "../lib/ticket-cost-study";
 import type { StateComparison } from "../lib/comparison";
 // Type-only imports are erased at compile time, so they don't trigger lib/notion's
 // module-load (its Client reads the token then). The runtime helpers are pulled in
@@ -403,24 +413,31 @@ async function main() {
     }
   }
 
-  // ── True Cost of a Traffic Ticket (fixed 2026 study) ──
-  // A static block (no Notion data) so the per-state cost figures become citable
-  // LLM facts. Appended last so the file ends with the study section.
+  // ── True Cost of a Traffic Ticket (2026 study) ──
+  // Built from lib/ticket-cost-study.ts (re-based on LendingTree, 26 Nov 2026), so
+  // the llms figures can never drift from the state pages and the study post.
+  // Appended last so the file ends with the study section.
+  const studyName = (code: string) => STATE_LIST.find((st) => st.code === code)?.name ?? code;
+  const allIn = (codes: readonly string[]) =>
+    codes.map((c) => `${studyName(c)} ${formatCost(STATE_TICKET_COST[c].allInCost ?? 0)}`).join(", ");
+  const saved = BEST_SAVINGS.map(
+    (c) => `${studyName(c)} ~${formatCost(STATE_TICKET_COST[c].netSavings ?? 0)}`
+  ).join(", ");
+  const tx = STATE_TICKET_COST.TX;
   lines.push(
     "## The True Cost of a Traffic Ticket (2026 study)",
     "",
-    "> TrafficSchoolPicker analysis of all 51 US jurisdictions. All-in cost of a first speeding ticket",
-    "> = fine + estimated 3-year insurance surcharge (an estimate from CarInsurance.com and Quadrant Information Services",
-    "> rate data, not a state figure; your insurer's actual surcharge varies). Full write-up:",
-    "> https://www.trafficschoolpicker.com/blog/true-cost-of-a-traffic-ticket",
+    "> TrafficSchoolPicker analysis of all 51 US jurisdictions. All-in cost of a first speeding ticket (15 mph over,",
+    `> clean record) = fine plus court costs + estimated 3-year insurance increase (${SURCHARGE_ESTIMATE_LABEL}).`,
+    `> Full write-up: ${BASE_URL}/blog/${TICKET_COST_STUDY.slug}. Re-based ${TICKET_COST_STUDY.updated}; earlier versions used higher CarInsurance.com estimates.`,
     "",
-    "- Nationally, one speeding ticket costs about $435 more per year in insurance (~$1,300 over 3 years). The average 24-25% rate increase dwarfs the ~$130 average 10-over fine.",
-    "- Most expensive states, all-in: Michigan $8,742, California $5,619, Hawaii $5,227, Texas $5,047, New Jersey $4,965, Delaware $4,582, Louisiana $4,512, Rhode Island $4,481, Nevada $4,228, Florida $4,170.",
-    "- Cheapest states, all-in: Vermont $1,305, Montana $1,486, Pennsylvania $1,494, Nebraska $1,528, Ohio $1,684, Utah $1,792, Virginia $1,818, Maryland $1,869, New Hampshire $2,024, Maine $2,100.",
-    "- Biggest traffic-school net savings: Michigan ~$8,600, California ~$5,300, Hawaii ~$5,050, Texas ~$4,650, Louisiana ~$4,300, Nevada ~$3,950, Florida ~$3,900, Tennessee ~$2,950, Arizona ~$2,950, Oklahoma ~$2,350.",
-    "- Texas example: a driving safety course dismissal costs about $170 to $180 in total, and $134 of that is court costs and state fines owed even if you just pay the ticket. It avoids about $4,800 in estimated 3-year insurance increases. Mechanism is dismissal, not a discount.",
-    "- Course mechanisms differ by state: masking (CA, VC §1808.7), dismissal (TX, Art. 45A.352), adjudication withheld (FL, §318.14), base-rate discount (NY PIRP, insurers still see the ticket), one-time point masking (MI BDIC). PA/MA/NJ/KS offer little for a first ticket.",
-    "- Sources: FinanceBuzz (fines), CarInsurance.com/Quadrant (surcharges), U.S. News, NHTSA. Rankings are source-dependent (esp. Hawaii).",
+    `- Nationally, one 11-to-15-over ticket raises insurance ${TICKET_COST_STUDY.nationalIncreasePct} (LendingTree: $551.54 a year, ${formatCost(TICKET_COST_STUDY.nationalThreeYear)} over 3 years), against an average 15-over fine of ${formatCost(TICKET_COST_STUDY.nationalFine)} (FinanceBuzz).`,
+    `- Most expensive states, all-in: ${allIn(MOST_EXPENSIVE)}.`,
+    `- Cheapest states, all-in: ${allIn(CHEAPEST)}.`,
+    `- Biggest traffic-school net savings (3-year increase avoided less a flat $100 for course and court fees): ${saved}.`,
+    `- Texas example: paying a 15-over ticket costs ${formatCost(tx.fine ?? 0)} plus about ${formatCost(tx.threeYearSurcharge ?? 0)} in higher insurance over 3 years (${formatCost(tx.allInCost ?? 0)}). A driving safety course dismissal (Code of Criminal Procedure Art. 45A.352) costs about $185 in total, $134 of it court costs and state fines owed either way. Mechanism is dismissal, not a discount; not available at 25 mph or more over.`,
+    "- Course mechanisms differ by state: dismissal (AZ, A.R.S. § 28-3392; TX, Art. 45A.352), masking (CA, VC §1808.7), adjudication withheld (FL, §318.14), base-rate discount (NY PIRP, insurers still see the ticket), one-time point masking (MI BDIC). PA/MA/NJ/KS offer little for a first ticket.",
+    "- Sources: FinanceBuzz (fines plus court costs, 15 mph over, October 2025), LendingTree using Quadrant Information Services data (insurance increase, September 2026), NHTSA. Rankings are source-dependent.",
     ""
   );
 

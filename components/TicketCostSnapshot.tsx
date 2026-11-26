@@ -4,8 +4,8 @@ import { ticketCostFor, formatCost, savingsSentence, TICKET_COST_STUDY } from "@
  * Canonical ticket-cost snapshot for the cost / worth-it question pages. Reads the
  * per-state figures straight from lib/ticket-cost-study.ts so the cost page, the
  * worth-it page, the parent state page, and llms can never show different numbers.
- * Renders nothing for states the study publishes no figure for (e.g. GA, whose
- * benefit is a point reduction, not a ticket-cost trade) — we never invent one.
+ * Every jurisdiction has a figure since the 26 Nov 2026 re-base; the null check
+ * stays so a state missing from the data renders nothing rather than an invented one.
  */
 export function TicketCostSnapshot({ stateCode, stateName }: { stateCode: string; stateName: string }) {
   const c = ticketCostFor(stateCode);
@@ -30,7 +30,7 @@ export function TicketCostSnapshot({ stateCode, stateName }: { stateCode: string
           ))}
         </dl>
         <p className="mt-3 text-xs text-slate-500">
-          A typical first ticket for 10 mph over, paid without taking a course.
+          A typical first ticket for 15 mph over, paid without taking a course.
           {savingsSentence(c) ? <> {savingsSentence(c)}</> : null}{" "}
           <a href={`/blog/${TICKET_COST_STUDY.slug}`} className="text-accent underline">
             See the full study.
