@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-25",
+  "generated": "2026-11-26",
   "base": "https://www.trafficschoolpicker.com",
   "pairs": {
     "aceable:CA": {
@@ -10,7 +10,7 @@
         {
           "kind": "list",
           "text": "ACEABLE TRAFFIC SCHOOL",
-          "url": "https://www.trafficschoolpicker.com/california (directory: data-count=\"directory\">218 DMV-licensed online traffic schools in California Source: Official California DMV records · Last verified 2026-11-01)"
+          "url": "https://www.trafficschoolpicker.com/california (directory: data-count=\"directory\">218 DMV-licensed online traffic schools in California Source: California DMV list of licensed traffic schools · Last verified 2026-11-01)"
         },
         {
           "kind": "page",
@@ -28,7 +28,7 @@
           "url": "https://www.aceable.com/dmv/california/report-of-traffic-accident-sr1/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "aceable:FL": {
       "school": "aceable",
@@ -38,7 +38,7 @@
         {
           "kind": "list",
           "text": "Aceable",
-          "url": "https://www.trafficschoolpicker.com/florida (directory: data-count=\"directory\">58 state-licensed traffic schools in Florida Source: Official Florida DMV records · Last verified 2026-09-24)"
+          "url": "https://www.trafficschoolpicker.com/florida (directory: data-count=\"directory\">58 FLHSMV-approved Basic Driver Improvement course providers in Florida Source: FLHSMV list of approved Basic Driver Improvement course providers · Last verified 2026-09-24)"
         },
         {
           "kind": "page",
@@ -51,7 +51,7 @@
           "url": "https://www.aceable.com/driver-improvement/florida/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "aceable:TX": {
       "school": "aceable",
@@ -60,8 +60,8 @@
       "evidence": [
         {
           "kind": "list",
-          "text": "ACEABLE",
-          "url": "https://www.trafficschoolpicker.com/texas (directory: data-count=\"directory\">845 DMV-licensed online traffic schools in Texas Source: Official Texas DMV records · Last verified 2026-08-01)"
+          "text": "ACEABLE DEFENSIVE DRIVING",
+          "url": "https://www.trafficschoolpicker.com/texas (directory: data-count=\"directory\">509 TDLR-licensed driving safety course providers in Texas Source: TDLR list of licensed driving safety course providers · Last verified 2026-11-26)"
         },
         {
           "kind": "page",
@@ -94,7 +94,7 @@
           "url": "https://www.aceable.com/defensive-driving/texas-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:AK": {
       "school": "driversed",
@@ -113,7 +113,7 @@
           "url": "https://driversed.com/alaska/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:AL": {
       "school": "driversed",
@@ -137,7 +137,7 @@
           "url": "https://driversed.com/alabama/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:AR": {
       "school": "driversed",
@@ -161,7 +161,7 @@
           "url": "https://driversed.com/arkansas/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:CA": {
       "school": "driversed",
@@ -171,7 +171,7 @@
         {
           "kind": "list",
           "text": "ACE TRAFFIC SCHOOL",
-          "url": "https://www.trafficschoolpicker.com/california (directory: data-count=\"directory\">218 DMV-licensed online traffic schools in California Source: Official California DMV records · Last verified 2026-11-01)"
+          "url": "https://www.trafficschoolpicker.com/california (directory: data-count=\"directory\">218 DMV-licensed online traffic schools in California Source: California DMV list of licensed traffic schools · Last verified 2026-11-01)"
         },
         {
           "kind": "page",
@@ -184,7 +184,7 @@
           "url": "https://driversed.com/california/traffic-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:CO": {
       "school": "driversed",
@@ -218,7 +218,7 @@
           "url": "https://driversed.com/colorado/driving-lessons/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:CT": {
       "school": "driversed",
@@ -237,7 +237,7 @@
           "url": "https://driversed.com/connecticut/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:DE": {
       "school": "driversed",
@@ -256,7 +256,7 @@
           "url": "https://driversed.com/delaware/traffic-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:FL": {
       "school": "driversed",
@@ -280,7 +280,7 @@
           "url": "https://driversed.com/florida/dets/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:GA": {
       "school": "driversed",
@@ -304,7 +304,7 @@
           "url": "https://driversed.com/georgia/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:HI": {
       "school": "driversed",
@@ -323,7 +323,7 @@
           "url": "https://driversed.com/hawaii/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:IA": {
       "school": "driversed",
@@ -342,7 +342,7 @@
           "url": "https://driversed.com/iowa/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:ID": {
       "school": "driversed",
@@ -366,7 +366,7 @@
           "url": "https://driversed.com/idaho/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:IN": {
       "school": "driversed",
@@ -400,7 +400,7 @@
           "url": "https://driversed.com/indiana/driving-lessons/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:KS": {
       "school": "driversed",
@@ -424,7 +424,7 @@
           "url": "https://driversed.com/kansas/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:LA": {
       "school": "driversed",
@@ -448,7 +448,7 @@
           "url": "https://driversed.com/louisiana/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:MN": {
       "school": "driversed",
@@ -467,7 +467,7 @@
           "url": "https://driversed.com/minnesota/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:MO": {
       "school": "driversed",
@@ -496,7 +496,7 @@
           "url": "https://driversed.com/missouri/driving-lessons/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:MS": {
       "school": "driversed",
@@ -515,7 +515,7 @@
           "url": "https://driversed.com/mississippi/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:MT": {
       "school": "driversed",
@@ -534,7 +534,7 @@
           "url": "https://driversed.com/montana/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:NC": {
       "school": "driversed",
@@ -558,7 +558,7 @@
           "url": "https://driversed.com/north-carolina/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:ND": {
       "school": "driversed",
@@ -577,7 +577,7 @@
           "url": "https://driversed.com/north-dakota/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:NE": {
       "school": "driversed",
@@ -601,7 +601,7 @@
           "url": "https://driversed.com/nebraska/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:NJ": {
       "school": "driversed",
@@ -612,7 +612,7 @@
         {
           "kind": "list",
           "text": "DriversEd.com",
-          "url": "https://www.trafficschoolpicker.com/new-jersey (directory: data-count=\"directory\">86 state-licensed traffic schools in New Jersey Source: Official New Jersey DMV records · Last verified 2026-11-01)"
+          "url": "https://www.trafficschoolpicker.com/new-jersey (directory: data-count=\"directory\">86 MVC-approved defensive driving course providers in New Jersey Source: New Jersey MVC list of approved defensive driving courses · Last verified 2026-11-01)"
         },
         {
           "kind": "page",
@@ -625,7 +625,7 @@
           "url": "https://driversed.com/new-jersey/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:NM": {
       "school": "driversed",
@@ -644,7 +644,7 @@
           "url": "https://driversed.com/new-mexico/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:NV": {
       "school": "driversed",
@@ -678,7 +678,7 @@
           "url": "https://driversed.com/nevada/driving-lessons/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:NY": {
       "school": "driversed",
@@ -702,7 +702,7 @@
           "url": "https://driversed.com/new-york/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:OH": {
       "school": "driversed",
@@ -713,7 +713,7 @@
         {
           "kind": "list",
           "text": "DriversEd.com",
-          "url": "https://www.trafficschoolpicker.com/ohio (directory: data-count=\"directory\">27 DMV-licensed online traffic schools in Ohio Source: Official Ohio DMV records · Last verified 2026-11-01)"
+          "url": "https://www.trafficschoolpicker.com/ohio (directory: data-count=\"directory\">27 DPS-approved online remedial driving courses in Ohio Source: Ohio DPS list of approved online remedial driving courses · Last verified 2026-11-01)"
         },
         {
           "kind": "page",
@@ -736,7 +736,7 @@
           "url": "https://driversed.com/ohio/knowledge-test-prep-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:OK": {
       "school": "driversed",
@@ -755,7 +755,7 @@
           "url": "https://driversed.com/oklahoma/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:OR": {
       "school": "driversed",
@@ -774,7 +774,7 @@
           "url": "https://driversed.com/oregon/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:RI": {
       "school": "driversed",
@@ -793,7 +793,7 @@
           "url": "https://driversed.com/rhode-island/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:SD": {
       "school": "driversed",
@@ -812,7 +812,7 @@
           "url": "https://driversed.com/south-dakota/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:TN": {
       "school": "driversed",
@@ -836,7 +836,7 @@
           "url": "https://driversed.com/tennessee/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:TX": {
       "school": "driversed",
@@ -845,8 +845,8 @@
       "evidence": [
         {
           "kind": "list",
-          "text": "AS DRIVER EDUCATION",
-          "url": "https://www.trafficschoolpicker.com/texas (directory: data-count=\"directory\">845 DMV-licensed online traffic schools in Texas Source: Official Texas DMV records · Last verified 2026-08-01)"
+          "text": "DRIVERSED.COM",
+          "url": "https://www.trafficschoolpicker.com/texas (directory: data-count=\"directory\">509 TDLR-licensed driving safety course providers in Texas Source: TDLR list of licensed driving safety course providers · Last verified 2026-11-26)"
         },
         {
           "kind": "page",
@@ -864,7 +864,7 @@
           "url": "https://driversed.com/texas/defensive-driving/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:UT": {
       "school": "driversed",
@@ -888,7 +888,7 @@
           "url": "https://driversed.com/utah/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:VA": {
       "school": "driversed",
@@ -907,14 +907,14 @@
           "url": "https://driversed.com/virginia/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:WA": {
       "school": "driversed",
       "state": "washington",
       "status": "unchecked",
       "evidence": [],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:WI": {
       "school": "driversed",
@@ -933,7 +933,7 @@
           "url": "https://driversed.com/wisconsin/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:WV": {
       "school": "driversed",
@@ -952,7 +952,7 @@
           "url": "https://driversed.com/west-virginia/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "driversed:WY": {
       "school": "driversed",
@@ -971,7 +971,7 @@
           "url": "https://driversed.com/wyoming/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:AK": {
       "school": "drivesafeonline",
@@ -984,7 +984,7 @@
           "url": "https://www.drivesafeonline.org/alaska/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:AL": {
       "school": "drivesafeonline",
@@ -1007,7 +1007,7 @@
           "url": "https://www.drivesafeonline.org/alabama/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:AR": {
       "school": "drivesafeonline",
@@ -1025,7 +1025,7 @@
           "url": "https://www.drivesafeonline.org/arkansas/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:CA": {
       "school": "drivesafeonline",
@@ -1038,7 +1038,7 @@
           "url": "https://www.drivesafeonline.org/california/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:CO": {
       "school": "drivesafeonline",
@@ -1056,7 +1056,7 @@
           "url": "https://www.drivesafeonline.org/colorado/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:CT": {
       "school": "drivesafeonline",
@@ -1066,10 +1066,10 @@
         {
           "kind": "list",
           "text": "Connecticut Mature Driver Accident Prevention - DriveSafe Online®",
-          "url": "https://www.trafficschoolpicker.com/connecticut (directory: data-count=\"directory\">22 DMV-licensed online traffic schools in Connecticut Source: Official Connecticut DMV records · Last verified 2026-11-01)"
+          "url": "data/directory-recheck-state-lists-2026-11-17.jsonl"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:DE": {
       "school": "drivesafeonline",
@@ -1092,7 +1092,7 @@
           "url": "https://www.drivesafeonline.org/delaware/defensive-driving-courses/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:FL": {
       "school": "drivesafeonline",
@@ -1102,7 +1102,7 @@
         {
           "kind": "list",
           "text": "NexLearn",
-          "url": "https://www.trafficschoolpicker.com/florida (directory: data-count=\"directory\">58 state-licensed traffic schools in Florida Source: Official Florida DMV records · Last verified 2026-09-24)"
+          "url": "https://www.trafficschoolpicker.com/florida (directory: data-count=\"directory\">58 FLHSMV-approved Basic Driver Improvement course providers in Florida Source: FLHSMV list of approved Basic Driver Improvement course providers · Last verified 2026-09-24)"
         },
         {
           "kind": "page",
@@ -1120,7 +1120,7 @@
           "url": "https://www.drivesafeonline.org/florida/basic-driver-improvement/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:GA": {
       "school": "drivesafeonline",
@@ -1148,7 +1148,7 @@
           "url": "https://www.drivesafeonline.org/georgia/henry-county/defensive-driving/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:HI": {
       "school": "drivesafeonline",
@@ -1161,7 +1161,7 @@
           "url": "https://www.drivesafeonline.org/hawaii/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:IA": {
       "school": "drivesafeonline",
@@ -1174,7 +1174,7 @@
           "url": "https://www.drivesafeonline.org/iowa/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:ID": {
       "school": "drivesafeonline",
@@ -1190,9 +1190,14 @@
           "kind": "claim",
           "text": "se and Traffic School Features: Content approved by the Idaho Transportation Department Fully narrated video with closed captioning Innovative in-c",
           "url": "https://www.drivesafeonline.org/idaho/"
+        },
+        {
+          "kind": "court",
+          "text": "e to all Virginia drivers. The DMV- and court-approved 8-hour online course is the latest addition to expanding Dr",
+          "url": "https://www.drivesafeonline.org/idaho/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:IN": {
       "school": "drivesafeonline",
@@ -1210,7 +1215,7 @@
           "url": "https://www.drivesafeonline.org/indiana/defensive-driving-courses/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:KS": {
       "school": "drivesafeonline",
@@ -1228,14 +1233,14 @@
           "url": "https://www.drivesafeonline.org/kansas/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:LA": {
       "school": "drivesafeonline",
       "state": "louisiana",
       "status": "unchecked",
       "evidence": [],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:MN": {
       "school": "drivesafeonline",
@@ -1245,7 +1250,7 @@
         {
           "kind": "list",
           "text": "DriveSafe Online",
-          "url": "https://www.trafficschoolpicker.com/minnesota (directory: data-count=\"directory\">28 state-licensed traffic schools in Minnesota Source: Official Minnesota DMV records · Last verified 2026-11-01)"
+          "url": "data/directory-recheck-state-lists-2026-11-17.jsonl"
         },
         {
           "kind": "page",
@@ -1253,7 +1258,7 @@
           "url": "https://www.drivesafeonline.org/minnesota/accident-prevention-courses/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:MO": {
       "school": "drivesafeonline",
@@ -1266,7 +1271,7 @@
           "url": "https://www.drivesafeonline.org/missouri/driver-improvement-program/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:MS": {
       "school": "drivesafeonline",
@@ -1284,7 +1289,7 @@
           "url": "https://www.drivesafeonline.org/mississippi/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:MT": {
       "school": "drivesafeonline",
@@ -1302,7 +1307,7 @@
           "url": "https://www.drivesafeonline.org/montana/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:NC": {
       "school": "drivesafeonline",
@@ -1315,7 +1320,7 @@
           "url": "https://www.drivesafeonline.org/north-carolina/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:ND": {
       "school": "drivesafeonline",
@@ -1328,7 +1333,7 @@
           "url": "https://www.drivesafeonline.org/north-dakota/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:NE": {
       "school": "drivesafeonline",
@@ -1346,7 +1351,7 @@
           "url": "https://www.drivesafeonline.org/nebraska/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:NJ": {
       "school": "drivesafeonline",
@@ -1356,7 +1361,7 @@
         {
           "kind": "list",
           "text": "DriveSafe Online",
-          "url": "https://www.trafficschoolpicker.com/new-jersey (directory: data-count=\"directory\">86 state-licensed traffic schools in New Jersey Source: Official New Jersey DMV records · Last verified 2026-11-01)"
+          "url": "https://www.trafficschoolpicker.com/new-jersey (directory: data-count=\"directory\">86 MVC-approved defensive driving course providers in New Jersey Source: New Jersey MVC list of approved defensive driving courses · Last verified 2026-11-01)"
         },
         {
           "kind": "page",
@@ -1369,7 +1374,7 @@
           "url": "https://www.drivesafeonline.org/new-jersey/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:NM": {
       "school": "drivesafeonline",
@@ -1382,7 +1387,7 @@
           "url": "https://www.drivesafeonline.org/new-mexico/online-defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:NV": {
       "school": "drivesafeonline",
@@ -1410,7 +1415,7 @@
           "url": "https://www.drivesafeonline.org/nevada/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:NY": {
       "school": "drivesafeonline",
@@ -1428,7 +1433,7 @@
           "url": "https://www.drivesafeonline.org/new-york/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:OH": {
       "school": "drivesafeonline",
@@ -1441,7 +1446,7 @@
           "url": "https://www.drivesafeonline.org/ohio/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:OK": {
       "school": "drivesafeonline",
@@ -1459,7 +1464,7 @@
           "url": "https://www.drivesafeonline.org/oklahoma/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:OR": {
       "school": "drivesafeonline",
@@ -1477,7 +1482,7 @@
           "url": "https://www.drivesafeonline.org/oregon/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:RI": {
       "school": "drivesafeonline",
@@ -1490,7 +1495,7 @@
           "url": "https://www.drivesafeonline.org/rhode-island/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:SD": {
       "school": "drivesafeonline",
@@ -1508,7 +1513,7 @@
           "url": "https://www.drivesafeonline.org/south-dakota/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:TN": {
       "school": "drivesafeonline",
@@ -1531,13 +1536,18 @@
           "url": "https://www.drivesafeonline.org/tennessee/ticket-dismissal/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:TX": {
       "school": "drivesafeonline",
       "state": "texas",
-      "status": "claimed",
+      "status": "listed",
       "evidence": [
+        {
+          "kind": "list",
+          "text": "DRIVESAFE ONLINE",
+          "url": "https://www.trafficschoolpicker.com/texas (directory: data-count=\"directory\">509 TDLR-licensed driving safety course providers in Texas Source: TDLR list of licensed driving safety course providers · Last verified 2026-11-26)"
+        },
         {
           "kind": "page",
           "text": "17773 chars",
@@ -1559,7 +1569,7 @@
           "url": "https://www.drivesafeonline.org/texas/bexar-county-defensive-driving/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:UT": {
       "school": "drivesafeonline",
@@ -1577,7 +1587,7 @@
           "url": "https://www.drivesafeonline.org/utah/defensive-driving-courses/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:VA": {
       "school": "drivesafeonline",
@@ -1620,7 +1630,7 @@
           "url": "https://www.drivesafeonline.org/virginia/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:WA": {
       "school": "drivesafeonline",
@@ -1638,7 +1648,7 @@
           "url": "https://www.drivesafeonline.org/washington/online-defensive-driving/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:WI": {
       "school": "drivesafeonline",
@@ -1651,7 +1661,7 @@
           "url": "https://www.drivesafeonline.org/wisconsin/failure-to-yield-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:WV": {
       "school": "drivesafeonline",
@@ -1664,7 +1674,7 @@
           "url": "https://www.drivesafeonline.org/west-virginia/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "drivesafeonline:WY": {
       "school": "drivesafeonline",
@@ -1677,7 +1687,7 @@
           "url": "https://www.drivesafeonline.org/wyoming/defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:AK": {
       "school": "gototrafficschool",
@@ -1700,7 +1710,7 @@
           "url": "https://www.gototrafficschool.com/register/Alaska-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:AL": {
       "school": "gototrafficschool",
@@ -1738,7 +1748,7 @@
           "url": "https://www.gototrafficschool.com/register/Arab-Alabama-City-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:AR": {
       "school": "gototrafficschool",
@@ -1776,7 +1786,7 @@
           "url": "https://www.gototrafficschool.com/register/Arkansas-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:CA": {
       "school": "gototrafficschool",
@@ -1786,7 +1796,7 @@
         {
           "kind": "list",
           "text": "GOTOTRAFFICSCHOOLCOM",
-          "url": "https://www.trafficschoolpicker.com/california (directory: data-count=\"directory\">218 DMV-licensed online traffic schools in California Source: Official California DMV records · Last verified 2026-11-01)"
+          "url": "https://www.trafficschoolpicker.com/california (directory: data-count=\"directory\">218 DMV-licensed online traffic schools in California Source: California DMV list of licensed traffic schools · Last verified 2026-11-01)"
         },
         {
           "kind": "page",
@@ -1804,7 +1814,7 @@
           "url": "https://www.gototrafficschool.com/states-spanish/california"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:CO": {
       "school": "gototrafficschool",
@@ -1842,7 +1852,7 @@
           "url": "https://www.gototrafficschool.com/register/Colorado-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:CT": {
       "school": "gototrafficschool",
@@ -1880,7 +1890,7 @@
           "url": "https://www.gototrafficschool.com/register/Connecticut-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:DE": {
       "school": "gototrafficschool",
@@ -1903,7 +1913,7 @@
           "url": "https://www.gototrafficschool.com/info2/Delaware-Defensive-Driving-Course.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:FL": {
       "school": "gototrafficschool",
@@ -1913,7 +1923,7 @@
         {
           "kind": "list",
           "text": "Cyberactive (Miami-Dade Citations Only)",
-          "url": "https://www.trafficschoolpicker.com/florida (directory: data-count=\"directory\">58 state-licensed traffic schools in Florida Source: Official Florida DMV records · Last verified 2026-09-24)"
+          "url": "https://www.trafficschoolpicker.com/florida (directory: data-count=\"directory\">58 FLHSMV-approved Basic Driver Improvement course providers in Florida Source: FLHSMV list of approved Basic Driver Improvement course providers · Last verified 2026-09-24)"
         },
         {
           "kind": "page",
@@ -1931,7 +1941,7 @@
           "url": "https://www.gototrafficschool.com/info2/Florida-BDI.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:GA": {
       "school": "gototrafficschool",
@@ -1959,7 +1969,7 @@
           "url": "https://www.gototrafficschool.com/articles/Buckle-Up-Its-Finally-The-Law-In-Georgia.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:HI": {
       "school": "gototrafficschool",
@@ -1997,7 +2007,7 @@
           "url": "https://www.gototrafficschool.com/register/Hawaii-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:IA": {
       "school": "gototrafficschool",
@@ -2035,7 +2045,7 @@
           "url": "https://www.gototrafficschool.com/register/Iowa-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:ID": {
       "school": "gototrafficschool",
@@ -2053,7 +2063,7 @@
           "url": "https://www.gototrafficschool.com/info2/Idaho-Traffic-Schools.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:IN": {
       "school": "gototrafficschool",
@@ -2086,7 +2096,7 @@
           "url": "https://www.gototrafficschool.com/register/Indiana-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:KS": {
       "school": "gototrafficschool",
@@ -2124,7 +2134,7 @@
           "url": "https://www.gototrafficschool.com/register/Kansas-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:LA": {
       "school": "gototrafficschool",
@@ -2162,7 +2172,7 @@
           "url": "https://www.gototrafficschool.com/register/Louisiana-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:MN": {
       "school": "gototrafficschool",
@@ -2172,7 +2182,7 @@
         {
           "kind": "list",
           "text": "GoToTrafficSchool.com",
-          "url": "https://www.trafficschoolpicker.com/minnesota (directory: data-count=\"directory\">28 state-licensed traffic schools in Minnesota Source: Official Minnesota DMV records · Last verified 2026-11-01)"
+          "url": "data/directory-recheck-state-lists-2026-11-17.jsonl"
         },
         {
           "kind": "page",
@@ -2195,7 +2205,7 @@
           "url": "https://www.gototrafficschool.com/register/Minnesota-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:MO": {
       "school": "gototrafficschool",
@@ -2218,7 +2228,7 @@
           "url": "https://www.gototrafficschool.com/info2/Missouri-Traffic-Laws.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:MS": {
       "school": "gototrafficschool",
@@ -2256,7 +2266,7 @@
           "url": "https://www.gototrafficschool.com/register/Mississippi-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:MT": {
       "school": "gototrafficschool",
@@ -2294,7 +2304,7 @@
           "url": "https://www.gototrafficschool.com/register/Montana-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:NC": {
       "school": "gototrafficschool",
@@ -2332,7 +2342,7 @@
           "url": "https://www.gototrafficschool.com/register/North-Carolina-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:NE": {
       "school": "gototrafficschool",
@@ -2370,7 +2380,7 @@
           "url": "https://www.gototrafficschool.com/register/Nebraska-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:NJ": {
       "school": "gototrafficschool",
@@ -2380,7 +2390,7 @@
         {
           "kind": "list",
           "text": "GoToTrafficSchool.com",
-          "url": "https://www.trafficschoolpicker.com/new-jersey (directory: data-count=\"directory\">86 state-licensed traffic schools in New Jersey Source: Official New Jersey DMV records · Last verified 2026-11-01)"
+          "url": "https://www.trafficschoolpicker.com/new-jersey (directory: data-count=\"directory\">86 MVC-approved defensive driving course providers in New Jersey Source: New Jersey MVC list of approved defensive driving courses · Last verified 2026-11-01)"
         },
         {
           "kind": "page",
@@ -2403,7 +2413,7 @@
           "url": "https://www.gototrafficschool.com/info2/New-Jersey-Traffic-Ticket.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:NM": {
       "school": "gototrafficschool",
@@ -2426,7 +2436,7 @@
           "url": "https://www.gototrafficschool.com/states/new-mexico"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:NV": {
       "school": "gototrafficschool",
@@ -2436,7 +2446,7 @@
         {
           "kind": "list",
           "text": "Go To Traffic School",
-          "url": "https://www.trafficschoolpicker.com/nevada (directory: data-count=\"directory\">18 DMV-licensed online traffic schools in Nevada Source: Official Nevada DMV records · Last verified 2026-06-01)"
+          "url": "https://www.trafficschoolpicker.com/nevada (directory: data-count=\"directory\">18 DMV-licensed online traffic safety schools in Nevada Source: Nevada DMV list of licensed traffic safety schools · Last verified 2026-06-01)"
         },
         {
           "kind": "page",
@@ -2464,7 +2474,7 @@
           "url": "https://www.gototrafficschool.com/register/Nevada-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:NY": {
       "school": "gototrafficschool",
@@ -2492,7 +2502,7 @@
           "url": "https://www.gototrafficschool.com/info2/New-York-Defensive-Driving.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:OK": {
       "school": "gototrafficschool",
@@ -2501,7 +2511,7 @@
       "evidence": [
         {
           "kind": "page",
-          "text": "6344 chars",
+          "text": "7583 chars",
           "url": "https://www.gototrafficschool.com/states/oklahoma"
         },
         {
@@ -2530,7 +2540,7 @@
           "url": "https://www.gototrafficschool.com/register/Oklahoma-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:OR": {
       "school": "gototrafficschool",
@@ -2540,7 +2550,7 @@
         {
           "kind": "list",
           "text": "CyberActive Incorporated",
-          "url": "https://www.trafficschoolpicker.com/oregon (directory: data-count=\"directory\">13 state-licensed traffic schools in Oregon Source: Official Oregon DMV records · Last verified 2026-11-01)"
+          "url": "https://www.trafficschoolpicker.com/oregon (directory: data-count=\"directory\">13 ODOT-approved Distracted Driving Avoidance Course providers in Oregon Source: Oregon ODOT list of Distracted Driving Avoidance Course providers · Last verified 2026-11-01)"
         },
         {
           "kind": "page",
@@ -2558,7 +2568,7 @@
           "url": "https://www.gototrafficschool.com/info2/Oregon-Traffic-Court.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:RI": {
       "school": "gototrafficschool",
@@ -2596,7 +2606,7 @@
           "url": "https://www.gototrafficschool.com/register/Rhode-Island-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:SD": {
       "school": "gototrafficschool",
@@ -2634,7 +2644,7 @@
           "url": "https://www.gototrafficschool.com/register/South-Dakota-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:TN": {
       "school": "gototrafficschool",
@@ -2672,7 +2682,7 @@
           "url": "https://www.gototrafficschool.com/register/Tennessee-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:TX": {
       "school": "gototrafficschool",
@@ -2710,7 +2720,7 @@
           "url": "https://www.gototrafficschool.com/register/Texas-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:UT": {
       "school": "gototrafficschool",
@@ -2738,7 +2748,7 @@
           "url": "https://www.gototrafficschool.com/info2/Defensive-Driving-Utah.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:VA": {
       "school": "gototrafficschool",
@@ -2771,7 +2781,7 @@
           "url": "https://www.gototrafficschool.com/info2/Virginia-DMV-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:WA": {
       "school": "gototrafficschool",
@@ -2799,7 +2809,7 @@
           "url": "https://www.gototrafficschool.com/register/Alabama_Washington-County-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:WI": {
       "school": "gototrafficschool",
@@ -2817,7 +2827,7 @@
           "url": "https://www.gototrafficschool.com/articles/Warmer-Weather-Means-Increased-Police-Presence-Throughout-Wisconsin.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:WV": {
       "school": "gototrafficschool",
@@ -2855,7 +2865,7 @@
           "url": "https://www.gototrafficschool.com/register/West-Virginia-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "gototrafficschool:WY": {
       "school": "gototrafficschool",
@@ -2893,7 +2903,7 @@
           "url": "https://www.gototrafficschool.com/register/Wyoming-Defensive-Driving-Online-Traffic-School.aspx"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "highwaytrafficschool:FL": {
       "school": "highwaytrafficschool",
@@ -2903,11 +2913,11 @@
         {
           "kind": "list",
           "text": "Highway Traffic School",
-          "url": "https://www.trafficschoolpicker.com/florida (directory: data-count=\"directory\">58 state-licensed traffic schools in Florida Source: Official Florida DMV records · Last verified 2026-09-24)"
+          "url": "https://www.trafficschoolpicker.com/florida (directory: data-count=\"directory\">58 FLHSMV-approved Basic Driver Improvement course providers in Florida Source: FLHSMV list of approved Basic Driver Improvement course providers · Last verified 2026-09-24)"
         },
         {
           "kind": "page",
-          "text": "13188 chars",
+          "text": "13140 chars",
           "url": "https://www.highwaytrafficschool.com/florida/"
         },
         {
@@ -2921,13 +2931,18 @@
           "url": "https://www.highwaytrafficschool.com/florida/tlsae-vs-dets/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "highwaytrafficschool:TX": {
       "school": "highwaytrafficschool",
       "state": "texas",
-      "status": "claimed",
+      "status": "listed",
       "evidence": [
+        {
+          "kind": "list",
+          "text": "HIGHWAY TRAFFIC SCHOOL, LLC",
+          "url": "https://www.trafficschoolpicker.com/texas (directory: data-count=\"directory\">509 TDLR-licensed driving safety course providers in Texas Source: TDLR list of licensed driving safety course providers · Last verified 2026-11-26)"
+        },
         {
           "kind": "page",
           "text": "7617 chars",
@@ -2944,7 +2959,7 @@
           "url": "https://www.highwaytrafficschool.com/texas/ticket-dismissal/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:AK": {
       "school": "idrivesafely",
@@ -2972,7 +2987,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/alaska/fines-and-penalties/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:AL": {
       "school": "idrivesafely",
@@ -3000,7 +3015,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/alabama/fines-and-penalties/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:AR": {
       "school": "idrivesafely",
@@ -3013,7 +3028,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/arkansas/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:CO": {
       "school": "idrivesafely",
@@ -3041,7 +3056,7 @@
           "url": "https://www.idrivesafely.com/dmv/colorado/drivers-license/appointments/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:CT": {
       "school": "idrivesafely",
@@ -3054,7 +3069,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/connecticut/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:DE": {
       "school": "idrivesafely",
@@ -3082,7 +3097,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/delaware/online/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:GA": {
       "school": "idrivesafely",
@@ -3100,7 +3115,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/georgia/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:HI": {
       "school": "idrivesafely",
@@ -3113,7 +3128,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/hawaii/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:IA": {
       "school": "idrivesafely",
@@ -3126,7 +3141,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/iowa/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:ID": {
       "school": "idrivesafely",
@@ -3144,7 +3159,7 @@
           "url": "https://www.idrivesafely.com/traffic-school/idaho/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:IN": {
       "school": "idrivesafely",
@@ -3172,7 +3187,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/indiana/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:KS": {
       "school": "idrivesafely",
@@ -3185,7 +3200,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/kansas/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:LA": {
       "school": "idrivesafely",
@@ -3203,7 +3218,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/louisiana/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:MN": {
       "school": "idrivesafely",
@@ -3213,7 +3228,7 @@
         {
           "kind": "list",
           "text": "Advancing the Experienced Driver",
-          "url": "https://www.trafficschoolpicker.com/minnesota (directory: data-count=\"directory\">28 state-licensed traffic schools in Minnesota Source: Official Minnesota DMV records · Last verified 2026-11-01)"
+          "url": "data/directory-recheck-state-lists-2026-11-17.jsonl"
         },
         {
           "kind": "page",
@@ -3226,7 +3241,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/minnesota/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:MO": {
       "school": "idrivesafely",
@@ -3249,7 +3264,7 @@
           "url": "https://www.idrivesafely.com/driver-improvement/missouri/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:MS": {
       "school": "idrivesafely",
@@ -3262,7 +3277,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/mississippi/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:MT": {
       "school": "idrivesafely",
@@ -3275,7 +3290,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/montana/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:NC": {
       "school": "idrivesafely",
@@ -3293,7 +3308,7 @@
           "url": "https://www.idrivesafely.com/dmv/north-carolina/insurance/points/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:ND": {
       "school": "idrivesafely",
@@ -3306,7 +3321,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/north-dakota/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:NE": {
       "school": "idrivesafely",
@@ -3319,7 +3334,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/nebraska/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:NJ": {
       "school": "idrivesafely",
@@ -3329,7 +3344,7 @@
         {
           "kind": "list",
           "text": "DefensiveDriving.com",
-          "url": "https://www.trafficschoolpicker.com/new-jersey (directory: data-count=\"directory\">86 state-licensed traffic schools in New Jersey Source: Official New Jersey DMV records · Last verified 2026-11-01)"
+          "url": "https://www.trafficschoolpicker.com/new-jersey (directory: data-count=\"directory\">86 MVC-approved defensive driving course providers in New Jersey Source: New Jersey MVC list of approved defensive driving courses · Last verified 2026-11-01)"
         },
         {
           "kind": "page",
@@ -3352,7 +3367,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/new-jersey/fines-and-penalties/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:NM": {
       "school": "idrivesafely",
@@ -3375,7 +3390,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/new-mexico/fines-and-penalties/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:NV": {
       "school": "idrivesafely",
@@ -3385,7 +3400,7 @@
         {
           "kind": "list",
           "text": "I Drive Safely",
-          "url": "https://www.trafficschoolpicker.com/nevada (directory: data-count=\"directory\">18 DMV-licensed online traffic schools in Nevada Source: Official Nevada DMV records · Last verified 2026-06-01)"
+          "url": "https://www.trafficschoolpicker.com/nevada (directory: data-count=\"directory\">18 DMV-licensed online traffic safety schools in Nevada Source: Nevada DMV list of licensed traffic safety schools · Last verified 2026-06-01)"
         },
         {
           "kind": "page",
@@ -3413,7 +3428,7 @@
           "url": "https://www.idrivesafely.com/dmv/nevada/laws/traffic-tickets/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:NY": {
       "school": "idrivesafely",
@@ -3423,7 +3438,7 @@
         {
           "kind": "list",
           "text": "I DRIVE SAFELY",
-          "url": "https://www.trafficschoolpicker.com/new-york (directory: data-count=\"directory\">20 state-licensed traffic schools in New York Source: Official New York DMV records · Last verified 2026-06-01)"
+          "url": "https://www.trafficschoolpicker.com/new-york (directory: data-count=\"directory\">20 DMV-approved PIRP and IPIRP course sponsors in New York Source: New York DMV list of Point and Insurance Reduction Program sponsors · Last verified 2026-06-01)"
         },
         {
           "kind": "page",
@@ -3446,7 +3461,7 @@
           "url": "https://www.idrivesafely.com/dmv/new-york/drivers-license/appointments/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:OH": {
       "school": "idrivesafely",
@@ -3459,7 +3474,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/ohio/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:OK": {
       "school": "idrivesafely",
@@ -3492,7 +3507,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/oklahoma/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:OR": {
       "school": "idrivesafely",
@@ -3510,7 +3525,7 @@
           "url": "https://www.idrivesafely.com/traffic-school/oregon/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:RI": {
       "school": "idrivesafely",
@@ -3523,7 +3538,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/rhode-island/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:SD": {
       "school": "idrivesafely",
@@ -3536,7 +3551,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/south-dakota/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:TN": {
       "school": "idrivesafely",
@@ -3554,7 +3569,7 @@
           "url": "https://www.idrivesafely.com/traffic-school/tennessee/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:TX": {
       "school": "idrivesafely",
@@ -3564,7 +3579,7 @@
         {
           "kind": "list",
           "text": "I DRIVE SAFELY LLC",
-          "url": "https://www.trafficschoolpicker.com/texas (directory: data-count=\"directory\">845 DMV-licensed online traffic schools in Texas Source: Official Texas DMV records · Last verified 2026-08-01)"
+          "url": "https://www.trafficschoolpicker.com/texas (directory: data-count=\"directory\">509 TDLR-licensed driving safety course providers in Texas Source: TDLR list of licensed driving safety course providers · Last verified 2026-11-26)"
         },
         {
           "kind": "page",
@@ -3587,7 +3602,7 @@
           "url": "https://www.idrivesafely.com/dmv/texas/laws/new-traffic-laws/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:UT": {
       "school": "idrivesafely",
@@ -3600,7 +3615,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/utah/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:VA": {
       "school": "idrivesafely",
@@ -3638,7 +3653,7 @@
           "url": "https://www.idrivesafely.com/driver-improvement/virginia/clinic-va/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:WA": {
       "school": "idrivesafely",
@@ -3666,7 +3681,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/washington/4-hour/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:WI": {
       "school": "idrivesafely",
@@ -3694,7 +3709,7 @@
           "url": "https://www.idrivesafely.com/dmv/wisconsin/appointments/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:WV": {
       "school": "idrivesafely",
@@ -3707,7 +3722,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/west-virginia/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "idrivesafely:WY": {
       "school": "idrivesafely",
@@ -3720,7 +3735,7 @@
           "url": "https://www.idrivesafely.com/defensive-driving/wyoming/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:AK": {
       "school": "trafficschoolonline",
@@ -3738,7 +3753,7 @@
           "url": "https://www.trafficschoolonline.com/state/alaska-defensive-driving/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:AL": {
       "school": "trafficschoolonline",
@@ -3756,7 +3771,7 @@
           "url": "https://www.trafficschoolonline.com/state/alabama-traffic-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:AR": {
       "school": "trafficschoolonline",
@@ -3794,7 +3809,7 @@
           "url": "https://www.trafficschoolonline.com/state/arkansas-traffic-school-2/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:CA": {
       "school": "trafficschoolonline",
@@ -3804,7 +3819,7 @@
         {
           "kind": "list",
           "text": "5 D O L L A R TRAFFIC SCHOOL ONLINE",
-          "url": "https://www.trafficschoolpicker.com/california (directory: data-count=\"directory\">218 DMV-licensed online traffic schools in California Source: Official California DMV records · Last verified 2026-11-01)"
+          "url": "https://www.trafficschoolpicker.com/california (directory: data-count=\"directory\">218 DMV-licensed online traffic schools in California Source: California DMV list of licensed traffic schools · Last verified 2026-11-01)"
         },
         {
           "kind": "page",
@@ -3817,7 +3832,7 @@
           "url": "https://www.trafficschoolonline.com/state/california-traffic-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:CO": {
       "school": "trafficschoolonline",
@@ -3830,7 +3845,7 @@
           "url": "https://www.trafficschoolonline.com/state/colorado-driver-improvement/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:CT": {
       "school": "trafficschoolonline",
@@ -3853,7 +3868,7 @@
           "url": "https://www.trafficschoolonline.com/state/connecticut-traffic-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:DE": {
       "school": "trafficschoolonline",
@@ -3871,7 +3886,7 @@
           "url": "https://www.trafficschoolonline.com/state/delaware-defensive-driving/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:FL": {
       "school": "trafficschoolonline",
@@ -3881,7 +3896,7 @@
         {
           "kind": "list",
           "text": "Traffic School Online.com",
-          "url": "https://www.trafficschoolpicker.com/florida (directory: data-count=\"directory\">58 state-licensed traffic schools in Florida Source: Official Florida DMV records · Last verified 2026-09-24)"
+          "url": "https://www.trafficschoolpicker.com/florida (directory: data-count=\"directory\">58 FLHSMV-approved Basic Driver Improvement course providers in Florida Source: FLHSMV list of approved Basic Driver Improvement course providers · Last verified 2026-09-24)"
         },
         {
           "kind": "page",
@@ -3904,7 +3919,7 @@
           "url": "https://www.trafficschoolonline.com/state/florida-traffic-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:GA": {
       "school": "trafficschoolonline",
@@ -3922,7 +3937,7 @@
           "url": "https://www.trafficschoolonline.com/state/georgia-defensive-driving/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:HI": {
       "school": "trafficschoolonline",
@@ -3940,7 +3955,7 @@
           "url": "https://www.trafficschoolonline.com/state/hawaii-driver-education-program/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:IA": {
       "school": "trafficschoolonline",
@@ -3958,7 +3973,7 @@
           "url": "https://www.trafficschoolonline.com/state/iowa-driver-improvement/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:ID": {
       "school": "trafficschoolonline",
@@ -3976,7 +3991,7 @@
           "url": "https://www.trafficschoolonline.com/state/idaho-defensive-driving/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:IN": {
       "school": "trafficschoolonline",
@@ -4004,7 +4019,7 @@
           "url": "https://www.trafficschoolonline.com/state/indiana-driver-improvement/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:KS": {
       "school": "trafficschoolonline",
@@ -4027,7 +4042,7 @@
           "url": "https://www.trafficschoolonline.com/state/kansas-driver-improvement/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:LA": {
       "school": "trafficschoolonline",
@@ -4055,7 +4070,7 @@
           "url": "https://www.trafficschoolonline.com/state/louisiana-driver-improvement/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:MN": {
       "school": "trafficschoolonline",
@@ -4073,7 +4088,7 @@
           "url": "https://www.trafficschoolonline.com/state/minnesota-traffic-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:MO": {
       "school": "trafficschoolonline",
@@ -4091,7 +4106,7 @@
           "url": "https://www.trafficschoolonline.com/state/missouri-driver-improvement/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:MS": {
       "school": "trafficschoolonline",
@@ -4109,7 +4124,7 @@
           "url": "https://www.trafficschoolonline.com/state/mississippi-traffic-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:MT": {
       "school": "trafficschoolonline",
@@ -4132,7 +4147,7 @@
           "url": "https://www.trafficschoolonline.com/state/montana-traffic-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:NC": {
       "school": "trafficschoolonline",
@@ -4150,25 +4165,20 @@
           "url": "https://www.trafficschoolonline.com/state/north-carolina-driver-improvement/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:ND": {
       "school": "trafficschoolonline",
       "state": "north-dakota",
-      "status": "listed",
+      "status": "unchecked",
       "evidence": [
-        {
-          "kind": "list",
-          "text": "Traffic School Online.com",
-          "url": "https://www.trafficschoolpicker.com/north-dakota (directory: data-count=\"directory\">17 DMV-licensed online traffic schools in North Dakota Source: Official North Dakota DMV records · Last verified 2026-08-13)"
-        },
         {
           "kind": "page",
           "text": "3327 chars",
           "url": "https://www.trafficschoolonline.com/state/north-dakota-point-reduction/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:NE": {
       "school": "trafficschoolonline",
@@ -4186,7 +4196,7 @@
           "url": "https://www.trafficschoolonline.com/state/nebraska-driver-improvement/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:NJ": {
       "school": "trafficschoolonline",
@@ -4196,7 +4206,7 @@
         {
           "kind": "list",
           "text": "TrafficSchoolOnline.com",
-          "url": "https://www.trafficschoolpicker.com/new-jersey (directory: data-count=\"directory\">86 state-licensed traffic schools in New Jersey Source: Official New Jersey DMV records · Last verified 2026-11-01)"
+          "url": "https://www.trafficschoolpicker.com/new-jersey (directory: data-count=\"directory\">86 MVC-approved defensive driving course providers in New Jersey Source: New Jersey MVC list of approved defensive driving courses · Last verified 2026-11-01)"
         },
         {
           "kind": "page",
@@ -4204,7 +4214,7 @@
           "url": "https://www.trafficschoolonline.com/state/new-jersey-defensive-driving/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:NM": {
       "school": "trafficschoolonline",
@@ -4217,7 +4227,7 @@
           "url": "https://www.trafficschoolonline.com/state/new-mexico-defensive-driving/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:NV": {
       "school": "trafficschoolonline",
@@ -4235,7 +4245,7 @@
           "url": "https://www.trafficschoolonline.com/state/nevada-traffic-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:NY": {
       "school": "trafficschoolonline",
@@ -4253,7 +4263,7 @@
           "url": "https://www.trafficschoolonline.com/state/new-york-defensive-driving/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:OH": {
       "school": "trafficschoolonline",
@@ -4271,7 +4281,7 @@
           "url": "https://www.trafficschoolonline.com/state/ohio-driving-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:OK": {
       "school": "trafficschoolonline",
@@ -4289,7 +4299,7 @@
           "url": "https://www.trafficschoolonline.com/state/oklahoma-traffic-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:OR": {
       "school": "trafficschoolonline",
@@ -4299,7 +4309,7 @@
         {
           "kind": "list",
           "text": "ABC Traffic School, LLC",
-          "url": "https://www.trafficschoolpicker.com/oregon (directory: data-count=\"directory\">13 state-licensed traffic schools in Oregon Source: Official Oregon DMV records · Last verified 2026-11-01)"
+          "url": "https://www.trafficschoolpicker.com/oregon (directory: data-count=\"directory\">13 ODOT-approved Distracted Driving Avoidance Course providers in Oregon Source: Oregon ODOT list of Distracted Driving Avoidance Course providers · Last verified 2026-11-01)"
         },
         {
           "kind": "page",
@@ -4312,7 +4322,7 @@
           "url": "https://www.trafficschoolonline.com/state/oregon-driver-improvement/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:RI": {
       "school": "trafficschoolonline",
@@ -4330,7 +4340,7 @@
           "url": "https://www.trafficschoolonline.com/state/rhode-island-traffic-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:SD": {
       "school": "trafficschoolonline",
@@ -4348,7 +4358,7 @@
           "url": "https://www.trafficschoolonline.com/state/south-dakota-defensive-driving/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:TN": {
       "school": "trafficschoolonline",
@@ -4366,13 +4376,18 @@
           "url": "https://www.trafficschoolonline.com/state/tennessee-defensive-driving/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:TX": {
       "school": "trafficschoolonline",
       "state": "texas",
-      "status": "claimed",
+      "status": "listed",
       "evidence": [
+        {
+          "kind": "list",
+          "text": "TRAFFIC SCHOOL ONLINE",
+          "url": "https://www.trafficschoolpicker.com/texas (directory: data-count=\"directory\">509 TDLR-licensed driving safety course providers in Texas Source: TDLR list of licensed driving safety course providers · Last verified 2026-11-26)"
+        },
         {
           "kind": "page",
           "text": "13237 chars",
@@ -4384,7 +4399,7 @@
           "url": "https://www.trafficschoolonline.com/state/texas-defensive-driving-course/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:UT": {
       "school": "trafficschoolonline",
@@ -4397,7 +4412,7 @@
           "url": "https://www.trafficschoolonline.com/state/utah-traffic-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:VA": {
       "school": "trafficschoolonline",
@@ -4415,7 +4430,7 @@
           "url": "https://www.trafficschoolonline.com/state/virginia-driver-improvement/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:WA": {
       "school": "trafficschoolonline",
@@ -4428,7 +4443,7 @@
           "url": "https://www.trafficschoolonline.com/state/washington-traffic-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:WI": {
       "school": "trafficschoolonline",
@@ -4441,7 +4456,7 @@
           "url": "https://www.trafficschoolonline.com/state/wisconsin-defensive-driving/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:WV": {
       "school": "trafficschoolonline",
@@ -4459,7 +4474,7 @@
           "url": "https://www.trafficschoolonline.com/state/west-virginia-traffic-school/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     },
     "trafficschoolonline:WY": {
       "school": "trafficschoolonline",
@@ -4477,7 +4492,7 @@
           "url": "https://www.trafficschoolonline.com/state/wyoming-driver-improvement/"
         }
       ],
-      "checked": "2026-11-25"
+      "checked": "2026-11-26"
     }
   }
 }
