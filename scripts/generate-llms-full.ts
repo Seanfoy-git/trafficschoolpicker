@@ -435,7 +435,7 @@ async function main() {
     `- Most expensive states, all-in: ${allIn(MOST_EXPENSIVE)}.`,
     `- Cheapest states, all-in: ${allIn(CHEAPEST)}.`,
     `- Biggest traffic-school net savings (3-year increase avoided less a flat $100 for course and court fees): ${saved}.`,
-    `- Texas example: paying a 15-over ticket costs ${formatCost(tx.fine ?? 0)} plus about ${formatCost(tx.threeYearSurcharge ?? 0)} in higher insurance over 3 years (${formatCost(tx.allInCost ?? 0)}). A driving safety course dismissal (Code of Criminal Procedure Art. 45A.352) costs about $185 in total, $134 of it court costs and state fines owed either way. Mechanism is dismissal, not a discount; not available at 25 mph or more over.`,
+    `- Texas example: paying a 15-over ticket costs ${formatCost(tx.fine ?? 0)} plus about ${formatCost(tx.threeYearSurcharge ?? 0)} in higher insurance over 3 years (${formatCost(tx.allInCost ?? 0)}). A driving safety course dismissal (Code of Criminal Procedure Art. 45A.352) costs about $170 to $180 in total, $134 of it court costs and state fines owed either way. Mechanism is dismissal, not a discount; not available at 25 mph or more over.`,
     "- Course mechanisms differ by state: dismissal (AZ, A.R.S. § 28-3392; TX, Art. 45A.352), masking (CA, VC §1808.7), adjudication withheld (FL, §318.14), base-rate discount (NY PIRP, insurers still see the ticket), one-time point masking (MI BDIC). PA/MA/NJ/KS offer little for a first ticket.",
     "- Sources: FinanceBuzz (fines plus court costs, 15 mph over, October 2025), LendingTree using Quadrant Information Services data (insurance increase, September 2026), NHTSA. Rankings are source-dependent.",
     ""
